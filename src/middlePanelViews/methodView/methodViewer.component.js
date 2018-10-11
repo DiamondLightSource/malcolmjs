@@ -163,6 +163,7 @@ const MethodViewer = props => {
               methodArchive={props.methodArchive}
               openPanels={{ parent: props.openParent, child: props.openChild }}
               selectedParam={props.selectedParam}
+              defaultTab={0}
             />
           );
         }

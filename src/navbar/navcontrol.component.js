@@ -64,7 +64,7 @@ class NavControl extends Component {
           className={classes.currentLink}
           color={
             (siblingLabels && siblingLabels.includes(nav.label)) ||
-            [NavTypes.Info, NavTypes.palette].includes(nav.navType)
+            [NavTypes.Info, NavTypes.Palette].includes(nav.navType)
               ? 'default'
               : 'error'
           }

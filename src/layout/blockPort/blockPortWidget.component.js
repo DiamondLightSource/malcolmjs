@@ -42,15 +42,11 @@ const styles = () => ({
   hiddenLink: {
     position: 'absolute',
     display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 10,
-    borderBottom: '3px dashed rgba(255,255,255,0.5)',
     right: '100%',
-    bottom: '40%',
+    alignItems: 'center',
+    marginRight: '-4px',
   },
-  hiddenLinkLine: {
-    width: '100%',
-  },
+  hiddenLinkLine: { fontSize: '20pt', whiteSpace: 'pre' },
 });
 
 class BlockPortWidget extends BaseWidget {
@@ -82,85 +78,65 @@ class BlockPortWidget extends BaseWidget {
           : 'rgba(0,0,0,0)',
     };
 
-    const hiddenLink = (
-      <div
-        className={this.props.classes.hiddenLink}
-        style={
-          this.props.isSelected
-            ? {
-                borderBottom: `3px dashed ${
-                  this.props.theme.palette.secondary.main
-                }`,
-              }
-            : {}
-        }
-        role="presentation"
-        onMouseDown={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onMouseUp={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onClick={e => {
-          e.preventDefault();
-          e.stopPropagation();
-          const fakeId = idSeparator + idSeparator + this.props.portId;
-          this.props.selectHandler(fakeId, true);
-          this.props.linkClickHandler(fakeId);
-        }}
-      >
-        <Typography>{this.props.portValue}</Typography>
-      </div>
-    );
-    const port = (
-      <div
-        className={this.props.classes.portDropZone}
-        style={portStyle}
-        onMouseEnter={() => {
-          this.setState({ selected: true });
-        }}
-        onMouseLeave={() => {
-          this.setState({ selected: false });
-        }}
-        role="presentation"
-        {...this.getProps()}
-        data-name={this.props.portName}
-        data-nodeid={this.props.nodeId}
-        onMouseDown={e => {
-          e.isPortClick = true;
-          this.props.mouseDownHandler(this.props.portId, true);
-        }}
-        onMouseUp={() => this.props.mouseDownHandler(this.props.portId, false)}
-      >
+    const port =
+      this.props.portType === 'HIDDEN' ? (
         <div
-          className={this.props.classes.port}
-          style={{
-            background:
-              this.state.selected &&
-              ((this.props.linkInProgress &&
-                this.props.canConnectToStartPort) ||
-                !this.props.linkInProgress)
-                ? portColour[100]
-                : portColour[500],
+          {...this.getProps()}
+          onMouseDown={e => e.stopPropagation()}
+          data-name={this.props.portName}
+          data-nodeid={this.props.nodeId}
+          role="presentation"
+        >
+          <div className={this.props.classes.port} />
+        </div>
+      ) : (
+        <div
+          className={this.props.classes.portDropZone}
+          style={portStyle}
+          onMouseEnter={() => {
+            this.setState({ selected: true });
+          }}
+          onMouseLeave={() => {
+            this.setState({ selected: false });
           }}
           role="presentation"
-        />
-      </div>
-    );
-    const label = (
-      <Typography className={this.props.classes.portLabel}>
-        {this.props.portLabel}
-      </Typography>
-    );
+          {...this.getProps()}
+          data-name={this.props.portName}
+          data-nodeid={this.props.nodeId}
+          onMouseDown={e => {
+            e.isPortClick = true;
+            this.props.mouseDownHandler(this.props.portId, true);
+          }}
+          onMouseUp={() =>
+            this.props.mouseDownHandler(this.props.portId, false)
+          }
+        >
+          <div
+            className={this.props.classes.port}
+            style={{
+              background:
+                this.state.selected &&
+                ((this.props.linkInProgress &&
+                  this.props.canConnectToStartPort) ||
+                  !this.props.linkInProgress)
+                  ? portColour[100]
+                  : portColour[500],
+            }}
+            role="presentation"
+          />
+        </div>
+      );
+    const label =
+      this.props.portType === 'HIDDEN' ? null : (
+        <Typography className={this.props.classes.portLabel}>
+          {this.props.portLabel}
+        </Typography>
+      );
 
     return (
       <div className={this.props.classes.container}>
-        {this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
         {this.props.inputPort ? port : label}
         {this.props.inputPort ? label : port}
-        {!this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
       </div>
     );
   }

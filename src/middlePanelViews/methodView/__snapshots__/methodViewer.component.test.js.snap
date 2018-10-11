@@ -119,7 +119,7 @@ exports[`Method viewer renders correctly for array once local state is initialis
 
 exports[`Method viewer renders input correctly with initial value 1`] = `
 <MethodArchive
-  defaultTab={1}
+  defaultTab={0}
   methodArchive={
     Object {
       "alarmState": MockCircularBuffer [
@@ -163,7 +163,7 @@ exports[`Method viewer renders input correctly with initial value 1`] = `
 
 exports[`Method viewer renders input correctly with no initial value 1`] = `
 <MethodArchive
-  defaultTab={1}
+  defaultTab={0}
   methodArchive={
     Object {
       "alarmState": MockCircularBuffer [
@@ -207,7 +207,7 @@ exports[`Method viewer renders input correctly with no initial value 1`] = `
 
 exports[`Method viewer renders method param archive if selected parameter isnt a tree 1`] = `
 <MethodArchive
-  defaultTab={1}
+  defaultTab={0}
   methodArchive={
     Object {
       "alarmState": MockCircularBuffer [
@@ -353,7 +353,7 @@ exports[`Method viewer renders output array correctly 1`] = `
 
 exports[`Method viewer renders output correctly with initial value 1`] = `
 <MethodArchive
-  defaultTab={1}
+  defaultTab={0}
   methodArchive={
     Object {
       "alarmState": MockCircularBuffer [

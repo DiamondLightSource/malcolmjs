@@ -11,12 +11,7 @@ const buildBlockNode = (
   mouseDownHandler,
   portMouseDown
 ) => {
-  const node = new BlockNodeModel(
-    block.name,
-    block.description,
-    block.mri,
-    block.loading
-  );
+  const node = new BlockNodeModel(block);
   block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);

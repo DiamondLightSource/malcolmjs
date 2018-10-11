@@ -1,6 +1,7 @@
 /* eslint no-console: ["error", { allow: ["info", "error"] }] */
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
 import { idSeparator } from '../../layout/layout.component';
+import { separator } from '../reducer/layout/layout.reducer';
 
 const calculateHeight = (layoutEngine, mri) => {
   const zoomFactor = layoutEngine.diagramModel.zoom / 100;
@@ -12,10 +13,9 @@ const calculateHeight = (layoutEngine, mri) => {
 
 const runAutoLayout = () => (dispatch, getState) => {
   const state = getState();
-  const { blocks } = state.malcolm.layout;
+  const blocks = state.malcolm.layout.blocks.filter(b => !b.isHiddenLink);
   const { parentBlock, mainAttribute } = state.malcolm;
   const { links } = state.malcolm.layoutEngine.diagramModel;
-
   const graph = {
     id: 'root',
     layoutOptions: {
@@ -41,15 +41,17 @@ const runAutoLayout = () => (dispatch, getState) => {
           side: p.input ? 'WEST' : 'EAST',
           index: p.input ? b.ports.length - i : i,
         },
-        width: 12,
+        width: b.hasHiddenLink && p.input ? 92 : 12,
         height: 12,
       })),
     })),
-    edges: Object.values(links).map((link, i) => ({
-      id: `e${i}`,
-      sources: [link.sourcePort.id],
-      targets: [link.targetPort.id],
-    })),
+    edges: Object.values(links)
+      .filter(link => link.id.split(separator)[0] !== 'HIDDEN-LINK')
+      .map((link, i) => ({
+        id: `e${i}`,
+        sources: [link.sourcePort.id],
+        targets: [link.targetPort.id],
+      })),
   };
 
   // The JSON graph can be visualised here https://rtsys.informatik.uni-kiel.de/elklive/json.html

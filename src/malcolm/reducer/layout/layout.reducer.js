@@ -12,6 +12,8 @@ import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
 import { idSeparator } from '../../../layout/layout.component';
 
+export const separator = '࿈';
+
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
   const outputs = blockUtils.findAttributesWithTag(block, sourcePort);
@@ -82,7 +84,8 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
   return layoutBlock;
 };
 
-const findHiddenLinks = layoutBlocks =>
+const findHiddenLinks = layoutBlocks => {
+  const hiddenBlocks = [];
   layoutBlocks.map(block => {
     const updatedBlock = block;
     const connectedInputPorts = updatedBlock.ports.filter(
@@ -95,10 +98,42 @@ const findHiddenLinks = layoutBlocks =>
         b.ports.some(p => p.tag === updatedPort.value)
       );
       updatedPort.hiddenLink = !isOutputPortVisible;
+      if (updatedPort.hiddenLink) {
+        updatedBlock.hasHiddenLink = true;
+        const portIndex = updatedBlock.ports.findIndex(
+          p => p.label === updatedPort.label
+        );
+        const newValue = `${updatedPort.value}${separator}${
+          updatedBlock.mri
+        }${separator}${updatedPort.label}`;
+        const hiddenLinkEnd = {
+          position: { ...updatedBlock.position },
+          mri: `HIDDEN-LINK${separator}${updatedBlock.mri}${separator}${
+            updatedPort.label
+          }`,
+          isHiddenLink: true,
+          name: `${newValue}`,
+          ports: [
+            {
+              input: false,
+              label: '',
+              portType: 'HIDDEN',
+              tag: newValue,
+            },
+          ],
+          visible: true,
+        };
+        updatedPort.value = newValue;
+        hiddenLinkEnd.position.x -= 60;
+        hiddenLinkEnd.position.y += 30 + portIndex * 20;
+        hiddenBlocks.push(hiddenLinkEnd);
+      }
     });
 
     return updatedBlock;
   });
+  return [...layoutBlocks, ...hiddenBlocks];
+};
 
 const processLayout = malcolmState => {
   const layout = {

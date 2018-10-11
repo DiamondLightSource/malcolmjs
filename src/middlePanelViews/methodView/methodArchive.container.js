@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CircularBuffer from 'circular-buffer';
 import Typography from '@material-ui/core/Typography';
 import Loadable from 'react-loadable';
-import WidgetTable from '../../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import TabbedPanel from '../tabbedMiddlePanel.component';
 import {
   AlarmStates,
@@ -122,6 +122,7 @@ const MethodArchive = props => (
       addRow={noOp}
       infoClickHandler={noOp}
       rowClickHandler={noOp}
+      closePanelHandler={noOp}
     />
     <LoadablePlotter
       attribute={dummyArchive(props.methodArchive, props.selectedParam)}

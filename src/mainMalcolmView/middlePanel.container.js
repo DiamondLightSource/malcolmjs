@@ -20,6 +20,7 @@ import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
+import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
 
 const styles = theme => ({
   container: {
@@ -287,7 +288,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openPalette: () => dispatch(navigationActions.navigateToPalette()),
+  openPalette: () => {
+    dispatch(malcolmClearLayoutSelect());
+    dispatch(navigationActions.navigateToPalette());
+  },
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
 });
 

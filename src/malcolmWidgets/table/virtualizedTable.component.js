@@ -347,10 +347,14 @@ const WidgetTable = props => {
                   rowHeight={iconWidth}
                   onRowClick={e => {
                     // dispatch a row selection event here
-                    props.rowClickHandler(
-                      props.attribute.calculated.path,
-                      `row.${e.index}`
-                    );
+                    if (e.index < tableState.values.length) {
+                      props.rowClickHandler(
+                        props.attribute.calculated.path,
+                        `row.${e.index}`
+                      );
+                    } else {
+                      props.closePanelHandler();
+                    }
                     e.event.stopPropagation();
                   }}
                   onHeaderClick={e => {

@@ -64,7 +64,11 @@ const updateBlockChildren = (nav, blocks) => {
       const attribute = blocks[nav.blockMri].attributes.find(
         a => a.calculated.name === child
       );
-      return attribute && attribute.raw.meta ? attribute.raw.meta.label : child;
+      const label =
+        attribute && attribute.raw.meta ? attribute.raw.meta.label : child;
+      return attribute && attribute.calculated.isMethod
+        ? attribute.raw.label
+        : label;
     });
   }
 };

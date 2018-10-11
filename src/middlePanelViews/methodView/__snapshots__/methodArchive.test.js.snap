@@ -54,6 +54,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}
@@ -136,6 +137,7 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}
@@ -218,6 +220,7 @@ exports[`MethodArchive renders table correctly for return param 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}
