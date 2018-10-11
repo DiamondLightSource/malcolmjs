@@ -15,6 +15,7 @@ import {
   editThemeAction,
 } from '../viewState/viewState.actions';
 import NavControl from './navcontrol.component';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 const drawerWidth = 320;
 
@@ -142,9 +143,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
-  navigateToChild: (basePath, child) =>
-    dispatch(push(`/gui${basePath}${child}`)),
   openThemeEditor: () => dispatch(editThemeAction(true)),
+  navigateToChild: (basePath, child) => {
+    dispatch(push(`/gui${basePath}${child}`));
+    dispatch(navigationActions.subscribeToChildren());
+  },
 });
 
 NavBar.propTypes = {

@@ -7,6 +7,7 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import MoreHoriz from '@material-ui/icons/MoreHoriz';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import NavTypes from '../malcolm/NavTypes';
 
 const styles = () => ({
   container: {
@@ -63,7 +64,7 @@ class NavControl extends Component {
           className={classes.currentLink}
           color={
             (siblingLabels && siblingLabels.includes(nav.label)) ||
-            ['Info', 'Palette'].includes(nav.label)
+            [NavTypes.Info, NavTypes.Palette].includes(nav.navType)
               ? 'inherit'
               : 'error'
           }

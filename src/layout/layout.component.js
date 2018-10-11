@@ -7,6 +7,7 @@ import {
   malcolmSelectBlock,
   malcolmSelectLink,
   malcolmLayoutUpdatePosition,
+  malcolmClearLayoutSelect,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
 
@@ -181,6 +182,7 @@ export const mapDispatchToProps = dispatch => ({
   },
   layoutClickHandler: () => {
     dispatch(navigationActions.updateChildPanel(''));
+    dispatch(malcolmClearLayoutSelect());
   },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {

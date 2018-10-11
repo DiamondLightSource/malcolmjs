@@ -1,6 +1,7 @@
 import { replace, push } from 'react-router-redux';
 import NavTypes from '../NavTypes';
 import {
+  malcolmClearLayoutSelect,
   malcolmNewBlockAction,
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
@@ -32,6 +33,27 @@ const subscribeToNewBlocksInRoute = () => (dispatch, getState) => {
   });
 };
 
+const subscribeToChildren = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  const lastNav = navigationLists.slice(-1)[0];
+  if (lastNav.navType === NavTypes.Attribute) {
+    const attribute = blockUtils.findAttribute(
+      state.blocks,
+      lastNav.parent.blockMri,
+      lastNav.path
+    );
+    attribute.raw.value.visible.forEach((visible, i) => {
+      const child = attribute.raw.value.mri[i];
+      if (visible && !state.blocks[child]) {
+        dispatch(malcolmNewBlockAction(child, false, false));
+        dispatch(malcolmSubscribeAction([child, 'meta']));
+      }
+    });
+  }
+};
+
 const navigateToAttribute = (blockMri, attributeName) => (
   dispatch,
   getState
@@ -46,6 +68,7 @@ const navigateToAttribute = (blockMri, attributeName) => (
 
   // subscribe to layout blocks
   if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+    dispatch(malcolmClearLayoutSelect());
     attribute.raw.value.visible.forEach((visible, i) => {
       if (visible) {
         const blockName = attribute.raw.value.mri[i];
@@ -135,10 +158,15 @@ const navigateToPalette = () => (dispatch, getState) => {
     .reverse()
     .findIndex(nav => nav.navType === NavTypes.Attribute);
   if (lastAttributeNav > -1) {
+    const routeEnding =
+      navigationLists[navigationLists.length - 1].navType === NavTypes.Palette
+        ? ''
+        : '.palette';
+
     const newPath = `/gui/${navigationLists
       .filter((nav, i) => i <= navigationLists.length - 1 - lastAttributeNav)
       .map(nav => nav.path)
-      .join('/')}/.palette`;
+      .join('/')}/${routeEnding}`;
     dispatch(push(newPath));
   }
 };
@@ -250,7 +278,8 @@ const closeInfo = (blockMri, attributeName, subElement) => (
   dispatch,
   getState
 ) => {
-  const { blocks, navigationLists, mainAttribute } = getState().malcolm;
+  const { blocks, mainAttribute, navigation } = getState().malcolm;
+  const { navigationLists } = navigation;
   const attribute = blockUtils.findAttribute(blocks, blockMri, attributeName);
   if (attribute && attribute.calculated && attribute.calculated.isMethod) {
     const newPath = `/gui/${navigationLists
@@ -268,6 +297,7 @@ const closeInfo = (blockMri, attributeName, subElement) => (
 };
 
 export default {
+  subscribeToChildren,
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
   navigateToInfo,

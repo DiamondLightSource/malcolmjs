@@ -1,6 +1,7 @@
 import ELK from 'elkjs/lib/elk.bundled';
 import autoLayoutAction from './autoLayout.action';
 import { MalcolmSend, MalcolmAttributeFlag } from '../malcolm.types';
+import { idSeparator } from '../../layout/layout.component';
 
 jest.mock('elkjs/lib/elk.bundled');
 
@@ -64,6 +65,7 @@ describe('auto layout actions', () => {
           diagramModel: {
             links: {
               link1: {
+                id: `block1${idSeparator}block1-out${idSeparator}block2${idSeparator}block2-in`,
                 sourcePort: {
                   id: 'block1-out',
                 },

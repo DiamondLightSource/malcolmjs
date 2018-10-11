@@ -1,6 +1,11 @@
 import navigationActions from './navigation.actions';
 import NavTypes from '../NavTypes';
 import { MalcolmNewBlock, MalcolmSend } from '../malcolm.types';
+import { buildAttribute } from '../../testState.utilities';
+import {
+  malcolmNewBlockAction,
+  malcolmSubscribeAction,
+} from '../malcolmActionCreators';
 
 const buildNavState = () => ({
   malcolm: {
@@ -47,6 +52,78 @@ describe('subscribeToNewBlocksInRoute', () => {
   });
 });
 
+describe('subscribeToChildren', () => {
+  it('fires subscription for child blocks', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[1].parent =
+      state.malcolm.navigation.navigationLists[0];
+    state.malcolm.navigation.navigationLists.pop();
+    state.malcolm.blocks.PANDA.attributes = [
+      buildAttribute(
+        'layout',
+        ['PANDA', 'layout'],
+        {
+          mri: ['PANDA:Test1', 'PANDA:Test2', 'PANDA:Test3'],
+          visible: [true, false, true],
+        },
+        undefined,
+        undefined,
+        ['Test1', 'Test2', 'Test3']
+      ),
+    ];
+
+    const navAction = navigationActions.subscribeToChildren();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(4);
+    expect(dispatches[0]).toEqual(
+      malcolmNewBlockAction('PANDA:Test1', false, false)
+    );
+    expect(dispatches[2]).toEqual(
+      malcolmNewBlockAction('PANDA:Test3', false, false)
+    );
+    expect(dispatches[1]).toEqual(
+      malcolmSubscribeAction(['PANDA:Test1', 'meta'])
+    );
+    expect(dispatches[3]).toEqual(
+      malcolmSubscribeAction(['PANDA:Test3', 'meta'])
+    );
+  });
+
+  it('does nothing if last nav element is not an attribute', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[1].parent =
+      state.malcolm.navigation.navigationLists[0];
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[2].parent =
+      state.malcolm.navigation.navigationLists[1];
+    state.malcolm.blocks.PANDA.attributes = [
+      buildAttribute(
+        'layout',
+        ['PANDA', 'layout'],
+        {
+          mri: ['PANDA:Test1', 'PANDA:Test2', 'PANDA:Test3'],
+          visible: [true, false, true],
+        },
+        undefined,
+        undefined,
+        ['Test1', 'Test2', 'Test3']
+      ),
+    ];
+
+    const navAction = navigationActions.subscribeToChildren();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(0);
+  });
+});
+
 describe('navigateToAttribute', () => {
   it('changes the url to look at the attribute', () => {
     const dispatches = [];
@@ -69,6 +146,23 @@ describe('navigateToAttribute', () => {
 
 describe('navigateToPalette', () => {
   it('changes the url to show the palette', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    state.malcolm.navigation.navigationLists.push({
+      navType: NavTypes.Palette,
+      path: '.palette',
+    });
+
+    const navAction = navigationActions.navigateToPalette();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/');
+  });
+
+  it('closes the palette if it is already open', () => {
     const dispatches = [];
     const state = buildNavState();
 

@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
 import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
+import { separator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
   block: {
@@ -99,7 +100,7 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
-  return props.node.loading ? (
+  const block = props.node.loading ? (
     <LoadingBlock classes={props.classes} node={props.node} />
   ) : (
     <Paper
@@ -108,7 +109,11 @@ const BlockWidget = props => {
       })}
       elevation={8}
       onClick={e => props.node.clickHandler(e)}
-      onMouseDown={() => props.node.mouseDownHandler(true)}
+      onMouseDown={e => {
+        if (!e.isPortClick) {
+          props.node.mouseDownHandler(true);
+        }
+      }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
       <Typography className={props.classes.title}>
@@ -145,6 +150,24 @@ const BlockWidget = props => {
       </Typography>
     </Paper>
   );
+  return props.node.isHiddenLink ? (
+    <div style={{ display: 'flex', position: 'relative', maxWidth: '5px' }}>
+      <div style={{ position: 'absolute', right: '100%' }}>
+        <Typography>{props.node.label.split(separator)[0]}</Typography>
+      </div>
+      {outputPorts.map(p => (
+        <div style={{ position: 'absolute', left: '100%' }}>
+          <BlockPortWidget
+            key={props.node.ports[p].id}
+            nodeId={props.node.id}
+            portId={p}
+          />
+        </div>
+      ))}
+    </div>
+  ) : (
+    block
+  );
 };
 
 BlockWidget.propTypes = {
@@ -156,6 +179,7 @@ BlockWidget.propTypes = {
     description: PropTypes.string,
     selected: PropTypes.bool,
     loading: PropTypes.bool,
+    isHiddenLink: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
   }).isRequired,
@@ -176,6 +200,7 @@ LoadingBlock.propTypes = {
   node: PropTypes.shape({
     label: PropTypes.string,
     selected: PropTypes.bool,
+    isHidden: PropTypes.bool,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

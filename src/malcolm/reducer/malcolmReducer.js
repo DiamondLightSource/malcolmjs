@@ -4,6 +4,7 @@ import {
   MalcolmUpdateBlockPosition,
   MalcolmShiftButton,
   MalcolmSelectPortType,
+  MalcolmIncrementMessageCount,
 } from '../malcolm.types';
 import blockUtils from '../blockUtils';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -52,6 +53,12 @@ const initialMalcolmState = {
     inDeleteZone: false,
   },
 };
+
+function incrementCounter(state) {
+  const updatedState = state;
+  updatedState.counter += 1;
+  return updatedState;
+}
 
 function setFlag(state, path, flagType, flagState) {
   if (path.length === 1) {
@@ -135,6 +142,8 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   updatedState = SocketReducer(updatedState, action);
 
   switch (action.type) {
+    case MalcolmIncrementMessageCount:
+      return incrementCounter(state);
     case MalcolmAttributeFlag:
       return setFlag(
         state,

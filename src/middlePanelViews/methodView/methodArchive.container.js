@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CircularBuffer from 'circular-buffer';
 import Typography from '@material-ui/core/Typography';
 import Loadable from 'react-loadable';
-import WidgetTable from '../../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import TabbedPanel from '../tabbedMiddlePanel.component';
 import {
   AlarmStates,
@@ -19,16 +19,18 @@ const LoadablePlotter = Loadable({
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
-  const alarms = [...attribute.alarmState];
-  dataElement.x = [...attribute.timeStamp];
-  dataElement.y = attribute.value.map(
-    (value, valIndex) =>
-      alarms[valIndex] === AlarmStatesByIndex[alarmIndex] ||
-      (alarms[valIndex - 1] === AlarmStatesByIndex[alarmIndex] &&
-        alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
-        ? value
-        : null
-  );
+  if (attribute) {
+    const alarms = [...attribute.alarmState];
+    dataElement.x = [...attribute.timeStamp];
+    dataElement.y = attribute.value.map(
+      (value, valIndex) =>
+        alarms[valIndex] === AlarmStatesByIndex[alarmIndex] ||
+        (alarms[valIndex - 1] === AlarmStatesByIndex[alarmIndex] &&
+          alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
+          ? value
+          : null
+    );
+  }
   dataElement.visible = dataElement.y.some(val => val !== null);
   return dataElement;
 };
@@ -40,8 +42,9 @@ export const deriveStateFromProps = (props, state) => {
   );
   layout.datarevision += 1;
   if (
-    props.attribute.parent !== layout.parent ||
-    props.attribute.name !== layout.attribute
+    props.attribute &&
+    (props.attribute.parent !== layout.parent ||
+      props.attribute.name !== layout.attribute)
   ) {
     layout.parent = props.attribute.parent;
     layout.attribute = props.attribute.name;
@@ -119,6 +122,7 @@ const MethodArchive = props => (
       addRow={noOp}
       infoClickHandler={noOp}
       rowClickHandler={noOp}
+      closePanelHandler={noOp}
     />
     <LoadablePlotter
       attribute={dummyArchive(props.methodArchive, props.selectedParam)}
@@ -144,7 +148,7 @@ MethodArchive.propTypes = {
   defaultTab: PropTypes.number,
 };
 MethodArchive.defaultProps = {
-  defaultTab: 0,
+  defaultTab: 1,
 };
 
 export default MethodArchive;
