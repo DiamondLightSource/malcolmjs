@@ -315,13 +315,9 @@ export const linkInfo = props => {
     .find(t => t.indexOf(sinkPort) > -1)
     .split(':')
     .slice(-1)[0];
-  /*
   const layout = props.layoutAttribute.raw.value;
-  const sourceIndex = layout.name.findIndex(
-    a => a === portAttribute.raw.value.split('.')[0]
-  );
+  const sourceIndex = -1;
   const sinkIndex = layout.mri.findIndex(a => a === blockMri);
-  */
   const info = {
     sourcePort: {
       label: 'Source',
@@ -341,7 +337,6 @@ export const linkInfo = props => {
       value: `${blockName}.${portName}`,
       inline: true,
     },
-    /*
     showSource: {
       label: '',
       value: 'Show Source',
@@ -349,23 +344,26 @@ export const linkInfo = props => {
       tag: 'info:button',
       showLabel: false,
       disabled:
-        sourceIndex === -1 ||
         layout.visible[sourceIndex] ||
         props.isLayoutLocked ||
         portAttribute.raw.value === portNullValue,
       functions: {
         clickHandler: () => {
-          props.eventHandler(props.layoutAttribute.calculated.path, {
-            mri: [layout.mri[sourceIndex]],
-            name: [layout.name[sourceIndex]],
-            visible: [true],
-            x: [layout.x[sinkIndex] - 180],
-            y: [layout.y[sinkIndex]],
-          });
+          layout.visible.forEach(
+            (b, index) => !b && props.getBlock([layout.mri[index], 'meta'])
+          );
+          if (sourceIndex !== -1) {
+            props.eventHandler(props.layoutAttribute.calculated.path, {
+              mri: [layout.mri[sourceIndex]],
+              name: [layout.name[sourceIndex]],
+              visible: [true],
+              x: [layout.x[sinkIndex] - 180],
+              y: [layout.y[sinkIndex]],
+            });
+          }
         },
       },
     },
-    */
     deleteLink: {
       label: '',
       value: 'Delete',

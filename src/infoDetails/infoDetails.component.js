@@ -12,6 +12,7 @@ import {
   malcolmRevertAction,
   malcolmUpdateTable,
   malcolmSelectLink,
+  malcolmGetAction,
 } from '../malcolm/malcolmActionCreators';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
@@ -240,6 +241,9 @@ const deselectLinkAction = path => (dispatch, getState) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  getBlock: path => {
+    dispatch(malcolmGetAction(path));
+  },
   changeInfoHandler: (path, subElement) => {
     dispatch(
       navigationActions.navigateToSubElement(path[0], path[1], subElement)

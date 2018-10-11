@@ -20,14 +20,6 @@ import {
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
-export const malcolmGetAction = path => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Get:1.0',
-    path,
-  },
-});
-
 export const malcolmSubscribeAction = (path, delta = true) => ({
   type: MalcolmSend,
   payload: {
@@ -45,6 +37,19 @@ export const malcolmNewBlockAction = (blockName, parent, child) => ({
     child,
   },
 });
+
+export const malcolmGetAction = path => (dispatch, getState) => {
+  if (!getState().malcolm.blocks[path[0]]) {
+    dispatch(malcolmNewBlockAction(path[0], false, false));
+  }
+  dispatch({
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Get:1.0',
+      path,
+    },
+  });
+};
 
 export const malcolmPutAction = (path, value) => ({
   type: MalcolmSend,

@@ -40,13 +40,10 @@ const processAttribute = (request, changedAttribute) => {
         .replace('group:', '')
     : '';
 
-  // #refactorDuplication
   const action = {
     type: MalcolmAttributeData,
     payload: {
-      ...changedAttribute,
       id: request.id,
-      typeid: changedAttribute.typeid,
       delta: true,
       raw: { ...changedAttribute },
       calculated: {
