@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
 import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
-import { separator } from '../../malcolm/reducer/layout/layout.reducer';
+import { hiddenLinkIdSeparator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
   block: {
@@ -157,7 +157,9 @@ const BlockWidget = props => {
       role="presentation"
     >
       <div style={{ position: 'absolute', right: '100%' }}>
-        <Typography>{props.node.label.split(separator)[0]}</Typography>
+        <Typography>
+          {props.node.label.split(hiddenLinkIdSeparator)[0]}
+        </Typography>
       </div>
       {outputPorts.map(p => (
         <div style={{ position: 'absolute', left: '100%' }}>

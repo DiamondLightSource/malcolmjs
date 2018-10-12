@@ -1,7 +1,7 @@
 /* eslint no-console: ["error", { allow: ["info", "error"] }] */
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
 import { idSeparator } from '../../layout/layout.component';
-import { separator } from '../reducer/layout/layout.reducer';
+import { hiddenLinkIdSeparator } from '../reducer/layout/layout.reducer';
 
 const calculateHeight = (layoutEngine, mri) => {
   const zoomFactor = layoutEngine.diagramModel.zoom / 100;
@@ -9,6 +9,13 @@ const calculateHeight = (layoutEngine, mri) => {
     layoutEngine.getNodeDimensions(layoutEngine.diagramModel.nodes[mri])
       .height / zoomFactor
   );
+};
+
+const getNodePadding = (block, port) => {
+  if (block.hasHiddenLink && port.input) {
+    return port.value.split(hiddenLinkIdSeparator)[0].length * 10;
+  }
+  return 12;
 };
 
 const runAutoLayout = () => (dispatch, getState) => {
@@ -41,12 +48,12 @@ const runAutoLayout = () => (dispatch, getState) => {
           side: p.input ? 'WEST' : 'EAST',
           index: p.input ? b.ports.length - i : i,
         },
-        width: b.hasHiddenLink && p.input ? 92 : 12,
+        width: getNodePadding(b, p),
         height: 12,
       })),
     })),
     edges: Object.values(links)
-      .filter(link => link.id.split(separator)[0] !== 'HIDDEN-LINK')
+      .filter(link => link.id.split(hiddenLinkIdSeparator)[0] !== 'HIDDEN-LINK')
       .map((link, i) => ({
         id: `e${i}`,
         sources: [link.sourcePort.id],

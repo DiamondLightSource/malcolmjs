@@ -12,7 +12,7 @@ import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
 import { idSeparator } from '../../../layout/layout.component';
 
-export const separator = '࿈';
+export const hiddenLinkIdSeparator = '࿈';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
@@ -109,14 +109,14 @@ const findHiddenLinks = (layoutBlocks, layoutEngine) => {
         const portIndex = inputPorts.findIndex(
           p => p.label === updatedPort.label
         );
-        const newValue = `${updatedPort.value}${separator}${
+        const newValue = `${updatedPort.value}${hiddenLinkIdSeparator}${
           updatedBlock.mri
-        }${separator}${updatedPort.label}`;
+        }${hiddenLinkIdSeparator}${updatedPort.label}`;
         const hiddenLinkEnd = {
           position: { ...updatedBlock.position },
-          mri: `HIDDEN-LINK${separator}${updatedBlock.mri}${separator}${
-            updatedPort.label
-          }`,
+          mri: `HIDDEN-LINK${hiddenLinkIdSeparator}${
+            updatedBlock.mri
+          }${hiddenLinkIdSeparator}${updatedPort.label}`,
           isHiddenLink: true,
           name: `${newValue}`,
           ports: [

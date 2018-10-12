@@ -10,7 +10,7 @@ import {
   malcolmClearLayoutSelect,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
-import { separator } from '../malcolm/reducer/layout/layout.reducer';
+import { hiddenLinkIdSeparator } from '../malcolm/reducer/layout/layout.reducer';
 
 require('storm-react-diagrams/dist/style.min.css');
 
@@ -167,7 +167,7 @@ export const mapDispatchToProps = dispatch => ({
         if (multipleBlocksSelected && childPanelIsOpen) {
           innerDispatch(navigationActions.updateChildPanel(''));
         } else if (!multipleBlocksSelected) {
-          const idComponents = block.mri.split(separator);
+          const idComponents = block.mri.split(hiddenLinkIdSeparator);
           const blockMri = idComponents[1];
           const portName = idComponents[2];
           dispatch(
@@ -214,7 +214,19 @@ export const mapDispatchToProps = dispatch => ({
   },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
-      dispatch(malcolmSelectBlock(id, isSelected));
+      const checkId = id.split(hiddenLinkIdSeparator);
+      if (!(checkId[0] === 'HIDDEN-LINK')) {
+        dispatch(malcolmSelectBlock(id, isSelected));
+      } else {
+        dispatch(
+          malcolmSelectLink(
+            `${id}${idSeparator}${idSeparator}${checkId[1]}${idSeparator}${
+              checkId[2]
+            }`,
+            isSelected
+          )
+        );
+      }
     } else if (type === 'malcolmlink') {
       dispatch(malcolmSelectLink(id, isSelected));
     }
