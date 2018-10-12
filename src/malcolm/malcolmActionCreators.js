@@ -50,7 +50,19 @@ export const malcolmGetAction = path => (dispatch, getState) => {
     },
   });
 };
-
+/*
+export const malcolmGetLinkSource = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const layout = {};
+  layout.visible.forEach(
+    (b, index) => !b && dispatch(malcolmGetAction([layout.mri[index], 'meta']))
+  );
+  // Wait until all Block Gets and Gets they kicked off have returned (but don't block)...
+  const sourceIndex = layout.visible.findIndex(
+    (b, index) => !b && blockUtils.findAttributesWithTag(state.blocks[layout.mri[index]], port.value).length > 0
+  );
+};
+*/
 export const malcolmPutAction = (path, value) => ({
   type: MalcolmSend,
   payload: {
