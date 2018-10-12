@@ -16,5 +16,5 @@ body {
 }
 
 :-moz-focusring {
-  color: white !important;
+  color: inherit !important;
 }
