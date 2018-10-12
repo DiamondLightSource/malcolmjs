@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { BaseWidget } from 'storm-react-diagrams';
 import Typography from '@material-ui/core/Typography';
+import { idSeparator } from '../layout.component';
+import { malcolmSelectLink } from '../../malcolm/malcolmActionCreators';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const styles = () => ({
   container: {
@@ -39,15 +42,11 @@ const styles = () => ({
   hiddenLink: {
     position: 'absolute',
     display: 'flex',
-    flexDirection: 'column',
-    paddingRight: 10,
-    borderBottom: '3px dashed rgba(255,255,255,0.5)',
     right: '100%',
-    bottom: '40%',
+    alignItems: 'center',
+    marginRight: '-4px',
   },
-  hiddenLinkLine: {
-    width: '100%',
-  },
+  hiddenLinkLine: { fontSize: '20pt', whiteSpace: 'pre' },
 });
 
 class BlockPortWidget extends BaseWidget {
@@ -79,58 +78,65 @@ class BlockPortWidget extends BaseWidget {
           : 'rgba(0,0,0,0)',
     };
 
-    const hiddenLink = (
-      <div className={this.props.classes.hiddenLink}>
-        <Typography>{this.props.portValue}</Typography>
-      </div>
-    );
-    const port = (
-      <div
-        className={this.props.classes.portDropZone}
-        style={portStyle}
-        onMouseEnter={() => {
-          this.setState({ selected: true });
-        }}
-        onMouseLeave={() => {
-          this.setState({ selected: false });
-        }}
-        role="presentation"
-        {...this.getProps()}
-        data-name={this.props.portName}
-        data-nodeid={this.props.nodeId}
-        onMouseDown={e => {
-          e.isPortClick = true;
-          this.props.mouseDownHandler(this.props.portId, true);
-        }}
-        onMouseUp={() => this.props.mouseDownHandler(this.props.portId, false)}
-      >
+    const port =
+      this.props.portType === 'HIDDEN' ? (
         <div
-          className={this.props.classes.port}
-          style={{
-            background:
-              this.state.selected &&
-              ((this.props.linkInProgress &&
-                this.props.canConnectToStartPort) ||
-                !this.props.linkInProgress)
-                ? portColour[100]
-                : portColour[500],
+          {...this.getProps()}
+          onMouseDown={e => e.stopPropagation()}
+          data-name={this.props.portName}
+          data-nodeid={this.props.nodeId}
+          role="presentation"
+        >
+          <div className={this.props.classes.port} />
+        </div>
+      ) : (
+        <div
+          className={this.props.classes.portDropZone}
+          style={portStyle}
+          onMouseEnter={() => {
+            this.setState({ selected: true });
+          }}
+          onMouseLeave={() => {
+            this.setState({ selected: false });
           }}
           role="presentation"
-        />
-      </div>
-    );
-    const label = (
-      <Typography className={this.props.classes.portLabel}>
-        {this.props.portLabel}
-      </Typography>
-    );
+          {...this.getProps()}
+          data-name={this.props.portName}
+          data-nodeid={this.props.nodeId}
+          onMouseDown={e => {
+            e.isPortClick = true;
+            this.props.mouseDownHandler(this.props.portId, true);
+          }}
+          onMouseUp={() =>
+            this.props.mouseDownHandler(this.props.portId, false)
+          }
+        >
+          <div
+            className={this.props.classes.port}
+            style={{
+              background:
+                this.state.selected &&
+                ((this.props.linkInProgress &&
+                  this.props.canConnectToStartPort) ||
+                  !this.props.linkInProgress)
+                  ? portColour[100]
+                  : portColour[500],
+            }}
+            role="presentation"
+          />
+        </div>
+      );
+    const label =
+      this.props.portType === 'HIDDEN' ? null : (
+        <Typography className={this.props.classes.portLabel}>
+          {this.props.portLabel}
+        </Typography>
+      );
 
     return (
       <div className={this.props.classes.container}>
-        {this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
         {this.props.inputPort ? port : label}
         {this.props.inputPort ? label : port}
-        {!this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
       </div>
     );
   }
@@ -144,6 +150,18 @@ const defaultPort = {
   hiddenLink: false,
   value: '',
 };
+
+const mapDispatchToProps = dispatch => ({
+  linkClickHandler: id => {
+    const idComponents = id.split(idSeparator);
+    const blockMri = idComponents[2];
+    const portName = idComponents[3];
+    dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
+  },
+  selectHandler: (id, isSelected) => {
+    dispatch(malcolmSelectLink(id, isSelected));
+  },
+});
 
 export const mapStateToProps = (state, ownProps) => {
   const allNodes = state.malcolm.layoutEngine.diagramModel.nodes;
@@ -170,6 +188,11 @@ export const mapStateToProps = (state, ownProps) => {
     portLabel: port.label,
     portType: port.portType,
     hiddenLink: port.hiddenLink,
+    isSelected: state.malcolm.layoutState.selectedLinks.some(
+      a =>
+        a.split(idSeparator)[2] === ownProps.portId.split(idSeparator)[0] &&
+        a.split(idSeparator)[3] === ownProps.portId.split(idSeparator)[1]
+    ),
     portValue: port.value,
     linkInProgress:
       state.malcolm.layoutState.startPortForLink !== undefined &&
@@ -179,6 +202,6 @@ export const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(BlockPortWidget)
 );

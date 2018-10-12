@@ -6,6 +6,7 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
@@ -20,62 +21,68 @@ import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
+import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
 
-const styles = theme => ({
-  container: {
-    marginTop: 64,
-    height: '100%',
-    width: '100%',
-  },
-  layoutArea: {
-    display: 'flex',
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    backgroundColor: theme.palette.background.default,
-    backgroundImage:
-      'linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent)',
-    backgroundSize: '50px 50px',
-  },
-  alarm: {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'absolute',
-  },
-  alarmText: {
-    marginRight: 5,
-  },
-  paletteButton: {
-    position: 'absolute',
-  },
-  autoLayoutButton: {
-    position: 'absolute',
-  },
-  tableContainer: {
-    display: 'flex',
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    verticalAlign: 'middle',
-  },
-  plainBackground: {
-    display: 'flex',
-    width: '100%',
-    minHeight: '100%',
-    height: '100%',
-    backgroundColor: theme.palette.background.paper,
-    align: 'center',
-  },
-  button: {
-    width: '24px',
-    height: '24px',
-    padding: 0,
-    '&:hover': {
-      backgroundColor: 'transparent',
+const styles = theme => {
+  const gridLineColor = fade(
+    emphasize(theme.palette.background.default, 0.9),
+    0.05
+  );
+  return {
+    container: {
+      marginTop: 64,
+      height: '100%',
+      width: '100%',
     },
-  },
-});
+    layoutArea: {
+      display: 'flex',
+      position: 'relative',
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.palette.background.default,
+      backgroundImage: `linear-gradient(0deg, transparent 24%, ${gridLineColor} 25%, ${gridLineColor} 26%, transparent 27%, transparent 74%, ${gridLineColor} 75%, ${gridLineColor} 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, ${gridLineColor} 25%, ${gridLineColor} 26%, transparent 27%, transparent 74%, ${gridLineColor} 75%, ${gridLineColor} 76%, transparent 77%, transparent)`,
+      backgroundSize: '50px 50px',
+    },
+    alarm: {
+      display: 'flex',
+      alignItems: 'center',
+      position: 'absolute',
+    },
+    alarmText: {
+      marginRight: 5,
+    },
+    paletteButton: {
+      position: 'absolute',
+    },
+    autoLayoutButton: {
+      position: 'absolute',
+    },
+    tableContainer: {
+      display: 'flex',
+      position: 'relative',
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      verticalAlign: 'middle',
+    },
+    plainBackground: {
+      display: 'flex',
+      width: '100%',
+      minHeight: '100%',
+      height: '100%',
+      backgroundColor: theme.palette.background.paper,
+      align: 'center',
+    },
+    button: {
+      width: '24px',
+      height: '24px',
+      padding: 0,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+  };
+};
 
 const getWidgetType = tags => {
   const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
@@ -287,7 +294,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openPalette: () => dispatch(navigationActions.navigateToPalette()),
+  openPalette: () => {
+    dispatch(malcolmClearLayoutSelect());
+    dispatch(navigationActions.navigateToPalette());
+  },
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
 });
 

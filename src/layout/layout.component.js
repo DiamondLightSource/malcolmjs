@@ -7,8 +7,10 @@ import {
   malcolmSelectBlock,
   malcolmSelectLink,
   malcolmLayoutUpdatePosition,
+  malcolmClearLayoutSelect,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
+import { hiddenLinkIdSeparator } from '../malcolm/reducer/layout/layout.reducer';
 
 require('storm-react-diagrams/dist/style.min.css');
 
@@ -132,29 +134,56 @@ const movedInXOrY = (node, block, limit) =>
 
 export const mapDispatchToProps = dispatch => ({
   clickHandler: (block, node) => {
-    const translation = {
-      x: node.x - block.position.x,
-      y: node.y - block.position.y,
-    };
+    if (!block.isHiddenLink) {
+      const translation = {
+        x: node.x - block.position.x,
+        y: node.y - block.position.y,
+      };
 
-    if (movedInXOrY(node, block, 3)) {
-      dispatch(malcolmLayoutUpdatePosition(translation));
-    }
-
-    dispatch((innerDispatch, getState) => {
-      const state = getState().malcolm;
-      const childPanelIsOpen = state.childBlock !== undefined;
-      const multipleBlocksSelected =
-        state.layoutState.selectedBlocks.length > 1;
-      if (multipleBlocksSelected && childPanelIsOpen) {
-        innerDispatch(navigationActions.updateChildPanel(''));
-      } else if (
-        !multipleBlocksSelected &&
-        (!movedInXOrY(node, block, 3) || childPanelIsOpen)
-      ) {
-        innerDispatch(navigationActions.updateChildPanel(block.name));
+      if (movedInXOrY(node, block, 3)) {
+        dispatch(malcolmLayoutUpdatePosition(translation));
       }
-    });
+
+      dispatch((innerDispatch, getState) => {
+        const state = getState().malcolm;
+        const childPanelIsOpen = state.childBlock !== undefined;
+        const multipleBlocksSelected =
+          state.layoutState.selectedBlocks.length > 1;
+        if (multipleBlocksSelected && childPanelIsOpen) {
+          innerDispatch(navigationActions.updateChildPanel(''));
+        } else if (
+          !multipleBlocksSelected &&
+          (!movedInXOrY(node, block, 3) || childPanelIsOpen)
+        ) {
+          innerDispatch(navigationActions.updateChildPanel(block.name));
+        }
+      });
+    } else {
+      dispatch((innerDispatch, getState) => {
+        const state = getState().malcolm;
+        const childPanelIsOpen = state.childBlock !== undefined;
+        const multipleBlocksSelected =
+          state.layoutState.selectedBlocks.length > 1;
+        if (multipleBlocksSelected && childPanelIsOpen) {
+          innerDispatch(navigationActions.updateChildPanel(''));
+        } else if (!multipleBlocksSelected) {
+          const idComponents = block.mri.split(hiddenLinkIdSeparator);
+          const blockMri = idComponents[1];
+          const portName = idComponents[2];
+          dispatch(
+            malcolmSelectLink(
+              `${
+                block.mri
+              }${idSeparator}${idSeparator}${blockMri}${idSeparator}${portName}`,
+              true
+            )
+          );
+          dispatch(
+            navigationActions.updateChildPanelWithLink(blockMri, portName)
+          );
+        }
+      });
+    }
   },
   mouseDownHandler: show => {
     if (show) {
@@ -181,10 +210,23 @@ export const mapDispatchToProps = dispatch => ({
   },
   layoutClickHandler: () => {
     dispatch(navigationActions.updateChildPanel(''));
+    dispatch(malcolmClearLayoutSelect());
   },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
-      dispatch(malcolmSelectBlock(id, isSelected));
+      const checkId = id.split(hiddenLinkIdSeparator);
+      if (!(checkId[0] === 'HIDDEN-LINK')) {
+        dispatch(malcolmSelectBlock(id, isSelected));
+      } else {
+        dispatch(
+          malcolmSelectLink(
+            `${id}${idSeparator}${idSeparator}${checkId[1]}${idSeparator}${
+              checkId[2]
+            }`,
+            isSelected
+          )
+        );
+      }
     } else if (type === 'malcolmlink') {
       dispatch(malcolmSelectLink(id, isSelected));
     }

@@ -12,6 +12,7 @@ import {
   malcolmRevertAction,
   malcolmUpdateTable,
   malcolmSelectLink,
+  malcolmGetAction,
 } from '../malcolm/malcolmActionCreators';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
@@ -240,6 +241,9 @@ const deselectLinkAction = path => (dispatch, getState) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  getBlock: path => {
+    dispatch(malcolmGetAction(path));
+  },
   changeInfoHandler: (path, subElement) => {
     dispatch(
       navigationActions.navigateToSubElement(path[0], path[1], subElement)
@@ -276,6 +280,7 @@ const mapStateToProps = state => {
   let blockName;
   let attributeName;
   let subElement;
+  let layoutAttribute;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
   if (navLists[2].navType === NavTypes.Info) {
     blockName =
@@ -291,7 +296,7 @@ const mapStateToProps = state => {
   const showLinkInfo = navLists[2].path.endsWith('.link');
   let linkBlockName;
   if (showLinkInfo) {
-    const layoutAttribute = blockUtils.findAttribute(
+    layoutAttribute = blockUtils.findAttribute(
       state.malcolm.blocks,
       state.malcolm.parentBlock,
       state.malcolm.mainAttribute
@@ -320,6 +325,7 @@ const mapStateToProps = state => {
     attributeName,
     subElement,
     isLinkInfo: showLinkInfo,
+    layoutAttribute: showLinkInfo ? layoutAttribute : undefined,
     isMethodInfo:
       attribute && attribute.calculated && attribute.calculated.isMethod,
     linkBlockName,

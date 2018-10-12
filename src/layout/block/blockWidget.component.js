@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
 import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
+import { hiddenLinkIdSeparator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
   block: {
@@ -99,7 +100,7 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
-  return props.node.loading ? (
+  const block = props.node.loading ? (
     <LoadingBlock classes={props.classes} node={props.node} />
   ) : (
     <Paper
@@ -149,6 +150,30 @@ const BlockWidget = props => {
       </Typography>
     </Paper>
   );
+  return props.node.isHiddenLink ? (
+    <div
+      style={{ display: 'flex', position: 'relative', maxWidth: '5px' }}
+      onClick={e => props.node.clickHandler(e)}
+      role="presentation"
+    >
+      <div style={{ position: 'absolute', right: '100%' }}>
+        <Typography>
+          {props.node.label.split(hiddenLinkIdSeparator)[0]}
+        </Typography>
+      </div>
+      {outputPorts.map(p => (
+        <div style={{ position: 'absolute', left: '100%' }}>
+          <BlockPortWidget
+            key={props.node.ports[p].id}
+            nodeId={props.node.id}
+            portId={p}
+          />
+        </div>
+      ))}
+    </div>
+  ) : (
+    block
+  );
 };
 
 BlockWidget.propTypes = {
@@ -160,6 +185,7 @@ BlockWidget.propTypes = {
     description: PropTypes.string,
     selected: PropTypes.bool,
     loading: PropTypes.bool,
+    isHiddenLink: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
   }).isRequired,
@@ -180,6 +206,7 @@ LoadingBlock.propTypes = {
   node: PropTypes.shape({
     label: PropTypes.string,
     selected: PropTypes.bool,
+    isHidden: PropTypes.bool,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

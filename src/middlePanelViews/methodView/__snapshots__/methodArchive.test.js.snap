@@ -54,6 +54,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}
@@ -85,7 +86,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
 exports[`MethodArchive renders table correctly for input param 1`] = `
 <Connect(WithTheme(TabbedPanel))
   alwaysUpdate={true}
-  defaultTab={0}
+  defaultTab={1}
   openPanels={Object {}}
   tabLabels={
     Array [
@@ -136,6 +137,7 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}
@@ -167,7 +169,7 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
 exports[`MethodArchive renders table correctly for return param 1`] = `
 <Connect(WithTheme(TabbedPanel))
   alwaysUpdate={true}
-  defaultTab={0}
+  defaultTab={1}
   openPanels={Object {}}
   tabLabels={
     Array [
@@ -218,6 +220,7 @@ exports[`MethodArchive renders table correctly for return param 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     hideInfo={true}
     infoClickHandler={[Function]}

@@ -239,7 +239,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].type).toEqual(MalcolmMultipleAttributeData);
     expect(dispatches[0].payload.actions).toHaveLength(1);
     expect(dispatches[0].payload.actions[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.actions[0].payload.typeid).toEqual(typeid);
+    expect(dispatches[0].payload.actions[0].payload.raw.typeid).toEqual(typeid);
   };
 
   it('handles scalar attribute updates', () => {

@@ -33,6 +33,9 @@ class MalcolmLinkFactory extends DefaultLinkFactory {
         className={findHightlightClass(model, widget, selected, hovering)}
         strokeWidth={model.width}
         stroke={model.color}
+        strokeDasharray={
+          model.sourcePort.portType === 'HIDDEN' ? '8' : undefined
+        }
         d={path}
         onClick={e => {
           model.clickHandler(model.id);

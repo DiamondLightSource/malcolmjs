@@ -1,6 +1,7 @@
 import { replace, push } from 'react-router-redux';
 import NavTypes from '../NavTypes';
 import {
+  malcolmClearLayoutSelect,
   malcolmNewBlockAction,
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
@@ -67,6 +68,7 @@ const navigateToAttribute = (blockMri, attributeName) => (
 
   // subscribe to layout blocks
   if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+    dispatch(malcolmClearLayoutSelect());
     attribute.raw.value.visible.forEach((visible, i) => {
       if (visible) {
         const blockName = attribute.raw.value.mri[i];
@@ -276,7 +278,8 @@ const closeInfo = (blockMri, attributeName, subElement) => (
   dispatch,
   getState
 ) => {
-  const { blocks, navigationLists, mainAttribute } = getState().malcolm;
+  const { blocks, mainAttribute, navigation } = getState().malcolm;
+  const { navigationLists } = navigation;
   const attribute = blockUtils.findAttribute(blocks, blockMri, attributeName);
   if (attribute && attribute.calculated && attribute.calculated.isMethod) {
     const newPath = `/gui/${navigationLists

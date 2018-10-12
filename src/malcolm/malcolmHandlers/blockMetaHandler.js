@@ -2,9 +2,16 @@ import { MalcolmBlockMeta, MalcolmRootBlockMeta } from '../malcolm.types';
 import {
   malcolmSubscribeAction,
   malcolmNewBlockAction,
+  malcolmGetAction,
 } from '../malcolmActionCreators';
 
-export const BlockMetaHandler = (request, changes, dispatch) => {
+export const BlockMetaHandler = (
+  request,
+  changes,
+  dispatch,
+  doSubscribe = true,
+  doGet = false
+) => {
   const action = {
     type: MalcolmBlockMeta,
     payload: {
@@ -15,12 +22,15 @@ export const BlockMetaHandler = (request, changes, dispatch) => {
       fields: changes.fields,
     },
   };
-
   dispatch(action);
 
   if (changes.fields) {
     changes.fields.forEach(field => {
-      dispatch(malcolmSubscribeAction([...request.path.slice(0, -1), field]));
+      if (doSubscribe) {
+        dispatch(malcolmSubscribeAction([...request.path.slice(0, -1), field]));
+      } else if (doGet) {
+        dispatch(malcolmGetAction([...request.path.slice(0, -1), field]));
+      }
     });
   }
 };
