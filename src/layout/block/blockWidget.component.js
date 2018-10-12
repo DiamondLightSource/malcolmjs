@@ -151,7 +151,11 @@ const BlockWidget = props => {
     </Paper>
   );
   return props.node.isHiddenLink ? (
-    <div style={{ display: 'flex', position: 'relative', maxWidth: '5px' }}>
+    <div
+      style={{ display: 'flex', position: 'relative', maxWidth: '5px' }}
+      onClick={e => props.node.clickHandler(e)}
+      role="presentation"
+    >
       <div style={{ position: 'absolute', right: '100%' }}>
         <Typography>{props.node.label.split(separator)[0]}</Typography>
       </div>

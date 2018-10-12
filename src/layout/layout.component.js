@@ -10,6 +10,7 @@ import {
   malcolmClearLayoutSelect,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
+import { separator } from '../malcolm/reducer/layout/layout.reducer';
 
 require('storm-react-diagrams/dist/style.min.css');
 
@@ -133,29 +134,56 @@ const movedInXOrY = (node, block, limit) =>
 
 export const mapDispatchToProps = dispatch => ({
   clickHandler: (block, node) => {
-    const translation = {
-      x: node.x - block.position.x,
-      y: node.y - block.position.y,
-    };
+    if (!block.isHiddenLink) {
+      const translation = {
+        x: node.x - block.position.x,
+        y: node.y - block.position.y,
+      };
 
-    if (movedInXOrY(node, block, 3)) {
-      dispatch(malcolmLayoutUpdatePosition(translation));
-    }
-
-    dispatch((innerDispatch, getState) => {
-      const state = getState().malcolm;
-      const childPanelIsOpen = state.childBlock !== undefined;
-      const multipleBlocksSelected =
-        state.layoutState.selectedBlocks.length > 1;
-      if (multipleBlocksSelected && childPanelIsOpen) {
-        innerDispatch(navigationActions.updateChildPanel(''));
-      } else if (
-        !multipleBlocksSelected &&
-        (!movedInXOrY(node, block, 3) || childPanelIsOpen)
-      ) {
-        innerDispatch(navigationActions.updateChildPanel(block.name));
+      if (movedInXOrY(node, block, 3)) {
+        dispatch(malcolmLayoutUpdatePosition(translation));
       }
-    });
+
+      dispatch((innerDispatch, getState) => {
+        const state = getState().malcolm;
+        const childPanelIsOpen = state.childBlock !== undefined;
+        const multipleBlocksSelected =
+          state.layoutState.selectedBlocks.length > 1;
+        if (multipleBlocksSelected && childPanelIsOpen) {
+          innerDispatch(navigationActions.updateChildPanel(''));
+        } else if (
+          !multipleBlocksSelected &&
+          (!movedInXOrY(node, block, 3) || childPanelIsOpen)
+        ) {
+          innerDispatch(navigationActions.updateChildPanel(block.name));
+        }
+      });
+    } else {
+      dispatch((innerDispatch, getState) => {
+        const state = getState().malcolm;
+        const childPanelIsOpen = state.childBlock !== undefined;
+        const multipleBlocksSelected =
+          state.layoutState.selectedBlocks.length > 1;
+        if (multipleBlocksSelected && childPanelIsOpen) {
+          innerDispatch(navigationActions.updateChildPanel(''));
+        } else if (!multipleBlocksSelected) {
+          const idComponents = block.mri.split(separator);
+          const blockMri = idComponents[1];
+          const portName = idComponents[2];
+          dispatch(
+            malcolmSelectLink(
+              `${
+                block.mri
+              }${idSeparator}${idSeparator}${blockMri}${idSeparator}${portName}`,
+              true
+            )
+          );
+          dispatch(
+            navigationActions.updateChildPanelWithLink(blockMri, portName)
+          );
+        }
+      });
+    }
   },
   mouseDownHandler: show => {
     if (show) {
