@@ -48,7 +48,7 @@ const handleMessages = (messages, dispatch, getState) => {
           dispatch({
             type: MalcolmAttributeData,
             payload: {
-              id: originalRequest.id,
+              id: originalRequest && originalRequest.id,
               delta: true,
               unableToProcess: true,
             },

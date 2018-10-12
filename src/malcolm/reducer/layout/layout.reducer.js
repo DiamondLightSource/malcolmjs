@@ -94,10 +94,11 @@ const findHiddenLinks = (layoutBlocks, layoutEngine) => {
     );
 
     const zoomFactor = layoutEngine.diagramModel.zoom / 100;
-    const blockHeight =
-      layoutEngine.getNodeDimensions(
-        layoutEngine.diagramModel.nodes[updatedBlock.mri]
-      ).height / zoomFactor;
+    const blockHeight = layoutEngine.diagramModel.nodes[updatedBlock.mri]
+      ? layoutEngine.getNodeDimensions(
+          layoutEngine.diagramModel.nodes[updatedBlock.mri]
+        ).height / zoomFactor
+      : 120 / zoomFactor;
     connectedInputPorts.forEach(port => {
       const updatedPort = port;
       const isOutputPortVisible = layoutBlocks.some(b =>
