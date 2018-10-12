@@ -168,7 +168,10 @@ export function handleErrorMessage(state, payload) {
       attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')
     ) {
       // reset the layout
-      const id = attribute.id === undefined ? attribute.id : payload.id;
+      const id =
+        attribute.calculated.id === undefined
+          ? attribute.calculated.id
+          : payload.id;
       updatedState = updateAttribute(state, {
         id,
         delta: true,
