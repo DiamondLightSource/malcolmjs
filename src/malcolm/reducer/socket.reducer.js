@@ -174,6 +174,8 @@ export function handleErrorMessage(state, payload) {
           : payload.id;
       updatedState = updateAttribute(state, {
         id,
+        raw: {},
+        calculated: {},
         delta: true,
       });
     } else if (
