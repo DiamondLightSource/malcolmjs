@@ -8,24 +8,24 @@ exports[`LinkFactory generates react widget 1`] = `
     key="link-0"
   >
     <path
-      className="srd-default-link--highlight-path "
       d="M 0,0 C 50,0 50,0 100,0"
       onClick={[Function]}
-      stroke="rgba(255,255,255,0.5)"
+      stroke="rgba(217, 217, 217, 0.4)"
       strokeWidth={3}
+      style={Object {}}
     />
     <path
-      className="srd-default-link--highlight-path "
       d="M 0,0 C 50,0 50,0 100,0"
       data-linkid="1"
       data-point={0}
       onClick={[Function]}
       onMouseEnter={[Function]}
       onMouseLeave={[Function]}
-      stroke="rgba(255,255,255,0.5)"
+      stroke="rgba(217, 217, 217, 0.4)"
       strokeLinecap="round"
       strokeOpacity={0}
       strokeWidth={20}
+      style={Object {}}
     />
   </g>
   <g

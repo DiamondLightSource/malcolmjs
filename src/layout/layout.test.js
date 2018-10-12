@@ -87,24 +87,24 @@ describe('Layout', () => {
         },
       },
     };
+    state.malcolm.layoutEngine.theme = {};
   });
 
   it('renders correctly', () => {
     const wrapper = shallow(<Layout store={mockStore(state)} />);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('onFocus sets hasFocus state to true', () => {
     state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
-    const wrapper = shallow(<Layout store={mockStore(state)} />);
-    expect(wrapper.state()).toEqual({ hasFocus: false });
+    const wrapper = shallow(<Layout store={mockStore(state)} />).dive();
     wrapper.find('#LayoutDiv').simulate('focus');
     expect(wrapper.state()).toEqual({ hasFocus: true });
   });
 
   it('onBlur sets hasFocus state to false', () => {
     state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
-    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    const wrapper = shallow(<Layout store={mockStore(state)} />).dive();
     expect(wrapper.state()).toEqual({ hasFocus: false });
     wrapper.setState({ hasFocus: true });
     expect(wrapper.state()).toEqual({ hasFocus: true });
@@ -114,7 +114,7 @@ describe('Layout', () => {
 
   it('delete key sends delete block action if layout has focus', () => {
     state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
-    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    const wrapper = shallow(<Layout store={mockStore(state)} />).dive();
     wrapper.setState({ hasFocus: true });
     wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
     expect(layoutActions.deleteBlocks).toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe('Layout', () => {
 
   it('backspace key sends delete block action if layout has focus', () => {
     state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
-    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    const wrapper = shallow(<Layout store={mockStore(state)} />).dive();
     wrapper.setState({ hasFocus: true });
     wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Backspace' });
 
@@ -133,7 +133,7 @@ describe('Layout', () => {
 
   it('delete key doesnt send delete block action if layout doesnt have focus', () => {
     state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
-    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    const wrapper = shallow(<Layout store={mockStore(state)} />).dive();
     wrapper.setState({ hasFocus: false });
     wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
     expect(layoutActions.deleteBlocks).not.toHaveBeenCalled();

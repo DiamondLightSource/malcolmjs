@@ -21,6 +21,12 @@ describe('LinkFactory', () => {
     link.sourcePort = {
       in: false,
     };
+    link.theme = {
+      palette: {
+        background: { default: '#424242' },
+        secondary: { main: '#ff0000' },
+      },
+    };
 
     const engine = new DiagramEngine();
     engine.nodesRendered = true;
