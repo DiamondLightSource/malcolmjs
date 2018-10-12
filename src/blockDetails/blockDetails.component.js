@@ -200,6 +200,7 @@ GroupDivider.propTypes = {
 
 const mapStateToProps = (state, ownProps, memory) => {
   const stateMemory = memory;
+  stateMemory.orphans = stateMemory.orphans || [];
   let block;
   const blockList = state.malcolm.blocks['.blocks']
     ? state.malcolm.blocks['.blocks'].children
@@ -226,7 +227,8 @@ const mapStateToProps = (state, ownProps, memory) => {
   if (
     block &&
     block.attributes &&
-    !areAttributesTheSame(stateMemory.oldAttributes, block.attributes)
+    (!areAttributesTheSame(stateMemory.oldAttributes, block.attributes) ||
+      block.orphans.some(a => !stateMemory.orphans.includes(a)))
   ) {
     stateMemory.rootAttributes = block.attributes.filter(
       a =>
@@ -236,6 +238,7 @@ const mapStateToProps = (state, ownProps, memory) => {
           block.orphans.some(orphan => orphan === a.calculated.name)
         )
     );
+    stateMemory.orphans = block.orphans;
     stateMemory.groups = block.attributes
       .filter(a => a.calculated.isGroup)
       .map(group => ({
