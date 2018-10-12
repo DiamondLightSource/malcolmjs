@@ -4,6 +4,7 @@ import * as colors from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const ThemeEditor = props => (
   <div style={{ padding: '16px' }}>
@@ -21,15 +22,17 @@ const ThemeEditor = props => (
             colors[color].main !== undefined || colors[color].A400 !== undefined
         )
         .map(color => (
-          <IconButton
-            style={{
-              margin: '2px',
-              width: 32,
-              height: 32,
-              backgroundColor: colors[color][400],
-            }}
-            onClick={() => props.setThemeProp('primary', colors[color])}
-          />
+          <Tooltip title={color}>
+            <IconButton
+              style={{
+                margin: '2px',
+                width: 32,
+                height: 32,
+                backgroundColor: colors[color][400],
+              }}
+              onClick={() => props.setThemeProp('primary', colors[color])}
+            />
+          </Tooltip>
         ))}
     </div>
     <Typography>Secondary color:</Typography>
@@ -46,15 +49,17 @@ const ThemeEditor = props => (
             colors[color].main !== undefined || colors[color].A400 !== undefined
         )
         .map(color => (
-          <IconButton
-            style={{
-              margin: '2px',
-              width: 32,
-              height: 32,
-              backgroundColor: colors[color][400],
-            }}
-            onClick={() => props.setThemeProp('secondary', colors[color])}
-          />
+          <Tooltip title={color}>
+            <IconButton
+              style={{
+                margin: '2px',
+                width: 32,
+                height: 32,
+                backgroundColor: colors[color][400],
+              }}
+              onClick={() => props.setThemeProp('secondary', colors[color])}
+            />
+          </Tooltip>
         ))}
     </div>
     <div>
