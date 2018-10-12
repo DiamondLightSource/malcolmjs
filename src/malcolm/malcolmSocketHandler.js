@@ -48,7 +48,7 @@ const handleMessages = (messages, dispatch, getState) => {
           dispatch({
             type: MalcolmAttributeData,
             payload: {
-              id: originalRequest.id,
+              id: originalRequest && originalRequest.id,
               delta: true,
               unableToProcess: true,
             },
@@ -57,6 +57,11 @@ const handleMessages = (messages, dispatch, getState) => {
         break;
       }
       case 'malcolm:core/Return:1.0': {
+        if (data.value && data.value.typeid === 'malcolm:core/BlockMeta:1.0') {
+          BlockMetaHandler(originalRequest, data.value, dispatch, false, true);
+        } else if (data.value && data.value.typeid.slice(0, 8) === 'epics:nt') {
+          AttributeHandler.processAttribute(originalRequest, data.value);
+        }
         dispatch(malcolmHailReturn(data, false));
         dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
         break;

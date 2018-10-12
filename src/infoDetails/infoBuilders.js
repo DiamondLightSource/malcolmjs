@@ -317,9 +317,7 @@ export const linkInfo = props => {
     .slice(-1)[0];
   /*
   const layout = props.layoutAttribute.raw.value;
-  const sourceIndex = layout.name.findIndex(
-    a => a === portAttribute.raw.value.split('.')[0]
-  );
+  const sourceIndex = -1;
   const sinkIndex = layout.mri.findIndex(a => a === blockMri);
   */
   const info = {
@@ -349,19 +347,20 @@ export const linkInfo = props => {
       tag: 'info:button',
       showLabel: false,
       disabled:
-        sourceIndex === -1 ||
         layout.visible[sourceIndex] ||
         props.isLayoutLocked ||
         portAttribute.raw.value === portNullValue,
       functions: {
         clickHandler: () => {
-          props.eventHandler(props.layoutAttribute.calculated.path, {
-            mri: [layout.mri[sourceIndex]],
-            name: [layout.name[sourceIndex]],
-            visible: [true],
-            x: [layout.x[sinkIndex] - 180],
-            y: [layout.y[sinkIndex]],
-          });
+          if (sourceIndex !== -1) {
+            props.eventHandler(props.layoutAttribute.calculated.path, {
+              mri: [layout.mri[sourceIndex]],
+              name: [layout.name[sourceIndex]],
+              visible: [true],
+              x: [layout.x[sinkIndex] - 180],
+              y: [layout.y[sinkIndex]],
+            });
+          }
         },
       },
     },

@@ -8,11 +8,29 @@ import {
 describe('Malcolm Action Creators', () => {
   it('malcolm GET actions have right properties', () => {
     const path = ['pathA', 'pathB'];
-    const getAction = malcolmGetAction(path);
+    const getActions = [];
+    malcolmGetAction(path)(
+      action => getActions.push(action),
+      () => ({ malcolm: { blocks: {} } })
+    );
+    expect(getActions.length).toEqual(2);
+    expect(getActions[0]).toEqual(malcolmNewBlockAction('pathA', false, false));
+    expect(getActions[1].type).toEqual('malcolm:send');
+    expect(getActions[1].payload.typeid).toEqual('malcolm:core/Get:1.0');
+    expect(getActions[1].payload.path).toEqual(path);
+  });
 
-    expect(getAction.type).toEqual('malcolm:send');
-    expect(getAction.payload.typeid).toEqual('malcolm:core/Get:1.0');
-    expect(getAction.payload.path).toEqual(path);
+  it('malcolm GET actions fire create block if it doesnt exist in state', () => {
+    const path = ['pathA', 'pathB'];
+    const getActions = [];
+    malcolmGetAction(path)(
+      action => getActions.push(action),
+      () => ({ malcolm: { blocks: { pathA: {} } } })
+    );
+    expect(getActions.length).toEqual(1);
+    expect(getActions[0].type).toEqual('malcolm:send');
+    expect(getActions[0].payload.typeid).toEqual('malcolm:core/Get:1.0');
+    expect(getActions[0].payload.path).toEqual(path);
   });
 
   it('malcolm SUBSCRIBE actions have right properties', () => {

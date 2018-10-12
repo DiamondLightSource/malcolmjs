@@ -20,14 +20,6 @@ import {
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
-export const malcolmGetAction = path => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Get:1.0',
-    path,
-  },
-});
-
 export const malcolmSubscribeAction = (path, delta = true) => ({
   type: MalcolmSend,
   payload: {
@@ -46,6 +38,31 @@ export const malcolmNewBlockAction = (blockName, parent, child) => ({
   },
 });
 
+export const malcolmGetAction = path => (dispatch, getState) => {
+  if (!getState().malcolm.blocks[path[0]]) {
+    dispatch(malcolmNewBlockAction(path[0], false, false));
+  }
+  dispatch({
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Get:1.0',
+      path,
+    },
+  });
+};
+/*
+export const malcolmGetLinkSource = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const layout = {};
+  layout.visible.forEach(
+    (b, index) => !b && dispatch(malcolmGetAction([layout.mri[index], 'meta']))
+  );
+  // Wait until all Block Gets and Gets they kicked off have returned (but don't block)...
+  const sourceIndex = layout.visible.findIndex(
+    (b, index) => !b && blockUtils.findAttributesWithTag(state.blocks[layout.mri[index]], port.value).length > 0
+  );
+};
+*/
 export const malcolmPutAction = (path, value) => ({
   type: MalcolmSend,
   payload: {

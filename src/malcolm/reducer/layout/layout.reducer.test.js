@@ -33,6 +33,13 @@ const buildMalcolmState = () => ({
     },
     selectedBlocks: ['block1'],
   },
+  layoutEngine: {
+    diagramModel: {
+      nodes: { block1: {} },
+      zoom: 100,
+    },
+    getNodeDimensions: () => ({ height: 120, width: 120 }),
+  },
   blocks: {
     block1: {
       label: 'block1 label',

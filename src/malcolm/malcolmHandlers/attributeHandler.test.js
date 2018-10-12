@@ -142,7 +142,9 @@ describe('attribute handler', () => {
 
     expect(dispatches[0].payload.actions[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].payload.actions[0].payload.id).toEqual(1);
-    expect(dispatches[0].payload.actions[0].payload.typeid).toEqual('NTScalar');
+    expect(dispatches[0].payload.actions[0].payload.raw.typeid).toEqual(
+      'NTScalar'
+    );
     expect(dispatches[0].payload.actions[0].payload.delta).toEqual(true);
   });
 
@@ -197,7 +199,9 @@ describe('attribute handler', () => {
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
     expect(dispatches[0].payload.actions[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].payload.actions[0].payload.id).toEqual(1);
-    expect(dispatches[0].payload.actions[0].payload.typeid).toEqual('NTTable');
+    expect(dispatches[0].payload.actions[0].payload.raw.typeid).toEqual(
+      'NTTable'
+    );
     expect(dispatches[0].payload.actions[0].payload.delta).toEqual(true);
   });
 

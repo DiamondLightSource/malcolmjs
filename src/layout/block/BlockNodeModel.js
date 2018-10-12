@@ -14,9 +14,7 @@ class BlockNodeModel extends NodeModel {
     this.hasHiddenLink = block.hasHiddenLink;
     this.addBlockPort = this.addBlockPort.bind(this);
     this.addIcon = this.addIcon.bind(this);
-    this.addClickHandler = block.isHiddenLink
-      ? () => {}
-      : this.addClickHandler.bind(this);
+    this.addClickHandler = this.addClickHandler.bind(this);
     this.addMouseDownHandler = block.isHiddenLink
       ? () => {}
       : this.addMouseDownHandler.bind(this);

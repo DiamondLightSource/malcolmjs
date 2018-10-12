@@ -12,7 +12,7 @@ import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
 import { idSeparator } from '../../../layout/layout.component';
 
-export const separator = '࿈';
+export const hiddenLinkIdSeparator = '࿈';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
@@ -84,14 +84,21 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
   return layoutBlock;
 };
 
-const findHiddenLinks = layoutBlocks => {
+const findHiddenLinks = (layoutBlocks, layoutEngine) => {
   const hiddenBlocks = [];
   layoutBlocks.map(block => {
     const updatedBlock = block;
+    const inputPorts = updatedBlock.ports.filter(p => p.input);
     const connectedInputPorts = updatedBlock.ports.filter(
       p => p.input && p.value !== p.tag
     );
 
+    const zoomFactor = layoutEngine.diagramModel.zoom / 100;
+    const blockHeight = layoutEngine.diagramModel.nodes[updatedBlock.mri]
+      ? layoutEngine.getNodeDimensions(
+          layoutEngine.diagramModel.nodes[updatedBlock.mri]
+        ).height / zoomFactor
+      : 120 / zoomFactor;
     connectedInputPorts.forEach(port => {
       const updatedPort = port;
       const isOutputPortVisible = layoutBlocks.some(b =>
@@ -100,17 +107,17 @@ const findHiddenLinks = layoutBlocks => {
       updatedPort.hiddenLink = !isOutputPortVisible;
       if (updatedPort.hiddenLink) {
         updatedBlock.hasHiddenLink = true;
-        const portIndex = updatedBlock.ports.findIndex(
+        const portIndex = inputPorts.findIndex(
           p => p.label === updatedPort.label
         );
-        const newValue = `${updatedPort.value}${separator}${
+        const newValue = `${updatedPort.value}${hiddenLinkIdSeparator}${
           updatedBlock.mri
-        }${separator}${updatedPort.label}`;
+        }${hiddenLinkIdSeparator}${updatedPort.label}`;
         const hiddenLinkEnd = {
           position: { ...updatedBlock.position },
-          mri: `HIDDEN-LINK${separator}${updatedBlock.mri}${separator}${
-            updatedPort.label
-          }`,
+          mri: `HIDDEN-LINK${hiddenLinkIdSeparator}${
+            updatedBlock.mri
+          }${hiddenLinkIdSeparator}${updatedPort.label}`,
           isHiddenLink: true,
           name: `${newValue}`,
           ports: [
@@ -125,7 +132,8 @@ const findHiddenLinks = layoutBlocks => {
         };
         updatedPort.value = newValue;
         hiddenLinkEnd.position.x -= 60;
-        hiddenLinkEnd.position.y += 30 + portIndex * 20;
+        hiddenLinkEnd.position.y +=
+          blockHeight / 2 - 10 + (portIndex - (inputPorts.length - 1) / 2) * 20;
         hiddenBlocks.push(hiddenLinkEnd);
       }
     });
@@ -154,7 +162,7 @@ const processLayout = malcolmState => {
         .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
         .map(b => updateLayoutBlock(b, malcolmState));
 
-      layoutBlocks = findHiddenLinks(layoutBlocks);
+      layoutBlocks = findHiddenLinks(layoutBlocks, malcolmState.layoutEngine);
       layout.blocks = layoutBlocks;
 
       layout.locked = !attribute.raw.meta.writeable;
