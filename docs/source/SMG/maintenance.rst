@@ -108,8 +108,10 @@ The YAML file for pyMalcolm should contain the following:
 Canned Data
 -----------
 
-Once the PandA simulator and pyMalcolm are running, it is possible to generate a fresh set of canned data. To do this, simply run the
-canned_data_generator.py python script (located in *<malcolmJS root>/server/pyScripts*).
+Once the PandA simulator and pyMalcolm are running, it is possible to generate a fresh set of canned data. To do this, first copy the CannedData.json
+file from  *<malcolmJS root>/server/canned_data/Pymalcolm_design* into the config directory as specified in the yaml file (for the above config the folder would be */tmp/PANDA*).
+Then, visit the page http://localhost:8008/gui/PANDA ; once loaded select 'CannedState' from the design field to load in the canned data design.
+Finally, run the canned_data_generator.py python script (located in *<malcolmJS root>/server/pyScripts*).
 This will delete the contents of the *<malcolmJS root>/server/canned_data* folder and generate new json files for a set of pre-programmed blocks, subscribing to their meta and all their attributes.
 Currently, these blocks are: ["PANDA", "PANDA:TTLIN1", "PANDA:INENC1", "PANDA:LUT1", "PANDA:SEQ1"], in addition to the list of all blocks available on the PANDA simulator.
 

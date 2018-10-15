@@ -237,10 +237,13 @@ export const mapDispatchToProps = dispatch => ({
   makeBlockVisible: (event, engine) => {
     const blockMri = event.dataTransfer.getData('storm-diagram-node');
     const position = engine.getRelativeMousePoint(event);
-    dispatch(layoutAction.makeBlockVisible(blockMri, position));
-
-    // close the palette after an item is dropped on to the layout
-    dispatch(navigationActions.updateChildPanel(''));
+    // Other items can be dropped onto the layout;
+    // prevent them from triggering the dispatch
+    if (blockMri !== '') {
+      dispatch(layoutAction.makeBlockVisible(blockMri, position));
+      // close the palette after an item is dropped on to the layout
+      dispatch(navigationActions.updateChildPanel(''));
+    }
   },
 
   deleteSelected: () => {

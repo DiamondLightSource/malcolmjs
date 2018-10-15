@@ -86,6 +86,7 @@ class BlockPortWidget extends BaseWidget {
           data-name={this.props.portName}
           data-nodeid={this.props.nodeId}
           role="presentation"
+          style={{ maxWidth: '1px', paddingLeft: '4px' }}
         >
           <div className={this.props.classes.port} />
         </div>

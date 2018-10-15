@@ -131,7 +131,7 @@ const findHiddenLinks = (layoutBlocks, layoutEngine) => {
           visible: true,
         };
         updatedPort.value = newValue;
-        hiddenLinkEnd.position.x -= 60;
+        hiddenLinkEnd.position.x -= 50;
         hiddenLinkEnd.position.y +=
           blockHeight / 2 - 10 + (portIndex - (inputPorts.length - 1) / 2) * 20;
         hiddenBlocks.push(hiddenLinkEnd);

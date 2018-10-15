@@ -44,13 +44,15 @@ const subscribeToChildren = () => (dispatch, getState) => {
       lastNav.parent.blockMri,
       lastNav.path
     );
-    attribute.raw.value.visible.forEach((visible, i) => {
-      const child = attribute.raw.value.mri[i];
-      if (visible && !state.blocks[child]) {
-        dispatch(malcolmNewBlockAction(child, false, false));
-        dispatch(malcolmSubscribeAction([child, 'meta']));
-      }
-    });
+    if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+      attribute.raw.value.visible.forEach((visible, i) => {
+        const child = attribute.raw.value.mri[i];
+        if (visible && !state.blocks[child]) {
+          dispatch(malcolmNewBlockAction(child, false, false));
+          dispatch(malcolmSubscribeAction([child, 'meta']));
+        }
+      });
+    }
   }
 };
 
