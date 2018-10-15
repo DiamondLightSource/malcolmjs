@@ -1,4 +1,16 @@
 # Changelog
+## 1.3.0 (15/10/2018)
+Features: 
+- Hidden links are now clickable/selectable/deletable in the same way normal links are.
+- Minor style tweaks
+
+Fixes: 
+- Errors from malcolm regarding the layout attribute no longer overwrite the subscription ID and cause a crash.
+- Orphaned attributes now get hidden as soon as the block meta is updated to orphan them (n.b. this bug still exists for orphaned group expanders).
+- Selected blocks/links state now reset properly when swapping between multiple layout attributes.
+- Navigating to a layout via the nav bar now fires the necessary subscription requests.
+- Highlighting text and dragging & dropping onto the layout no longer causes a crash.
+
 ## 1.2.0 (8/10/2018)
 Features:
 - Table widget swapped for react-virtualized based component for improved performance and styling
