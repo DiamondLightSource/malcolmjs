@@ -81,6 +81,7 @@ class NavControl extends Component {
           handleClose={this.handleClose}
           navigateToChild={navigateToChild}
           icon={<KeyboardArrowDown />}
+          theme={this.props.theme}
         />
       </div>
     );
@@ -102,6 +103,7 @@ export const NavSelector = props => (
       anchorEl={props.anchorEl}
       open={Boolean(props.anchorEl)}
       onClose={props.handleClose}
+      style={{ color: props.theme.palette.text.primary }}
     >
       {props.childElements.map((child, i) => (
         <MenuItem
@@ -129,6 +131,13 @@ NavControl.propTypes = {
     currentLink: PropTypes.string,
   }).isRequired,
   isFinalNav: PropTypes.bool,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 NavControl.defaultProps = {
@@ -143,6 +152,13 @@ NavSelector.propTypes = {
   anchorEl: PropTypes.string.isRequired,
   // navigateToChild: PropTypes.func.isRequired,
   icon: PropTypes.node.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(NavControl);

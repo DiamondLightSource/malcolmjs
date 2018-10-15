@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withTheme } from '@material-ui/core/styles';
 import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 import MiddlePanelContainer from './middlePanel.container';
@@ -29,7 +30,7 @@ const childPanelSelector = props => {
 };
 
 const MainMalcolmView = props => (
-  <div>
+  <div style={{ color: props.theme.palette.text.primary }}>
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
       parentMRI={props.parentBlock}
@@ -101,6 +102,13 @@ MainMalcolmView.propTypes = {
   parentBlock: PropTypes.string,
   childBlock: PropTypes.string,
   footerHeight: PropTypes.number.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 childPanelSelector.propTypes = {
@@ -115,4 +123,6 @@ MainMalcolmView.defaultProps = {
   childBlock: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainMalcolmView);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withTheme()(MainMalcolmView)
+);
