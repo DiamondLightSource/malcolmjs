@@ -2,6 +2,7 @@
 ## 1.3.0 (15/10/2018)
 Features: 
 - Hidden links are now clickable/selectable/deletable in the same way normal links are.
+- Added saved configuration for generating canned data from PandA simulator
 - Minor style tweaks
 
 Fixes: 
