@@ -88,7 +88,10 @@ class BlockPortWidget extends BaseWidget {
           role="presentation"
           style={{ maxWidth: '1px', paddingLeft: '4px' }}
         >
-          <div className={this.props.classes.port} />
+          <div
+            className={this.props.classes.port}
+            style={{ maxWidth: '1px' }}
+          />
         </div>
       ) : (
         <div
