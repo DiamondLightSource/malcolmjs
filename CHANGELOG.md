@@ -1,4 +1,7 @@
 # Changelog
+##1.3.1 (15/10/2018)
+Fixes:
+- Prevented accidental multi-selecting of links by clicking the middle of a hidden link (the port on a hidden link is no longer clickable).
 ## 1.3.0 (15/10/2018)
 Features: 
 - Hidden links are now clickable/selectable/deletable in the same way normal links are.
