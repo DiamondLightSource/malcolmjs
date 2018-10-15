@@ -40,6 +40,7 @@ export const buildLayoutEngine = (
   engine.clickHandler = () => {};
   engine.mouseDownHandler = () => {};
   engine.linkClickHandler = () => {};
+  engine.theme = {};
 
   const nodes = layout.blocks.map(b =>
     buildBlockNode(
@@ -86,6 +87,7 @@ export const buildLayoutEngine = (
               newLink.selected = selectedLinks.some(
                 linkId => linkId === newLink.id
               );
+              newLink.theme = engine.theme;
               newLink.clickHandler = linkId => {
                 engine.linkClickHandler(linkId);
               };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withTheme } from '@material-ui/core/styles';
 import { DiagramWidget } from 'storm-react-diagrams';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import {
@@ -52,6 +53,7 @@ class Layout extends React.Component {
     this.props.layoutEngine.mouseDownHandler = this.props.mouseDownHandler;
     this.props.layoutEngine.portMouseDown = this.props.portMouseDown;
     this.props.layoutEngine.linkClickHandler = this.props.linkClickHandler;
+    this.props.layoutEngine.theme.palette = this.props.theme.palette;
     return (
       <div
         id="LayoutDiv"
@@ -109,6 +111,9 @@ Layout.propTypes = {
     portMouseDown: PropTypes.func,
     mouseDownHandler: PropTypes.func,
     linkClickHandler: PropTypes.func,
+    theme: PropTypes.shape({
+      palette: PropTypes.shape({}),
+    }),
   }).isRequired,
   selectHandler: PropTypes.func.isRequired,
   clickHandler: PropTypes.func.isRequired,
@@ -119,6 +124,9 @@ Layout.propTypes = {
   linkClickHandler: PropTypes.func.isRequired,
   layoutClickHandler: PropTypes.func.isRequired,
   locked: PropTypes.bool.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({}),
+  }).isRequired,
 };
 
 export const mapStateToProps = state => ({
@@ -237,13 +245,10 @@ export const mapDispatchToProps = dispatch => ({
   makeBlockVisible: (event, engine) => {
     const blockMri = event.dataTransfer.getData('storm-diagram-node');
     const position = engine.getRelativeMousePoint(event);
-    // Other items can be dropped onto the layout;
-    // prevent them from triggering the dispatch
-    if (blockMri !== '') {
-      dispatch(layoutAction.makeBlockVisible(blockMri, position));
-      // close the palette after an item is dropped on to the layout
-      dispatch(navigationActions.updateChildPanel(''));
-    }
+    dispatch(layoutAction.makeBlockVisible(blockMri, position));
+
+    // close the palette after an item is dropped on to the layout
+    dispatch(navigationActions.updateChildPanel(''));
   },
 
   deleteSelected: () => {
@@ -252,4 +257,6 @@ export const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withTheme()(Layout)
+);
