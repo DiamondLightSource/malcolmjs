@@ -82,6 +82,7 @@ class BlockPortWidget extends BaseWidget {
       this.props.portType === 'HIDDEN' ? (
         <div
           {...this.getProps()}
+          onMouseDown={e => e.stopPropagation()}
           data-name={this.props.portName}
           data-nodeid={this.props.nodeId}
           role="presentation"
