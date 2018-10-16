@@ -26,7 +26,6 @@ import {
   getDefaultFromType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
-import { isArrayType } from '../../malcolm/reducer/method.reducer';
 
 const styles = () => ({
   div: {
@@ -68,7 +67,10 @@ const buildIOComponent = (input, props, isOutput) => {
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
     isErrorState: props.methodErrored && input[1].writeable,
-    isDirty: props.dirtyInputs[input[0]],
+    isDirty:
+      !isOutput &&
+      (props.dirtyInputs[input[0]] ||
+        props.inputValues[input[0]] !== undefined),
   };
   const updateStoreOnEveryValueChange = true;
 
@@ -80,9 +82,9 @@ const buildIOComponent = (input, props, isOutput) => {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    if (inputValue !== undefined && !isArrayType(input[1])) {
+    /* if (inputValue !== undefined && !isArrayType(input[1])) {
       props.updateInput(props.methodPath, input[0], inputValue);
-    }
+    } */
   }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);

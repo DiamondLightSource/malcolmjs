@@ -82,15 +82,6 @@ const updateMethodInput = (state, payload) => {
           rows: [],
         },
       };
-    } else if (payload.value && payload.value.isDirty !== undefined) {
-      if (!attributeCopy.calculated.dirtyInputs) {
-        attributeCopy.calculated.dirtyInputs = {};
-      }
-      attributeCopy.calculated.dirtyInputs = {
-        ...attributeCopy.calculated.dirtyInputs,
-      };
-      attributeCopy.calculated.dirtyInputs[payload.name] =
-        payload.value.isDirty;
     } else {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,
@@ -106,6 +97,35 @@ const updateMethodInput = (state, payload) => {
     }
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
+  }
+  return {
+    ...state,
+    blocks,
+  };
+};
+
+export const setInputFlag = (state, payload) => {
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+  const matchingAttribute = blockUtils.findAttributeIndex(
+    state.blocks,
+    blockName,
+    attributeName
+  );
+  const blocks = { ...state.blocks };
+  if (matchingAttribute >= 0) {
+    const { attributes } = blocks[blockName];
+    const attributeCopy = attributes[matchingAttribute];
+    if (payload.value && payload.value.isDirty !== undefined) {
+      if (!attributeCopy.calculated.dirtyInputs) {
+        attributeCopy.calculated.dirtyInputs = {};
+      }
+      attributeCopy.calculated.dirtyInputs = {
+        ...attributeCopy.calculated.dirtyInputs,
+      };
+      attributeCopy.calculated.dirtyInputs[payload.name] =
+        payload.value.isDirty;
+    }
   }
   return {
     ...state,
