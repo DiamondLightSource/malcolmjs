@@ -8,6 +8,8 @@ describe('NavControl', () => {
 
   let nav;
 
+  const mockTheme = { palette: { text: { primary: '#fff' } } };
+
   beforeEach(() => {
     shallow = createShallow();
     mount = createMount();
@@ -53,6 +55,7 @@ describe('NavControl', () => {
         handleClose={() => {}}
         navigateToChild={() => {}}
         icon={<div />}
+        theme={mockTheme}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -70,6 +73,7 @@ describe('NavControl', () => {
         handleClose={() => {}}
         navigateToChild={() => {}}
         icon={<div />}
+        theme={mockTheme}
       />
     );
     expect(wrapper).toMatchSnapshot();

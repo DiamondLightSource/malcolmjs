@@ -54,6 +54,7 @@ class NavControl extends Component {
             handleClose={this.handleClose}
             navigateToChild={navigateToChild}
             icon={<MoreHoriz />}
+            theme={this.props.theme}
           />
         </div>
       );
