@@ -99,21 +99,23 @@ export const getTableState = props => {
 const getWidgetWidth = tag => widgetWidths[tag];
 
 const getColumnWidths = (divWidth, columnWidgetTags, tableState, hideInfo) => {
-  const fixedWidths = tableState.columnLabels.map((label, index) => {
-    const widgetWidth = getWidgetWidth(columnWidgetTags[index]);
-    if (widgetWidth !== undefined) {
-      return Math.max(
-        getWidgetWidth(columnWidgetTags[index]),
-        11 *
-          (tableState.meta.elements[label].label
-            ? tableState.meta.elements[label].label
-            : label
-          ).length +
-          4
-      );
-    }
-    return undefined;
-  });
+  const fixedWidths = tableState.columnLabels
+    ? tableState.columnLabels.map((label, index) => {
+        const widgetWidth = getWidgetWidth(columnWidgetTags[index]);
+        if (widgetWidth !== undefined) {
+          return Math.max(
+            getWidgetWidth(columnWidgetTags[index]),
+            11 *
+              (tableState.meta.elements[label].label
+                ? tableState.meta.elements[label].label
+                : label
+              ).length +
+              4
+          );
+        }
+        return undefined;
+      })
+    : [undefined];
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
     .reduce((total, val) => total + val, 0);
@@ -393,7 +395,7 @@ const WidgetTable = props => {
         </AutoSizer>
       </div>
       {tableState.meta.writeable ? (
-        <Tooltip id="1" title="Add row to bottom of table" placement="center">
+        <Tooltip id="1" title="Add row to bottom of table" placement="top">
           <Button
             variant="fab"
             color="secondary"

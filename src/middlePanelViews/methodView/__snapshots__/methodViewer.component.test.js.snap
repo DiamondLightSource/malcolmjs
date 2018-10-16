@@ -9,7 +9,9 @@ exports[`Method viewer renders correctly for array once local state is initialis
         "errorMessage": undefined,
         "errorState": false,
         "inputs": Object {
-          "first": 3,
+          "first": Object {
+            "value": 3,
+          },
           "second": Object {
             "isAString": true,
             "value": "four",
@@ -93,6 +95,7 @@ exports[`Method viewer renders correctly for array once local state is initialis
       },
     }
   }
+  closePanelHandler={[Function]}
   eventHandler={[Function]}
   infoClickHandler={[Function]}
   localState={
@@ -260,11 +263,17 @@ exports[`Method viewer renders output array correctly 1`] = `
         "inputs": Object {},
         "name": "Method",
         "outputs": Object {
-          "first": true,
-          "second": "done",
-          "third": Array [
-            "something finished",
-          ],
+          "first": Object {
+            "value": true,
+          },
+          "second": Object {
+            "value": "done",
+          },
+          "third": Object {
+            "value": Array [
+              "something finished",
+            ],
+          },
         },
         "path": Array [
           "Test",
@@ -327,6 +336,7 @@ exports[`Method viewer renders output array correctly 1`] = `
       },
     }
   }
+  closePanelHandler={[Function]}
   eventHandler={[Function]}
   infoClickHandler={[Function]}
   localState={
@@ -341,9 +351,11 @@ exports[`Method viewer renders output array correctly 1`] = `
         ],
         "typeid": "malcolm:core/StringArrayMeta:1.0",
       },
-      "value": Array [
-        "something finished",
-      ],
+      "value": Object {
+        "value": Array [
+          "something finished",
+        ],
+      },
     }
   }
   rowClickHandler={[Function]}
@@ -474,6 +486,7 @@ exports[`Method viewer renders top-level method param archive if no selected par
       },
     }
   }
+  closePanelHandler={[Function]}
   eventHandler={[Function]}
   hideInfo={true}
   infoClickHandler={[Function]}

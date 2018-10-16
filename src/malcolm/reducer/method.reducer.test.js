@@ -88,9 +88,10 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.calculated.inputs.input1).toEqual(123);
+    expect(attribute.calculated.inputs.input1).toEqual({ value: 123 });
   });
 
+  /* TODO: these tests should check the new set flag function (when it exists)
   it('updateMethodInput should flag an input on a method as dirty', () => {
     const payload = {
       path: ['block1', 'attr1'],
@@ -116,6 +117,7 @@ describe('method reducer', () => {
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
   });
+  */
 
   it('updateMethodInput should initialise an array input', () => {
     const payload = {
@@ -184,7 +186,7 @@ describe('method reducer', () => {
       test.updatedState.blocks.block1.attributes[test.attribute];
     const archive =
       test.updatedState.blockArchive.block1.attributes[test.attribute];
-    expect(attribute.calculated.outputs.output1).toEqual(456);
+    expect(attribute.calculated.outputs.output1).toEqual({ value: 456 });
     expect(archive.timeStamp.toarray().length).toEqual(1);
     expect(
       archive.timeStamp.toarray()[0].localRunTime instanceof Date
@@ -197,7 +199,9 @@ describe('method reducer', () => {
         archive.timeStamp.toarray()[0].localRunTime
     ).not.toEqual(0);
     expect(archive.value.toarray().length).toEqual(1);
-    expect(archive.value.toarray()[0].returned).toEqual(payload.value);
+    expect(archive.value.toarray()[0].returned).toEqual({
+      output1: { value: 456 },
+    });
     expect(archive.value.toarray()[0].returnStatus).toEqual('Success');
     expect(archive.alarmState.toarray().length).toEqual(1);
   });
@@ -222,7 +226,7 @@ describe('method reducer', () => {
     expect(
       test.updatedState.blocks.block1.attributes[test.attribute].calculated
         .outputs.output1
-    ).toEqual(456);
+    ).toEqual({ value: 456 });
   });
 
   it('handleMethodReturn should do nothing if original request wasnt a post', () => {

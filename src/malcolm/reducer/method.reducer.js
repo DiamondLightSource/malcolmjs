@@ -22,7 +22,7 @@ const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
     if (payload.value[returnVar] !== undefined) {
-      valueMap.outputs[returnVar] = payload.value[returnVar];
+      valueMap.outputs[returnVar] = { value: payload.value[returnVar] };
     } else {
       valueMap.errorState = true;
       valueMap.errorMessage = `MethodError: expected value ${returnVar} missing from return`;
@@ -86,14 +86,13 @@ const updateMethodInput = (state, payload) => {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,
       };
-      if (isArrayType(attributeCopy.raw.takes.elements[payload.name])) {
-        attributeCopy.calculated.inputs[payload.name] = {
-          ...attributeCopy.calculated.inputs[payload.name],
-          value: payload.value,
-        };
-      } else {
-        attributeCopy.calculated.inputs[payload.name] = payload.value;
-      }
+      attributeCopy.calculated.inputs[payload.name] = attributeCopy.calculated
+        .inputs[payload.name]
+        ? {
+            ...attributeCopy.calculated.inputs[payload.name],
+            value: payload.value,
+          }
+        : { value: payload.value };
     }
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
@@ -160,7 +159,7 @@ export const handleMethodReturn = (state, payload) => {
           'method:return:unpacked'
         )
       ) {
-        valueMap.outputs[returnKeys[0]] = payload.value;
+        valueMap.outputs[returnKeys[0]] = { value: payload.value };
       } else {
         valueMap = mapReturnValues(returnKeys, payload);
       }
