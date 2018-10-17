@@ -98,8 +98,7 @@ export const buildAttributeInfo = props => {
           };
         }
       }
-      // eslint-disable-next-line prefer-destructuring
-      value = attribute.raw.value;
+      ({ value } = attribute.raw);
     } else if (
       attribute.raw.meta.typeid === malcolmTypes.table &&
       attribute.localState
@@ -243,6 +242,19 @@ export const buildAttributeInfo = props => {
             },
           };
         });
+        info.takes.discardParams = {
+          showLabel: false,
+          label: 'Discard params',
+          value: 'Discard params',
+          tag: 'info:button',
+          functions: {
+            clickHandler: () => {
+              Object.keys(attribute.raw.takes.elements).forEach(input => {
+                props.clearParamState(attribute.calculated.path, input);
+              });
+            },
+          },
+        };
       }
       if (Object.keys(attribute.raw.returns.elements).length > 0) {
         info.returns = { label: 'Output parameter types' };
@@ -294,6 +306,23 @@ export const buildAttributeInfo = props => {
               ? attribute.raw.defaults[props.subElement[1]]
               : 'undefined',
         };
+        if (props.clearParamState) {
+          info.discardParams = {
+            showLabel: false,
+            label: 'Discard param',
+            value: 'Discard param',
+            inline: true,
+            tag: 'info:button',
+            functions: {
+              clickHandler: () => {
+                props.clearParamState(
+                  attribute.calculated.path,
+                  props.subElement[1]
+                );
+              },
+            },
+          };
+        }
       }
     }
   }

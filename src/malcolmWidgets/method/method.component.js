@@ -309,6 +309,11 @@ const mapStateToProps = (state, ownProps) => {
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.calculated.dirty ? AlarmStates.DIRTY : alarm;
+  alarm =
+    method && method.calculated.errorState && method.calculated.dirty
+      ? AlarmStates.DIRTYANDERROR
+      : alarm;
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
   const inputAlarms = {};
   if (method && method.raw.takes.elements) {

@@ -4,6 +4,7 @@ import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
   MalcolmArchiveMethodRun,
+  MalcolmFlagMethodInputType,
 } from '../malcolm.types';
 import MockCircularBuffer from './attribute.reducer.mocks';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
@@ -24,7 +25,7 @@ describe('method reducer', () => {
             {
               calculated: {
                 name: 'attr1',
-                inputs: {},
+                inputs: { input1: { value: 'test', flags: {} } },
               },
               raw: {
                 takes: {
@@ -88,19 +89,23 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.calculated.inputs.input1).toEqual({ value: 123 });
+    expect(attribute.calculated.inputs.input1).toEqual({
+      flags: {},
+      value: 123,
+    });
   });
 
-  /* TODO: these tests should check the new set flag function (when it exists)
-  it('updateMethodInput should flag an input on a method as dirty', () => {
+  it('setFlag should flag an input on a method correctly', () => {
     const payload = {
       path: ['block1', 'attr1'],
       name: 'input1',
-      value: { isDirty: true },
+      flagType: 'testFlag',
+      flagState: true,
     };
 
-    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
+    const attribute = runReducer(MalcolmFlagMethodInputType, payload);
+    expect(attribute.calculated.inputs.input1.flags.testFlag).toBeTruthy();
+    expect(attribute.calculated.inputs.input1.value).toEqual('test');
   });
 
   it('updateMethodInput should update dirty state of an input on a method', () => {
@@ -111,13 +116,14 @@ describe('method reducer', () => {
     const payload = {
       path: ['block1', 'attr1'],
       name: 'input1',
-      value: { isDirty: true },
+      flagType: 'dirty',
+      flagState: true,
     };
 
-    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    const attribute = runReducer(MalcolmFlagMethodInputType, payload);
     expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
+    expect(attribute.calculated.inputs.input1.flags).toBeTruthy();
   });
-  */
 
   it('updateMethodInput should initialise an array input', () => {
     const payload = {

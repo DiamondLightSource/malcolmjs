@@ -14,6 +14,7 @@ import {
   malcolmSelectLink,
   malcolmGetAction,
 } from '../malcolm/malcolmActionCreators';
+import { malcolmClearMethodInput } from '../malcolm/actions/method.actions';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
@@ -200,6 +201,7 @@ export class InfoDetails extends React.Component {
                   attributeName={this.props.attributeName}
                   disabled={this.state.info[group][a].disabled}
                   disabledFlagPath={this.state.info[group][a].disabledPath}
+                  showLabel={this.state.info[group][a].showLabel}
                   infoPath={this.state.info[group][a].infoPath}
                   infoClickHandler={this.props.infoClickHandler}
                 />
@@ -273,6 +275,9 @@ const mapDispatchToProps = dispatch => ({
   },
   unselectLink: path => {
     dispatch(deselectLinkAction(path));
+  },
+  clearParamState: (path, param) => {
+    dispatch(malcolmClearMethodInput(path, param));
   },
 });
 

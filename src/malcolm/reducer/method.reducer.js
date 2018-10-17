@@ -5,6 +5,7 @@ import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
   MalcolmArchiveMethodRun,
+  MalcolmFlagMethodInputType,
 } from '../malcolm.types';
 
 export const getMethodParam = (type, param, method) =>
@@ -69,6 +70,9 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
+    const archive =
+      state.blockArchive[blockName] &&
+      state.blockArchive[blockName].attributes[matchingAttribute];
     if (
       payload.doInitialise &&
       isArrayType(attributeCopy.raw.takes.elements[payload.name])
@@ -82,6 +86,11 @@ const updateMethodInput = (state, payload) => {
           rows: [],
         },
       };
+    } else if (payload.delete) {
+      attributeCopy.calculated.inputs = {
+        ...attributeCopy.calculated.inputs,
+      };
+      delete attributeCopy.calculated.inputs[payload.name];
     } else {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,
@@ -92,8 +101,18 @@ const updateMethodInput = (state, payload) => {
             ...attributeCopy.calculated.inputs[payload.name],
             value: payload.value,
           }
-        : { value: payload.value };
+        : { value: payload.value, flags: {} };
     }
+    attributeCopy.calculated.dirty =
+      (archive &&
+        archive.value.size() === 0 &&
+        Object.keys(attributeCopy.calculated.inputs).length !== 0) ||
+      (archive.value.size() !== 0 &&
+        ((archive.value.get(archive.value.size() - 1).runParameters &&
+          archive.value.get(archive.value.size() - 1).runParameters[
+            payload.name
+          ].value !== attributeCopy.calculated.inputs[payload.name].value) ||
+          !archive.value.get(archive.value.size() - 1).runParameters));
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
   }
@@ -115,17 +134,21 @@ export const setInputFlag = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value && payload.value.isDirty !== undefined) {
+    if (payload.flagType === 'dirty') {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
       attributeCopy.calculated.dirtyInputs = {
         ...attributeCopy.calculated.dirtyInputs,
       };
-      attributeCopy.calculated.dirtyInputs[payload.name] =
-        payload.value.isDirty;
+      attributeCopy.calculated.dirtyInputs[payload.name] = payload.flagState;
     }
+    attributeCopy.calculated.inputs[payload.name].flags[payload.flagType] =
+      payload.flagState;
+    attributes[matchingAttribute] = attributeCopy;
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
+
   return {
     ...state,
     blocks,
@@ -205,6 +228,7 @@ const MethodReducer = createReducer(
     [MalcolmUpdateMethodInputType]: updateMethodInput,
     [MalcolmReturn]: handleMethodReturn,
     [MalcolmArchiveMethodRun]: pushParamsToArchive,
+    [MalcolmFlagMethodInputType]: setInputFlag,
   }
 );
 

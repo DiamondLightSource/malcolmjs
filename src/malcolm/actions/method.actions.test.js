@@ -14,8 +14,6 @@ describe('method actions', () => {
     expect(action.payload.calculated.isMethod).toBeTruthy();
     expect(action.payload.delta).toBeTruthy();
     expect(action.payload.calculated.pending).toBeFalsy();
-    expect(action.payload.calculated.inputs).toEqual({});
-    expect(action.payload.calculated.outputs).toEqual({});
   });
 
   it('malcolmUpdateMethodInput sends the info needed to update an input', () => {

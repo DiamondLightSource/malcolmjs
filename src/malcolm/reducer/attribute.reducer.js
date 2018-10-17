@@ -13,7 +13,10 @@ import {
   MalcolmMultipleAttributeData,
   MalcolmSimpleLocalState,
 } from '../malcolm.types';
-import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  getDefaultFromType,
+  malcolmTypes,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   shouldClearDirtyFlag,
   tableHasColumn,
@@ -267,11 +270,36 @@ const updateLocalState = attribute => {
   return updatedAttribute;
 };
 
+const presetMethodInputs = attribute => {
+  const updatedAttribute = attribute;
+  if (updatedAttribute && updatedAttribute.calculated.isMethod) {
+    updatedAttribute.calculated.inputs =
+      updatedAttribute.calculated.inputs || {};
+    updatedAttribute.calculated.outputs =
+      updatedAttribute.calculated.outputs || {};
+    Object.entries(updatedAttribute.raw.takes.elements).forEach(
+      ([input, meta]) => {
+        if (
+          updatedAttribute.raw.takes.required.includes(input) &&
+          !updatedAttribute.calculated.inputs[input]
+        ) {
+          updatedAttribute.calculated.inputs[input] = {
+            value: getDefaultFromType(meta),
+            flags: {},
+          };
+        }
+      }
+    );
+  }
+  return updatedAttribute;
+};
+
 const checkForSpecialCases = inputAttribute => {
   let attribute = checkForFlowGraph(inputAttribute);
   attribute = updateAttributeChildren(attribute);
   attribute = hasSubElements(attribute);
   attribute = updateLocalState(attribute);
+  attribute = presetMethodInputs(attribute);
 
   return attribute;
 };
