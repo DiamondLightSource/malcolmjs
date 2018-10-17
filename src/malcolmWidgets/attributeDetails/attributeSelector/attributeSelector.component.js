@@ -31,6 +31,7 @@ export const malcolmTypes = {
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',
   choiceArray: 'malcolm:core/ChoiceArrayMeta:1.0',
   table: 'malcolm:core/TableMeta:1.0',
+  pointGenerator: 'malcolm:core/PointGeneratorMeta:1.0',
 };
 
 export const getDefaultFromType = objectMeta => {
@@ -47,6 +48,8 @@ export const getDefaultFromType = objectMeta => {
     case malcolmTypes.choice:
     case malcolmTypes.choiceArray:
       return null;
+    case malcolmTypes.pointGenerator:
+      return {};
     default:
       return undefined;
   }
@@ -108,7 +111,7 @@ export const selectorFunction = (
       return (
         <WidgetTextInput
           Error={flags.isErrorState}
-          Value={value !== undefined ? value.toString() : '-'}
+          Value={value !== undefined ? value.toString() : ''}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
           localState={localState}

@@ -2729,7 +2729,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
       </div>
       <WithStyles(Tooltip)
         id="1"
-        placement="center"
+        placement="top"
         title="Add row to bottom of table"
       >
         <Tooltip
@@ -2753,7 +2753,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           id="1"
           leaveDelay={0}
           leaveTouchDelay={1500}
-          placement="center"
+          placement="top"
           theme={
             Object {
               "breakpoints": Object {
@@ -3268,7 +3268,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
             className="MuiTooltip-popper-7"
             id={null}
             open={false}
-            placement="center"
+            placement="top"
             transition={true}
           >
             <Popper
@@ -3276,7 +3276,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
               disablePortal={false}
               id={null}
               open={false}
-              placement="center"
+              placement="top"
               theme={
                 Object {
                   "breakpoints": Object {

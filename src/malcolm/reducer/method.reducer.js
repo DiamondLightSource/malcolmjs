@@ -5,6 +5,7 @@ import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
   MalcolmArchiveMethodRun,
+  MalcolmFlagMethodInputType,
 } from '../malcolm.types';
 
 export const getMethodParam = (type, param, method) =>
@@ -22,7 +23,7 @@ const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
     if (payload.value[returnVar] !== undefined) {
-      valueMap.outputs[returnVar] = payload.value[returnVar];
+      valueMap.outputs[returnVar] = { value: payload.value[returnVar] };
     } else {
       valueMap.errorState = true;
       valueMap.errorMessage = `MethodError: expected value ${returnVar} missing from return`;
@@ -69,6 +70,9 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
+    const archive =
+      state.blockArchive[blockName] &&
+      state.blockArchive[blockName].attributes[matchingAttribute];
     if (
       payload.doInitialise &&
       isArrayType(attributeCopy.raw.takes.elements[payload.name])
@@ -82,31 +86,69 @@ const updateMethodInput = (state, payload) => {
           rows: [],
         },
       };
-    } else if (payload.value && payload.value.isDirty !== undefined) {
+    } else if (payload.delete) {
+      attributeCopy.calculated.inputs = {
+        ...attributeCopy.calculated.inputs,
+      };
+      delete attributeCopy.calculated.inputs[payload.name];
+    } else {
+      attributeCopy.calculated.inputs = {
+        ...attributeCopy.calculated.inputs,
+      };
+      attributeCopy.calculated.inputs[payload.name] = attributeCopy.calculated
+        .inputs[payload.name]
+        ? {
+            ...attributeCopy.calculated.inputs[payload.name],
+            value: payload.value,
+          }
+        : { value: payload.value, flags: {} };
+    }
+    attributeCopy.calculated.dirty =
+      (archive &&
+        archive.value.size() === 0 &&
+        Object.keys(attributeCopy.calculated.inputs).length !== 0) ||
+      (archive.value.size() !== 0 &&
+        ((archive.value.get(archive.value.size() - 1).runParameters &&
+          archive.value.get(archive.value.size() - 1).runParameters[
+            payload.name
+          ].value !== attributeCopy.calculated.inputs[payload.name].value) ||
+          !archive.value.get(archive.value.size() - 1).runParameters));
+    attributes[matchingAttribute] = attributeCopy;
+    blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
+  }
+  return {
+    ...state,
+    blocks,
+  };
+};
+
+export const setInputFlag = (state, payload) => {
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+  const matchingAttribute = blockUtils.findAttributeIndex(
+    state.blocks,
+    blockName,
+    attributeName
+  );
+  const blocks = { ...state.blocks };
+  if (matchingAttribute >= 0) {
+    const { attributes } = blocks[blockName];
+    const attributeCopy = attributes[matchingAttribute];
+    if (payload.flagType === 'dirty') {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
       attributeCopy.calculated.dirtyInputs = {
         ...attributeCopy.calculated.dirtyInputs,
       };
-      attributeCopy.calculated.dirtyInputs[payload.name] =
-        payload.value.isDirty;
-    } else {
-      attributeCopy.calculated.inputs = {
-        ...attributeCopy.calculated.inputs,
-      };
-      if (isArrayType(attributeCopy.raw.takes.elements[payload.name])) {
-        attributeCopy.calculated.inputs[payload.name] = {
-          ...attributeCopy.calculated.inputs[payload.name],
-          value: payload.value,
-        };
-      } else {
-        attributeCopy.calculated.inputs[payload.name] = payload.value;
-      }
+      attributeCopy.calculated.dirtyInputs[payload.name] = payload.flagState;
     }
+    attributeCopy.calculated.inputs[payload.name].flags[payload.flagType] =
+      payload.flagState;
     attributes[matchingAttribute] = attributeCopy;
-    blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
+
   return {
     ...state,
     blocks,
@@ -140,7 +182,7 @@ export const handleMethodReturn = (state, payload) => {
           'method:return:unpacked'
         )
       ) {
-        valueMap.outputs[returnKeys[0]] = payload.value;
+        valueMap.outputs[returnKeys[0]] = { value: payload.value };
       } else {
         valueMap = mapReturnValues(returnKeys, payload);
       }
@@ -186,6 +228,7 @@ const MethodReducer = createReducer(
     [MalcolmUpdateMethodInputType]: updateMethodInput,
     [MalcolmReturn]: handleMethodReturn,
     [MalcolmArchiveMethodRun]: pushParamsToArchive,
+    [MalcolmFlagMethodInputType]: setInputFlag,
   }
 );
 

@@ -26,7 +26,6 @@ import {
   getDefaultFromType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
-import { isArrayType } from '../../malcolm/reducer/method.reducer';
 
 const styles = () => ({
   div: {
@@ -68,28 +67,29 @@ const buildIOComponent = (input, props, isOutput) => {
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
     isErrorState: props.methodErrored && input[1].writeable,
-    isDirty: props.dirtyInputs[input[0]],
+    isDirty:
+      !isOutput &&
+      (props.dirtyInputs[input[0]] ||
+        props.inputValues[input[0]] !== undefined),
   };
   const updateStoreOnEveryValueChange = true;
 
   const valueMap = isOutput ? props.outputValues : props.inputValues;
   let inputValue;
   if (valueMap[input[0]] !== undefined) {
-    inputValue = valueMap[input[0]];
+    inputValue = valueMap[input[0]].value;
   } else if (props.defaultValues[input[0]] !== undefined) {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    if (inputValue !== undefined && !isArrayType(input[1])) {
+    /* if (inputValue !== undefined && !isArrayType(input[1])) {
       props.updateInput(props.methodPath, input[0], inputValue);
-    }
+    } */
   }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };
-  const setFlag = (path, flagName, isDirty) => {
-    props.updateInput(path, input[0], { isDirty });
-  };
+  const setFlag = () => {}; // (path, flagName, flagState) => {};
   const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
@@ -164,7 +164,7 @@ const MethodDetails = props => {
                   )
                 }
               >
-                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                <AttributeAlarm alarmSeverity={props.inputAlarms[input[0]]} />
               </IconButton>
             </Tooltip>
             <Typography
@@ -277,6 +277,7 @@ MethodDetails.propTypes = {
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
+  inputAlarms: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
   outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
@@ -308,7 +309,35 @@ const mapStateToProps = (state, ownProps) => {
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.calculated.dirty ? AlarmStates.DIRTY : alarm;
+  alarm =
+    method && method.calculated.errorState && method.calculated.dirty
+      ? AlarmStates.DIRTYANDERROR
+      : alarm;
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
+  const inputAlarms = {};
+  if (method && method.raw.takes.elements) {
+    Object.keys(method.raw.takes.elements).forEach(input => {
+      const inputIsDirty =
+        method.calculated.inputs[input] || method.calculated.dirtyInputs;
+      const inputIsErrored = false;
+      const inputInvalid = false;
+      inputAlarms[input] = AlarmStates.NO_ALARM;
+      inputAlarms[input] = inputIsDirty
+        ? AlarmStates.DIRTY
+        : inputAlarms[input];
+      inputAlarms[input] = inputIsErrored
+        ? AlarmStates.MAJOR_ALARM
+        : inputAlarms[input];
+      inputAlarms[input] =
+        inputIsDirty && inputIsErrored
+          ? AlarmStates.DIRTYANDERROR
+          : inputAlarms[input];
+      inputAlarms[input] = inputInvalid
+        ? AlarmStates.MINOR_ALARM
+        : inputAlarms[input];
+    });
+  }
 
   return {
     writeable: method ? method.raw.writeable : false,
@@ -324,6 +353,7 @@ const mapStateToProps = (state, ownProps) => {
     inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
     dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
+    inputAlarms,
     outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
     outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
     required: method ? method.raw.required : EMPTY_OBJECT,

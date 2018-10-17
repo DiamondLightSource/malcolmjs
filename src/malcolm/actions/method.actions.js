@@ -12,8 +12,6 @@ export const buildMethodUpdate = (id, data) => ({
     delta: true,
     calculated: {
       isMethod: true,
-      inputs: {},
-      outputs: {},
       pending: false,
     },
   },
@@ -25,6 +23,15 @@ export const malcolmUpdateMethodInput = (path, name, value) => ({
     path,
     name,
     value,
+  },
+});
+
+export const malcolmClearMethodInput = (path, name) => ({
+  type: MalcolmUpdateMethodInputType,
+  payload: {
+    path,
+    name,
+    delete: true,
   },
 });
 

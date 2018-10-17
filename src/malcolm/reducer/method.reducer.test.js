@@ -4,6 +4,7 @@ import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
   MalcolmArchiveMethodRun,
+  MalcolmFlagMethodInputType,
 } from '../malcolm.types';
 import MockCircularBuffer from './attribute.reducer.mocks';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
@@ -24,7 +25,7 @@ describe('method reducer', () => {
             {
               calculated: {
                 name: 'attr1',
-                inputs: {},
+                inputs: { input1: { value: 'test', flags: { test: true } } },
               },
               raw: {
                 takes: {
@@ -88,18 +89,48 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.calculated.inputs.input1).toEqual(123);
+    expect(attribute.calculated.inputs.input1).toEqual({
+      flags: { test: true },
+      value: 123,
+    });
   });
 
-  it('updateMethodInput should flag an input on a method as dirty', () => {
+  it('updateMethodInput should initialise the input on a method if not already done', () => {
     const payload = {
       path: ['block1', 'attr1'],
-      name: 'input1',
-      value: { isDirty: true },
+      name: 'input2',
+      value: '456',
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
+    expect(attribute.calculated.inputs.input2).toEqual({
+      flags: {},
+      value: '456',
+    });
+  });
+
+  it('updateMethodInput should delete the input on a method', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input1',
+      delete: true,
+    };
+
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    expect(attribute.calculated.inputs.input1).not.toBeDefined();
+  });
+
+  it('setFlag should flag an input on a method correctly', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input1',
+      flagType: 'testFlag',
+      flagState: true,
+    };
+
+    const attribute = runReducer(MalcolmFlagMethodInputType, payload);
+    expect(attribute.calculated.inputs.input1.flags.testFlag).toBeTruthy();
+    expect(attribute.calculated.inputs.input1.value).toEqual('test');
   });
 
   it('updateMethodInput should update dirty state of an input on a method', () => {
@@ -110,11 +141,13 @@ describe('method reducer', () => {
     const payload = {
       path: ['block1', 'attr1'],
       name: 'input1',
-      value: { isDirty: true },
+      flagType: 'dirty',
+      flagState: true,
     };
 
-    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    const attribute = runReducer(MalcolmFlagMethodInputType, payload);
     expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
+    expect(attribute.calculated.inputs.input1.flags).toBeTruthy();
   });
 
   it('updateMethodInput should initialise an array input', () => {
@@ -184,7 +217,7 @@ describe('method reducer', () => {
       test.updatedState.blocks.block1.attributes[test.attribute];
     const archive =
       test.updatedState.blockArchive.block1.attributes[test.attribute];
-    expect(attribute.calculated.outputs.output1).toEqual(456);
+    expect(attribute.calculated.outputs.output1).toEqual({ value: 456 });
     expect(archive.timeStamp.toarray().length).toEqual(1);
     expect(
       archive.timeStamp.toarray()[0].localRunTime instanceof Date
@@ -197,7 +230,9 @@ describe('method reducer', () => {
         archive.timeStamp.toarray()[0].localRunTime
     ).not.toEqual(0);
     expect(archive.value.toarray().length).toEqual(1);
-    expect(archive.value.toarray()[0].returned).toEqual(payload.value);
+    expect(archive.value.toarray()[0].returned).toEqual({
+      output1: { value: 456 },
+    });
     expect(archive.value.toarray()[0].returnStatus).toEqual('Success');
     expect(archive.alarmState.toarray().length).toEqual(1);
   });
@@ -222,7 +257,7 @@ describe('method reducer', () => {
     expect(
       test.updatedState.blocks.block1.attributes[test.attribute].calculated
         .outputs.output1
-    ).toEqual(456);
+    ).toEqual({ value: 456 });
   });
 
   it('handleMethodReturn should do nothing if original request wasnt a post', () => {

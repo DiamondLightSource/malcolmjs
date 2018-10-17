@@ -75,9 +75,7 @@ export const malcolmPutAction = (path, value) => ({
 export const malcolmPostAction = (path, rawParameters) => dispatch => {
   const parameters = {};
   Object.keys(rawParameters).forEach(param => {
-    parameters[param] = rawParameters[param].meta
-      ? rawParameters[param].value
-      : rawParameters[param];
+    parameters[param] = rawParameters[param].value;
   });
   dispatch({
     type: MalcolmSend,

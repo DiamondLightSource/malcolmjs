@@ -39,6 +39,11 @@ describe('Method component', () => {
     second: 'four',
   };
 
+  const testInputState = {};
+  Object.keys(testInputValues).forEach(input => {
+    testInputState[input] = { value: testInputValues[input] };
+  });
+
   const testOutputValues = {
     first: true,
     second: 'done',
@@ -53,14 +58,22 @@ describe('Method component', () => {
     errorMsg,
     writeable = true
   ) => {
+    const inputState = {};
+    Object.keys(inputValues).forEach(input => {
+      inputState[input] = { value: inputValues[input] };
+    });
+    const outputState = {};
+    Object.keys(outputValues).forEach(output => {
+      outputState[output] = { value: outputValues[output] };
+    });
     const method = {
       calculated: {
         name: 'Method',
         path: ['Test', 'Method'],
         errorState: !!errorMsg,
         errorMessage: errorMsg,
-        inputs: inputValues,
-        outputs: outputValues,
+        inputs: inputState,
+        outputs: outputState,
       },
       raw: {
         label: 'Test',
@@ -179,7 +192,7 @@ describe('Method component', () => {
     expect(malcolmPostAction).toHaveBeenCalledTimes(1);
     expect(malcolmPostAction).toHaveBeenCalledWith(
       ['Test', 'Method'],
-      testInputValues
+      testInputState
     );
   });
 
@@ -203,16 +216,11 @@ describe('Method component', () => {
       .find('input')
       .first()
       .simulate('change', { target: { value: 'test' } });
-    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(2);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(1);
     expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
       ['Test', 'Method', 'takes.first'],
       'first',
       'test'
-    );
-    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
-      ['Test', 'Method', 'takes.first'],
-      'first',
-      { isDirty: true }
     );
   });
 

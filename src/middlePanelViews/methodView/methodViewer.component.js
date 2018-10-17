@@ -15,7 +15,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
 
 // import ButtonAction from '../buttonAction/buttonAction.component';
-import WidgetTable from '../../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import MethodArchive from './methodArchive.container';
 
 import blockUtils from '../../malcolm/blockUtils';
@@ -71,7 +71,9 @@ const MethodViewer = props => {
               <div style={{ height: 'calc(100% - 56px)' }}>
                 <JSONInput
                   locale={locale}
-                  placeholder={props.selectedParamValue}
+                  placeholder={
+                    props.selectedParamValue && props.selectedParamValue.value
+                  }
                   viewOnly={!props.selectedParamMeta.writeable}
                   onChange={val => {
                     if (!val.error) {
@@ -154,6 +156,7 @@ const MethodViewer = props => {
                   }}
                   infoClickHandler={noOp}
                   rowClickHandler={noOp}
+                  closePanelHandler={noOp}
                 />
               );
             }
@@ -237,11 +240,11 @@ const MethodViewer = props => {
         addRow={noOp}
         infoClickHandler={noOp}
         rowClickHandler={noOp}
+        closePanelHandler={noOp}
       />
     );
   }
-
-  return <div>oops!</div>;
+  return null;
 };
 
 const mapStateToProps = (state, ownProps) => {
