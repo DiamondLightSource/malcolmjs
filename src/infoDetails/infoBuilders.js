@@ -242,19 +242,21 @@ export const buildAttributeInfo = props => {
             },
           };
         });
-        info.takes.discardParams = {
-          showLabel: false,
-          label: 'Discard params',
-          value: 'Discard params',
-          tag: 'info:button',
-          functions: {
-            clickHandler: () => {
-              Object.keys(attribute.raw.takes.elements).forEach(input => {
-                props.clearParamState(attribute.calculated.path, input);
-              });
+        if (props.clearParamState) {
+          info.takes.discardParams = {
+            showLabel: false,
+            label: 'Discard params',
+            value: 'Discard params',
+            tag: 'info:button',
+            functions: {
+              clickHandler: () => {
+                Object.keys(attribute.raw.takes.elements).forEach(input => {
+                  props.clearParamState(attribute.calculated.path, input);
+                });
+              },
             },
-          },
-        };
+          };
+        }
       }
       if (Object.keys(attribute.raw.returns.elements).length > 0) {
         info.returns = { label: 'Output parameter types' };

@@ -201,6 +201,7 @@ export class InfoDetails extends React.Component {
                   attributeName={this.props.attributeName}
                   disabled={this.state.info[group][a].disabled}
                   disabledFlagPath={this.state.info[group][a].disabledPath}
+                  handlers={this.state.info[group][a].functions}
                   showLabel={this.state.info[group][a].showLabel}
                   infoPath={this.state.info[group][a].infoPath}
                   infoClickHandler={this.props.infoClickHandler}

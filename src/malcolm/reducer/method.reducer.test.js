@@ -25,7 +25,7 @@ describe('method reducer', () => {
             {
               calculated: {
                 name: 'attr1',
-                inputs: { input1: { value: 'test', flags: {} } },
+                inputs: { input1: { value: 'test', flags: { test: true } } },
               },
               raw: {
                 takes: {
@@ -90,9 +90,34 @@ describe('method reducer', () => {
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.calculated.inputs.input1).toEqual({
-      flags: {},
+      flags: { test: true },
       value: 123,
     });
+  });
+
+  it('updateMethodInput should initialise the input on a method if not already done', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input2',
+      value: '456',
+    };
+
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    expect(attribute.calculated.inputs.input2).toEqual({
+      flags: {},
+      value: '456',
+    });
+  });
+
+  it('updateMethodInput should delete the input on a method', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input1',
+      delete: true,
+    };
+
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    expect(attribute.calculated.inputs.input1).not.toBeDefined();
   });
 
   it('setFlag should flag an input on a method correctly', () => {
