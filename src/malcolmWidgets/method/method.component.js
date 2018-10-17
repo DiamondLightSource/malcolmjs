@@ -12,13 +12,10 @@ import ButtonAction from '../buttonAction/buttonAction.component';
 
 import GroupExpander from '../groupExpander/groupExpander.component';
 import blockUtils from '../../malcolm/blockUtils';
-import {
-  malcolmSetFlag,
-  malcolmPostAction,
-} from '../../malcolm/malcolmActionCreators';
+import { malcolmPostAction } from '../../malcolm/malcolmActionCreators';
 import {
   malcolmUpdateMethodInput,
-  malcolmArchivePost,
+  malcolmFlagMethodInput,
 } from '../../malcolm/actions/method.actions';
 
 import {
@@ -76,20 +73,19 @@ const buildIOComponent = (input, props, isOutput) => {
 
   const valueMap = isOutput ? props.outputValues : props.inputValues;
   let inputValue;
-  if (valueMap[input[0]] !== undefined) {
+  if (valueMap[input[0]] && valueMap[input[0]].value !== undefined) {
     inputValue = valueMap[input[0]].value;
   } else if (props.defaultValues[input[0]] !== undefined) {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    /* if (inputValue !== undefined && !isArrayType(input[1])) {
-      props.updateInput(props.methodPath, input[0], inputValue);
-    } */
   }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };
-  const setFlag = () => {}; // (path, flagName, flagState) => {};
+  const setFlag = (path, flagName, flagState) => {
+    props.flagInput(path, input[0], flagName, flagState);
+  };
   const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
@@ -321,7 +317,9 @@ const mapStateToProps = (state, ownProps) => {
       const inputIsDirty =
         method.calculated.inputs[input] || method.calculated.dirtyInputs;
       const inputIsErrored = false;
-      const inputInvalid = false;
+      const inputInvalid =
+        method.calculated.inputs[input] &&
+        method.calculated.inputs[input].flags.invalid;
       inputAlarms[input] = AlarmStates.NO_ALARM;
       inputAlarms[input] = inputIsDirty
         ? AlarmStates.DIRTY
@@ -377,8 +375,6 @@ export const mapDispatchToProps = dispatch => ({
     );
   },
   runMethod: (path, inputs) => {
-    dispatch(malcolmSetFlag(path, 'pending', true));
-    dispatch(malcolmArchivePost(path, inputs));
     dispatch(malcolmPostAction(path, inputs));
   },
   updateInput: (path, inputName, inputValue) => {
@@ -386,6 +382,9 @@ export const mapDispatchToProps = dispatch => ({
   },
   methodParamClickHandler: path => {
     dispatch(navigationActions.navigateToSubElement(path[0], path[1], path[2]));
+  },
+  flagInput: (path, param, flagType, flagState) => {
+    dispatch(malcolmFlagMethodInput(path, param, flagType, flagState));
   },
 });
 

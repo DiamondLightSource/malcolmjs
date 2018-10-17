@@ -41,7 +41,7 @@ describe('Method component', () => {
 
   const testInputState = {};
   Object.keys(testInputValues).forEach(input => {
-    testInputState[input] = { value: testInputValues[input] };
+    testInputState[input] = { value: testInputValues[input], flags: {} };
   });
 
   const testOutputValues = {
@@ -56,11 +56,15 @@ describe('Method component', () => {
     inputValues,
     outputValues,
     errorMsg,
-    writeable = true
+    writeable = true,
+    flags = {}
   ) => {
     const inputState = {};
     Object.keys(inputValues).forEach(input => {
-      inputState[input] = { value: inputValues[input] };
+      inputState[input] = { value: inputValues[input], flags: {} };
+    });
+    Object.keys(flags).forEach(input => {
+      inputState[input] = { ...inputState[input], flags: flags[input] };
     });
     const outputState = {};
     Object.keys(outputValues).forEach(output => {
@@ -146,6 +150,15 @@ describe('Method component', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly with invalid inputs', () => {
+    const wrapper = shallow(
+      testMethod(testInputs, {}, defaultInputs, {}, {}, '', true, {
+        first: { invalid: true },
+      })
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('renders correctly with existing input values', () => {
     const wrapper = shallow(
       testMethod(testInputs, {}, {}, testInputValues, {}, '')
@@ -183,12 +196,6 @@ describe('Method component', () => {
       .find('button')
       .last()
       .simulate('click');
-    expect(malcolmSetFlag).toHaveBeenCalledTimes(1);
-    expect(malcolmSetFlag).toHaveBeenCalledWith(
-      ['Test', 'Method'],
-      'pending',
-      true
-    );
     expect(malcolmPostAction).toHaveBeenCalledTimes(1);
     expect(malcolmPostAction).toHaveBeenCalledWith(
       ['Test', 'Method'],

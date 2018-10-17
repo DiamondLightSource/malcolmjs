@@ -1,6 +1,7 @@
 import {
   MalcolmArchiveMethodRun,
   MalcolmAttributeData,
+  MalcolmFlagMethodInputType,
   MalcolmUpdateMethodInputType,
 } from '../malcolm.types';
 
@@ -49,6 +50,16 @@ export const malcolmIntialiseMethodParam = (path, selectedParam) => ({
     doInitialise: true,
     path,
     name: selectedParam[0] === 'takes' ? selectedParam[1] : undefined,
+  },
+});
+
+export const malcolmFlagMethodInput = (path, name, flagType, flagState) => ({
+  type: MalcolmFlagMethodInputType,
+  payload: {
+    path,
+    name,
+    flagType,
+    flagState,
   },
 });
 

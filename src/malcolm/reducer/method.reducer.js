@@ -143,8 +143,12 @@ export const setInputFlag = (state, payload) => {
       };
       attributeCopy.calculated.dirtyInputs[payload.name] = payload.flagState;
     }
-    attributeCopy.calculated.inputs[payload.name].flags[payload.flagType] =
-      payload.flagState;
+    const flags = {};
+    flags[payload.flagType] = payload.flagState;
+    attributeCopy.calculated.inputs[payload.name] = {
+      ...attributeCopy.calculated.inputs[payload.name],
+      flags,
+    };
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
