@@ -66,6 +66,7 @@ describe('Method component', () => {
     Object.keys(flags).forEach(input => {
       inputState[input] = { ...inputState[input], flags: flags[input] };
     });
+    console.log(inputState);
     const outputState = {};
     Object.keys(outputValues).forEach(output => {
       outputState[output] = { value: outputValues[output] };
@@ -153,7 +154,7 @@ describe('Method component', () => {
   it('renders correctly with invalid inputs', () => {
     const wrapper = shallow(
       testMethod(testInputs, {}, defaultInputs, {}, {}, '', true, {
-        first: { invalid: true },
+        first: { invalid: 'this is not valid' },
       })
     );
     expect(wrapper.dive()).toMatchSnapshot();

@@ -571,7 +571,7 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
       key="first"
     >
       <WithStyles(Tooltip)
-        title="a test input"
+        title="this is not valid"
       >
         <WithStyles(IconButton)
           className="MethodDetails-button-6"

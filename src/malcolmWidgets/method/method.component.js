@@ -317,7 +317,12 @@ const mapStateToProps = (state, ownProps) => {
   if (method && method.raw.takes.elements) {
     Object.entries(method.raw.takes.elements).forEach(([input, meta]) => {
       const inputIsDirty =
-        method.calculated.inputs[input] || method.calculated.dirtyInputs;
+        (method.calculated.inputs[input] instanceof Object &&
+          Object.prototype.hasOwnProperty.call(
+            method.calculated.inputs[input],
+            'value'
+          )) ||
+        method.calculated.dirtyInputs;
 
       const inputIsErrored = false; // TODO: implement individual parameter errors
 
