@@ -13,7 +13,7 @@ In turn, state information is used to alert you when an Attribute value is found
 The four states, and their associated representation in the User Interface are:
 
 .. list-table::
-    :widths: auto
+    :widths: 20 70 10
     :align: center
     :header-rows: 1
 
@@ -22,17 +22,20 @@ The four states, and their associated representation in the User Interface are:
       - icon
     * - Normal
       - Data associated with the Attribute is within acceptable parameters.
-      - .. figure:: images/int32_port.png
+      - .. figure:: images/information_icon.png
             :align: center
     * - Warning
       - Data is deemed to be outside normal operating parameters but is still considered acceptable.
-      - blah
+      - .. figure:: images/warning_icon.png
+            :align: center
     * - Error
       - Attribute data is deemed to be outside acceptable operating conditions and immediate action is recommended.  
-      - blah             
+      - .. figure:: images/error_icon.png
+            :align: center            
     * - Disconnected
       - The Block hosting the Attribute is not currently connected and data is therefore not available.
-      - blah
+      - .. figure:: images/disconnected_icon.png
+            :align: center    
 
 
 Operating ranges and threshold values are not specified directly within the user interface but instead via configuration of individual Attributes in the underlying Block Specification.  These settings are then reflected into the User Interface.  See specific Block documentation for additional information.
