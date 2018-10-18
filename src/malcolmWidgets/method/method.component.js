@@ -147,7 +147,7 @@ const MethodDetails = props => {
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
-            <Tooltip title={input[1].description}>
+            <Tooltip title={props.inputInfo[input[0]]}>
               <IconButton
                 tabIndex="-1"
                 className={props.classes.button}
@@ -272,6 +272,7 @@ MethodDetails.propTypes = {
   methodErrorMessage: PropTypes.string.isRequired,
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
+  inputInfo: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   inputAlarms: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
@@ -312,28 +313,42 @@ const mapStateToProps = (state, ownProps) => {
       : alarm;
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
   const inputAlarms = {};
+  const inputInfo = {};
   if (method && method.raw.takes.elements) {
-    Object.keys(method.raw.takes.elements).forEach(input => {
+    Object.entries(method.raw.takes.elements).forEach(([input, meta]) => {
       const inputIsDirty =
         method.calculated.inputs[input] || method.calculated.dirtyInputs;
-      const inputIsErrored = false;
+
+      const inputIsErrored = false; // TODO: implement individual parameter errors
+
       const inputInvalid =
         method.calculated.inputs[input] &&
         method.calculated.inputs[input].flags.invalid;
+
+      inputInfo[input] = meta.description;
       inputAlarms[input] = AlarmStates.NO_ALARM;
+
+      inputInfo[input] = inputInvalid || inputInfo[input];
+      inputAlarms[input] = inputInvalid
+        ? AlarmStates.MINOR_ALARM
+        : inputAlarms[input];
+
+      inputInfo[input] = inputIsDirty ? meta.description : inputInfo[input];
       inputAlarms[input] = inputIsDirty
         ? AlarmStates.DIRTY
         : inputAlarms[input];
+
+      inputInfo[input] = inputIsErrored
+        ? `Error in parameter ${input}`
+        : inputInfo[input];
       inputAlarms[input] = inputIsErrored
         ? AlarmStates.MAJOR_ALARM
         : inputAlarms[input];
+
       inputAlarms[input] =
         inputIsDirty && inputIsErrored
           ? AlarmStates.DIRTYANDERROR
           : inputAlarms[input];
-      inputAlarms[input] = inputInvalid
-        ? AlarmStates.MINOR_ALARM
-        : inputAlarms[input];
     });
   }
 
@@ -352,6 +367,7 @@ const mapStateToProps = (state, ownProps) => {
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
     dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
     inputAlarms,
+    inputInfo,
     outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
     outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
     required: method ? method.raw.required : EMPTY_OBJECT,

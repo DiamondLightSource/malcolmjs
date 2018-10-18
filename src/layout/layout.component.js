@@ -245,7 +245,6 @@ export const mapDispatchToProps = dispatch => ({
   makeBlockVisible: (event, engine) => {
     const blockMri = event.dataTransfer.getData('storm-diagram-node');
     const position = engine.getRelativeMousePoint(event);
-    dispatch(layoutAction.makeBlockVisible(blockMri, position));
     // Other items can be dropped onto the layout;
     // prevent them from triggering the dispatch
     if (blockMri !== '') {

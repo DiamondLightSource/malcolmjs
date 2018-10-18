@@ -114,7 +114,14 @@ export const malcolmPostAction = (path, rawParameters) => (
     });
   } else {
     missing.forEach(param => {
-      dispatch(malcolmFlagMethodInput(path, param, 'invalid', true));
+      dispatch(
+        malcolmFlagMethodInput(
+          path,
+          param,
+          'invalid',
+          `Warning: parameter ${param} is required to run method ${path[1]}`
+        )
+      );
     });
   }
 };
