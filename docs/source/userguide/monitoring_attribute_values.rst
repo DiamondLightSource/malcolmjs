@@ -68,7 +68,7 @@ The following options are available:
 Enhanced Chart Interactivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While the PandA chart interface provides basic interactive exploration capabilities it is largely limited to panning and zooming.  Further interactive capabilities are directly available via the '**Edit in Chart Studio**' option in the chart menu bar.  Selecting this option automatically exports the data associated with the current on-screen chart and opens it in the online `Chart Studio <https://plot.ly/online-chart-maker/>`_ tool.  Further information on the use of Chart Studio is available in its own `online documentation <https://help.plot.ly/>`_.
+While the chart interface provides basic interactive exploration capabilities it is largely limited to panning and zooming.  Further interactive capabilities are directly available via the '**Edit in Chart Studio**' option in the chart menu bar.  Selecting this option automatically exports the data associated with the current on-screen chart and opens it in the online `Chart Studio <https://plot.ly/online-chart-maker/>`_ tool.  Further information on the use of Chart Studio is available in its own `online documentation <https://help.plot.ly/>`_.
 
 .. NOTE::
     The external charting tool provided through the '**Edit in Chart Studio**' option is provided by a third party organisation.  Functionality and support for this tool is not the responsibility of the MalcolmJS team. 

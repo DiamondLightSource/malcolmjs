@@ -3,13 +3,13 @@
 User Interface Overview
 =======================
 
-The User Interface provides a fully interactive environment for designing, configuring and managing components and their connections that together define the underlying Control System.
+The User Interface provides a fully interactive environment for designing, configuring and managing components and the links between them that together define the underlying control system.
 
 
 User Interface Components
 -------------------------
 
-The User Interface consists of four core components, their content changing dynamically to reflect the activity you are undertaking:
+The User Interface consists of four core components.  The content of each compoent changes dynamically to support the activity you are undertaking:
 
 .. figure:: images/ui_schematic.png
     :align: center
@@ -29,9 +29,9 @@ Looking at each component in more detail:
     * - Left-hand Panel
       - The *'left-hand panel'* provides **general** information about the `parent_block_` currently forming the central focus of interest within the User Interface.  
     * - Central Panel
-      - The *'central panel'* displays information about an Attribute selected from the Block presented in the 'left-hand panel'.  In `Layout View <layout_view_>` an interactive graphical representation of the formal Control System Design is shown, in `Attribute View <attribute_view_>` a plot or table of Attribute data against time is displayed. 
+      - The *'central panel'* displays information about an Attribute selected from the Parent Block presented in the 'left-hand panel'.  In `Layout View <layout_view_>` an interactive graphical representation of the Design is shown, in `Attribute View <attribute_view_>` a `plot <monitoring_attribute_values_>` or `table <monitoring_attribute_values_>` of Attribute value data against time is displayed. 
     * - Right-hand Panel
-      - The *'right-hand panel'* provides **detailed** information about the Block, Attribute or Link currently in focus.  For example, if the 'left-hand panel' represents the `root_block_` then the 'right-hand panel' reflects a `block_` within the Control System Design, whereas if the 'left-hand panel' represents a `block_` the 'right-hand panel' reflects an `attribute_` within that Block or a link associated with it.
+      - The *'right-hand panel'* provides **detailed** information about the Block, Attribute or Link currently in focus.  For example, if the 'left-hand panel' represents the `root_block_` then the 'right-hand panel' reflects a `block_` within the Design, whereas if the 'left-hand panel' represents a `block_` the 'right-hand panel' reflects an `attribute_` within that Block or a `link_` associated with it.
 
 
 .. _principle_ui_views_:
@@ -49,9 +49,9 @@ To support design, configuration and management activies the User Interface prov
     * - View
       - Content
     * - `Layout View <layout_view_>`
-      - Provides an interactive environment for designing and configuring your Control System through `block_`, `attribute_` and `link_` specification.  The resulting `flowgraph_` provides a visual representation of the formal Control System `design_`.
+      - Provides an interactive environment for designing and configuring your control system through `block_`, `attribute_` and `link_` specification.  The resulting `flowgraph_` provides a visual representation of the formal `design_`.
     * - `Attribute View <attribute_view_>`
-      - Provides details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control System over time.
+      - Provides details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control system over time.
 
 
 .. TIP::
@@ -62,7 +62,7 @@ To support design, configuration and management activies the User Interface prov
 The Layout View
 ---------------
 
-Layout View is used to create, modify and manage the overall Design of your Control System.  
+Layout View is used to create, modify and manage the overall Design of your control system.  
 
 Layout View is accessed via the **'View'** or **'Edit'** button associated with the *'Layout'* Attribute or a `root_block_` or `parent_block_`.   
 
@@ -76,7 +76,7 @@ A typical example of the view you may expect to see is shown below.
 In this example we see:
 
     * Summary information about the 'PANDA' system displayed in the 'left-hand panel'.
-    * The Design of the PandABox Control System presented in the central `layout_` panel.  Note the 'CLOCKS' `block_` is highlighted.
+    * The Design of the 'PANDA' presented in the central `layout_` panel.  Note the 'CLOCKS' `block_` is highlighted.
     * Detailed information about the 'CLOCKS' Block in the 'right-hand' panel, including all of its pre-defined `attributes <attribute_>`.
     * The 'navigation bar' denoting that we are viewing the 'CLOCKS' Block via the layout of the 'PANDA' System.
 
@@ -93,7 +93,7 @@ The User Interface automatically transitions to Attribute View when an Attribute
 
 In both cases the 'central panel' presents a view of the Attribute's value against time.  This may represent a constantly changing value, for example a calculated data value updated every 2ms, or a periodically changing boolean on/off status indicator that only changes every 10h.  Two representations of the Attribute value are available and can be selected by choosing the appropriate option at the bottom of the 'central panel' thus:
 
-    * Plot - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `working_with_charts_` for further information.
+    * Plot - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `monitoring_attribute_values_` for further information.
     * Table - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.
     
 For example, viewing the plot associated with the 'PANDA Input Encoder':

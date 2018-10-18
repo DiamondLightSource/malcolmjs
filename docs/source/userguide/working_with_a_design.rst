@@ -101,13 +101,13 @@ Attributes whose value can be set at design-time are denoted by a highlight belo
 Obtaining Information About an Attribute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Information about an individual Attribute can be obtained by selecting the 'information icon' associated with it from the Block Information Panel.  This opens the Attribute Information Panel within the right-hand panel of the User Interface.
+Information about an individual Attribute can be obtained by selecting the 'information icon' associated with it from the Block Information Panel.  This opens the Attribute Information Panel within the 'right-hand panel' of the User Interface.
 
 For each Attribute the following information is displayed:
 
     * The fully qualified path to the Attribute allowing it to be uniquely identified within the Design.
     * Basic meta-data about the Attribute including it's type, a brief description of its purpose and whether it is a writeable Attribute.
-    * Details of the `alarm state <working_with_alarms_>` associated with the Attribute, including severity and any corresponding message.
+    * Details of the `Attribute state <understanding_attribute_state_>` associated with the Attribute, including severity and any corresponding message.
     * Timestamp details showing when the Attribute was last updated.
 
 Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying Block specification.
@@ -312,8 +312,8 @@ Obtaining information about Method execution
 
 Selecting the 'Information' icon associated with a Block Method displays two sources of information relating to the Method:
 
-    * The 'Right-hand Panel' displays details about the Method including a description of its purpose and the parameters it requires to execute successfully.
-    * The 'Central Panel' shows a log recording each instance of Method execution within your current session.  This includes the time of submission and completion, the status of that completion (e.g. success or failure) and any alarms associated with that status.  Selecting the Method parameter name from the table header opens further information about that parameter in the 'Right-hand panel'.
+    * The 'right-hand panel' displays details about the Method including a description of its purpose and the parameters it requires to execute successfully.
+    * The 'central panel' shows a log recording each instance of Method execution within your current session.  This includes the time of submission and completion, the status of that completion (e.g. success or failure) and any alarms associated with that status.  Selecting the Method parameter name from the table header opens further information about that parameter in the 'Right-hand panel'.
 
 Block Ports
 -----------
