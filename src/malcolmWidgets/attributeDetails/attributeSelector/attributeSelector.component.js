@@ -19,7 +19,6 @@ import {
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
-import { isArrayType } from '../../../malcolm/reducer/method.reducer';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -33,6 +32,14 @@ export const malcolmTypes = {
   table: 'malcolm:core/TableMeta:1.0',
   pointGenerator: 'malcolm:core/PointGeneratorMeta:1.0',
 };
+
+export const isArrayType = meta =>
+  meta &&
+  meta.typeid &&
+  meta.typeid
+    .split('/')[1]
+    .split(':')[0]
+    .slice(-9) === 'ArrayMeta';
 
 export const getDefaultFromType = objectMeta => {
   switch (objectMeta.typeid) {
