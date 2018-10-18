@@ -107,7 +107,26 @@ const MethodViewer = props => {
         case 'widget:led': {
           if (isArrayType(props.selectedParamMeta)) {
             if (props.selectedParamValue === undefined) {
-              return <div>Loading...</div>;
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <Typography style={{ fontSize: '20px' }}>
+                    No value parameter value defined
+                  </Typography>
+                  {props.selectedParamMeta.writeable ? (
+                    <Typography style={{ fontSize: '20px' }}>
+                      Press Edit button to initialise
+                    </Typography>
+                  ) : null}
+                </div>
+              );
             } else if (
               props.selectedParam[0] === 'returns' ||
               (props.selectedParamValue.meta && props.selectedParamValue.value)
