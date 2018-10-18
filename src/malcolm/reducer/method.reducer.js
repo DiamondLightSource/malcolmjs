@@ -7,17 +7,10 @@ import {
   MalcolmArchiveMethodRun,
   MalcolmFlagMethodInputType,
 } from '../malcolm.types';
+import { isArrayType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const getMethodParam = (type, param, method) =>
   Object.keys(method.raw[type].elements).includes(`${param}`);
-
-export const isArrayType = meta =>
-  meta &&
-  meta.typeid &&
-  meta.typeid
-    .split('/')[1]
-    .split(':')[0]
-    .slice(-9) === 'ArrayMeta';
 
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
