@@ -22,6 +22,7 @@ import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
+import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = theme => {
   const gridLineColor = fade(
@@ -178,6 +179,57 @@ const findAttributeComponent = props => {
         </div>
       );
     case 'widget:table':
+      if (!isArrayType({ typeid: props.typeid })) {
+        return (
+          <div className={props.classes.plainBackground}>
+            <div
+              className={props.classes.tableContainer}
+              style={transitionWithPanelStyle}
+            >
+              <TableContainer
+                attributeName={props.mainAttribute}
+                blockName={props.parentBlock}
+                subElement={props.mainAttributeSubElements}
+                footerItems={[
+                  <Tooltip id="1" title={props.errorMessage} placement="right">
+                    <IconButton className={props.classes.button} disableRipple>
+                      <AttributeAlarm
+                        alarmSeverity={props.mainAttributeAlarmState}
+                      />
+                    </IconButton>
+                  </Tooltip>,
+                ]}
+              />
+            </div>
+          </div>
+        );
+      }
+      return <div className={props.classes.plainBackground} />;
+
+    case 'widget:textupdate':
+    case 'widget:multilinetextupdate':
+    case 'widget:textinput':
+    case 'widget:led':
+    case 'widget:checkbox':
+    case 'widget:combo':
+      if (!isArrayType({ typeid: props.typeid })) {
+        return (
+          <div className={props.classes.plainBackground}>
+            <div
+              className={props.classes.tableContainer}
+              style={transitionWithPanelStyle}
+            >
+              <AttributeViewer
+                attributeName={props.mainAttribute}
+                blockName={props.parentBlock}
+                widgetTag={widgetTag}
+                typeId={props.typeid}
+                // openPanels={{ parent: props.openParent, child: props.openChild }}
+              />
+            </div>
+          </div>
+        );
+      }
       return (
         <div className={props.classes.plainBackground}>
           <div
@@ -201,28 +253,7 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
-    case 'widget:textupdate':
-    case 'widget:multilinetextupdate':
-    case 'widget:textinput':
-    case 'widget:led':
-    case 'widget:checkbox':
-    case 'widget:combo':
-      return (
-        <div className={props.classes.plainBackground}>
-          <div
-            className={props.classes.tableContainer}
-            style={transitionWithPanelStyle}
-          >
-            <AttributeViewer
-              attributeName={props.mainAttribute}
-              blockName={props.parentBlock}
-              widgetTag={widgetTag}
-              typeId={props.typeId}
-              // openPanels={{ parent: props.openParent, child: props.openChild }}
-            />
-          </div>
-        </div>
-      );
+
     case 'widget:tree':
       return (
         <div className={props.classes.plainBackground}>
@@ -285,7 +316,7 @@ const mapStateToProps = state => {
     openChild: state.malcolm.childBlock !== undefined,
     isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
-    typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
+    typeid: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
     disableAutoLayout:
       state.malcolm.layout && state.malcolm.layout.blocks.length === 0,
