@@ -2,20 +2,19 @@ Contents
 ========
 
 .. toctree::
-    :caption: Introduction
+    :caption: Overview
 
-    userguide/intro
-.. Introduction <index>
+    index
 
 .. toctree::
     :caption: User Guide
     
-    userguide/what_is_a_pandabox
+    userguide/getting_started
     userguide/quick-start
     userguide/user_interface_overview
-    userguide/creating_a_new_design
-    userguide/working_with_charts
-    userguide/working_with_alarms
+    userguide/working_with_a_design
+    userguide/monitoring_attribute_values
+    userguide/understanding_attribute_state
     userguide/glossary
 
 .. toctree::

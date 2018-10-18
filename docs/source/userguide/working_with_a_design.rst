@@ -34,6 +34,8 @@ The Block Palette icon is replaced by a full representation of the selected Bloc
 
 After adding a Block to the Layout Panel it can be selected by hovering over it and clicking the left mouse button.  Upon selection the Block Information panel presenting each `attribute_` and `method_` available to that Block is displayed in the right-hand panel of the web interface.
 
+.. NOTE::   
+    On intially adding a new Block to your Design it is configured according to its pre-defined default settings retrieved from the underlying Design Specification of that Block.
 
 .. _removing_a_block_from_a_design_:
 
@@ -103,7 +105,7 @@ Information about an individual Attribute can be obtained by selecting the 'info
 
 For each Attribute the following information is displayed:
 
-    * The fully qualified path to the Attribute allowing it to be uniquely identified within the PandA Design.
+    * The fully qualified path to the Attribute allowing it to be uniquely identified within the Design.
     * Basic meta-data about the Attribute including it's type, a brief description of its purpose and whether it is a writeable Attribute.
     * Details of the `alarm state <working_with_alarms_>` associated with the Attribute, including severity and any corresponding message.
     * Timestamp details showing when the Attribute was last updated.
@@ -188,7 +190,7 @@ Changes to the export specification can be discarded at any time throughout the 
 Local vs. Server Parameter Attribute State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The underlying hardware infrastructure described by your virtual representation is defined and configured based on the content of the Design specification saved behind the graphical representation you interact with on screen.  Only when modified content is submitted and recorded to the Design specification is the change effected in underlying hardware.  It is therefore crucial to understand the difference betwwen 'local' attribute state and 'server' attribute state, particularly for `Parameter Attributes <parameter_attribute_>` that can be modified directly within the User Interface.
+The underlying physcial hardware infrastructure described by your virtual representation is defined and configured based on the content of the Design specification saved behind the graphical representation you interact with on screen.  Only when modified content is submitted and recorded to the Design specification is the change effected in physical hardware.  It is therefore crucial to understand the difference between 'local' attribute state and 'server' attribute state, particularly for `Parameter Attributes <parameter_attribute_>` that can be modified directly within the User Interface.
 
 Local Attribute state represents the staus of a Parameter Attribute that has been modified within the User Inferface but not yet submitted for inclusion in the underlying Design specification.  As such the modified value has no effect on the currently implemented hardware solution.  Locally modified attributes are denoted by the 'edit' status icon next to the Attribute name within their Block information panel.  A Parameter Attribute enters the 'local' state as soon as its incumbent value is changed in any way (including adding content to a previously empty Attibute value field) and will remain so until the 'Enter' key is pressed, triggering submission of content to the server.  If the server detects an error in the variable content or format it will return an error and the variable will remain in 'local' state until the issue is resolved.  Details of the mechanism of submitting modified content is described in the `Attribute Change Lifecycle <attribute_change_lifecycle_>` section below.
 
@@ -198,6 +200,8 @@ The following diagram shows the process involved in modifying a Parameter Attrib
 
 .. figure:: images/attribute_lifecycle.svg
     :align: center
+
+
 
 
 .. TIP::
@@ -220,12 +224,11 @@ Within the user interface the duration of this round-trip is represented by a sp
 
 The following diagram shows the scope of the 'put' process within the wider context of an Attribute change request.
 
-.. figure:: images/put_process.svg
-    :align: center
-
-
-.. NOTE::
-    The value of a manually specified Attribute is not *saved* permanently until the overall `design_` has been `saved <saving_a_design_>`.
+.. TIP::
+    Remember the three rules of Attribute change:
+        * Changing an Attribute value in the User Interface has no impact on the underlying physical system until it has been 'put'.
+        * Once the 'put' process is complete the change takes immediate effect.
+        * Changes to an Attribute will not be stored permenantly unless the overall Design has been `saved <saving_a_design_>`. Only those Attribute values that have been 'put' on the server will be recorded in the saved Design.
 
 
 Defining Complex Attributes - Working With Attribute Tables
@@ -233,7 +236,12 @@ Defining Complex Attributes - Working With Attribute Tables
 
 An Attribute associated with a Block may itself represent a collection of values which, when taken together, define the overall Attribute.  For example, the Sequencer Block type contains a single Attribute defining the sequence of steps performed by underlying hardware when controlling motion of a motor.   
 
-The collection of values required by the Attribute are presented in the User Interface as an Attribute Table.  The template for the table is generated dynamically based on the specification of the Attribure within its Block.  For details of utilising the table associated with a specific Attribute refer to the technical documentation of its Block.
+The collection of values required by the Attribute are presented in the User Interface as an Attribute Table.  The template for the table is generated dynamically based on the specification of the Attribute within its Block.  For details of utilising the table associated with a specific Attribute refer to the technical documentation of its Block.
+
+An example of an Attribute Table for the 'Sequencer' Block associated with a 'PANDA' Parent Block is shown below:
+
+.. figure:: screenshots/attribute_table.png
+      :align: center
 
 
 Identifying Table Attributes
@@ -291,20 +299,21 @@ While Block `attributes <attribute_>` define the *behaviour* of a Block, `Method
 
 A Method in represented in the user inferface as a button, labelled with the name of the action that will be performed. The Method will only be executed if the button is pressed on the User Interface. 
 
-A Method may require input parameters defining how the action is to be enacted.  For example, the 'Save' Method associated with the Design within a `parent_block_` requires a single input parameter - the name of the file to which Design information is stored.  Method input parameters are managed in the same way as Block attributes.  Like a Block Attribute, a Method parameter:
+A Method may require input parameters defining how the action is to be enacted.  For example, the 'Save' Method associated with the Design within a `parent_block_` requires a single input parameter - the name of the file to which Design information is stored. Method parameters:
 
-    * Can be edited directly via the Block Information Panel via the 'Edit' option associated with it.
-    * Remains in the 'local' state within the User Interface until it is *put* to the server by pressing 'Enter'.
-    * Once is the 'server' state will be utilised when the button associated with the Method is pressed.
-    * Will not be saved as part of the overall definition of the `parent_block_` until the 'Save' Method has been executed.
-
-**THIS NEEDS A DIAGRAM OF THE METHOD MANAGEMENT LIFECYCLE**
-
-.. NOTE::
-    Executing a Block Method while a Method parameter is in the 'local' state will cause the locally entered value to be ignored in favour of the Mathod parameter value held on the server.  This can lead to confusion when the on-screen Method Parameter does not relate to the action that has taken place.  Ensure you always *put* content to the server as described in the `attribute_change_lifecycle_` section before executing the Method.
+    * Can be edited directly via the Block Information Panel.
+    * Exist in 'local' state until the button associated with the Method is pressed.
+    * Should be considered as properties of the Method they are associated with rather than entities in their own right.  Method parameters are never recorded on the server or saved within the persistent Design specification.
 
 A full list of the Methods available within each Block and details of their Method parameters can be found in the documentation defining that Block. 
 
+Obtaining information about Method execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Selecting the 'Information' icon associated with a Block Method displays two sources of information relating to the Method:
+
+    * The 'Right-hand Panel' displays details about the Method including a description of its purpose and the parameters it requires to execute successfully.
+    * The 'Central Panel' shows a log recording each instance of Method execution within your current session.  This includes the time of submission and completion, the status of that completion (e.g. success or failure) and any alarms associated with that status.  Selecting the Method parameter name from the table header opens further information about that parameter in the 'Right-hand panel'.
 
 Block Ports
 -----------
@@ -441,20 +450,4 @@ To open an existing Design:
 
 .. TIP::
      If no previously saved designs exist the 'Design' Attribute list will be empty.
-
-..
-    Working Collaboratively on a Design
-    -----------------------------------
-
-    Needs to cover the eventuality where 2 people are potentially editing the same PandA configuration. 
-        What does each user see?
-        What happens if they both edit the same Attribute at the same time?
-        What happens if one updates an attribute, when does the second see it?
-
-    Disabling a Root Block
-    ----------------------
-
-    **NEED TO EXPLORE THE USE CASE FOR THIS**
-
-
 

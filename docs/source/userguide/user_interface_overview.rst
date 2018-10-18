@@ -6,6 +6,34 @@ User Interface Overview
 The User Interface provides a fully interactive environment for designing, configuring and managing components and their connections that together define the underlying Control System.
 
 
+User Interface Components
+-------------------------
+
+The User Interface consists of four core components, their content changing dynamically to reflect the activity you are undertaking:
+
+.. figure:: images/ui_schematic.png
+    :align: center
+
+Looking at each component in more detail:
+
+
+.. list-table::
+    :widths: 20, 80
+    :align: center
+    :header-rows: 1
+
+    * - Component
+      - Description
+    * - Navigation Bar
+      - The *'navigation bar'* at the top of the screen provides the ability to move through the currently open Design, selecting design elements at increasingly deep levels of implementation.  In doing so it provides a breadcrumb-like map of where you currently are within the Design.
+    * - Left-hand Panel
+      - The *'left-hand panel'* provides **general** information about the `parent_block_` currently forming the central focus of interest within the User Interface.  
+    * - Central Panel
+      - The *'central panel'* displays information about an Attribute selected from the Block presented in the 'left-hand panel'.  In `Layout View <layout_view_>` an interactive graphical representation of the formal Control System Design is shown, in `Attribute View <attribute_view_>` a plot or table of Attribute data against time is displayed. 
+    * - Right-hand Panel
+      - The *'right-hand panel'* provides **detailed** information about the Block, Attribute or Link currently in focus.  For example, if the 'left-hand panel' represents the `root_block_` then the 'right-hand panel' reflects a `block_` within the Control System Design, whereas if the 'left-hand panel' represents a `block_` the 'right-hand panel' reflects an `attribute_` within that Block or a link associated with it.
+
+
 .. _principle_ui_views_:
 
 Principle User Interface views
@@ -25,25 +53,9 @@ To support design, configuration and management activies the User Interface prov
     * - `Attribute View <attribute_view_>`
       - Provides details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control System over time.
 
-User Interface Components
--------------------------
 
-Each of the views introduced in `principle_ui_views_` utilises the same basic structure, with content changing dynamically to reflect the purpose of the requested view.  The User Interface consists of four core components:
-
-.. figure:: images/ui_schematic.png
-    :align: center
-
-Looking at each component in more detail:
-
-    * The *'navigation bar'* at the top of the screen provides the ability to move through the currently open Design, selecting design elements at increasingly deep levels of implementation.  In doing so it provides a breadcrumb-like map of where you currently are within the Design.
-    * The *'left-hand panel'* provides **general** information about the `block_` currently forming the central focus of interest within the User Interface.  
-    
-    .. HINT::
-        Remember that nature of the Block displayed will depend on the context in which you are viewing it.  A `parent_block_` displayed within the Layout View will contain information about the overall Control System Design (name, state, modification status, etc.) whereas Attribute View presents the details of the Block hosting the Attribute of interest.
-
-    * The *'central panel'* displays information about an Attribute selected from the Block presented in the 'left-hand panel'.  In `Layout View <layout_view_>` an interactive graphical representation of the formal Control System Design is shown, in `Attribute View <attribute_view_>` a plot or table of Attribute data against time is displayed. 
-    * The *'right-hand panel'* provides **detailed** information about the Block, Attribute or Link currently in focus.  For example, if the 'left-hand panel' represents the `root_block_` then the 'right-hand panel' reflects a `block_` within the Control System Design, whereas if the 'left-hand panel' represents a `block_` the 'right-hand panel' reflects an `attribute_` within that Block or a link associated with it.
-
+.. TIP::
+    Remember that nature of the Block displayed will depend on the context in which you are viewing it.  A `parent_block_` displayed in the left-hand panel within the Layout View will contain information about the overall design of that Block (name, state, modification status, etc.) whereas in Attribute View the left-hand panel presents details of the Block hosting the Attribute of interest.
 
 .. _layout_view_:
 
@@ -84,7 +96,12 @@ In both cases the 'central panel' presents a view of the Attribute's value again
     * Plot - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `working_with_charts_` for further information.
     * Table - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.
     
-**THIS NEEDS AN IMAGE**
+For example, viewing the plot associated with the 'PANDA Input Encoder':
+
+.. figure:: screenshots/attribute_view_chart.png
+      :align: center
+
+As noted above, since we are now in 'Attribute View' the left-hand panel contains details of the 'Input Encoder 1' Block not the 'PANDA' Parent Block.
 
 Panel Popping
 -------------
@@ -93,8 +110,10 @@ Under normal use the 'left-hand panel' contains summary information about the cu
 
 Connectivity to the underlying system is maintained meaning each independent window is updated in response to activity within the Control System.  Similarly, manual updates to any Attribute within an independent Information Panel is reflected back to the Control System in the same way as occurs when the Information Panel is integrated with the main user interface.
 
-This approach becomes particularly powerful when Attributes within a Child Block are `exported <exporting_attributes_>` to their `parent_block_` as it allows key variables across multiple Design components to be monitored via a single aggregated view.
+This approach becomes particularly powerful when Attributes within a Child Block are `exported <exporting_attributes_>` to their `parent_block_` as it allows key variables across multiple Design components to be monitored via a single aggregated view.  For example:
 
-**THIS NEEDS AN IMAGE OF MULTIPLE WINDOWS**
+.. figure:: screenshots/panel_popping.png
+    :align: center
 
+In this image, which spans two monitor screens, we see three Child Blocks ('CLOCKS', 'COUNTER1' and 'BITS') associated with the 'PANDA' Parent Block *popped* into individual windows and displayed alongside the overall 'PANDA' Layout.
 

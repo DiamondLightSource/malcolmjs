@@ -1,4 +1,4 @@
-.. _welcome_to_your_pandabox_:
+.. _getting_started_:
 
 Getting Started
 ===============
@@ -6,7 +6,7 @@ Getting Started
 This user guide introduces the web-based environment, toolkit and processes available to you as you develop and manage your Control System through its integrated user interface.  This interface allows you to:
 
     * Design and configure the building blocks and linkages between them as a *virtual representation* of you control system.
-    * Optimise your design through interaction with the physical hardware of your control system implementation.
-    * Utilise and manage your design in real-world operational scenarios through monitoring and basic analysis tools.
-    * Save snapshots of your design for re-use later, or for traceability purposes in support of good scientific practice.  
+    * Optimise your `design_` through interaction with the physical hardware of your Control System implementation.
+    * Utilise and manage your `design_` in real-world operational scenarios through monitoring and basic analysis tools.
+    * Save snapshots of your `design_` for re-use later, or for traceability purposes in support of good scientific practice.  
     * Load saved designs to quickly revert to a 'known good state' or to reconfigure your underlying hardware. 
