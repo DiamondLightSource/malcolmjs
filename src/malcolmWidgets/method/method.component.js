@@ -16,11 +16,13 @@ import { malcolmPostAction } from '../../malcolm/malcolmActionCreators';
 import {
   malcolmUpdateMethodInput,
   malcolmFlagMethodInput,
+  malcolmIntialiseMethodParam,
 } from '../../malcolm/actions/method.actions';
 
 import {
   selectorFunction,
   getDefaultFromType,
+  isArrayType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 
@@ -86,6 +88,13 @@ const buildIOComponent = (input, props, isOutput) => {
   const setFlag = (path, flagName, flagState) => {
     props.flagInput(path, input[0], flagName, flagState);
   };
+  const buttonClickHandler =
+    isArrayType(input[1]) && !isOutput
+      ? path => {
+          props.initialiseLocalState(path, ['takes', input[0]]);
+          props.methodParamClickHandler(path);
+        }
+      : props.methodParamClickHandler;
   const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
@@ -99,7 +108,7 @@ const buildIOComponent = (input, props, isOutput) => {
       parameterMeta,
       false,
       updateStoreOnEveryValueChange,
-      props.methodParamClickHandler
+      buttonClickHandler
     );
   }
   return selectorFunction('widget:undefined');
@@ -406,6 +415,9 @@ export const mapDispatchToProps = dispatch => ({
   },
   flagInput: (path, param, flagType, flagState) => {
     dispatch(malcolmFlagMethodInput(path, param, flagType, flagState));
+  },
+  initialiseLocalState: (path, selectedParam) => {
+    dispatch(malcolmIntialiseMethodParam(path, selectedParam));
   },
 });
 

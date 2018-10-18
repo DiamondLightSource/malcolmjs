@@ -6,6 +6,7 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
@@ -283,7 +284,25 @@ const findAttributeComponent = props => {
 
 const MiddlePanelContainer = props => (
   <div className={props.classes.container} role="presentation">
-    {findAttributeComponent(props)}
+    {props.mainAttribute ? (
+      findAttributeComponent(props)
+    ) : (
+      <div
+        className={props.classes.plainBackground}
+        style={{
+          justifyContent: 'center',
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+          verticalAlign: 'middle',
+        }}
+      >
+        <Typography style={{ fontSize: '20pt' }}>
+          Please select a field to view
+        </Typography>
+      </div>
+    )}
   </div>
 );
 
@@ -355,7 +374,9 @@ findAttributeComponent.propTypes = {
 MiddlePanelContainer.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
+    plainBackground: PropTypes.string,
   }).isRequired,
+  mainAttribute: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

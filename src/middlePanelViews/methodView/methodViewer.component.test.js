@@ -3,10 +3,7 @@ import { createShallow, createMount } from '@material-ui/core/test-utils';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors/index';
 import MethodViewer from './methodViewer.component';
-import {
-  malcolmUpdateMethodInput,
-  malcolmIntialiseMethodParam,
-} from '../../malcolm/actions/method.actions';
+import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
@@ -144,7 +141,6 @@ describe('Method viewer', () => {
     getItem.mockClear();
     setItem.mockClear();
     malcolmUpdateMethodInput.mockClear();
-    malcolmIntialiseMethodParam.mockClear();
 
     mockStore = myState => ({
       getState: () => myState,
@@ -316,21 +312,6 @@ describe('Method viewer', () => {
   });
   */
   // it('updates method input after 1s inactivity', () => {});
-
-  it('fires action to initialise local state if input is an array', () => {
-    testInputValues = {};
-    mount(testMethodViewer({}, ['takes', 'third'], undefined, freshArchive));
-    expect(malcolmIntialiseMethodParam).toHaveBeenCalledTimes(1);
-    expect(malcolmIntialiseMethodParam).toHaveBeenCalledWith(
-      ['Test', 'Method'],
-      ['takes', 'third']
-    );
-  });
-
-  it('doesnt fire action if array input local state is already initialised', () => {
-    mount(testMethodViewer({}, ['takes', 'third'], undefined, freshArchive));
-    expect(malcolmIntialiseMethodParam).not.toHaveBeenCalled();
-  });
 
   it('renders correctly for array once local state is initialised', () => {
     const wrapper = shallow(

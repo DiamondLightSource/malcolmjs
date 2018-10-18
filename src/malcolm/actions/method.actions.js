@@ -4,6 +4,7 @@ import {
   MalcolmFlagMethodInputType,
   MalcolmUpdateMethodInputType,
 } from '../malcolm.types';
+import blockUtils from '../blockUtils';
 
 export const buildMethodUpdate = (id, data) => ({
   type: MalcolmAttributeData,
@@ -44,14 +45,32 @@ export const malcolmArchivePost = (path, parameters) => ({
   },
 });
 
-export const malcolmIntialiseMethodParam = (path, selectedParam) => ({
-  type: MalcolmUpdateMethodInputType,
-  payload: {
-    doInitialise: true,
-    path,
-    name: selectedParam[0] === 'takes' ? selectedParam[1] : undefined,
-  },
-});
+export const malcolmIntialiseMethodParam = (path, selectedParam) => (
+  dispatch,
+  getState
+) => {
+  const { blocks } = getState().malcolm;
+  const method = blockUtils.findAttribute(blocks, path[0], path[1]);
+  if (
+    (method &&
+      method.calculated.isMethod &&
+      selectedParam[0] === 'takes' &&
+      !method.calculated.inputs[selectedParam[1]]) ||
+    (method.calculated.inputs[selectedParam[1]] instanceof Object &&
+      !Object.prototype.hasOwnProperty.call(
+        method.calculated.inputs[selectedParam[1]],
+        'value'
+      ))
+  )
+    dispatch({
+      type: MalcolmUpdateMethodInputType,
+      payload: {
+        doInitialise: true,
+        path,
+        name: selectedParam[1],
+      },
+    });
+};
 
 export const malcolmFlagMethodInput = (path, name, flagType, flagState) => ({
   type: MalcolmFlagMethodInputType,
