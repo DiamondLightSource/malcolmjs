@@ -149,16 +149,20 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmRevertAction(path));
   },
   putTable: (path, tableState) => {
-    const value = {};
-    tableState.labels.forEach(label => {
-      value[label] = [];
-    });
-    tableState.value.forEach(row => {
+    let value;
+    if (tableState.labels) {
+      value = {};
       tableState.labels.forEach(label => {
-        value[label] = [...value[label], row[label]];
+        value[label] = [];
       });
-    });
-
+      tableState.value.forEach(row => {
+        tableState.labels.forEach(label => {
+          value[label] = [...value[label], row[label]];
+        });
+      });
+    } else {
+      ({ value } = tableState);
+    }
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPutAction(path, value));
   },

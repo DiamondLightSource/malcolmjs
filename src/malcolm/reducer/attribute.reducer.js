@@ -16,11 +16,14 @@ import {
 import {
   getDefaultFromType,
   malcolmTypes,
+  isArrayType,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
+  createLocalState,
   shouldClearDirtyFlag,
   tableHasColumn,
   tableHasRow,
+  arrayHasElement,
 } from './table.reducer';
 import { getMethodParam } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -52,6 +55,10 @@ const hasSubElements = inputAttribute => {
     attribute.calculated.subElements = {
       takes: (param, method) => getMethodParam('takes', param, method),
       returns: (param, method) => getMethodParam('returns', param, method),
+    };
+  } else if (isArrayType(attribute.raw.meta)) {
+    attribute.calculated.subElements = {
+      row: arrayHasElement,
     };
   }
   return attribute;
@@ -219,49 +226,28 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
-const deepCopy = value =>
-  value !== undefined ? JSON.parse(JSON.stringify(value)) : undefined;
-
 const updateLocalState = attribute => {
   let updatedAttribute = { ...attribute };
   if (updatedAttribute && updatedAttribute.raw.meta) {
     if (
       updatedAttribute.raw.meta.tags &&
       updatedAttribute.raw.meta.tags.includes('widget:textinput') &&
+      !isArrayType(attribute.raw.meta) &&
       (!updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate)
     ) {
       updatedAttribute.localState = updatedAttribute.raw.value;
     } else if (
-      updatedAttribute.raw.meta.typeid === malcolmTypes.table &&
+      (updatedAttribute.raw.meta.typeid === malcolmTypes.table ||
+        isArrayType(attribute.raw.meta)) &&
       updatedAttribute.localState !== undefined
     ) {
-      const labels = Object.keys(updatedAttribute.raw.meta.elements);
       updatedAttribute = shouldClearDirtyFlag(updatedAttribute);
       if (
         !updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate
       ) {
-        updatedAttribute.calculated.dirty = false;
-        updatedAttribute.localState = {
-          value: updatedAttribute.raw.value[labels[0]].map((value, row) => {
-            const dataRow = {};
-            labels.forEach(label => {
-              dataRow[label] = updatedAttribute.raw.value[label][row];
-            });
-            return dataRow;
-          }),
-          meta: deepCopy(updatedAttribute.raw.meta),
-          labels,
-          flags: {
-            rows: updatedAttribute.raw.value[labels[0]].map(() => ({})),
-            table: {
-              dirty: false,
-              fresh: true,
-              timeStamp: deepCopy(updatedAttribute.raw.timeStamp),
-            },
-          },
-        };
+        updatedAttribute = createLocalState(updatedAttribute);
       } else {
         updatedAttribute.localState.flags.table.fresh = false;
       }

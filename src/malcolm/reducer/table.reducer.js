@@ -7,14 +7,21 @@ import {
   MalcolmTableFlag,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  getDefaultFromType,
+  isArrayType,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const rowIsDifferent = (attribute, row) =>
-  attribute.localState.labels.some(
-    label =>
-      `${attribute.localState.value[row][label]}` !==
-      `${attribute.raw.value[label][row]}`
-  );
+  attribute.localState.labels
+    ? attribute.localState.labels.some(
+        label =>
+          `${attribute.localState.value[row][label]}` !==
+          `${attribute.raw.value[label][row]}`
+      )
+    : attribute.localState.value[row] !== attribute.raw.value[row];
+
+export const arrayHasElement = (index, array) => index < array.raw.value.length;
 
 export const tableHasRow = (row, table) =>
   table &&
@@ -50,6 +57,49 @@ export const shouldClearDirtyFlag = inputAttribute => {
   return attribute;
 };
 
+const deepCopy = value =>
+  value !== undefined ? JSON.parse(JSON.stringify(value)) : undefined;
+
+export const createLocalState = oldAttribute => {
+  const attribute = oldAttribute;
+  if (!isArrayType(attribute.raw.meta)) {
+    const labels = Object.keys(attribute.raw.meta.elements);
+    attribute.localState = {
+      meta: deepCopy(attribute.raw.meta),
+      value: attribute.raw.value[labels[0]].map((value, row) => {
+        const dataRow = {};
+        labels.forEach(label => {
+          dataRow[label] = attribute.raw.value[label][row];
+        });
+        return dataRow;
+      }),
+      labels,
+      flags: {
+        rows: attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: deepCopy(attribute.raw.timeStamp),
+        },
+      },
+    };
+  } else {
+    attribute.localState = {
+      meta: deepCopy(attribute.raw.meta),
+      value: deepCopy(attribute.raw.value),
+      flags: {
+        rows: attribute.raw.value.map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: deepCopy(attribute.raw.timeStamp),
+        },
+      },
+    };
+  }
+  return attribute;
+};
+
 export const copyAttributeValue = (state, payload) => {
   const blockName = payload.path[0];
   const attributeName = payload.path[1];
@@ -64,27 +114,9 @@ export const copyAttributeValue = (state, payload) => {
     matchingAttributeIndex >= 0 &&
     attributes[matchingAttributeIndex].raw.value !== undefined
   ) {
-    const attribute = { ...attributes[matchingAttributeIndex] };
-    const labels = Object.keys(attribute.raw.meta.elements);
-    attribute.localState = {
-      meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
-      value: attribute.raw.value[labels[0]].map((value, row) => {
-        const dataRow = {};
-        labels.forEach(label => {
-          dataRow[label] = attribute.raw.value[label][row];
-        });
-        return dataRow;
-      }),
-      labels,
-      flags: {
-        rows: attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
-        },
-      },
-    };
+    const attribute = createLocalState({
+      ...attributes[matchingAttributeIndex],
+    });
     attribute.calculated.dirty = false;
     attribute.calculated.alarms.dirty = null;
     attributes[matchingAttributeIndex] = attribute;
@@ -115,12 +147,16 @@ export const updateTableLocal = (state, payload) => {
         attribute.localState.value.splice(insertAt, 1);
         attribute.localState.flags.rows.splice(insertAt, 1);
       } else {
-        const defaultRow = {};
-        attribute.localState.labels.forEach(label => {
-          defaultRow[label] = getDefaultFromType(
-            attribute.raw.meta.elements[label]
-          );
-        });
+        let defaultRow = {};
+        if (!isArrayType(attribute.raw.meta)) {
+          attribute.localState.labels.forEach(label => {
+            defaultRow[label] = getDefaultFromType(
+              attribute.raw.meta.elements[label]
+            );
+          });
+        } else {
+          defaultRow = getDefaultFromType(attribute.raw.meta);
+        }
         attribute.localState.value.splice(insertAt, 0, defaultRow);
         attribute.localState.flags.rows.splice(insertAt, 0, {
           _isChanged: true,

@@ -180,32 +180,29 @@ const findAttributeComponent = props => {
         </div>
       );
     case 'widget:table':
-      if (!isArrayType({ typeid: props.typeid })) {
-        return (
-          <div className={props.classes.plainBackground}>
-            <div
-              className={props.classes.tableContainer}
-              style={transitionWithPanelStyle}
-            >
-              <TableContainer
-                attributeName={props.mainAttribute}
-                blockName={props.parentBlock}
-                subElement={props.mainAttributeSubElements}
-                footerItems={[
-                  <Tooltip id="1" title={props.errorMessage} placement="right">
-                    <IconButton className={props.classes.button} disableRipple>
-                      <AttributeAlarm
-                        alarmSeverity={props.mainAttributeAlarmState}
-                      />
-                    </IconButton>
-                  </Tooltip>,
-                ]}
-              />
-            </div>
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <TableContainer
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+              subElement={props.mainAttributeSubElements}
+              footerItems={[
+                <Tooltip id="1" title={props.errorMessage} placement="right">
+                  <IconButton className={props.classes.button} disableRipple>
+                    <AttributeAlarm
+                      alarmSeverity={props.mainAttributeAlarmState}
+                    />
+                  </IconButton>
+                </Tooltip>,
+              ]}
+            />
           </div>
-        );
-      }
-      return <div className={props.classes.plainBackground} />;
+        </div>
+      );
 
     case 'widget:textupdate':
     case 'widget:multilinetextupdate':

@@ -16,6 +16,7 @@ import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
+import { isArrayType } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = theme => ({
   header: {
@@ -69,22 +70,26 @@ const iconWidth = 36;
 
 export const getTableState = props => {
   const tableState = {};
+  const isArray = isArrayType(props.attribute.raw.meta);
+  tableState.columnLabels = !isArray
+    ? Object.keys(props.attribute.raw.meta.elements)
+    : undefined;
   tableState.columnLabels =
-    props.localState === undefined
-      ? Object.keys(props.attribute.raw.meta.elements)
-      : props.localState.labels;
+    props.localState !== undefined
+      ? props.localState.labels
+      : tableState.columnLabels;
+  tableState.values = !isArray
+    ? props.attribute.raw.value[tableState.columnLabels[0]].map((val, row) => {
+        const rowData = {};
+        tableState.columnLabels.forEach(label => {
+          rowData[label] = props.attribute.raw.value[label][row];
+        });
+        return rowData;
+      })
+    : JSON.parse(JSON.stringify(props.attribute.raw.value));
   tableState.values =
-    props.localState === undefined
-      ? props.attribute.raw.value[tableState.columnLabels[0]].map(
-          (val, row) => {
-            const rowData = {};
-            tableState.columnLabels.forEach(label => {
-              rowData[label] = props.attribute.raw.value[label][row];
-            });
-            return rowData;
-          }
-        )
-      : props.localState.value;
+    props.localState !== undefined ? props.localState.value : tableState.values;
+
   tableState.flags =
     props.localState === undefined
       ? { rows: [], table: {} }
