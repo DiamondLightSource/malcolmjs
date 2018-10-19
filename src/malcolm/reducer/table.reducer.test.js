@@ -32,15 +32,33 @@ const rowValues = harderAttribute.raw.value[
   return rowData;
 });
 
+const testArrayLocalState = {
+  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: ['widget:textinput'] },
+  value: ['a', 'b', 'c'],
+  flags: {
+    rows: [{}, {}, {}],
+    table: {
+      dirty: false,
+      fresh: true,
+      timeStamp: expectedCopy.timeStamp,
+    },
+  },
+};
+const testArrayAttribute = {
+  calculated: { name: 'testArray', alarms: {} },
+  raw: {
+    meta: {
+      typeid: 'foo:bar/someArrayMeta:1.6',
+      tags: ['widget:textinput'],
+    },
+    value: ['a', 'b', 'c'],
+  },
+};
+
 describe('Table reducer', () => {
   let testState;
   const labels = Object.keys(harderAttribute.raw.meta.elements);
-  const copyAction = {
-    type: MalcolmLocalCopy,
-    payload: {
-      path: ['block1', 'layout'],
-    },
-  };
+  let copyAction;
 
   const expectedValue = JSON.parse(JSON.stringify(rowValues));
   expectedValue[0].outa1 = false;
@@ -53,7 +71,10 @@ describe('Table reducer', () => {
     state = {
       blocks: {
         block1: {
-          attributes: [JSON.parse(JSON.stringify(harderAttribute))],
+          attributes: [
+            JSON.parse(JSON.stringify(harderAttribute)),
+            testArrayAttribute,
+          ],
         },
       },
     };
@@ -61,9 +82,15 @@ describe('Table reducer', () => {
     testState.blocks.block1.attributes[0].localState = JSON.parse(
       JSON.stringify(expectedCopy)
     );
+    copyAction = {
+      type: MalcolmLocalCopy,
+      payload: {
+        path: ['block1', 'layout'],
+      },
+    };
   });
 
-  it('creates local state copy', () => {
+  it('creates local state copy for table', () => {
     testState = {};
     testState = TableReducer(state, copyAction);
 
@@ -76,6 +103,23 @@ describe('Table reducer', () => {
         },
       },
       localState: expectedCopy,
+    });
+  });
+
+  it('creates local state copy for array', () => {
+    testState = {};
+    copyAction.payload.path[1] = 'testArray';
+    testState = TableReducer(state, copyAction);
+
+    expect(testState.blocks.block1.attributes[1]).toEqual({
+      ...testArrayAttribute,
+      calculated: {
+        ...testArrayAttribute.calculated,
+        alarms: {
+          dirty: null,
+        },
+      },
+      localState: testArrayLocalState,
     });
   });
 

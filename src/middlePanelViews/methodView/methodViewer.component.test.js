@@ -112,6 +112,7 @@ describe('Method viewer', () => {
         errorMessage: errorMsg,
         inputs: inputState,
         outputs: outputState,
+        isMethod: true,
       },
       raw: {
         label: 'Test',

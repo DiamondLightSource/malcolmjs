@@ -18,6 +18,25 @@ import WidgetTable from './virtualizedTable.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
 
+export const putArrayOrTable = (path, tableState, dispatch) => {
+  let value;
+  if (tableState.labels) {
+    value = {};
+    tableState.labels.forEach(label => {
+      value[label] = [];
+    });
+    tableState.value.forEach(row => {
+      tableState.labels.forEach(label => {
+        value[label] = [...value[label], row[label]];
+      });
+    });
+  } else {
+    ({ value } = tableState);
+  }
+  dispatch(malcolmSetFlag(path, 'pending', true));
+  dispatch(malcolmPutAction(path, value));
+};
+
 const TableContainer = props => {
   const path = [props.blockName, props.attributeName];
   if (props.attribute.localState === undefined) {
@@ -149,18 +168,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmRevertAction(path));
   },
   putTable: (path, tableState) => {
-    const value = {};
-    tableState.labels.forEach(label => {
-      value[label] = [];
-    });
-    tableState.value.forEach(row => {
-      tableState.labels.forEach(label => {
-        value[label] = [...value[label], row[label]];
-      });
-    });
-
-    dispatch(malcolmSetFlag(path, 'pending', true));
-    dispatch(malcolmPutAction(path, value));
+    putArrayOrTable(path, tableState, dispatch);
   },
 });
 
