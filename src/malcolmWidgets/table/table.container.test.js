@@ -1,7 +1,7 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
-import WidgetTable from './table.container';
+import WidgetTable, { putArrayOrTable } from './table.container';
 import { harderAttribute, expectedCopy } from './table.stories';
 import {
   malcolmSetFlag,
@@ -15,6 +15,19 @@ import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
 
 jest.mock('../../malcolm/actions/navigation.actions');
+
+const testArrayLocalState = {
+  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: ['widget:textinput'] },
+  value: ['a', 'b', 'c'],
+  flags: {
+    rows: [{}, {}, {}],
+    table: {
+      dirty: false,
+      fresh: true,
+      timeStamp: expectedCopy.timeStamp,
+    },
+  },
+};
 
 describe('Table container', () => {
   let shallow;
@@ -78,6 +91,7 @@ describe('Table container', () => {
       malcolmCopyValue(['test1', 'layout'])
     );
   });
+
   it('add row button hooks up correctly', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
@@ -124,7 +138,7 @@ describe('Table container', () => {
     );
   });
 
-  it('submit button hooks up correctly', () => {
+  it('submit button hooks up correctly/put function works for table', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
@@ -143,6 +157,23 @@ describe('Table container', () => {
       malcolmPutAction(['test1', 'layout'], expectedSent)
     );
   });
+
+  it('put function works for array', () => {
+    const actions = [];
+
+    putArrayOrTable(['test1', 'testArray'], testArrayLocalState, action =>
+      actions.push(action)
+    );
+
+    expect(actions.length).toEqual(2);
+    expect(actions[0]).toEqual(
+      malcolmSetFlag(['test1', 'testArray'], 'pending', true)
+    );
+    expect(actions[1]).toEqual(
+      malcolmPutAction(['test1', 'testArray'], testArrayLocalState.value)
+    );
+  });
+
   it('subelement in url selects row correctly', () => {
     state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
     state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
