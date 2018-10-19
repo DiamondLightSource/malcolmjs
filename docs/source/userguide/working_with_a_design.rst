@@ -3,7 +3,7 @@
 Working With a Design
 =====================
 
-A Design forms the heart of your system implementation.  It provides an interactive graphical representation of your system, helping you build and manage:
+A `design_` forms the heart of your system implementation.  It provides an interactive graphical representation of your system, helping you build and manage:
 
 * `Blocks <block_>` representing hardware components, logic gates, etc.
 * The `connectivity <link_>` between blocks, in terms of input (sink) ports and output (source) ports.
@@ -18,7 +18,7 @@ A Design is created in the user interface `Layout View <layout_view_>`.
 Adding a Block to a Design
 -----------------------------
 
-A `block_` is added to a `design_` by dragging and dropping it from the 'Block Palette' into the 'Layout Panel' as follows:
+A `block_` is added to a `design_` by dragging and dropping it from the 'Block Palette' into the `Layout Panel <user_interface_overview_>` as follows:
 
     #. Select the 'Palette' icon at the bottom of the Layout Panel.  The Block Palette opens containing the set of blocks currently available to you.
     #. Identify the Block you wish to add.  By hovering over it the mouse pointer changes from an arrow to a hand.
@@ -107,7 +107,7 @@ For each Attribute the following information is displayed:
 
     * The fully qualified path to the Attribute allowing it to be uniquely identified within the Design.
     * Basic meta-data about the Attribute including it's type, a brief description of its purpose and whether it is a writeable Attribute.
-    * Details of the `Attribute state <understanding_attribute_state_>` associated with the Attribute, including severity and any corresponding message.
+    * Details of the `Attribute state <understanding_attribute_state_>` associated with the Attribute, including severity of any issues and any corresponding message.
     * Timestamp details showing when the Attribute was last updated.
 
 Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying Block specification.
