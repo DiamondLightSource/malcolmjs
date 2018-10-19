@@ -1,7 +1,10 @@
 /* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort } from '../malcolm/malcolmConstants';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  isArrayType,
+} from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 // eslint-disable-next-line import/prefer-default-export
 export const buildAttributeInfo = props => {
@@ -97,17 +100,30 @@ export const buildAttributeInfo = props => {
             },
           };
         }
+        if (
+          attribute.raw.meta.tags.some(a => a === 'widget:textinput') &&
+          !isArrayType(attribute.raw.meta)
+        ) {
+          info.remoteState = {
+            label: 'Remote state',
+            value: attribute.raw.value,
+            tag: 'widget:textupdate',
+            inline: true,
+          };
+        }
       }
       ({ value } = attribute.raw);
     } else if (
-      attribute.raw.meta.typeid === malcolmTypes.table &&
+      (attribute.raw.meta.typeid === malcolmTypes.table ||
+        isArrayType(attribute.raw.meta)) &&
       attribute.localState
     ) {
       if (props.subElement[0] === 'row') {
         const row = parseInt(props.subElement[1], 10);
         const rowFlags = attribute.localState.flags.rows[row];
-        const isNewRow =
-          row >= attribute.raw.value[attribute.localState.labels[0]].length;
+        const isNewRow = isArrayType(attribute.raw.meta)
+          ? row >= attribute.raw.value.length
+          : row >= attribute.raw.value[attribute.localState.labels[0]].length;
         info.localState = {
           label: 'Row local state',
           value: 'Discard',
@@ -118,12 +134,19 @@ export const buildAttributeInfo = props => {
             rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
         };
         const dataRow = {};
-        attribute.localState.labels.forEach(label => {
-          dataRow[label] =
-            row < attribute.raw.value[label].length
-              ? attribute.raw.value[label][row]
+        if (!isArrayType(attribute.raw.meta)) {
+          attribute.localState.labels.forEach(label => {
+            dataRow[label] =
+              row < attribute.raw.value[label].length
+                ? attribute.raw.value[label][row]
+                : 'undefined';
+          });
+        } else {
+          dataRow.value =
+            row < attribute.raw.value.length
+              ? attribute.raw.value[row]
               : 'undefined';
-        });
+        }
         info.rowValue = {
           label: 'Row remote state',
           ...dataRow,

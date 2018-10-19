@@ -70,7 +70,9 @@ const iconWidth = 36;
 
 export const getTableState = props => {
   const tableState = {};
-  const isArray = isArrayType(props.attribute.raw.meta);
+  const isArray = props.attribute.calculated.isMethod
+    ? isArrayType(props.localState.meta)
+    : isArrayType(props.attribute.raw.meta);
   tableState.columnLabels = !isArray
     ? Object.keys(props.attribute.raw.meta.elements)
     : undefined;
@@ -78,17 +80,21 @@ export const getTableState = props => {
     props.localState !== undefined
       ? props.localState.labels
       : tableState.columnLabels;
-  tableState.values = !isArray
-    ? props.attribute.raw.value[tableState.columnLabels[0]].map((val, row) => {
-        const rowData = {};
-        tableState.columnLabels.forEach(label => {
-          rowData[label] = props.attribute.raw.value[label][row];
-        });
-        return rowData;
-      })
-    : JSON.parse(JSON.stringify(props.attribute.raw.value));
-  tableState.values =
-    props.localState !== undefined ? props.localState.value : tableState.values;
+  if (props.localState !== undefined) {
+    tableState.values = props.localState.value;
+  } else {
+    tableState.values = !isArray
+      ? props.attribute.raw.value[tableState.columnLabels[0]].map(
+          (val, row) => {
+            const rowData = {};
+            tableState.columnLabels.forEach(label => {
+              rowData[label] = props.attribute.raw.value[label][row];
+            });
+            return rowData;
+          }
+        )
+      : JSON.parse(JSON.stringify(props.attribute.raw.value));
+  }
 
   tableState.flags =
     props.localState === undefined

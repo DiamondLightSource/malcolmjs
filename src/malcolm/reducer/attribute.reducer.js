@@ -92,13 +92,9 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
   if (oldAttribute) {
     let oldMeta;
     let newMeta;
-    // #refactorDuplication
     if (oldAttribute.raw && oldAttribute.raw.meta) {
       oldMeta = oldAttribute.raw.meta;
       newMeta = newAttribute.raw.meta;
-      /* } else if (oldAttribute.meta) {
-      oldMeta = oldAttribute.meta;
-      newMeta = newAttribute.meta; */
     } else {
       return true;
     }
@@ -185,14 +181,11 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 
   const attribute = attributes[matchingAttributeIndex];
 
-  // #refactorDuplication
   if (
     attribute &&
-    ((attribute.raw &&
+    (attribute.raw &&
       attribute.raw.meta &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')) ||
-      (attribute.meta &&
-        attribute.meta.tags.some(t => t === 'widget:flowgraph')))
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph'))
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
@@ -226,7 +219,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
-const updateLocalState = attribute => {
+export const updateLocalState = attribute => {
   let updatedAttribute = { ...attribute };
   if (updatedAttribute && updatedAttribute.raw.meta) {
     if (

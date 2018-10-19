@@ -32,6 +32,7 @@ exports[`Method viewer renders correctly for array once local state is initialis
             ],
           },
         },
+        "isMethod": true,
         "name": "Method",
         "outputs": Object {},
         "path": Array [
@@ -261,6 +262,7 @@ exports[`Method viewer renders output array correctly 1`] = `
         "errorMessage": undefined,
         "errorState": false,
         "inputs": Object {},
+        "isMethod": true,
         "name": "Method",
         "outputs": Object {
           "first": Object {
