@@ -142,6 +142,7 @@ export const setErrorState = (
             dirty: errorState ? AlarmStates.DIRTY : null,
             errorState: errorState ? AlarmStates.MAJOR_ALARM : null,
           },
+          loading: false,
         },
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -188,7 +189,7 @@ export function handleErrorMessage(state, payload) {
       updatedState = updateAttribute(state, {
         id,
         raw: {},
-        calculated: {},
+        calculated: { loading: false },
         delta: true,
       });
     } else if (
