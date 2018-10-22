@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import PaletteItem from './paletteItem.component';
 import blockUtils from '../../malcolm/blockUtils';
+import { snackbarState } from '../../viewState/viewState.actions';
 
 const styles = {
   container: {
@@ -15,7 +16,14 @@ const Palette = props => (
   <div className={props.classes.container}>
     {props.blocks
       .filter(b => !b.visible)
-      .map(b => <PaletteItem key={b.mri} name={b.name} mri={b.mri} />)}
+      .map(b => (
+        <PaletteItem
+          key={b.mri}
+          name={b.name}
+          mri={b.mri}
+          clickHandler={props.snackbarInfo}
+        />
+      ))}
   </div>
 );
 
@@ -30,7 +38,16 @@ Palette.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,
+  snackbarInfo: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = dispatch => ({
+  snackbarInfo: () => {
+    dispatch(
+      snackbarState(true, 'Drag and drop a chip to add it to the layout')
+    );
+  },
+});
 
 const mapStateToProps = state => {
   const attribute = blockUtils.findAttribute(
@@ -48,6 +65,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(Palette)
 );

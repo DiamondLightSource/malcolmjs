@@ -160,7 +160,7 @@ const findAttributeComponent = props => {
                 disabled={props.layoutLocked}
                 data-cy="palettebutton"
               >
-                <PaletteIcon />
+                <PaletteIcon style={{ fontSize: '36px' }} />
               </Button>
             )}
           </div>
@@ -275,7 +275,26 @@ const findAttributeComponent = props => {
         </div>
       );
     default:
-      return <div className={props.classes.plainBackground} />;
+      return (
+        <div
+          className={props.classes.plainBackground}
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          }}
+        >
+          <Typography style={{ fontSize: '20pt' }}>
+            {`Unable to display attribute "${props.mainAttribute}"`}
+          </Typography>
+          <Typography style={{ fontSize: '20pt' }}>
+            No valid widget tag found!
+          </Typography>
+        </div>
+      );
   }
 };
 
@@ -296,7 +315,7 @@ const MiddlePanelContainer = props => (
         }}
       >
         <Typography style={{ fontSize: '20pt' }}>
-          Please select a field to view
+          Please select a field to view from the left hand pane
         </Typography>
       </div>
     )}

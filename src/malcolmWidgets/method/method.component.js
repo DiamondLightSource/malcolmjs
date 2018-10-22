@@ -121,7 +121,7 @@ const MethodDetails = props => {
   ) {
     return (
       <div className={props.classes.div}>
-        <Tooltip title={props.methodErrorMessage}>
+        <Tooltip title={props.methodMessage}>
           <IconButton
             tabIndex="-1"
             className={props.classes.button}
@@ -191,7 +191,7 @@ const MethodDetails = props => {
           </div>
         ))}
         <div className={props.classes.div}>
-          <Tooltip title={props.methodErrorMessage}>
+          <Tooltip title={props.methodMessage}>
             <IconButton
               tabIndex="-1"
               className={props.classes.button}
@@ -278,7 +278,7 @@ MethodDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
-  methodErrorMessage: PropTypes.string.isRequired,
+  methodMessage: PropTypes.string.isRequired,
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
   inputInfo: PropTypes.shape({}).isRequired,
@@ -312,6 +312,8 @@ const mapStateToProps = (state, ownProps) => {
     );
   }
 
+  const methodDescription =
+    method && method.raw.description ? method.raw.description : EMPTY;
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
@@ -372,10 +374,10 @@ const mapStateToProps = (state, ownProps) => {
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,
     methodErrored: method ? method.calculated.errorState : false,
-    methodErrorMessage:
-      method && method.calculated.errorMessage
+    methodMessage:
+      method && method.calculated.errorState
         ? method.calculated.errorMessage
-        : EMPTY,
+        : methodDescription,
     methodPath: method ? method.calculated.path : EMPTY_ARRAY,
     inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,

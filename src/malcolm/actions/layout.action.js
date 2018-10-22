@@ -128,7 +128,7 @@ const makeBlockVisible = (mriList, positionList, visibleList) => (
     attributeName
   );
 
-  if (layoutAttribute) {
+  if (layoutAttribute && mri.length > 0) {
     const visibleBlockIndices = mri.map(blockMri =>
       layoutAttribute.raw.value.mri.findIndex(val => val === blockMri)
     );

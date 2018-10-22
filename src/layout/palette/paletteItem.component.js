@@ -18,6 +18,7 @@ const PaletteItem = props => (
     onDragStart={event => {
       event.dataTransfer.setData('storm-diagram-node', props.mri);
     }}
+    onClick={props.clickHandler}
     className={props.classes.chip}
   />
 );
@@ -28,6 +29,7 @@ PaletteItem.propTypes = {
   classes: PropTypes.shape({
     chip: PropTypes.string,
   }).isRequired,
+  clickHandler: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(PaletteItem);

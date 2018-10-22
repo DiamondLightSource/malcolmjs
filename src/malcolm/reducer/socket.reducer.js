@@ -8,6 +8,7 @@ import {
   MalcolmReturn,
   MalcolmSend,
   MalcolmSocketConnect,
+  MalcolmClearError,
 } from '../malcolm.types';
 
 function updateMessagesInFlight(state, payload) {
@@ -101,9 +102,21 @@ export function setDisconnected(state) {
   };
 }
 
-export const setErrorState = (state, id, errorState, errorMessage) => {
-  const matchingMessage = state.messagesInFlight[id];
-  const path = matchingMessage ? matchingMessage.path : undefined;
+export const setErrorState = (
+  state,
+  id,
+  errorState,
+  errorMessage,
+  attributePath = undefined
+) => {
+  let path;
+  if (!attributePath) {
+    const matchingMessage = state.messagesInFlight[id];
+    path = matchingMessage ? matchingMessage.path : undefined;
+  } else {
+    path = attributePath;
+  }
+
   if (path) {
     const blockName = path[0];
     const attributeName = path[1];
@@ -205,6 +218,10 @@ export function handleErrorMessage(state, payload) {
   return stopTrackingMessage(updatedState, payload);
 }
 
+export function clearErrorState(state, payload) {
+  return setErrorState(state, undefined, false, undefined, payload.path);
+}
+
 const updateSocket = (state, payload) => {
   const { worker } = payload;
   worker.postMessage(`connect::${payload.socketUrl}`);
@@ -222,6 +239,7 @@ const SocketReducer = createReducer(
     [MalcolmReturn]: handleReturnMessage,
     [MalcolmSocketConnect]: updateSocket,
     [MalcolmDisconnected]: setDisconnected,
+    [MalcolmClearError]: clearErrorState,
   }
 );
 

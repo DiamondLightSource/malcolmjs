@@ -7,7 +7,36 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"
-  />
+    style={
+      Object {
+        "flexDirection": "column",
+        "height": "100%",
+        "justifyContent": "center",
+        "textAlign": "center",
+        "verticalAlign": "middle",
+        "width": "100%",
+      }
+    }
+  >
+    <WithStyles(Typography)
+      style={
+        Object {
+          "fontSize": "20pt",
+        }
+      }
+    >
+      Unable to display attribute "notAWidget"
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      style={
+        Object {
+          "fontSize": "20pt",
+        }
+      }
+    >
+      No valid widget tag found!
+    </WithStyles(Typography)>
+  </div>
 </div>
 `;
 
@@ -48,7 +77,13 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(PaletteIcon) />
+        <pure(PaletteIcon)
+          style={
+            Object {
+              "fontSize": "36px",
+            }
+          }
+        />
       </WithStyles(Button)>
     </div>
     <div
@@ -138,7 +173,13 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(PaletteIcon) />
+        <pure(PaletteIcon)
+          style={
+            Object {
+              "fontSize": "36px",
+            }
+          }
+        />
       </WithStyles(Button)>
     </div>
     <div
@@ -200,7 +241,13 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(PaletteIcon) />
+        <pure(PaletteIcon)
+          style={
+            Object {
+              "fontSize": "36px",
+            }
+          }
+        />
       </WithStyles(Button)>
     </div>
     <div
@@ -262,7 +309,13 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(PaletteIcon) />
+        <pure(PaletteIcon)
+          style={
+            Object {
+              "fontSize": "36px",
+            }
+          }
+        />
       </WithStyles(Button)>
     </div>
     <div
