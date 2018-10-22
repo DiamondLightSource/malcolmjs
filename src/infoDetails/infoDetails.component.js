@@ -13,6 +13,7 @@ import {
   malcolmUpdateTable,
   malcolmSelectLink,
   malcolmGetAction,
+  clearError,
 } from '../malcolm/malcolmActionCreators';
 import { malcolmClearMethodInput } from '../malcolm/actions/method.actions';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
@@ -279,6 +280,9 @@ const mapDispatchToProps = dispatch => ({
   },
   clearParamState: (path, param) => {
     dispatch(malcolmClearMethodInput(path, param));
+  },
+  clearError: path => {
+    dispatch(clearError(path));
   },
 });
 

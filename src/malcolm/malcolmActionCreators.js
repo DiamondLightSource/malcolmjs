@@ -17,6 +17,7 @@ import {
   MalcolmRevert,
   MalcolmSelectLinkType,
   MalcolmSimpleLocalState,
+  MalcolmClearError,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 import {
@@ -269,6 +270,13 @@ export const writeLocalState = (path, value) => ({
   payload: {
     path,
     value,
+  },
+});
+
+export const clearError = path => ({
+  type: MalcolmClearError,
+  payload: {
+    path,
   },
 });
 

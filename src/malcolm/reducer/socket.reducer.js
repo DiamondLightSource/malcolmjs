@@ -107,7 +107,8 @@ export const setErrorState = (
   id,
   errorState,
   errorMessage,
-  attributePath = undefined
+  attributePath = undefined,
+  suppressUpdate = false
 ) => {
   let path;
   if (!attributePath) {
@@ -135,8 +136,8 @@ export const setErrorState = (
           ...attributes[matchingAttributeIndex].calculated,
           errorState,
           errorMessage,
-          dirty: errorState,
-          forceUpdate: !errorState,
+          dirty: suppressUpdate ? true : errorState,
+          forceUpdate: suppressUpdate ? false : !errorState,
           alarms: {
             ...attributes[matchingAttributeIndex].calculated.alarms,
             dirty: errorState ? AlarmStates.DIRTY : null,
@@ -220,7 +221,7 @@ export function handleErrorMessage(state, payload) {
 }
 
 export function clearErrorState(state, payload) {
-  return setErrorState(state, undefined, false, undefined, payload.path);
+  return setErrorState(state, undefined, false, undefined, payload.path, true);
 }
 
 const updateSocket = (state, payload) => {

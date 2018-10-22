@@ -108,9 +108,11 @@ class BlockPortWidget extends BaseWidget {
             e.isPortClick = true;
             this.props.mouseDownHandler(this.props.portId, true);
           }}
-          onMouseUp={() =>
-            this.props.mouseDownHandler(this.props.portId, false)
-          }
+          onMouseUp={() => {
+            if (this.props.linkInProgress && this.props.canConnectToStartPort) {
+              this.props.mouseDownHandler(this.props.portId, false);
+            }
+          }}
         >
           <div
             className={this.props.classes.port}
