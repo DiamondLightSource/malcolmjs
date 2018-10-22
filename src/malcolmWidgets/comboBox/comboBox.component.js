@@ -20,6 +20,7 @@ const styles = theme => ({
 });
 
 const WidgetComboBox = props => {
+  const value = props.Value !== null ? props.Value : props.Choices[0];
   const options = props.Choices.map((choice, index) => (
     // Rule prevents behaviour we want in this case
     // eslint-disable-next-line react/no-array-index-key
@@ -27,6 +28,13 @@ const WidgetComboBox = props => {
       {choice}
     </option>
   ));
+  if (!props.Choices.includes(value)) {
+    options.push(
+      <option value={value} disabled>
+        {value}
+      </option>
+    );
+  }
   return (
     <FormControl
       disabled={props.Pending}
@@ -35,13 +43,10 @@ const WidgetComboBox = props => {
     >
       <Select
         native
-        value={props.Value}
+        value={value}
         onChange={props.selectEventHandler}
         className={props.classes.select}
       >
-        <option value={null} disabled={props.Value !== null}>
-          {' '}
-        </option>
         {options}
       </Select>
     </FormControl>
