@@ -3,7 +3,7 @@
 Monitoring Attribute Values
 ===========================
 
-The User Interface provides a near-realtime graphical representation of values associated with an `attribute_` against time.  Attribute values can be represented graphically as a *chart* or numerically as a *table*.
+The user interface provides a near-realtime graphical representation of values associated with an `attribute_` against time.  Attribute values can be represented graphically as a *chart* or numerically as a *table*.
 
 Working With Charts
 -------------------
@@ -34,6 +34,8 @@ Once displayed you have a number of tools at your disposal to support interactio
 .. figure:: screenshots/chart_options.png
       :align: center
 
+      Chart options bar
+
 The following options are available:
 
 .. list-table::
@@ -48,14 +50,14 @@ The following options are available:
     * - Edit in Chart Studio
       - Generates a snapshot of the data behind the plot and exports it to the online Chart Studio tool.
     * - Zoom
-      - Allows you to select a rectangular bounding box around a feature of interest and zoom in on it.  The level of zoom dynamically adjusts according to the size of the bounding box (smaller box = higher zoom) with X and Y axes dynamically scaling to reflect the granularity of the resulting plot.  Note that while zoomed the chart pauses automatic updates, instead presenting a snapshot at the time of zoom. 
+      - Allows you to select a rectangular bounding box around a feature of interest and zoom in on it.  The level of zoom dynamically adjusts according to the size of the bounding box (smaller box = higher zoom) with X and Y axes dynamically scaling to reflect the granularity of the resulting plot.  Note that while zoomed updates to the selected area pause, instead presenting a snapshot at the time of zoom. 
     * - Pan
-      - Provides the ability to pan the chart through horizontal and vertical axes.  Note that unlike **Zoom** options panning doese not pause automatic updates, thus when panning back through time the plot may appear blank.
+      - Provides the ability to pan the chart through horizontal and vertical axes.  Note that unlike **Zoom** options panning does not pause automatic updates, thus when panning back through time the plot may appear blank.
     * - Zoom in/out
       - similar to the manual **Zoom** option described above but automatically focussed on most recent data.  As noted above zooming pauses automatic chart updates, presenting the area of zoom only.
     * - Autoscale
       - Automatically scales the plot to include all data available since the Attribute was originally selected.
-    * - Reset Axes
+    * - Home (Reset Axes)
       - Resets the chart back to its default scale after **Zoom** and **Pan** actions, restarting automatic updates of the chart as it does so.
     * - Toggle Spike Lines
       - Click this option once to overlay vertical and horizontal guide lines when hovering over a data value.  Click a second time to disable overlay.
@@ -85,7 +87,7 @@ A snapshot of a chart can be taken at any time via the '**Download Plot as PNG**
 Data Retrieval and Chart Update Frequency
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Data is supplied to the chart interface at a frequency of 20Hz.
+#. Data is supplied to the chart interface at a frequency of up to 20Hz.
 #. On screen graphics update at a pre-defined temporal frequency of 1 second and cannot therefore be regarded as a true realtime display.  Each 1 second update plots *all* data supplied at 20Hz frequency during preceeding second.
 #. On zooming into a plot the plot update process is paused to enable inspection of the area of interest.  Automatic updates resume on returning to the default view state.
 
@@ -104,6 +106,8 @@ For example:
 .. figure:: screenshots/attribute_value_table.png
       :align: center
 
+      Attribute values presented in tabular formal
+
 
 The data displayed is a 'for information only' representation of the Attribute's characteristics for the duration over which the table remains open.
 
@@ -111,7 +115,7 @@ The data displayed is a 'for information only' representation of the Attribute's
 Data Retrieval and Table Update Frequency
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Data is supplied to the table at a frequency of 20Hz.
+#. Data is supplied to the table at a frequency of up to 20Hz.
 #. On screen updates are set to a pre-defined temporal frequency of 1 second.
 #. Each 1 second update includes *all* data supplied at 20Hz frequency during the preceeding second.
 #. Newest data is presented at the *bottom* of the table.

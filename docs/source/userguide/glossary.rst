@@ -5,7 +5,7 @@
 .. ##########
 
 .. _PandABlocks-FPGA: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
-.. _malcolm: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
+.. _Malcolm: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
 
 
 Glossary
@@ -31,7 +31,9 @@ Attributes are divided into four categories based on their purpose:
 Attribute Group
 ---------------
 
-A logically grouping of related `attributes <attribute>` within a `block_`.
+A logically grouping of related `attributes <attribute>` within a `block_`. 
+
+Within the user interface these are represented as a collapsable block within the overall `block_information_panel_`.
 
 
 .. _block_: 
@@ -47,7 +49,7 @@ Blocks may represent, for example:
     * Configurable clocks.
     * Logic lookup tables and logic gates.
 
-A full list of supported blocks, together with their attribute specifications is available from the `PandABlocks-FPGA`_ documentation.
+A Block is defined my its underlying Block specification, which is interrogated by `malcolm`_ and reflected into the user interface. For example, the list of supported blocks available for a PandA device is described in `PandABlocks-FPGA`_ documentation.
 
 
 .. _Block_information_panel_:
@@ -63,7 +65,7 @@ Panel displayed within the user inferface containing details of the `attributes 
 Child Block
 -----------
 
-A `block_` within an assemblage of connected blocks that when aggregated deliver the capability of a larger `Parent Block <parent_block_>`. 
+A `block_` within the `layout_` of a `Parent Block <parent_block_>`. 
 
 A Child Block may itself represent a Parent Block if its own functionality can be further decomposed. 
 
@@ -73,7 +75,7 @@ A Child Block may itself represent a Parent Block if its own functionality can b
 Design
 ------
 
-The technical definition of the implemented system describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `links <link_>` between them.
+The technical definition of the overall system, or a component within it,  describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `links <link_>` between them.  A Design is represented as a `parent_block_` within the user interface.
 
 Designs are presented graphically as a `layout_` within the 'Layout Panel' on the web interface allowing a user to build, configure and manage the system represented by that Design.
 
@@ -155,7 +157,7 @@ Synonym for `source_port_`.
 Parameter Attribute
 -------------------
 
-An attribute whose value can be set by a User in configuring a `block_` within the context of a `design_`.  The Parameter Attribute value influences behaviour of the Block once in an execution environment.
+An attribute whose value can be set by a User within a `block_` in order to influence the behaviour of that `block_`.
 
 
 .. _parent_block_:
@@ -165,12 +167,12 @@ Parent Block
 
 A `block_` aggregating one-or-more `Child Blocks <child_block_>` each performing an action or activity in support of its parent's functionality.  
 
-Parent blocks, together with their attributes and methods are always presented in the left-hand panel of the web interface when open in Layout View.
+Parent blocks, together with their attributes and methods are typically presented in the left-hand panel of the web interface when open in Layout View.
 
 .. _readback_attribute_:
 
-Readback Attributes
--------------------
+Readback Attribute
+------------------
 
 An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be set manually via the User Interface.
 
@@ -180,7 +182,7 @@ An Attribute whose value is set automatically by a process within the execution 
 Root Block
 ----------
 
-The outermost entity defining the `design_` presented within the user inferface.  If the higest level Root Block is selected this encapulates the entire `design_`, otherwise the Root Block represents a configured `block_` representing an entity within that Design.  The selected Block may itself be a `parent_block_` consisting of multiple `Child Blocks <child_block_>` or a `child_block_` in its own right of the wider Design. 
+The outermost entity defining the content presented within the user interface.  If the outermost Block representing a `design_` is selected this encapulates the entire `design_`, from where a user can 'drill down' to an area of interest.  Otherwise the Root Block represents any configured `block_` within the `design_`.
 
 
 .. _source_port_:

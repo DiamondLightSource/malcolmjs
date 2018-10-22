@@ -32,7 +32,7 @@ The Block Palette icon is replaced by a full representation of the selected Bloc
     * `Source Ports <source_port_>` responsible for transmitting output from the Block, including their type.
     * `Sink Ports <sink_port_>` responsible for receiving input to the Block, including their type.
 
-After adding a Block to the Layout Panel it can be selected by hovering over it and clicking the left mouse button.  Upon selection the Block Information panel presenting each `attribute_` and `method_` available to that Block is displayed in the right-hand panel of the web interface.
+After adding a Block to the Layout Panel it can be selected by hovering over it and clicking the left mouse button.  Upon selection the `block_information_panel_` presenting each `attribute_` and `method_` available to that Block is displayed in the right-hand panel of the web interface.
 
 .. NOTE::   
     On intially adding a new Block to your Design it is configured according to its pre-defined default settings retrieved from the underlying Design Specification of that Block.
@@ -86,14 +86,14 @@ Four types of `attribute_` are available, and a `block_` may support zero or mor
 
     * - Type
       - Description
-    * - `Parameter <parameter_attribute_>`
-      - An Attribute supporting configuration of the Block within the context of the `design_`, ultimately influencing its behaviour once in an execution environment. 
     * - `Input <input_attribute_>`
       - An Attribute identifying the source of data that will be received into a `block_` via a `sink_port_` with the same name. 
     * - `Output <output_attribute_>`
       - An Attribute identifying the value (or stream of values) that will be transmitted out of a `block_` via a `source_port_` with the same name.
+    * - `Parameter <parameter_attribute_>`
+      - An Attribute that can be set by a user while configuring a Block, ultimately influencing the behavior of that Block. 
     * - `Readback <readback_attribute_>`
-      - An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be set manually via the User Interface.
+      - An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be set manually via the user interface.
 
 Attributes whose value can be set at design-time are denoted by a highlight below the attribute value field.
 
@@ -101,7 +101,7 @@ Attributes whose value can be set at design-time are denoted by a highlight belo
 Obtaining Information About an Attribute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Information about an individual Attribute can be obtained by selecting the 'information icon' associated with it from the Block Information Panel.  This opens the Attribute Information Panel within the 'right-hand panel' of the User Interface.
+Information about an individual Attribute can be obtained by selecting the `information <normal_state_>` icon associated with it from the `block_information_panel_`.  This opens the Attribute Information Panel within the right-hand panel of the user interface.
 
 For each Attribute the following information is displayed:
 
@@ -113,38 +113,62 @@ For each Attribute the following information is displayed:
 Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying Block specification.
 
 
-Manually Setting or Modifying a Block Attribute
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Setting a Block Attribute
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Parameter, Input and Output Block attributes are specified via the 'Block Information Panel' associated with the Block you wish to configure.
+Parameter, Input and Output Block attributes are set via the `block_information_panel_` associated with the Block you wish to configure.
+
+The way in which an Attribute is set within the user inferface reflects the nature of that Attribute based on its defintion in the underlying Block specification.  This can also provide clues on whether the Attribute is editable or not.  The user interface provides the following approaches:
+
+.. list-table::
+    :widths: 30, 70
+    :align: center
+    :header-rows: 1
+
+    * - Widget 
+      - Description
+    * - .. _edit_button_:
+        Edit button
+      - Provides the ability to modify a `complex Attribute <complex_attributes_>`.  Selecting the button opens configurable content in the central panel.  Upon completion of changes the overall complex Attribute must be saved.
+    * - .. _view_button_:
+        View button
+      - Provides the abililty to view a `complex Attribute <complex_attributes_>` in read-only format. 
+    * - Dropdown list
+      - Provides the ability to select a value from a list of pre-defined values appropriate to the Attribute within is current Block context.  Upon selection the Attribute value field updates to reflect the selected value.
+    * - Text field
+      - Provides a 'free text' field accepting any alphanumeric string.  Attributes that have been edited but not yet submitted are shown in the .  Press the **Enter** key to submit the value. Upon successful submission the `locally_edited_state_` icon is replaced by the default `information <normal_state_>` icon. 
+    * - Checkbox
+      - Provides the option to switch on or switch off the action performed by the Attribute.   If the checkbox is empty the Attribute is *off*. 
+
+
+
+.. TIP::
+    An Attribute may contain a value but within the context of the current Design this cannot be modified.  Such instances are represented by the approach for setting that Attribute being greyed out.
+
 
 To configure an Attribute:
 
-    #. Select the Block you wish to configure by clicking on it within the Layout Panel.  The selected Block will be highlighted and the Block Information Panel associated with it displayed on the right-hand panel of the user interface.
+    #. Select the Block you wish to configure by clicking on it within the Layout Panel.  The selected Block will be highlighted and the `block_information_panel_` associated with it displayed on the right-hand panel of the user interface.
     #. Find the Attribute you wish to configure in the list of available Attributes.
-    #. Edit the Attribute value field as necessary:
+    #. Edit the Attribute value field as necessary based on the update process associated with the update approach described above.
 
-        * If the Attribute represents a list of pre-defined options select your desired value from the drop-down list.  The Attribute value field updates to reflect the selected value.
-        * If the Attribute represents a boolean switch option select the checkbox to enable (switch on) or disable (switch off) the attribute.  If the checkbox is empty the Attribute is *disabled*.  When *enabled* a tick is displayed within the checkbox.  
-        * If the Attribute requires manually entered input (e.g. a numerical value or text string) select the Attribute value field by clicking within it.  Delete any pre-existing content and enter your desired value.  Press the *Enter* key for the value to be submitted.  Values that have been edited but not yet submitted are denoted by a 'Edit' icon.  Upon successful submission the 'Edit' icon is replaced by the default information symbol.
+.. NOTE::
+     No data type validation is performed on manually entered values within the user interface.  Validation is performed upon receipt by the backend server.  If an invalid format is detected a 'Warning' icon is presented in the user interface.
 
-         .. NOTE::
-            No data type validation is performed on manually entered values within the User Interface.  Validation is performed upon receipt by the backend server.  If an invalid format is detected a 'Warning' icon is presented in the User Interface.
+During the process of submitting a new Attribute value a `spinning <updating_state_>` icon is displayed to the left of the modified Attribute.  For more information on the process this represents see `attribute_change_lifecycle_`.
 
-During the process of submitting a new Attribute value to the `design_` a spinning icon is displayed to the left of the modified Attribute.  For more information on the process this represents see `attribute_change_lifecycle_`.
+Upon successful submission the icon associated with the modified Attribute reverts to the `information <normal_state_>` icon.
 
-Upon successful submission the icon associated with the modified Attribute reverts to an information icon.
-
-In case of submission failure a red error icon is displayed next to the modified Attribute.
+In case of submission failure an `attribute update error <update_error_state_>` icon is displayed next to the modified Attribute.
 
 .. _exporting_attributes_:
 
 Exporting Attributes
 ^^^^^^^^^^^^^^^^^^^^
 
-If your `design_` consists of multiple `layouts <layout_>` each Layout is represented by a `parent_block_`.  While Parent Blocks can be linked together logically via `Source Ports <source_port_>` and `Sink Ports <sink_port_>` it may be an underlying attribute within a Child Block of the layout that influences the behaviour of the overall Parent Block
+The user interface presents a heirarchical view of the overall system, with one or more `Parent blocks <parent_block_>` encapsulating increasingly deeper levels of your Design.  By default at the top level of your `design_` you will only see attributes associated with Parent blocks but it might be an underlying attribute within a Child Block that influences the behaviour of its parent.  To mitigate this scenario every Parent Block provides the option to **Export** one or more Attributes from its children so they are displayed within the Parent Block.  
 
-The User Interface view presents a heirarchical view of the overall System Design and where such relationships exist it is not possible to monitor this relationship by default, meaning the influence of the underlying Attribute on a Parent Block cannot be monitored directly.  To mitigate this scenario every Parent Block provides the option to **Export** one or more Attributes from the Child Blocks within it to the Parent Block itself so they are displayed within the Parent Blocl.  In doing so it becomes possible to monitor, and potentially utilise, crucial Attributes implemented deep within a Design at increasingly abstracted levels of detail.
+In doing so it becomes possible to monitor, and potentially utilise, crucial Attributes implemented deep within a Design at increasingly abstracted levels of detail.
 
 To specify an Attribute for export:
 
@@ -152,19 +176,22 @@ To specify an Attribute for export:
     #. Within the Parent Block describing the Layout select the 'View' option associated with the 'Exports' Attribute.
     #. When the Export Table is displayed select the first available blank row.  If no blank rows are available select the option to add a new row.
     #. In the 'Source' column select the drop-down menu option and find the Attribute you wish to export in the list of Attributes available.
-    #. In the 'Export' column enter the name of the Attribute as you would like it to appear when exported to its Parent Block.  Leave the 'Export' field blank to display the default name of the Attribute.  Manually specified display names must be specified in *camelCase* format to ensure consistency when processing content for display.
+    #. In the 'Export' column enter the name of the Attribute as you would like it to appear when exported to its Parent Block.  Leave the 'Export' field blank to display the default name of the Attribute.  User specified display names must be specified in ``camelCase`` format, for example *myAttribute*.
 
-Once successfully exported the Attribure appears directly within the Parent Block in the left-hand panel of the User Interface.
+.. NOTE::
+    The ``camelCase`` naming convention is required to ensure an appropiate Attribute label can be generated in the Parent `block_information_panel_`.
+
+Once successfully exported the Attribute appears within the 'Exported Attributes' section of the Parent `block_information_panel_` in the left-hand panel of the user interface.
 
 Previously specified Attributes can be edited at any time within the Export Table following a similar process.
 
 Any number of Attributes can be exported from Child Blocks to their overall Parent Block.
 
-The order in which exported Attributes appear within their Parent Block mirrors the order in which they were added to the export specification.  If you require a specific order to be displayed in the User Interface:
+The order in which exported Attributes appear within their Parent Block mirrors the order in which they were added to the export specification.  If you require a specific order to be displayed in the user interface:
 
-    #. With the Export Table displayed select the 'Edit' icon associated with an existing Attribute or 'Information' icon associated with a new Attribute.  The information panel associated with the Attribute is displayed on the right-hand side.
-    #. To insert a new Attribute *above* the current one select the 'Add' option associated with the 'Insert row above' field.
-    #. To insert a new Attribute *below* the current one select the 'Add' option associated with the 'Insert row below' field.
+    #. With the Export Table displayed select the Edit icon associated with an existing Attribute or `information <normal_state_>` icon associated with a new Attribute.  The information panel associated with the Attribute is displayed on the right-hand side.
+    #. To insert a new Attribute *above* the current one select the 'Insert row above' option.
+    #. To insert a new Attribute *below* the current one select the 'Insert row below' option.
     #. On selecting the appropriate insert option a new row is added to the Export Table.
     #. An existing Attribute can also be re-ordered by moving it up and down the list of attributes via the 'Move Up' or 'Move Down' option associated with it.
 
@@ -175,12 +202,11 @@ Attributes that have previously been exported can be removed from the Parent Blo
     #. Identify the line in the export table representing the Attribute to be removed.
     #. Select the information icon assoicated with the Attribute.  It's information panel is displayed on the right-hand side.
     #. Select the 'Delete' option associated with the 'Delete row' field.
-    #. Refresh the Parent Block in the left-hand panel and confirm the Attribute is no longer displayed.
 
 To complete the export process the export specification defined within the Export Table must be submitted for processing and recording within the overall system Design.  To submit your export specification:
     
     #. Select the 'Submit' option at the bottom of the Export Table.
-    #. Refresh the Parent Block in the left-hand panel and confirm that the exported Attribute(s) have been promoted to the Parent Block.
+    #. Refresh the Parent Block in the left-hand panel and confirm that the exported Attribute(s) have been promoted to the Parent Block or removed attributes are no longer visible.
 
 Changes to the export specification can be discarded at any time throughout the modification process without impacting the currently recorded specification.  To discard changes:
 
@@ -190,18 +216,18 @@ Changes to the export specification can be discarded at any time throughout the 
 Local vs. Server Parameter Attribute State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The underlying physcial hardware infrastructure described by your virtual representation is defined and configured based on the content of the Design specification saved behind the graphical representation you interact with on screen.  Only when modified content is submitted and recorded to the Design specification is the change effected in physical hardware.  It is therefore crucial to understand the difference between 'local' attribute state and 'server' attribute state, particularly for `Parameter Attributes <parameter_attribute_>` that can be modified directly within the User Interface.
+The underlying physcial hardware infrastructure described by your virtual representation is defined and configured based on the content of the Design specification saved behind the graphical representation you interact with on screen.  Only when modified content is submitted and recorded to the Design specification is the change effected in physical hardware.  It is therefore crucial to understand the difference between 'local' attribute state and 'server' attribute state, particularly for `Parameter Attributes <parameter_attribute_>` that can be modified directly within the user interface.
 
-Local Attribute state represents the staus of a Parameter Attribute that has been modified within the User Inferface but not yet submitted for inclusion in the underlying Design specification.  As such the modified value has no effect on the currently implemented hardware solution.  Locally modified attributes are denoted by the 'edit' status icon next to the Attribute name within their Block information panel.  A Parameter Attribute enters the 'local' state as soon as its incumbent value is changed in any way (including adding content to a previously empty Attibute value field) and will remain so until the 'Enter' key is pressed, triggering submission of content to the server.  If the server detects an error in the variable content or format it will return an error and the variable will remain in 'local' state until the issue is resolved.  Details of the mechanism of submitting modified content is described in the `Attribute Change Lifecycle <attribute_change_lifecycle_>` section below.
+Local Attribute state represents the staus of a Parameter Attribute that has been modified within the User Inferface but not yet submitted for inclusion in the underlying Design specification.  As such the modified value has no effect on the currently implemented hardware solution.  Locally modified attributes are denoted by the 'edit' status icon next to the Attribute name within their `block_information_panel_`.  A Parameter Attribute enters the 'local' state as soon as its incumbent value is changed in any way (including adding content to a previously empty Attibute value field) and will remain so until the 'Enter' key is pressed, triggering submission of content to the server.  If the server detects an error in the variable content or format it will return an error and the variable will remain in 'local' state until the issue is resolved.  Details of the mechanism of submitting modified content is described in the `Attribute Change Lifecycle <attribute_change_lifecycle_>` section below.
 
 Once a Parameter Attribute has been successfully recorded it is said to be in the 'server' attribute state, denoting that it has been saved to an underlying information server used to host the Design specification.  Attributes in 'server' state are reflected in the underlying hardware implementation and will be utilised by the system during exection of the hardware design.  'Server' state attributes are denoted by the 'information' status icon.
 
-The following diagram shows the process involved in modifying a Parameter Attribute, mapping 'local' and 'server' states to the activities within it.  Note also the inclusion of Attribute state icons as displayed in the User Interface to denote the state of the Parameter Attribute as activities are completed.
+The following diagram shows the process involved in modifying a Parameter Attribute, mapping 'local' and 'server' states to the activities within it.  Note also the inclusion of Attribute state icons as displayed in the user interface to denote the state of the Parameter Attribute as activities are completed.
 
 .. figure:: images/attribute_lifecycle.svg
     :align: center
 
-
+    Attribute change lifecycle workflow
 
 
 .. TIP::
@@ -214,40 +240,42 @@ The following diagram shows the process involved in modifying a Parameter Attrib
 The Attribute Change Lifecycle
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Attributes values modified via a Block Information Panel are recorded as part of the overall `design_`.  We refer to the combined submission and recording processes as a *'put'* action (as in 'we are putting the value in the attribute').  
+Attributes values modified via a `block_information_panel_` are recorded as part of the overall `design_`.  We refer to the combined submission and recording processes as a *'put'* action (as in 'we are putting the value in the attribute').  
 
-Once the 'put' is complete the Attribute value takes immediate effect, influencing any executing processes as appropriate from that point forward.  If an error is detected during the 'put' process it is immediately abandonded and the nature of the error reflected back to the User Interface.
+Once the 'put' is complete the Attribute value takes immediate effect, influencing any executing processes as appropriate from that point forward.  If an error is detected during the 'put' process it is immediately abandonded and the nature of the error reflected back to the user interface.
 
 The round-trip from submission of a value via the user interface to its utilisation in the execution environment takes a small but non-deterministic period of time while data is transferred, validated and ultimately recorded in the Design.  Attribute modification cannot therefore be considered an atomic process. 
 
-Within the user interface the duration of this round-trip is represented by a spinning icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default information icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
-
-The following diagram shows the scope of the 'put' process within the wider context of an Attribute change request.
+Within the user interface the duration of this round-trip is represented by a `spinning <updating_state_>` icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default `information <normal_state_>` icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
 
 .. TIP::
     Remember the three rules of Attribute change:
-        * Changing an Attribute value in the User Interface has no impact on the underlying physical system until it has been 'put'.
+        * Changing an Attribute value in the user interface has no impact on the underlying physical system until it has been 'put'.
         * Once the 'put' process is complete the change takes immediate effect.
         * Changes to an Attribute will not be stored permenantly unless the overall Design has been `saved <saving_a_design_>`. Only those Attribute values that have been 'put' on the server will be recorded in the saved Design.
 
+
+.. _complex_attributes_:
 
 Defining Complex Attributes - Working With Attribute Tables
 -----------------------------------------------------------
 
 An Attribute associated with a Block may itself represent a collection of values which, when taken together, define the overall Attribute.  For example, the Sequencer Block type contains a single Attribute defining the sequence of steps performed by underlying hardware when controlling motion of a motor.   
 
-The collection of values required by the Attribute are presented in the User Interface as an Attribute Table.  The template for the table is generated dynamically based on the specification of the Attribute within its Block.  For details of utilising the table associated with a specific Attribute refer to the technical documentation of its Block.
+The collection of values required by the Attribute are presented in the user interface as an Attribute Table.  The template for the table is generated dynamically based on the specification of the Attribute within its Block.  For details of utilising the table associated with a specific Attribute refer to the technical documentation of its Block.
 
 An example of an Attribute Table for the 'Sequencer' Block associated with a 'PANDA' Parent Block is shown below:
 
 .. figure:: screenshots/attribute_table.png
       :align: center
 
+      Example Attribute Table associated with a complex Attribute
+
 
 Identifying Table Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A Table Attribute can be idenitifed by the 'View' option associated with it.  Selecting the 'View' option opens the Attribute Table within the 'Central Panel' of the User Interface.
+A Table Attribute can be idenitifed by the `view_button_` or `edit_button_` associated with it.  Selecting the button opens the Attribute Table within the central panel of the user interface.
 
 
 Specifying Attribute Table Content
@@ -297,11 +325,11 @@ Working with Block Methods
 
 While Block `attributes <attribute_>` define the *behaviour* of a Block, `Methods <method_>` define the *actions* it can perform.
 
-A Method in represented in the user inferface as a button, labelled with the name of the action that will be performed. The Method will only be executed if the button is pressed on the User Interface. 
+A Method in represented in the user inferface as a button, labelled with the name of the action that will be performed. The Method will only be executed if the button is pressed on the user interface. 
 
 A Method may require input parameters defining how the action is to be enacted.  For example, the 'Save' Method associated with the Design within a `parent_block_` requires a single input parameter - the name of the file to which Design information is stored. Method parameters:
 
-    * Can be edited directly via the Block Information Panel.
+    * Can be edited directly via the `block_information_panel_`.
     * Exist in 'local' state until the button associated with the Method is pressed.
     * Should be considered as properties of the Method they are associated with rather than entities in their own right.  Method parameters are never recorded on the server or saved within the persistent Design specification.
 
@@ -312,8 +340,8 @@ Obtaining information about Method execution
 
 Selecting the 'Information' icon associated with a Block Method displays two sources of information relating to the Method:
 
-    * The 'right-hand panel' displays details about the Method including a description of its purpose and the parameters it requires to execute successfully.
-    * The 'central panel' shows a log recording each instance of Method execution within your current session.  This includes the time of submission and completion, the status of that completion (e.g. success or failure) and any alarms associated with that status.  Selecting the Method parameter name from the table header opens further information about that parameter in the 'Right-hand panel'.
+    * The right-hand panel displays details about the Method including a description of its purpose and the parameters it requires to execute successfully.
+    * The central panel shows a log recording each instance of Method execution within your current session.  This includes the time of submission and completion, the status of that completion (e.g. success or failure) and any alarms associated with that status.  Selecting the Method parameter name from the table header opens further information about that parameter in the 'Right-hand panel'.
 
 Block Ports
 -----------
@@ -336,9 +364,9 @@ To aid the design process ports are colour coded to denote the type of informati
     * - Int32
       - Orange
     * - Motor 
-      - Green
+      - Pink
     * - NDArray
-      - Purple
+      - Brown
 
 Transmission of information between a Source Port on one Block to a Sink Port on a second Block is achieved via a `link_`.  For further information about working with links see `linking_blocks_`. 
 
@@ -364,23 +392,21 @@ To create a Link between two blocks:
 
       
 .. TIP::
-    To confirm the Connection has been created correctly select the Link by clicking on it.  The Link is highlighted to denote selection and the Link information panel opens in the 'right hand panel' displaying the name of the `source_port_` and `sink_port_` associated with the Link.
+    To confirm the Connection has been created correctly select the Link by clicking on it.  The Link is highlighted to denote selection and the Link information panel opens in the right hand panel displaying the name of the `source_port_` and `sink_port_` associated with the Link.
 
 
 Interrogating Link Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As with a `block_` a `link_` also possesses `attributes <attribute_>`.  Unlike Block attributes however Link attributes cannot be pre-defined as we do not know which blocks are being linked by you in your Design - so there is no default specification to guide your Link definition.
+A `link_` does not possess attributes of its own, but selecting it within a `layout_` displays information about its `source_port_` origin and `sink_port_` target in the right-hand panel of the user interface.  
 
 To interrogate the attributes associated with the Link you have created:
 
     #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
-    #. Click the left mouse button to select the Link.  A Link Information Panel open in the 'right-hand panel' of the user interface.
-
-The Link Information Panel contains the names of the `source_port_` and `sink_port_` at each end of the Link.  
+    #. Click the left mouse button to select the Link.  A Link Information Panel open in the right-hand panel of the user interface.
 
 .. CAUTION::
-    It is possible to modify the Source and Sink associated with the Link from the Link Information Panel.  Do so cautiously as this will change how blocks are connected in the overall Design without any acknwledgement that a change has occurred.
+    It is possible to modify the Source and Sink associated with the Link from the Link Information Panel.  Do so cautiously as this will change how blocks are connected in the overall Design without any acknowledgement that a change has occurred.
 
 Removing a Link
 ^^^^^^^^^^^^^^^
@@ -397,7 +423,7 @@ If a `link_` has been added to a `design_` erroneously, or is no longer required
 #. *Via the Link Information Panel:*
 
     #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
-    #. Click the left mouse button to select the Link.  A Link Information Panel open in the 'right-hand panel' of the user interface.
+    #. Click the left mouse button to select the Link.  A Link Information Panel open in the right-hand panel of the user interface.
     #. Select the 'Delete' button in the Link Information Panel.  The Link is removed from the Design Layout.
 
 
@@ -443,10 +469,10 @@ When a `parent_block_` is opened a list of all `Designs <design_>` within it is 
 
 To open an existing Design:
 
-    #. Navigate to the `parent_block_` represening the hghest level of the system you wish to use.
+    #. Navigate to the `parent_block_` represening the highest level of the system you wish to use.
     #. Navigate to the 'Design' Attribute and select the dropdown arrow to display the list of available Designs.
     #. Select the Design you wish to use.
-    #. Select the 'View' option associated with the 'Layout' Attribute.
+    #. Select the `edit_button_` or `view_button_` associated with the 'Layout' Attribute.
 
 .. TIP::
      If no previously saved designs exist the 'Design' Attribute list will be empty.
