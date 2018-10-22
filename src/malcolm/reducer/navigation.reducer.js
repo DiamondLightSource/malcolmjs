@@ -64,11 +64,12 @@ const updateBlockChildren = (nav, blocks) => {
         a => a.calculated.name === child
       );
       return (
-        (attribute.raw.meta &&
+        attribute &&
+        ((attribute.raw.meta &&
           attribute.raw.meta.tags.some(
             tag => tag.slice(0, 7) === 'widget:' && tag !== 'widget:icon'
           )) ||
-        attribute.calculated.isMethod
+          attribute.calculated.isMethod)
       );
     });
     updatedNav.childrenLabels = updatedNav.children.map(child => {
