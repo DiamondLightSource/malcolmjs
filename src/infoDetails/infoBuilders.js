@@ -80,14 +80,30 @@ export const buildAttributeInfo = props => {
         inline: true,
         alarmStatePath: 'calculated.alarms.errorState',
       };
+      if (props.clearError) {
+        info.acknowledgeError = {
+          showLabel: false,
+          label: 'Acknowledge Error',
+          value: 'Acknowledge Error',
+          inline: true,
+          tag: 'info:button',
+          disabledPath: 'NOT.calculated.errorState',
+          functions: {
+            clickHandler: () => {
+              props.clearError(attribute.calculated.path);
+            },
+          },
+        };
+      }
       if (
         attribute.raw.meta.tags.some(a =>
           ['widget:table', 'widget:textinput'].includes(a)
         )
       ) {
         info.localState = {
-          label: 'Local State',
-          value: 'Discard',
+          label: 'Discard Local State',
+          value: 'Discard Local State',
+          showLabel: false,
           disabledPath: 'NOT.calculated.dirty',
           inline: true,
           tag: 'info:button',
@@ -126,7 +142,8 @@ export const buildAttributeInfo = props => {
           : row >= attribute.raw.value[attribute.localState.labels[0]].length;
         info.localState = {
           label: 'Row local state',
-          value: 'Discard',
+          showLabel: false,
+          value: 'Discard row local state',
           disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
           inline: true,
           tag: 'info:button',
@@ -302,6 +319,21 @@ export const buildAttributeInfo = props => {
           ? AlarmStates.MAJOR_ALARM
           : null,
       };
+      if (props.clearError) {
+        info.acknowledgeError = {
+          showLabel: false,
+          label: 'Acknowledge Error',
+          value: 'Acknowledge Error',
+          inline: true,
+          tag: 'info:button',
+          disabledPath: 'NOT.calculated.errorState',
+          functions: {
+            clickHandler: () => {
+              props.clearError(attribute.calculated.path);
+            },
+          },
+        };
+      }
     } else {
       info.parameterType = {
         label: 'Parameter Type',

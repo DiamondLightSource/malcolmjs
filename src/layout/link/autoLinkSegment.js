@@ -67,7 +67,7 @@ class MalcolmAutoLinkSegment extends BaseWidget {
 
     const Top = React.cloneElement(Bottom, {
       ...extraProps,
-      strokeLinecap: 'round',
+      strokeLinecap: 'butt',
       onMouseLeave: () => {
         this.setState({ ...this.state, hovering: false });
       },

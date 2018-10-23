@@ -59,7 +59,19 @@ const previousNavIsAttribute = (i, navigationLists) =>
 const updateBlockChildren = (nav, blocks) => {
   const updatedNav = nav;
   if (blocks[nav.blockMri]) {
-    updatedNav.children = blocks[nav.blockMri].children;
+    updatedNav.children = blocks[nav.blockMri].children.filter(child => {
+      const attribute = blocks[nav.blockMri].attributes.find(
+        a => a.calculated.name === child
+      );
+      return (
+        attribute &&
+        ((attribute.raw.meta &&
+          attribute.raw.meta.tags.some(
+            tag => tag.slice(0, 7) === 'widget:' && tag !== 'widget:icon'
+          )) ||
+          attribute.calculated.isMethod)
+      );
+    });
     updatedNav.childrenLabels = updatedNav.children.map(child => {
       const attribute = blocks[nav.blockMri].attributes.find(
         a => a.calculated.name === child

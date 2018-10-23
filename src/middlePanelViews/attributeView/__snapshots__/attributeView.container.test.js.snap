@@ -2,6 +2,7 @@
 
 exports[`attributeView renders 1st tab correctly 1`] = `
 <Connect(WithTheme(TabbedPanel))
+  defaultTab={0}
   tabLabels={
     Array [
       "Table",
@@ -24,6 +25,7 @@ exports[`attributeView renders 1st tab correctly 1`] = `
 
 exports[`attributeView renders 2nd tab correctly 1`] = `
 <Connect(WithTheme(TabbedPanel))
+  defaultTab={0}
   tabLabels={
     Array [
       "Table",

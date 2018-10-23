@@ -139,7 +139,7 @@ describe('Child panel', () => {
       cy.get(childPanel).should('be.visible');
 
       // confirm info element is present
-      cy.contains('Row local state').should('be.visible');
+      cy.contains('Row remote state').should('be.visible');
     });
 
     it('clicking the table background should close the info panel', () => {

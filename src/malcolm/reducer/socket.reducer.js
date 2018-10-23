@@ -8,6 +8,7 @@ import {
   MalcolmReturn,
   MalcolmSend,
   MalcolmSocketConnect,
+  MalcolmClearError,
 } from '../malcolm.types';
 
 function updateMessagesInFlight(state, payload) {
@@ -101,9 +102,22 @@ export function setDisconnected(state) {
   };
 }
 
-export const setErrorState = (state, id, errorState, errorMessage) => {
-  const matchingMessage = state.messagesInFlight[id];
-  const path = matchingMessage ? matchingMessage.path : undefined;
+export const setErrorState = (
+  state,
+  id,
+  errorState,
+  errorMessage,
+  attributePath = undefined,
+  suppressUpdate = false
+) => {
+  let path;
+  if (!attributePath) {
+    const matchingMessage = state.messagesInFlight[id];
+    path = matchingMessage ? matchingMessage.path : undefined;
+  } else {
+    path = attributePath;
+  }
+
   if (path) {
     const blockName = path[0];
     const attributeName = path[1];
@@ -122,13 +136,14 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
           ...attributes[matchingAttributeIndex].calculated,
           errorState,
           errorMessage,
-          dirty: errorState,
-          forceUpdate: !errorState,
+          dirty: suppressUpdate ? true : errorState,
+          forceUpdate: suppressUpdate ? false : !errorState,
           alarms: {
             ...attributes[matchingAttributeIndex].calculated.alarms,
             dirty: errorState ? AlarmStates.DIRTY : null,
             errorState: errorState ? AlarmStates.MAJOR_ALARM : null,
           },
+          loading: false,
         },
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -175,7 +190,7 @@ export function handleErrorMessage(state, payload) {
       updatedState = updateAttribute(state, {
         id,
         raw: {},
-        calculated: {},
+        calculated: { loading: false },
         delta: true,
       });
     } else if (
@@ -205,6 +220,10 @@ export function handleErrorMessage(state, payload) {
   return stopTrackingMessage(updatedState, payload);
 }
 
+export function clearErrorState(state, payload) {
+  return setErrorState(state, undefined, false, undefined, payload.path, true);
+}
+
 const updateSocket = (state, payload) => {
   const { worker } = payload;
   worker.postMessage(`connect::${payload.socketUrl}`);
@@ -222,6 +241,7 @@ const SocketReducer = createReducer(
     [MalcolmReturn]: handleReturnMessage,
     [MalcolmSocketConnect]: updateSocket,
     [MalcolmDisconnected]: setDisconnected,
+    [MalcolmClearError]: clearErrorState,
   }
 );
 
