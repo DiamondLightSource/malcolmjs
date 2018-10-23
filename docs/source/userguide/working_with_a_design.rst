@@ -455,12 +455,13 @@ To save a Design:
     #. Navigate to the 'Save' Attribute Group at the bottom of the left-hand panel.  Expand it if necessary.
     #. Enter a descriptive name for the Design in the 'Design' field.  Note this will be used later to identify existing Designs available for use.
 
-    .. TIP::
-        To save your Design with the same name as the currently open Design leave the 'Filename' field blank.
+        .. TIP::
+            To save your Design with the same name as the currently open Design leave the 'Filename' field blank.
 
     #. Select the **'Save'** button.  The information icon to the left of the button will spin to denote the save is in progess, returning to the information icon when the Design is saved.
 
-        * If an error is detected during the save process a red warning icon is displayed next to the button.
+.. NOTE::
+    If an error is detected during the save process a red warning icon is displayed next to the button.
 
 
 Opening an Existing Design
