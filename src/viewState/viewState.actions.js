@@ -2,6 +2,7 @@ export const openParentPanelType = 'OPEN_PARENT_PANEL';
 export const updateVersionNumerType = 'UPDATE_VERSION';
 export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
+export const popout = 'WINDOW_IS_POPOUT';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -29,6 +30,10 @@ export const showFooterAction = footerHeight => ({
   payload: {
     footerHeight,
   },
+});
+
+export const flagAsPopout = () => ({
+  type: popout,
 });
 
 export default {

@@ -3,6 +3,7 @@ import {
   updateVersionNumerType,
   snackbar,
   showFooterType,
+  popout,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -38,6 +39,11 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
         footerHeight: action.payload.footerHeight || 0,
       };
 
+    case popout:
+      return {
+        ...state,
+        popout: true,
+      };
     default:
       return state;
   }
