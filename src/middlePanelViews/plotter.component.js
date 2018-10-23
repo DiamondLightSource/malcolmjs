@@ -192,6 +192,7 @@ class Plotter extends React.Component {
         useResizeHandler
         onRelayout={this.finishChangingViewState}
         divId="plotComponent"
+        data-cy="plotter"
       />
     );
   }

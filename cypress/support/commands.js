@@ -49,6 +49,11 @@ Cypress.Commands.add('waitForSnackbarToDisappear', () => {
     .should('have.length', 0);
 });
 
+Cypress.Commands.add('checkFor', (element, state = true) => {
+  cy.wait(1000);
+  cy.get(element).should(`${state ? '' : 'not.'}be.visible`);
+});
+
 Cypress.Commands.add('waitForComponentToLoad', () => {
   cy.log('Waiting for component to load');
   cy.wait(1000, { log: false });

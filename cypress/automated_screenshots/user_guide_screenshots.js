@@ -67,5 +67,8 @@ describe('User guide screenshots', () => {
     cy.get('[data-cy=plotTab]').click();
     cy.waitForComponentToLoad();
     cy.screenshot('Attribute-Plot');
+
+    cy.get('[]').trigger('mouseover');
+    cy.screenshot('Plot-toolbar');
   });
 });
