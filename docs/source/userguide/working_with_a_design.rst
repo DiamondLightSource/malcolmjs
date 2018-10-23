@@ -20,7 +20,7 @@ Adding a Block to a Design
 
 A `block_` is added to a `design_` by dragging and dropping it from the 'Block Palette' into the `Layout Panel <user_interface_overview_>` as follows:
 
-    #. Select the 'Palette' icon at the bottom of the Layout Panel.  The Block Palette opens containing the set of blocks currently available to you.
+    #. Select the **'Palette'** icon at the bottom of the Layout Panel.  The Block Palette opens containing the set of blocks currently available to you.
     #. Identify the Block you wish to add.  By hovering over it the mouse pointer changes from an arrow to a hand.
     #. Click the left mouse button to select the Block and while holding down the mouse button drag the Block into the Layout Panel.
     #. When you reach your desired location for the Block within the Layout Panel release the mouse button.
@@ -47,13 +47,13 @@ If a `block_` has been added to a `design_` erroneously, or is no longer require
 #. *By dragging it to the Bin:*
 
     #. Select the Block to be removed by hovering over it and clicking the left mouse button.  Upon selection a 'Bin' icon is displayed at the bottom of the Layout Panel.
-    #. While holding down the left mouse button drag the Block over the 'Bin' icon.  The icon is highlighted.
+    #. While holding down the left mouse button drag the Block over the **'Bin'** icon.  The icon is highlighted.
     #. Release the left mouse button.
 
 #. *Hitting the Delete or Backspace Key:*
 
     #. Select the Block to be removed by hovering over it and clicking the left mouse button.  The selected Block is highlighted.
-    #. Hit the 'Delete' key or backspace key on your keyboard.
+    #. Hit the *Delete* key or *backspace* key on your keyboard.
 
 .. NOTE::
     Upon removing a Block from your Design all `source_port_` and `sink_port_` links associated with it are automatically removed.
@@ -128,15 +128,17 @@ The way in which an Attribute is set within the user inferface reflects the natu
     * - Widget 
       - Description
     * - .. _edit_button_:
+
         Edit button
       - Provides the ability to modify a `complex Attribute <complex_attributes_>`.  Selecting the button opens configurable content in the central panel.  Upon completion of changes the overall complex Attribute must be saved.
     * - .. _view_button_:
+
         View button
       - Provides the abililty to view a `complex Attribute <complex_attributes_>` in read-only format. 
     * - Dropdown list
       - Provides the ability to select a value from a list of pre-defined values appropriate to the Attribute within is current Block context.  Upon selection the Attribute value field updates to reflect the selected value.
     * - Text field
-      - Provides a 'free text' field accepting any alphanumeric string.  Attributes that have been edited but not yet submitted are shown in the .  Press the **Enter** key to submit the value. Upon successful submission the `locally_edited_state_` icon is replaced by the default `information <normal_state_>` icon. 
+      - Provides a 'free text' field accepting any alphanumeric string.  Attributes that have been edited but not yet submitted are shown in the .  Press the *Enter* key to submit the value. Upon successful submission the `locally_edited_state_` icon is replaced by the default `information <normal_state_>` icon. 
     * - Checkbox
       - Provides the option to switch on or switch off the action performed by the Attribute.   If the checkbox is empty the Attribute is *off*. 
 
@@ -173,7 +175,7 @@ In doing so it becomes possible to monitor, and potentially utilise, crucial Att
 To specify an Attribute for export:
 
     #. Identify the Attribute you wish to monitor outside the current layout level within the overall Deisgn.  Note its source (in the format ``BlockName.Attribute``).
-    #. Within the Parent Block describing the Layout select the 'View' option associated with the 'Exports' Attribute.
+    #. Within the Parent Block describing the Layout select the **'View'** option associated with the 'Exports' Attribute.
     #. When the Export Table is displayed select the first available blank row.  If no blank rows are available select the option to add a new row.
     #. In the 'Source' column select the drop-down menu option and find the Attribute you wish to export in the list of Attributes available.
     #. In the 'Export' column enter the name of the Attribute as you would like it to appear when exported to its Parent Block.  Leave the 'Export' field blank to display the default name of the Attribute.  User specified display names must be specified in ``camelCase`` format, for example *myAttribute*.
@@ -190,27 +192,27 @@ Any number of Attributes can be exported from Child Blocks to their overall Pare
 The order in which exported Attributes appear within their Parent Block mirrors the order in which they were added to the export specification.  If you require a specific order to be displayed in the user interface:
 
     #. With the Export Table displayed select the Edit icon associated with an existing Attribute or `information <normal_state_>` icon associated with a new Attribute.  The information panel associated with the Attribute is displayed on the right-hand side.
-    #. To insert a new Attribute *above* the current one select the 'Insert row above' option.
-    #. To insert a new Attribute *below* the current one select the 'Insert row below' option.
+    #. To insert a new Attribute *above* the current one select the **'Insert row above'** option.
+    #. To insert a new Attribute *below* the current one select the **'Insert row below'** option.
     #. On selecting the appropriate insert option a new row is added to the Export Table.
-    #. An existing Attribute can also be re-ordered by moving it up and down the list of attributes via the 'Move Up' or 'Move Down' option associated with it.
+    #. An existing Attribute can also be re-ordered by moving it up and down the list of attributes via the **'Move Up'** or **'Move Down'** option associated with it.
 
 Attributes that have previously been exported can be removed from the Parent Block by deleting them from the Parent Block's export table.  To remove an exported Attribute:
 
     #. Identify the attribute to be removed.
-    #. Within the Parent Block containing the Attribute select the 'View' option associated with the 'Export' Attribute.
+    #. Within the Parent Block containing the Attribute select the **'View'** option associated with the 'Export' Attribute.
     #. Identify the line in the export table representing the Attribute to be removed.
     #. Select the information icon assoicated with the Attribute.  It's information panel is displayed on the right-hand side.
-    #. Select the 'Delete' option associated with the 'Delete row' field.
+    #. Select the **'Delete'** option associated with the **'Delete row'** field.
 
 To complete the export process the export specification defined within the Export Table must be submitted for processing and recording within the overall system Design.  To submit your export specification:
     
-    #. Select the 'Submit' option at the bottom of the Export Table.
+    #. Select the **'Submit'** option at the bottom of the Export Table.
     #. Refresh the Parent Block in the left-hand panel and confirm that the exported Attribute(s) have been promoted to the Parent Block or removed attributes are no longer visible.
 
 Changes to the export specification can be discarded at any time throughout the modification process without impacting the currently recorded specification.  To discard changes:
 
-    #. Select the 'Discard Changes' option at the bottom of the Export Table.
+    #. Select the **'Discard Changes'** option at the bottom of the Export Table.
 
 
 Local vs. Server Parameter Attribute State
@@ -285,11 +287,11 @@ Upon opening an Attribute Table you are presented with details of the content of
 
 After adding values the content of the table must be submitted for processing and recording within the overall system Design.  To submit an Attribute Table:
 
-    #. Select the 'Submit' option at the bottom of the Attribute Table.
+    #. Select the **'Submit'** option at the bottom of the Attribute Table.
     
 Updates and changes within the table can be discarded at any time throughout the modification process without impacting the currently recorded specification.  To discard changes:
 
-    #. Select the 'Discard Changes' option at the bottom of the Attribute Table.
+    #. Select the **'Discard Changes'** option at the bottom of the Attribute Table.
 
 
 Static vs. Dynamic Attribute Tables
@@ -306,18 +308,19 @@ Depending on the specification of a table-based Attribute in its underlying Bloc
 
 New rows are added to the table in one of two ways:
 
-    * To add a new row to the end of the table select the '+' option below the current last row entry.  A new row is created.
+    * To add a new row to the end of the table select the **'Add'** option below the current last row entry.  A new row is created.
     * If the order in which table entries are specified is important (for example in the case of describing a sequence of activities), rows can be added before or after previously defined rows as follows:
 
-        #. With the Attribute Table displayed select the 'edit' icon associated with an existing row entry or 'information' icon associated with a new row.  The information panel associated with the row is displayed on the right-hand side.
-        #. To insert a new row *above* the current one select the 'Add' option associated with the 'Insert row above' field.
-        #. To insert a new row *below* the current one select the 'Add' option associated with the 'Insert row below' field.
+        #. With the Attribute Table displayed select the 'edit' icon associated with an existing row entry or `information <normal_state_>` icon associated with a new row.  The information panel associated with the row is displayed on the right-hand side.
+        #. To insert a new row *above* the current one select the **'Insert row above'** option.
+        #. To insert a new row *below* the current one select the **'Insert row below'** option.
+        #. An existing row can also be re-ordered by moving it up and down the list of attributes via the **'Move Up'** or **'Move Down'** option associated with it.
 
 Rows that have been previously specified can be removed by deleting them from the Attribute Table.  To remove a row:
 
     #. Identify the row to be removed.
-    #. Select the information icon assoicated with the row.  It's information panel is displayed on the right-hand side.
-    #. Select the 'Delete' option associated with the 'Delete row' field.
+    #. Select the `information <normal_state_>` icon assoicated with the row.  It's information panel is displayed on the right-hand side.
+    #. Select the **'Delete'** option associated with the 'Delete row' field.
 
 
 Working with Block Methods
@@ -417,14 +420,14 @@ If a `link_` has been added to a `design_` erroneously, or is no longer required
 
     #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
     #. Click the left mouse button to select the Link. The Link is highlighted.
-    #. Hit the 'Delete' or backspace key on your keyboard.  The Link is removed from the Design Layout.
+    #. Hit the *Delete* or *backspace* key on your keyboard.  The Link is removed from the Design Layout.
 
 
 #. *Via the Link Information Panel:*
 
     #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
     #. Click the left mouse button to select the Link.  A Link Information Panel open in the right-hand panel of the user interface.
-    #. Select the 'Delete' button in the Link Information Panel.  The Link is removed from the Design Layout.
+    #. Select the **'Delete'** button in the Link Information Panel.  The Link is removed from the Design Layout.
 
 
 .. _constraints_when_using_links_:
@@ -455,7 +458,7 @@ To save a Design:
     .. TIP::
         To save your Design with the same name as the currently open Design leave the 'Filename' field blank.
 
-    #. Select the 'Save' button.  The information icon to the left of the button will spin to denote the save is in progess, returning to the information icon when the Design is saved.
+    #. Select the **'Save'** button.  The information icon to the left of the button will spin to denote the save is in progess, returning to the information icon when the Design is saved.
 
         * If an error is detected during the save process a red warning icon is displayed next to the button.
 
