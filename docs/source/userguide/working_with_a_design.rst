@@ -46,7 +46,7 @@ If a `block_` has been added to a `design_` erroneously, or is no longer require
 
 #. *By dragging it to the Bin:*
 
-    #. Select the Block to be removed by hovering over it and clicking the left mouse button.  Upon selection a 'Bin' icon is displayed at the bottom of the Layout Panel.
+    #. Select the Block to be removed by hovering over it and clicking the left mouse button.  Upon selection a **'Bin'** icon is displayed at the bottom of the Layout Panel.
     #. While holding down the left mouse button drag the Block over the **'Bin'** icon.  The icon is highlighted.
     #. Release the left mouse button.
 
@@ -128,17 +128,17 @@ The way in which an Attribute is set within the user inferface reflects the natu
     * - Widget 
       - Description
     * - .. _edit_button_:
-
+    
         Edit button
       - Provides the ability to modify a `complex Attribute <complex_attributes_>`.  Selecting the button opens configurable content in the central panel.  Upon completion of changes the overall complex Attribute must be saved.
     * - .. _view_button_:
-
+    
         View button
       - Provides the abililty to view a `complex Attribute <complex_attributes_>` in read-only format. 
     * - Dropdown list
       - Provides the ability to select a value from a list of pre-defined values appropriate to the Attribute within is current Block context.  Upon selection the Attribute value field updates to reflect the selected value.
     * - Text field
-      - Provides a 'free text' field accepting any alphanumeric string.  Attributes that have been edited but not yet submitted are shown in the .  Press the *Enter* key to submit the value. Upon successful submission the `locally_edited_state_` icon is replaced by the default `information <normal_state_>` icon. 
+      - Provides a 'free text' field accepting any alphanumeric string.  Attributes that have been edited but not yet submitted are shown in the .  Press the *Enter* key to submit the value. Upon successful submission the `edit <locally_edited_state_>` icon is replaced by the default `information <normal_state_>` icon. 
     * - Checkbox
       - Provides the option to switch on or switch off the action performed by the Attribute.   If the checkbox is empty the Attribute is *off*. 
 
@@ -157,7 +157,7 @@ To configure an Attribute:
 .. NOTE::
      No data type validation is performed on manually entered values within the user interface.  Validation is performed upon receipt by the backend server.  If an invalid format is detected a 'Warning' icon is presented in the user interface.
 
-During the process of submitting a new Attribute value a `spinning <updating_state_>` icon is displayed to the left of the modified Attribute.  For more information on the process this represents see `attribute_change_lifecycle_`.
+During the process of submitting a new Attribute value a `spinning <processing_state_>` icon is displayed to the left of the modified Attribute.  For more information on the process this represents see `attribute_change_lifecycle_`.
 
 Upon successful submission the icon associated with the modified Attribute reverts to the `information <normal_state_>` icon.
 
@@ -248,7 +248,7 @@ Once the 'put' is complete the Attribute value takes immediate effect, influenci
 
 The round-trip from submission of a value via the user interface to its utilisation in the execution environment takes a small but non-deterministic period of time while data is transferred, validated and ultimately recorded in the Design.  Attribute modification cannot therefore be considered an atomic process. 
 
-Within the user interface the duration of this round-trip is represented by a `spinning <updating_state_>` icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default `information <normal_state_>` icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
+Within the user interface the duration of this round-trip is represented by a `spinning <processing_state_>` icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default `information <normal_state_>` icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
 
 .. TIP::
     Remember the three rules of Attribute change:
@@ -277,7 +277,7 @@ An example of an Attribute Table for the 'Sequencer' Block associated with a 'PA
 Identifying Table Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A Table Attribute can be idenitifed by the `view_button_` or `edit_button_` associated with it.  Selecting the button opens the Attribute Table within the central panel of the user interface.
+A Table Attribute can be idenitifed by the `View button <view_button_>` or `Edit button <edit_button_>` associated with it.  Selecting the button opens the Attribute Table within the central panel of the user interface.
 
 
 Specifying Attribute Table Content
@@ -475,7 +475,7 @@ To open an existing Design:
     #. Navigate to the `parent_block_` represening the highest level of the system you wish to use.
     #. Navigate to the 'Design' Attribute and select the dropdown arrow to display the list of available Designs.
     #. Select the Design you wish to use.
-    #. Select the `edit_button_` or `view_button_` associated with the 'Layout' Attribute.
+    #. Select the `Edit <edit_button_>` or `View <view_button_>` button associated with the 'Layout' Attribute.
 
 .. TIP::
      If no previously saved designs exist the 'Design' Attribute list will be empty.
