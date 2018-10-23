@@ -26,7 +26,7 @@ const styles = theme => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: 180,
+    width: '50%',
     padding: 2,
   },
   button: {
