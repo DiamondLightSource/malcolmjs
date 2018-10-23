@@ -134,9 +134,10 @@ describe('info builder', () => {
       alarmStatePath: 'calculated.alarms.dirty',
       disabledPath: 'NOT.calculated.dirty',
       inline: true,
-      label: 'Local State',
+      label: 'Discard Local State',
+      showLabel: false,
       tag: 'info:button',
-      value: 'Discard',
+      value: 'Discard Local State',
     });
   });
 
@@ -152,8 +153,9 @@ describe('info builder', () => {
       disabled: true,
       inline: true,
       label: 'Row local state',
+      showLabel: false,
       tag: 'info:button',
-      value: 'Discard',
+      value: 'Discard row local state',
     });
   });
 
