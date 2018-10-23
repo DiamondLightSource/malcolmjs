@@ -13,6 +13,7 @@ import AttributeAlarm, {
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import { parentPanelTransition } from '../../viewState/viewState.actions';
 
 const styles = theme => ({
   div: {
@@ -183,7 +184,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   buttonClickHandler: (blockName, attributeName) => {
-    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+    dispatch(parentPanelTransition(true));
+    setTimeout(() => {
+      dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+      dispatch(parentPanelTransition(false));
+    }, 550);
   },
 });
 

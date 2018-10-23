@@ -4,6 +4,7 @@ import {
   snackbar,
   showFooterType,
   popout,
+  panelDirection,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -14,6 +15,7 @@ const initialViewState = {
     open: false,
   },
   footerHeight: 0,
+  transitionParent: false,
 };
 
 const viewStateReducer = (state = initialViewState, action = {}) => {
@@ -43,6 +45,11 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return {
         ...state,
         popout: true,
+      };
+    case panelDirection:
+      return {
+        ...state,
+        transitionParent: action.payload.transition,
       };
     default:
       return state;
