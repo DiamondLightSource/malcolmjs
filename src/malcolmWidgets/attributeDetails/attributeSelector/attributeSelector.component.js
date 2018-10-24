@@ -161,12 +161,10 @@ export const selectorFunction = (
     case 'widget:help':
       return (
         <ButtonAction
-          method
-          text={value}
+          text="View"
           clickAction={() =>
             window.open('http://github.com/dls-controls/pymalcolm')
           }
-          disabled={flags.isDisabled}
         />
       );
     case 'info:alarm':

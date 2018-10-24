@@ -10,6 +10,7 @@ class BlockNodeModel extends NodeModel {
     this.label = block.name;
     this.description = block.description;
     this.loading = block.loading;
+    this.locked = block.locked;
     this.isHiddenLink = block.isHiddenLink;
     this.hasHiddenLink = block.hasHiddenLink;
     this.addBlockPort = this.addBlockPort.bind(this);

@@ -25,7 +25,10 @@ const handleMessages = (messages, dispatch, getState) => {
     const { data, originalRequest } = message;
     switch (data.typeid) {
       case 'malcolm:core/Update:1.0': {
-        if (originalRequest.path.join('') === '.blocks') {
+        if (
+          JSON.stringify(originalRequest.path) ===
+          JSON.stringify(['.', 'blocks', 'value'])
+        ) {
           RootBlockHandler(originalRequest, data.value, dispatch, getState());
         }
 
