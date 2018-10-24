@@ -31,6 +31,9 @@ const buildNavState = () => ({
       ],
     },
   },
+  viewState: {
+    popout: false,
+  },
 });
 
 describe('subscribeToNewBlocksInRoute', () => {

@@ -72,8 +72,18 @@ const AttributeDetails = props => {
             tabIndex="-1"
             className={props.classes.button}
             disableRipple
-            onClick={() =>
-              props.buttonClickHandler(props.blockName, props.attributeName)
+            onClick={
+              props.isGrandchild
+                ? () =>
+                    props.buttonClickHandlerWithTransition(
+                      props.blockName,
+                      props.attributeName
+                    )
+                : () =>
+                    props.buttonClickHandler(
+                      props.blockName,
+                      props.attributeName
+                    )
             }
           >
             <AttributeAlarm alarmSeverity={props.alarm} />
@@ -113,7 +123,9 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  buttonClickHandlerWithTransition: PropTypes.func.isRequired,
   isMainAttribute: PropTypes.bool.isRequired,
+  isGrandchild: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       secondary: PropTypes.shape({
@@ -179,16 +191,20 @@ const mapStateToProps = (state, ownProps) => {
       attribute.calculated &&
       ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
+    isGrandchild: ownProps.blockName === state.malcolm.childBlock,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  buttonClickHandler: (blockName, attributeName) => {
+  buttonClickHandlerWithTransition: (blockName, attributeName) => {
     dispatch(parentPanelTransition(true));
     setTimeout(() => {
       dispatch(navigationActions.navigateToInfo(blockName, attributeName));
       dispatch(parentPanelTransition(false));
     }, 550);
+  },
+  buttonClickHandler: (blockName, attributeName) => {
+    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },
 });
 
