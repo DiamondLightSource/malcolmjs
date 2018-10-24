@@ -56,4 +56,19 @@ describe('User guide screenshots', () => {
     cy.wait(1000);
     cy.screenshot('PANDA-new-link');
   });
+
+  it('attribute viewer', () => {
+    cy.visit('/gui/PANDA:INENC1/val');
+    cy.waitForDetailsToLoad();
+    cy.waitForSnackbarToDisappear();
+    cy.wait(30000); // wait for attribute plot to collect enough data
+    cy.screenshot('Attribute-Table');
+
+    cy.get('[data-cy=plotTab]').click();
+    cy.waitForComponentToLoad();
+    cy.screenshot('Attribute-Plot');
+
+    cy.get('[]').trigger('mouseover');
+    cy.screenshot('Plot-toolbar');
+  });
 });

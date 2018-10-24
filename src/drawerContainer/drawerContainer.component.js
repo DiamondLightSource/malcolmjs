@@ -82,6 +82,54 @@ const DrawerContainer = props => (
         {props.children[props.children.length - 1]}
       </div>
     </Drawer>
+    {!props.childIsInfo && !props.childIsPalette ? (
+      <div>
+        <Drawer
+          variant="persistent"
+          open={props.transitionParent}
+          anchor="left"
+          SlideProps={{ direction: 'left' }}
+          transitionDuration={props.transitionParent ? 500 : 0}
+          classes={{ paper: props.classes.drawer }}
+          PaperProps={{
+            style: {
+              height: `calc(100vh - ${props.footerHeight}px)`,
+            },
+          }}
+        >
+          <div className={props.classes.drawerContents}>
+            <DrawerHeader
+              closeAction={() => props.closeChild(props.urlPath)}
+              title={props.childTitle}
+              popOutAction={() =>
+                props.popOutAction(
+                  baseUrl,
+                  drawerWidth,
+                  props.childIsInfo
+                    ? `${props.parentMRI}/${props.mainAttribute}/${
+                        props.childMRI
+                      }`
+                    : props.childMRI
+                )
+              }
+            />
+            {props.children[props.children.length - 1]}
+          </div>
+        </Drawer>
+        <div
+          style={{
+            minHeight: '100vh',
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            width: props.transitionParent ? 'calc(100vw - 360px)' : 0,
+            transition: `width ${props.transitionParent ? '500' : '150'}ms`,
+            backgroundColor: props.theme.palette.background.default,
+            zIndex: 9999,
+          }}
+        />
+      </div>
+    ) : null}
   </div>
 );
 
@@ -92,12 +140,15 @@ const mapStateToProps = state => {
   );
   const navType = matchingNavItem ? matchingNavItem.navType : undefined;
   const childIsInfo = navType === NavTypes.Info;
+  const childIsPalette = navType === NavTypes.Palette;
 
   return {
     childIsInfo,
+    childIsPalette,
     mainAttribute: state.malcolm.mainAttribute,
     open: state.viewState.openParentPanel,
     openSecondary: state.malcolm.childBlock !== undefined,
+    transitionParent: state.viewState.transitionParent,
     urlPath: state.router.location.pathname,
     footerHeight: state.viewState.footerHeight,
   };
@@ -125,8 +176,17 @@ DrawerContainer.propTypes = {
   }).isRequired,
   children: PropTypes.node,
   childIsInfo: PropTypes.bool.isRequired,
+  childIsPalette: PropTypes.bool.isRequired,
   mainAttribute: PropTypes.string.isRequired,
   footerHeight: PropTypes.number.isRequired,
+  transitionParent: PropTypes.bool.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        default: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 DrawerContainer.defaultProps = {

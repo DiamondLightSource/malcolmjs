@@ -98,6 +98,7 @@ exports[`MethodPlot renders correctly for returns 1`] = `
       },
     ]
   }
+  data-cy="plotter"
   debug={false}
   divId="plotComponent"
   layout={
@@ -234,6 +235,7 @@ exports[`MethodPlot renders correctly for takes 1`] = `
       },
     ]
   }
+  data-cy="plotter"
   debug={false}
   divId="plotComponent"
   layout={
@@ -370,6 +372,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
     ]
   }
+  data-cy="plotter"
   debug={false}
   divId="plotComponent"
   layout={
@@ -506,6 +509,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       },
     ]
   }
+  data-cy="plotter"
   debug={false}
   divId="plotComponent"
   layout={
@@ -642,6 +646,7 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
     ]
   }
+  data-cy="plotter"
   debug={false}
   divId="plotComponent"
   layout={

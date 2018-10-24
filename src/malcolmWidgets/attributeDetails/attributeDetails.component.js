@@ -13,6 +13,7 @@ import AttributeAlarm, {
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import { parentPanelTransition } from '../../viewState/viewState.actions';
 
 const styles = theme => ({
   div: {
@@ -71,8 +72,18 @@ const AttributeDetails = props => {
             tabIndex="-1"
             className={props.classes.button}
             disableRipple
-            onClick={() =>
-              props.buttonClickHandler(props.blockName, props.attributeName)
+            onClick={
+              props.isGrandchild
+                ? () =>
+                    props.buttonClickHandlerWithTransition(
+                      props.blockName,
+                      props.attributeName
+                    )
+                : () =>
+                    props.buttonClickHandler(
+                      props.blockName,
+                      props.attributeName
+                    )
             }
           >
             <AttributeAlarm alarmSeverity={props.alarm} />
@@ -112,7 +123,9 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  buttonClickHandlerWithTransition: PropTypes.func.isRequired,
   isMainAttribute: PropTypes.bool.isRequired,
+  isGrandchild: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       secondary: PropTypes.shape({
@@ -178,10 +191,18 @@ const mapStateToProps = (state, ownProps) => {
       attribute.calculated &&
       ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
+    isGrandchild: ownProps.blockName === state.malcolm.childBlock,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
+  buttonClickHandlerWithTransition: (blockName, attributeName) => {
+    dispatch(parentPanelTransition(true));
+    setTimeout(() => {
+      dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+      dispatch(parentPanelTransition(false));
+    }, 550);
+  },
   buttonClickHandler: (blockName, attributeName) => {
     dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },

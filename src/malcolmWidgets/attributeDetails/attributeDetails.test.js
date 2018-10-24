@@ -3,8 +3,12 @@ import { createShallow, createMount } from '@material-ui/core/test-utils';
 import { Provider } from 'react-redux';
 import AttributeDetails from './attributeDetails.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import { parentPanelTransition } from '../../viewState/viewState.actions';
 
+jest.mock('../../viewState/viewState.actions');
 jest.mock('../../malcolm/actions/navigation.actions');
+
+jest.useFakeTimers();
 
 describe('AttributeDetails', () => {
   let shallow;
@@ -14,6 +18,8 @@ describe('AttributeDetails', () => {
   const actions = [];
 
   beforeEach(() => {
+    navigationActions.navigateToInfo.mockClear();
+    parentPanelTransition.mockClear();
     mockStore = {
       getState: () => state,
       dispatch: action => actions.push(action),
@@ -81,6 +87,31 @@ describe('AttributeDetails', () => {
       'block1',
       'Attribute1'
     );
+  });
+  it('info button hooks up correctly if grandchild', () => {
+    const attribute = buildAttribute();
+    state.malcolm.blocks.block1.attributes.push(attribute);
+    state.malcolm.childBlock = 'block1';
+
+    const wrapper = mount(
+      <Provider store={mockStore}>
+        <AttributeDetails blockName="block1" attributeName="Attribute1" />
+      </Provider>
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(parentPanelTransition).toHaveBeenCalledTimes(1);
+    expect(parentPanelTransition).toHaveBeenCalledWith(true);
+    jest.runAllTimers();
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
+      'block1',
+      'Attribute1'
+    );
+    expect(parentPanelTransition).toHaveBeenCalledTimes(2);
+    expect(parentPanelTransition).toHaveBeenCalledWith(false);
   });
 
   it('middle click hooks up correctly', () => {

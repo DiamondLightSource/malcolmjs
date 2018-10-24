@@ -86,6 +86,7 @@ const mapStateToProps = state => {
     showPalette,
     showInfo,
     footerHeight: state.viewState.footerHeight,
+    openParent: state.viewState.openParentPanel,
   };
 };
 

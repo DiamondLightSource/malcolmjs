@@ -27,6 +27,30 @@ describe('WidgetComboBox', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly with invalid value', () => {
+    const wrapper = shallow(
+      <WidgetComboBox
+        Value="4"
+        Pending={false}
+        Choices={['1', '2', '3']}
+        selectEventHandler={() => {}}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly with null initial value', () => {
+    const wrapper = shallow(
+      <WidgetComboBox
+        Value={null}
+        Pending={false}
+        Choices={['1', '2', '3']}
+        selectEventHandler={() => {}}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('calls change', () => {
     const eventAction = jest.fn();
     const wrapper = mount(

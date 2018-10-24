@@ -19,6 +19,7 @@ import {
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
+import { parentPanelTransition } from '../../../viewState/viewState.actions';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -157,6 +158,17 @@ export const selectorFunction = (
           disabled={flags.isDisabled}
         />
       );
+    case 'widget:help':
+      return (
+        <ButtonAction
+          method
+          text={value}
+          clickAction={() =>
+            window.open('http://github.com/dls-controls/pymalcolm')
+          }
+          disabled={flags.isDisabled}
+        />
+      );
     case 'info:alarm':
       return <AttributeAlarm alarmSeverity={value} />;
     default:
@@ -201,7 +213,9 @@ const AttributeSelector = props => {
         props.attribute.raw.meta,
         props.attribute.calculated.forceUpdate,
         continuousSend,
-        props.buttonClickHandler,
+        props.isGrandchild
+          ? props.buttonClickHandlerWithTransition
+          : props.buttonClickHandler,
         {
           value: props.attribute.localState,
           set: event =>
@@ -225,6 +239,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     attribute,
+    isGrandchild: ownProps.blockName === state.malcolm.childBlock,
   };
 };
 
@@ -238,7 +253,14 @@ const mapDispatchToProps = dispatch => ({
   },
   buttonClickHandler: path => {
     dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
-    // dispatch(push(`/gui/${path[0]}/${path[1]}`));
+  },
+
+  buttonClickHandlerWithTransition: path => {
+    dispatch(parentPanelTransition(true));
+    setTimeout(() => {
+      dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
+      dispatch(parentPanelTransition(false));
+    }, 550);
   },
   setLocalState: (path, value) => {
     dispatch(writeLocalState(path, value));
@@ -278,6 +300,7 @@ AttributeSelector.propTypes = {
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  buttonClickHandlerWithTransition: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

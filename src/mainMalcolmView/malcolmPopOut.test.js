@@ -24,6 +24,9 @@ describe('MalcolmPopOut', () => {
           navigationLists: [{ path: 'test1', navType: NavTypes.Block }],
         },
       },
+      viewState: {
+        popout: true,
+      },
     };
 
     const mockStore = configureStore();
@@ -50,6 +53,9 @@ describe('MalcolmPopOut', () => {
             { path: '.info', navType: NavTypes.Info },
           ],
         },
+      },
+      viewState: {
+        popout: true,
       },
     };
 

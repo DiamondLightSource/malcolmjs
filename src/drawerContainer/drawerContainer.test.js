@@ -24,6 +24,7 @@ describe('DrawerContainer', () => {
         openParentPanel: true,
         openChildPanel: true,
         footerHeight: 10,
+        transitionParent: false,
       },
       malcolm: {
         blocks: {},
@@ -48,6 +49,23 @@ describe('DrawerContainer', () => {
   });
 
   it('renders correctly', () => {
+    const wrapper = shallow(
+      <DrawerContainer
+        store={mockStore(state)}
+        parentTitle="Parent"
+        childTitle="Child"
+        popOutAction={() => {}}
+      >
+        <div>Left</div>
+        <div>Middle</div>
+        <div>Right</div>
+      </DrawerContainer>
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly with panel transition', () => {
+    state.viewState.transitionParent = true;
     const wrapper = shallow(
       <DrawerContainer
         store={mockStore(state)}

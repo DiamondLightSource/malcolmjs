@@ -85,13 +85,11 @@ export const buildAttributeInfo = props => {
           showLabel: false,
           label: 'Acknowledge Error',
           value: 'Acknowledge Error',
+          disabledPath: 'NOT.calculated.errorState',
           inline: true,
           tag: 'info:button',
-          disabledPath: 'NOT.calculated.errorState',
           functions: {
-            clickHandler: () => {
-              props.clearError(attribute.calculated.path);
-            },
+            clickHandler: () => props.clearError(attribute.calculated.path),
           },
         };
       }
@@ -324,13 +322,11 @@ export const buildAttributeInfo = props => {
           showLabel: false,
           label: 'Acknowledge Error',
           value: 'Acknowledge Error',
+          disabledPath: 'NOT.calculated.errorState',
           inline: true,
           tag: 'info:button',
-          disabledPath: 'NOT.calculated.errorState',
           functions: {
-            clickHandler: () => {
-              props.clearError(attribute.calculated.path);
-            },
+            clickHandler: () => props.clearError(attribute.calculated.path),
           },
         };
       }

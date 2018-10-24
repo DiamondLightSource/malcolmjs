@@ -88,7 +88,11 @@ class TabbedPanel extends React.Component {
           fullWidth
         >
           <Tab label={this.props.tabLabels[0]} />
-          <Tab label={this.props.tabLabels[1]} disabled={disablePlotView} />
+          <Tab
+            label={this.props.tabLabels[1]}
+            disabled={disablePlotView}
+            data-cy="plotTab"
+          />
         </Tabs>
       </div>
     );
