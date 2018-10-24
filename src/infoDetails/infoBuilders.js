@@ -80,26 +80,14 @@ export const buildAttributeInfo = props => {
         inline: true,
         alarmStatePath: 'calculated.alarms.errorState',
       };
-      if (props.clearError) {
-        info.acknowledgeError = {
-          showLabel: false,
-          label: 'Acknowledge Error',
-          value: 'Acknowledge Error',
-          disabledPath: 'NOT.calculated.errorState',
-          inline: true,
-          tag: 'info:button',
-          functions: {},
-        };
-      }
       if (
         attribute.raw.meta.tags.some(a =>
           ['widget:table', 'widget:textinput'].includes(a)
         )
       ) {
         info.localState = {
-          label: 'Discard Local State',
-          value: 'Discard Local State',
-          showLabel: false,
+          label: 'Local State',
+          value: 'Discard',
           disabledPath: 'NOT.calculated.dirty',
           inline: true,
           tag: 'info:button',
@@ -138,8 +126,7 @@ export const buildAttributeInfo = props => {
           : row >= attribute.raw.value[attribute.localState.labels[0]].length;
         info.localState = {
           label: 'Row local state',
-          showLabel: false,
-          value: 'Discard row local state',
+          value: 'Discard',
           disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
           inline: true,
           tag: 'info:button',
@@ -315,17 +302,6 @@ export const buildAttributeInfo = props => {
           ? AlarmStates.MAJOR_ALARM
           : null,
       };
-      if (props.clearError) {
-        info.acknowledgeError = {
-          showLabel: false,
-          label: 'Acknowledge Error',
-          value: 'Acknowledge Error',
-          disabledPath: 'NOT.calculated.errorState',
-          inline: true,
-          tag: 'info:button',
-          functions: {},
-        };
-      }
     } else {
       info.parameterType = {
         label: 'Parameter Type',
