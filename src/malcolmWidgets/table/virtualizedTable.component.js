@@ -25,6 +25,7 @@ const styles = theme => ({
     fontFamily: 'Roboto',
     fontWeight: 'normal',
     color: theme.palette.text.primary,
+    paddingRight: '0px !important',
   },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
@@ -324,10 +325,10 @@ const WidgetTable = props => {
     >
       <div
         style={{
-          width: '100%',
-          height: '100%',
+          height: 'calc(100% - 12px)',
           overflowX: 'auto',
           overflowY: 'hidden',
+          paddingBottom: '12px',
         }}
       >
         <AutoSizer>
