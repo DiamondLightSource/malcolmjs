@@ -160,12 +160,7 @@ export const selectorFunction = (
       );
     case 'widget:help':
       return (
-        <ButtonAction
-          text="View"
-          clickAction={() =>
-            window.open('http://github.com/dls-controls/pymalcolm')
-          }
-        />
+        <ButtonAction text="View" clickAction={() => window.open(value)} />
       );
     case 'info:alarm':
       return <AttributeAlarm alarmSeverity={value} />;
