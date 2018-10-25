@@ -121,7 +121,7 @@ describe('malcolm socket handler', () => {
           },
           4: {
             id: 4,
-            path: ['.', 'blocks'],
+            path: ['.', 'blocks', 'value'],
           },
         },
         blocks: {
@@ -196,7 +196,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
     expect(dispatches[2].payload.path).toEqual(['Test:TestBlock', 'meta']);
     expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[1].payload.path).toEqual(['.', 'blocks']);
+    expect(dispatches[1].payload.path).toEqual(['.', 'blocks', 'value']);
   });
 
   it('does nothing on receiving a non-malcolm message', () => {

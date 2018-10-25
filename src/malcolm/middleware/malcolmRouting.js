@@ -16,7 +16,7 @@ const handleLocationChange = (path, blocks, dispatch, getState) => {
   // Get the root list of blocks
   if (!blocks['.blocks']) {
     dispatch(malcolmNewBlockAction('.blocks', false, false));
-    dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+    dispatch(malcolmSubscribeAction(['.', 'blocks', 'value'], false));
   } else {
     const { navigationLists } = getState().malcolm.navigation;
     const newBlocks = navigationLists.filter(

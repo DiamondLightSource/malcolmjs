@@ -129,6 +129,7 @@ const findHiddenLinks = (layoutBlocks, layoutEngine) => {
             },
           ],
           visible: true,
+          locked: true,
         };
         updatedPort.value = newValue;
         hiddenLinkEnd.position.x -= 50;

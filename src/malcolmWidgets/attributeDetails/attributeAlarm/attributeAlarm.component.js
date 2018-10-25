@@ -6,8 +6,10 @@ import InfoOutline from '@material-ui/icons/InfoOutlined';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import Edit from '@material-ui/icons/Edit';
 import PowerOff from '@material-ui/icons/PowerOff';
+import Help from '@material-ui/icons/HelpOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
+import blockUtils from '../../../malcolm/blockUtils';
 import EditError from './EditError.component';
 
 const AlarmStateNumbers = {
@@ -19,6 +21,7 @@ const AlarmStateNumbers = {
   PENDING: -1,
   DIRTY: -2,
   DIRTYANDERROR: -3,
+  HELP: -4,
 };
 
 Object.entries(AlarmStateNumbers).forEach(entry => {
@@ -35,6 +38,10 @@ export const AlarmStatesByIndex = [
 ];
 
 export const getAlarmState = attribute => {
+  if (blockUtils.attributeHasTag(attribute, 'widget:help')) {
+    return AlarmStates.HELP;
+  }
+
   let alarm = AlarmStates.NO_ALARM;
   if (attribute && attribute.raw && attribute.raw.alarm) {
     alarm = attribute.raw.alarm.severity;
@@ -82,6 +89,9 @@ const AttributeAlarm = props => {
 
     case AlarmStates.DIRTYANDERROR:
       return <EditError nativeColor={props.theme.palette.error.main} />;
+
+    case AlarmStates.HELP:
+      return <Help nativeColor={props.theme.palette.secondary.dark} />;
 
     default:
       return <div style={{ width: 24 }} />;

@@ -141,7 +141,7 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
 
   const state = getState();
   state.malcolm.messagesInFlight = {};
-  dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+  dispatch(malcolmSubscribeAction(['.', 'blocks', 'value'], false));
   Object.values(state.malcolm.blocks)
     .filter(block => block.name !== '.blocks')
     .forEach(block => {

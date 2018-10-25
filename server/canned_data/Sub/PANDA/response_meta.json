@@ -19,7 +19,8 @@
           "design", 
           "exports", 
           "modified", 
-          "save"
+          "save",
+	  "help"
         ]
       }
     ]

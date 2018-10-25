@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 import MethodDetails from '../malcolmWidgets/method/method.component';
+import blockUtils from '../malcolm/blockUtils';
 
 const ascii404 =
   '                __     __      _____      __     __ \n' +
@@ -228,14 +229,20 @@ const mapStateToProps = (state, ownProps, memory) => {
     (!areAttributesTheSame(stateMemory.oldAttributes, block.attributes) ||
       block.orphans.some(a => !stateMemory.orphans.includes(a)))
   ) {
-    stateMemory.rootAttributes = block.attributes.filter(
-      a =>
-        isRootLevelAttribute(a) &&
-        !(
-          block.orphans &&
-          block.orphans.some(orphan => orphan === a.calculated.name)
-        )
-    );
+    stateMemory.rootAttributes = [
+      ...block.attributes.filter(a =>
+        blockUtils.attributeHasTag(a, 'widget:help')
+      ),
+      ...block.attributes.filter(
+        a =>
+          isRootLevelAttribute(a) &&
+          !(
+            block.orphans &&
+            block.orphans.some(orphan => orphan === a.calculated.name)
+          ) &&
+          !blockUtils.attributeHasTag(a, 'widget:help')
+      ),
+    ];
     stateMemory.orphans = block.orphans;
     stateMemory.groups = block.attributes
       .filter(a => a.calculated.isGroup)
