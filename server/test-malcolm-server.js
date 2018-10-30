@@ -40,7 +40,6 @@ function resetServer() {
 }
 
 function handleMessage(socket, message) {
-  console.log(message)
   let simplifiedMessage = message;
   const originalId = message.id;
   delete simplifiedMessage.id;
