@@ -1,5 +1,8 @@
-import { harderAttribute } from '../malcolmWidgets/table/table.stories';
-
+import {
+  harderAttribute,
+  expectedCopy,
+} from '../malcolmWidgets/table/table.stories';
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { buildAttributeInfo } from './infoBuilders';
 
 describe('info builder', () => {
@@ -42,6 +45,7 @@ describe('info builder', () => {
 
   it('attribute info builder generates correct structure for basic attribute', () => {
     props.attribute.raw.meta.tags = ['widget:test'];
+    props.attribute.raw.meta.typeid = malcolmTypes.string;
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info).toEqual({
       errorState: {
@@ -122,6 +126,15 @@ describe('info builder', () => {
           valuePath: 'raw.timeStamp.userTag',
         },
       },
+    });
+  });
+
+  it('attribute info builder adds column list for table attribute', () => {
+    const infoObject = buildAttributeInfo(props);
+    expect(infoObject.info.columnHeadings).toEqual({
+      inline: true,
+      label: 'Columns',
+      value: JSON.stringify(expectedCopy.labels),
     });
   });
 

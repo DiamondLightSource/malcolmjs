@@ -127,6 +127,13 @@ export const buildAttributeInfo = props => {
         }
       }
       ({ value } = attribute.raw);
+      if (attribute.raw.meta.typeid === malcolmTypes.table) {
+        info.columnHeadings = {
+          label: 'Columns',
+          value: JSON.stringify(Object.keys(attribute.raw.meta.elements)),
+          inline: true,
+        };
+      }
     } else if (
       (attribute.raw.meta.typeid === malcolmTypes.table ||
         isArrayType(attribute.raw.meta)) &&
@@ -271,6 +278,21 @@ export const buildAttributeInfo = props => {
         info.columnHeading = {
           label: 'Column',
           value: props.subElement[1],
+          inline: true,
+        };
+        info.columnDescription = {
+          label: 'Description',
+          value: attribute.raw.meta.elements[props.subElement[1]].description,
+          inline: true,
+        };
+        info.columnType = {
+          label: 'Type',
+          value: attribute.raw.meta.elements[props.subElement[1]].typeid,
+          inline: true,
+        };
+        info.columnWriteable = {
+          label: 'Writeable',
+          value: attribute.raw.meta.elements[props.subElement[1]].writeable,
           inline: true,
         };
       }
