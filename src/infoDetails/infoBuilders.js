@@ -162,30 +162,49 @@ export const buildAttributeInfo = props => {
               ? attribute.raw.value[row]
               : 'undefined';
         }
+        info.rowOperations = {
+          label: 'Row Operations',
+          moveRowUp: {
+            label: 'Shift row up',
+            value: 'Shift row up',
+            showLabel: false,
+            disabled: row === 0,
+            tag: 'info:button',
+          },
+          moveRowDown: {
+            label: 'Shift row down',
+            value: 'Shift row down',
+            showLabel: false,
+            disabled: row === attribute.localState.value.length - 1,
+            tag: 'info:button',
+          },
+          addRowAbove: {
+            label: 'Insert row above',
+            value: 'Insert row above',
+            showLabel: false,
+            tag: 'info:button',
+          },
+          addRowBelow: {
+            label: 'Insert row below',
+            value: 'Insert row below',
+            showLabel: false,
+            tag: 'info:button',
+          },
+          deleteRow: {
+            label: 'Delete row',
+            value: 'Delete',
+            inline: true,
+            showLabel: false,
+            tag: 'info:button',
+          },
+        };
         info.rowValue = {
           label: 'Row remote state',
           ...dataRow,
         };
-        info.addRowAbove = {
-          label: 'Insert row above',
-          value: 'Add',
-          inline: true,
-          tag: 'info:button',
-        };
-        info.addRowBelow = {
-          label: 'Insert row below',
-          value: 'Add',
-          inline: true,
-          tag: 'info:button',
-        };
-        info.deleteRow = {
-          label: 'Delete row',
-          value: 'Delete',
-          inline: true,
-          tag: 'info:button',
-        };
+
         if (props.addRow) {
-          info.addRowAbove.functions = {
+          info.rowOperations.addRowAbove.functions = {
             clickHandler: () => {
               props.addRow(props.attribute.calculated.path, row);
               props.changeInfoHandler(
@@ -194,12 +213,12 @@ export const buildAttributeInfo = props => {
               );
             },
           };
-          info.addRowBelow.functions = {
+          info.rowOperations.addRowBelow.functions = {
             clickHandler: () => {
               props.addRow(props.attribute.calculated.path, row, 'below');
             },
           };
-          info.deleteRow.functions = {
+          info.rowOperations.deleteRow.functions = {
             clickHandler: () => {
               if (row >= props.attribute.localState.value.length - 1) {
                 if (row !== 0) {
@@ -212,6 +231,26 @@ export const buildAttributeInfo = props => {
                 }
               }
               props.addRow(props.attribute.calculated.path, row, 'delete');
+            },
+          };
+        }
+        if (props.moveRow) {
+          info.rowOperations.moveRowUp.functions = {
+            clickHandler: () => {
+              props.moveRow(props.attribute.calculated.path, row);
+              props.changeInfoHandler(
+                props.attribute.calculated.path,
+                `row.${row - 1}`
+              );
+            },
+          };
+          info.rowOperations.moveRowDown.functions = {
+            clickHandler: () => {
+              props.moveRow(props.attribute.calculated.path, row, 'below');
+              props.changeInfoHandler(
+                props.attribute.calculated.path,
+                `row.${row + 1}`
+              );
             },
           };
         }

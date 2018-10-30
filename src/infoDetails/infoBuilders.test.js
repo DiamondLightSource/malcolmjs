@@ -188,6 +188,7 @@ describe('info builder', () => {
 
   it('table add and delete row methods get hooked up', () => {
     props.addRow = jest.fn();
+    props.moveRow = jest.fn();
     props.changeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
@@ -195,19 +196,21 @@ describe('info builder', () => {
 
     props.subElement = ['row', '1'];
     const infoObject = buildAttributeInfo(props);
-    expect(infoObject.info.addRowAbove).toBeDefined();
-    expect(infoObject.info.addRowBelow).toBeDefined();
-    expect(infoObject.info.deleteRow).toBeDefined();
-    infoObject.info.addRowBelow.functions.clickHandler();
+    expect(infoObject.info.rowOperations.addRowAbove).toBeDefined();
+    expect(infoObject.info.rowOperations.addRowBelow).toBeDefined();
+    expect(infoObject.info.rowOperations.deleteRow).toBeDefined();
+    expect(infoObject.info.rowOperations.moveRowUp).toBeDefined();
+    expect(infoObject.info.rowOperations.moveRowDown).toBeDefined();
+    infoObject.info.rowOperations.addRowBelow.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
     expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1, 'below');
     props.addRow.mockClear();
-    infoObject.info.deleteRow.functions.clickHandler();
+    infoObject.info.rowOperations.deleteRow.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
     expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1, 'delete');
     expect(props.changeInfoHandler).toHaveBeenCalledTimes(0);
     props.addRow.mockClear();
-    infoObject.info.addRowAbove.functions.clickHandler();
+    infoObject.info.rowOperations.addRowAbove.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
     expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1);
     expect(props.changeInfoHandler).toHaveBeenCalledTimes(1);
@@ -215,6 +218,12 @@ describe('info builder', () => {
       ['test1', 'layout'],
       'row.2'
     );
+    infoObject.info.rowOperations.moveRowUp.functions.clickHandler();
+    expect(props.moveRow).toHaveBeenCalledTimes(1);
+
+    props.moveRow.mockClear();
+    infoObject.info.rowOperations.moveRowDown.functions.clickHandler();
+    expect(props.moveRow).toHaveBeenCalledTimes(1);
   });
 
   it('table delete row methods fires info route change if bottom row selected', () => {
@@ -231,7 +240,7 @@ describe('info builder', () => {
     const infoObject = buildAttributeInfo(props);
 
     props.addRow.mockClear();
-    infoObject.info.deleteRow.functions.clickHandler();
+    infoObject.info.rowOperations.deleteRow.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
     expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 4, 'delete');
     expect(props.changeInfoHandler).toHaveBeenCalledTimes(1);
@@ -258,7 +267,7 @@ describe('info builder', () => {
     const infoObject = buildAttributeInfo(props);
 
     props.addRow.mockClear();
-    infoObject.info.deleteRow.functions.clickHandler();
+    infoObject.info.rowOperations.deleteRow.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
     expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 0, 'delete');
     expect(props.closeInfoHandler).toHaveBeenCalledTimes(1);

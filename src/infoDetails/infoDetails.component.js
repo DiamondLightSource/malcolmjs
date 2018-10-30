@@ -275,6 +275,9 @@ const mapDispatchToProps = dispatch => ({
   addRow: (path, row, modifier) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
   },
+  moveRow: (path, row, modifier) => {
+    dispatch(malcolmUpdateTable(path, { moveRow: true, modifier }, row));
+  },
   unselectLink: path => {
     dispatch(deselectLinkAction(path));
   },
