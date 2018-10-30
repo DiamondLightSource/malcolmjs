@@ -40,6 +40,7 @@ function resetServer() {
 }
 
 function handleMessage(socket, message) {
+  console.log(message)
   let simplifiedMessage = message;
   const originalId = message.id;
   delete simplifiedMessage.id;
@@ -47,6 +48,8 @@ function handleMessage(socket, message) {
     handleUnsubscribe(socket, originalId);
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
     let response;
+    let labelResponse = undefined;
+
     if (pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]) {
       pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value = simplifiedMessage.value;
       if (subscribedPaths[JSON.stringify(simplifiedMessage.path)]) {
@@ -67,12 +70,19 @@ function handleMessage(socket, message) {
           const blockMeta = pathIndexedMessages[JSON.stringify([simplifiedMessage.path[0], 'meta'])];
           blockMeta.changes[0][1].label = simplifiedMessage.value;
 
-          response = {
-            ...blockMeta,
+          labelResponse = {
+            //...blockMeta,
+            typeid: 'malcolm:core/Delta:1.0',
+            changes: [
+              [
+                ["label"],
+                simplifiedMessage.value
+              ]
+            ],
             id: parseInt(subscribedPaths[JSON.stringify([simplifiedMessage.path[0], 'meta'])]),
           }
 
-          sendResponse(socket, response);
+          sendResponse(socket, labelResponse);
         }
       }
 
@@ -109,6 +119,10 @@ function handleMessage(socket, message) {
       response = buildErrorMessage(originalId, message);
     }
     sendResponse(socket, response);
+
+    // if (labelResponse) {
+    //   sendResponse(socket, labelResponse)
+    // }
 
   } else if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
     let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);

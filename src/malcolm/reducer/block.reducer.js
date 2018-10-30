@@ -141,8 +141,9 @@ export function updateBlock(state, payload) {
 
     if (
       mainAttribute &&
-      mainAttribute.meta &&
-      mainAttribute.meta.tags.some(t => t === 'widget:flowgraph')
+      ((mainAttribute.meta &&
+        mainAttribute.meta.tags.some(t => t === 'widget:flowgraph')) ||
+        mainAttribute.label !== payload.label)
     ) {
       layout = layoutReducer.processLayout(state);
     }
