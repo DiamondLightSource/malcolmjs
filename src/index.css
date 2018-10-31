@@ -18,3 +18,7 @@ body {
 :focus {
   color: inherit !important;
 }
+
+/* .ReactVirtualized__Table__Grid {
+  overflow-y: hidden !important
+} */

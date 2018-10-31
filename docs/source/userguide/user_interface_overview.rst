@@ -122,7 +122,7 @@ Under normal use the 'left-hand panel' contains summary information about the cu
 
 Connectivity to the underlying system is maintained meaning each independent window is updated in response to activity within the control system.  Similarly, manual updates to any Attribute within an independent Information Panel is reflected back to the control system in the same way as occurs when the Information Panel is integrated with the main user interface.  For example:
 
-.. figure:: screenshots/panel_popping.png
+.. figure:: screenshots/window_popping_output.svg
     :align: center
 
     Example of multiple Block Information Panels popped into an independent display
