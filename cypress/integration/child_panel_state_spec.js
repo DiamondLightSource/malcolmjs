@@ -173,8 +173,9 @@ describe('Child panel', () => {
         .first()
         .click();
       cy.checkFor(childPanel);
-      // ensure info for row 0
-      cy.get('p:contains(0)').should('have.length', 2);
+      // ensure info for row 0: top row shift up should be disabled and cypress treats disabled buttons as invisible
+      cy.contains('Shift row up').should('not.be.visible');
+      cy.contains('Shift row down').should('be.visible');
 
       cy
         .get('[data-cy=table]')
@@ -182,9 +183,10 @@ describe('Child panel', () => {
         .last()
         .click({ force: true });
       cy.checkFor(childPanel);
-      // ensure info for row 1
+      // ensure info for row 1: bottom row shift down should be disabled
       cy.wait(2000, { log: false });
-      cy.get('p:contains(1)').should('have.length', 2);
+      cy.contains('Shift row up').should('be.visible');
+      cy.contains('Shift row down').should('not.be.visible');
     });
 
     it('clicking on a column heading should open panel', () => {
