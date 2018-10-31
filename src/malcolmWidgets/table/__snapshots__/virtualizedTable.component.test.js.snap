@@ -881,10 +881,10 @@ exports[`virtualized table widget table renders correctly for array attribute wi
       <div
         style={
           Object {
-            "height": "100%",
+            "height": "calc(100% - 12px)",
             "overflowX": "auto",
             "overflowY": "hidden",
-            "width": "100%",
+            "paddingBottom": "12px",
           }
         }
       >
@@ -911,7 +911,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                 headerHeight={36}
                 headerRowRenderer={[Function]}
                 headerStyle={Object {}}
-                height={0}
+                height={-12}
                 noRowsRenderer={[Function]}
                 onHeaderClick={[Function]}
                 onRowClick={[Function]}
@@ -1012,7 +1012,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                     headerHeight={36}
                     headerRowRenderer={[Function]}
                     headerStyle={Object {}}
-                    height={-36}
+                    height={-48}
                     isScrollingOptOut={false}
                     noContentRenderer={[Function]}
                     noRowsRenderer={[Function]}
@@ -1057,7 +1057,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                           "WebkitOverflowScrolling": "touch",
                           "boxSizing": "border-box",
                           "direction": "ltr",
-                          "height": -36,
+                          "height": -48,
                           "overflowX": "hidden",
                           "overflowY": "auto",
                           "position": "relative",
@@ -1408,10 +1408,10 @@ exports[`virtualized table widget table renders correctly for array attribute wi
       <div
         style={
           Object {
-            "height": "100%",
+            "height": "calc(100% - 12px)",
             "overflowX": "auto",
             "overflowY": "hidden",
-            "width": "100%",
+            "paddingBottom": "12px",
           }
         }
       >
@@ -1438,7 +1438,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                 headerHeight={36}
                 headerRowRenderer={[Function]}
                 headerStyle={Object {}}
-                height={0}
+                height={-12}
                 noRowsRenderer={[Function]}
                 onHeaderClick={[Function]}
                 onRowClick={[Function]}
@@ -1539,7 +1539,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                     headerHeight={36}
                     headerRowRenderer={[Function]}
                     headerStyle={Object {}}
-                    height={-36}
+                    height={-48}
                     isScrollingOptOut={false}
                     noContentRenderer={[Function]}
                     noRowsRenderer={[Function]}
@@ -1584,7 +1584,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
                           "WebkitOverflowScrolling": "touch",
                           "boxSizing": "border-box",
                           "direction": "ltr",
-                          "height": -36,
+                          "height": -48,
                           "overflowX": "hidden",
                           "overflowY": "auto",
                           "position": "relative",
@@ -3255,10 +3255,10 @@ exports[`virtualized table widget table renders correctly with no selected row 1
       <div
         style={
           Object {
-            "height": "100%",
+            "height": "calc(100% - 12px)",
             "overflowX": "auto",
             "overflowY": "hidden",
-            "width": "100%",
+            "paddingBottom": "12px",
           }
         }
       >
@@ -3285,7 +3285,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 headerHeight={36}
                 headerRowRenderer={[Function]}
                 headerStyle={Object {}}
-                height={0}
+                height={-12}
                 noRowsRenderer={[Function]}
                 onHeaderClick={[Function]}
                 onRowClick={[Function]}
@@ -3773,7 +3773,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     headerHeight={36}
                     headerRowRenderer={[Function]}
                     headerStyle={Object {}}
-                    height={-36}
+                    height={-48}
                     isScrollingOptOut={false}
                     noContentRenderer={[Function]}
                     noRowsRenderer={[Function]}
@@ -3818,7 +3818,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "WebkitOverflowScrolling": "touch",
                           "boxSizing": "border-box",
                           "direction": "ltr",
-                          "height": -36,
+                          "height": -48,
                           "overflowX": "hidden",
                           "overflowY": "auto",
                           "position": "relative",

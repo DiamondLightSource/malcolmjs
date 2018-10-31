@@ -245,6 +245,44 @@ describe('Table reducer', () => {
     );
   });
 
+  it('moves row up', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      value: { moveRow: true },
+      row: 1,
+    };
+    const action = {
+      type: MalcolmTableUpdate,
+      payload,
+    };
+    testState = TableReducer(testState, action);
+    expect(testState.blocks.block1.attributes[0].localState.value[0]).toEqual(
+      expectedCopy.value[1]
+    );
+    expect(testState.blocks.block1.attributes[0].localState.value[1]).toEqual(
+      expectedCopy.value[0]
+    );
+  });
+
+  it('moves row down', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      value: { moveRow: true, modifier: 'below' },
+      row: 1,
+    };
+    const action = {
+      type: MalcolmTableUpdate,
+      payload,
+    };
+    testState = TableReducer(testState, action);
+    expect(testState.blocks.block1.attributes[0].localState.value[1]).toEqual(
+      expectedCopy.value[2]
+    );
+    expect(testState.blocks.block1.attributes[0].localState.value[2]).toEqual(
+      expectedCopy.value[1]
+    );
+  });
+
   it('updates existing local state copy', () => {
     testState.blocks.block1.attributes[0].localState.value = expectedValue;
     testState = TableReducer(state, copyAction);

@@ -139,7 +139,14 @@ export class InfoDetails extends React.Component {
     );
     return (
       <div>
-        {infoElements.map(a => (
+        {[
+          ...infoElements.filter(
+            a => this.state.info[a] && this.state.info[a].tag !== 'info:button'
+          ),
+          ...infoElements.filter(
+            a => this.state.info[a] && this.state.info[a].tag === 'info:button'
+          ),
+        ].map(a => (
           <InfoElement
             key={a}
             label={this.state.info[a].label ? this.state.info[a].label : a}
@@ -274,6 +281,9 @@ const mapDispatchToProps = dispatch => ({
   },
   addRow: (path, row, modifier) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
+  },
+  moveRow: (path, row, modifier) => {
+    dispatch(malcolmUpdateTable(path, { moveRow: true, modifier }, row));
   },
   unselectLink: path => {
     dispatch(deselectLinkAction(path));

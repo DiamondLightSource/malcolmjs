@@ -165,6 +165,23 @@ export const updateTableLocal = (state, payload) => {
       attribute.localState.flags.rows.slice(insertAt).forEach((row, index) => {
         attribute.localState.flags.rows[index + insertAt]._isChanged = true;
       });
+    } else if (payload.value.moveRow) {
+      const moveTo =
+        payload.value.modifier === 'below' ? payload.row + 1 : payload.row - 1;
+      const rowValue = deepCopy(attribute.localState.value[payload.row]);
+      const swapWith = deepCopy(attribute.localState.value[moveTo]);
+      const rowFlags = deepCopy(attribute.localState.flags.rows[payload.row]);
+      const swapWithFlags = deepCopy(attribute.localState.flags.rows[moveTo]);
+      attribute.localState.value[payload.row] = swapWith;
+      attribute.localState.value[moveTo] = rowValue;
+      attribute.localState.flags.rows[payload.row] = {
+        ...swapWithFlags,
+        _isChanged: true,
+      };
+      attribute.localState.flags.rows[moveTo] = {
+        ...rowFlags,
+        _isChanged: true,
+      };
     } else {
       attribute.localState.value[payload.row] = payload.value;
 
