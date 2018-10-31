@@ -7,6 +7,7 @@ import {
   MalcolmResetPortsType,
   MalcolmSelectLinkType,
   MalcolmSelectBlock,
+  MalcolmZoom,
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
@@ -427,6 +428,33 @@ const selectBlock = (state, payload) => ({
   },
 });
 
+const zoomLayout = (state, payload) => {
+  const { layoutEngine } = state;
+
+  let zoomFactor;
+  if (payload.zoomToFit) {
+    const xFactor =
+      (layoutEngine.canvas.clientWidth -
+        360 * (payload.openParent + payload.openChild)) /
+      layoutEngine.canvas.scrollWidth;
+    const yFactor =
+      layoutEngine.canvas.clientHeight / layoutEngine.canvas.scrollHeight;
+    zoomFactor = xFactor < yFactor ? xFactor : yFactor;
+  } else {
+    zoomFactor = payload.direction === 'in' ? 1.1 : 0.9;
+  }
+
+  layoutEngine.diagramModel.setZoomLevel(
+    layoutEngine.diagramModel.getZoomLevel() * zoomFactor
+  );
+  layoutEngine.diagramModel.setOffset(
+    payload.openParent ? 360 * payload.openParent : 0,
+    0
+  );
+  layoutEngine.repaintCanvas();
+  return { ...state, layoutEngine };
+};
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -436,6 +464,7 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmResetPortsType]: resetPorts,
     [MalcolmSelectLinkType]: selectLink,
     [MalcolmSelectBlock]: selectBlock,
+    [MalcolmZoom]: zoomLayout,
   }
 );
 

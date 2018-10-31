@@ -4,6 +4,7 @@ import {
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
   MalcolmResetPortsType,
+  MalcolmZoom,
 } from '../malcolm.types';
 import {
   malcolmPutAction,
@@ -198,6 +199,22 @@ const mouseInsideDeleteZone = insideZone => ({
   },
 });
 
+const zoomToFit = (openParent, openChild) => ({
+  type: MalcolmZoom,
+  payload: {
+    zoomToFit: true,
+    openParent,
+    openChild,
+  },
+});
+
+const zoomInDirection = direction => ({
+  type: MalcolmZoom,
+  payload: {
+    direction,
+  },
+});
+
 export default {
   selectPort,
   makeBlockVisible,
@@ -205,4 +222,6 @@ export default {
   mouseInsideDeleteZone,
   deleteBlocks,
   deleteLinks,
+  zoomToFit,
+  zoomInDirection,
 };

@@ -104,6 +104,104 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
         Auto layout
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "display": "flex",
+          "left": 389,
+          "top": 12,
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomInIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutMapIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -200,6 +298,104 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
         Auto layout
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "display": "flex",
+          "left": 389,
+          "top": 12,
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomInIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutMapIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -268,6 +464,104 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
         Auto layout
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "display": "flex",
+          "left": 389,
+          "top": 12,
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomInIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutMapIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -335,6 +629,104 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       >
         Auto layout
       </WithStyles(Button)>
+    </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "display": "flex",
+          "left": 389,
+          "top": 12,
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomInIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
+      <div
+        style={
+          Object {
+            "padding": 4,
+          }
+        }
+      >
+        <WithStyles(Button)
+          color="secondary"
+          disabled={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "36px",
+              "padding": 4,
+              "width": "36px",
+            }
+          }
+          variant="fab"
+        >
+          <pure(ZoomOutMapIcon)
+            style={
+              Object {
+                "fontSize": "24px",
+              }
+            }
+          />
+        </WithStyles(Button)>
+      </div>
     </div>
   </div>
 </div>

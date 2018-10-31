@@ -199,7 +199,7 @@ export const buildAttributeInfo = props => {
           },
           deleteRow: {
             label: 'Delete row',
-            value: 'Delete',
+            value: 'Delete row',
             inline: true,
             showLabel: false,
             tag: 'info:button',
@@ -272,7 +272,6 @@ export const buildAttributeInfo = props => {
             },
           };
         }
-        info.subElement = props.subElement;
       } else {
         // column info will go here eventually
         info.columnHeading = {
