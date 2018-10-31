@@ -5,6 +5,7 @@ import LayoutReducer, {
   LayoutReduxReducer,
 } from './layout.reducer';
 import { malcolmSelectBlock } from '../../malcolmActionCreators';
+import layoutActions from '../../actions/layout.action';
 
 const sourcePort = 'sourcePort';
 const sinkPort = 'sinkPort';
@@ -17,6 +18,10 @@ const buildLayoutBlock = () => ({
   },
   visible: true,
 });
+
+const repaintMock = jest.fn();
+let zoomFactor = 0;
+let offset = [];
 
 const buildMalcolmState = () => ({
   layout: {
@@ -37,8 +42,17 @@ const buildMalcolmState = () => ({
     diagramModel: {
       nodes: { block1: {} },
       zoom: 100,
+      getZoomLevel: () => zoomFactor,
+      setZoomLevel: val => {
+        zoomFactor = val;
+      },
+      setOffset: (xval, yval) => {
+        offset = [xval, yval];
+      },
     },
     getNodeDimensions: () => ({ height: 120, width: 120 }),
+    repaintCanvas: repaintMock,
+    canvas: {},
   },
   blocks: {
     block1: {
@@ -87,6 +101,12 @@ const buildMalcolmState = () => ({
 });
 
 describe('Layout Reducer', () => {
+  beforeEach(() => {
+    repaintMock.mockClear();
+    offset = [0, 0];
+    zoomFactor = 100;
+  });
+
   it('buildPorts builds the port array correctly', () => {
     const block = {
       attributes: [
@@ -322,5 +342,27 @@ describe('Layout Reducer', () => {
 
     attribute.raw.meta.tags = ['something else', 'widget:icon'];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
+  });
+
+  it('Zoom in action zooms in', () => {
+    const state = buildMalcolmState();
+
+    const action = layoutActions.zoomInDirection('in');
+    LayoutReduxReducer(state, action);
+
+    expect(zoomFactor).toBeCloseTo(110, 10);
+    expect(offset).toEqual([0, 0]);
+    expect(repaintMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('Zoom out action zooms out', () => {
+    const state = buildMalcolmState();
+
+    const action = layoutActions.zoomInDirection('out');
+    LayoutReduxReducer(state, action);
+
+    expect(zoomFactor).toBeCloseTo(90, 10);
+    expect(offset).toEqual([0, 0]);
+    expect(repaintMock).toHaveBeenCalledTimes(1);
   });
 });

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import PaletteIcon from '@material-ui/icons/Palette';
+import ZoomIn from '@material-ui/icons/ZoomIn';
+import ZoomOut from '@material-ui/icons/ZoomOut';
+import ZoomToFit from '@material-ui/icons/ZoomOutMap';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,6 +27,7 @@ import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
 import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import layoutActions from '../malcolm/actions/layout.action';
 
 const styles = theme => {
   const gridLineColor = fade(
@@ -176,6 +180,50 @@ const findAttributeComponent = props => {
             >
               Auto layout
             </Button>
+          </div>
+          <div
+            className={props.classes.autoLayoutButton}
+            style={{
+              left: props.openParent ? 360 + 29 : 29,
+              top: 12,
+              display: 'flex',
+            }}
+          >
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() => props.zoomInDirection('in')}
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomIn style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() => props.zoomInDirection('out')}
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomOut style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() =>
+                  props.zoomToFit(props.openParent, props.openChild)
+                }
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomToFit style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
           </div>
         </div>
       );
@@ -365,6 +413,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(navigationActions.navigateToPalette());
   },
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
+  zoomToFit: (openParent, openChild) =>
+    dispatch(layoutActions.zoomToFit(openParent, openChild)),
+  zoomInDirection: direction =>
+    dispatch(layoutActions.zoomInDirection(direction)),
 });
 
 findAttributeComponent.propTypes = {
@@ -385,6 +437,8 @@ findAttributeComponent.propTypes = {
     plainBackground: PropTypes.string,
   }).isRequired,
   openPalette: PropTypes.func.isRequired,
+  zoomToFit: PropTypes.func.isRequired,
+  zoomInDirection: PropTypes.func.isRequired,
 };
 
 MiddlePanelContainer.propTypes = {

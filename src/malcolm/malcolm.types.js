@@ -34,3 +34,4 @@ export const MalcolmRunAutoLayoutType = 'malcolm:runautolayout';
 export const MalcolmSimpleLocalState = 'malcolm:simplelocalstate';
 export const MalcolmIncrementMessageCount = 'malcolm:incrementcounter';
 export const MalcolmClearError = 'malcolm:clearerror';
+export const MalcolmZoom = 'malcolm:zoomlayout';
