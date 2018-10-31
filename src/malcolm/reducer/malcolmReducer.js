@@ -96,11 +96,11 @@ function setFlag(state, path, flagType, flagState) {
         ...attributeCopy.calculated.alarms,
         dirty: flagState ? AlarmStates.DIRTY : null,
       };
-    } else if (flagType === 'pending' && flagState === true) {
+    } else if (flagType === 'pending') {
       if (path[path.length - 1] === 'label') {
         // only a PUT on the label attribute actually affects whether
         // the layout should show the loading screen in blocks
-        attributeCopy.calculated.loading = true;
+        attributeCopy.calculated.loading = flagState;
         recalculateLayout = true;
       }
     }

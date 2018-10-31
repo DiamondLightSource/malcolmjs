@@ -140,12 +140,12 @@ export function updateBlock(state, payload) {
     );
 
     if (
-      mainAttribute &&
-      ((mainAttribute.meta &&
-        mainAttribute.meta.tags.some(t => t === 'widget:flowgraph')) ||
-        mainAttribute.label !== payload.label)
+      (mainAttribute &&
+        (mainAttribute.meta &&
+          mainAttribute.meta.tags.some(t => t === 'widget:flowgraph'))) ||
+      state.layout.blocks.map(block => block.mri).includes(blockName)
     ) {
-      layout = layoutReducer.processLayout(state);
+      layout = layoutReducer.processLayout({ ...state, blocks });
     }
   }
 

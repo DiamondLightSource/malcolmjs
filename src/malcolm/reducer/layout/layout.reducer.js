@@ -78,6 +78,12 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       matchingBlock.loading ||
       (matchingBlock.attributes &&
         matchingBlock.attributes.some(a => a.calculated.loading));
+    if (updatedBlock.loading) {
+      console.log('!!!!!!!!!11 I am loading');
+      console.log(updatedBlock.mri);
+      console.log(matchingBlock.loading);
+      console.log(matchingBlock.attributes.find(a => a.calculated.loading));
+    }
 
     return updatedBlock;
   }

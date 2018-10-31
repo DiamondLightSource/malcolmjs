@@ -9,7 +9,7 @@ function sendMalcolmMessage(worker, payload) {
   worker.postMessage(msg);
 }
 
-function subscriptionActive(path, messagesInFlight) {
+export function subscriptionActive(path, messagesInFlight) {
   return Object.keys(messagesInFlight).some(
     m =>
       messagesInFlight[m].typeid === 'malcolm:core/Subscribe:1.0' &&
