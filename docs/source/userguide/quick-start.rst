@@ -1,3 +1,5 @@
+.. _quick_start_guide_:
+
 Quick Start
 =============
 
@@ -29,16 +31,16 @@ This quick start walkthrough aims to show you how a simple workflow might be car
    .. figure:: screenshots/layout-button.png
       :align: center
 
-      Click on the ``View`` button in the layout attribute to see the layout in the middle panel
+      Click on the ``Edit`` button in the layout attribute to see the layout in the middle panel
 
-#. Click on the ``View`` button to load the block layout for the PANDA.
+#. Click on the ``Edit`` button to load the block layout for the PANDA.
 
    .. figure:: screenshots/PANDA-layout.png
       :align: center
 
       The layout for the PANDA block
 
-#. You can then drag blocks around to update the layout, be aware that it may take a short amount of time for the position to update on the server which is what the loading spinner is indicating in the top left of the layout panel.
+#. You can then drag blocks around to update the layout, be aware that it may take a short amount of time for the position to update on the server.  This is indicated by the spinner icon.
 
    .. figure:: screenshots/PANDA-layout-spread-out.png
       :align: center

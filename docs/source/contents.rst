@@ -2,15 +2,20 @@ Contents
 ========
 
 .. toctree::
-    :caption: Introduction
+    :caption: Overview
 
-    Introduction <index>
+    index
 
 .. toctree::
     :caption: User Guide
     
-    userguide/intro
+    userguide/getting_started
     userguide/quick-start
+    userguide/user_interface_overview
+    userguide/working_with_a_design
+    userguide/monitoring_attribute_values
+    userguide/understanding_attribute_state
+    userguide/glossary
 
 .. toctree::
     :caption: System Maintenance Guide 
