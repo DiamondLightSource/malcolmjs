@@ -16,10 +16,10 @@ exports[`archiveTable renders correctly 1`] = `
   <div
     style={
       Object {
-        "height": "100%",
+        "height": "calc(100% - 12px)",
         "overflowX": "auto",
         "overflowY": "hidden",
-        "width": "100%",
+        "paddingBottom": "12px",
       }
     }
   >
