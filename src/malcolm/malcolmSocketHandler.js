@@ -1,6 +1,7 @@
 import {
   BlockMetaHandler,
   RootBlockHandler,
+  rootBlockSubPath,
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
@@ -21,13 +22,14 @@ const isAttributeDelta = msg =>
 const handleMessages = (messages, dispatch, getState) => {
   const attributeDeltas = messages.filter(msg => isAttributeDelta(msg));
   const otherMessages = messages.filter(msg => !isAttributeDelta(msg));
+  const { messagesInFlight } = getState().malcolm;
   otherMessages.forEach(message => {
     const { data, originalRequest } = message;
     switch (data.typeid) {
       case 'malcolm:core/Update:1.0': {
         if (
           JSON.stringify(originalRequest.path) ===
-          JSON.stringify(['.', 'blocks', 'value'])
+          JSON.stringify(rootBlockSubPath)
         ) {
           RootBlockHandler(originalRequest, data.value, dispatch, getState());
         }
@@ -38,7 +40,7 @@ const handleMessages = (messages, dispatch, getState) => {
         const object = message.attributeDelta;
         const typeid = object.typeid ? object.typeid : '';
         if (typeid === 'malcolm:core/BlockMeta:1.0') {
-          BlockMetaHandler(originalRequest, object, dispatch);
+          BlockMetaHandler(originalRequest, object, dispatch, messagesInFlight);
         } else if (typeid.slice(0, 8) === 'epics:nt') {
           // multiple attribute updates are now handled separately.
         } else if (typeid === 'malcolm:core/Method:1.0') {
@@ -61,7 +63,14 @@ const handleMessages = (messages, dispatch, getState) => {
       }
       case 'malcolm:core/Return:1.0': {
         if (data.value && data.value.typeid === 'malcolm:core/BlockMeta:1.0') {
-          BlockMetaHandler(originalRequest, data.value, dispatch, false, true);
+          BlockMetaHandler(
+            originalRequest,
+            data.value,
+            dispatch,
+            messagesInFlight,
+            false,
+            true
+          );
         } else if (data.value && data.value.typeid.slice(0, 8) === 'epics:nt') {
           AttributeHandler.processAttribute(originalRequest, data.value);
         }

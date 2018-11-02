@@ -24,6 +24,7 @@ import {
   malcolmArchivePost,
   malcolmFlagMethodInput,
 } from './actions/method.actions';
+import { rootBlockSubPath } from './malcolmHandlers/blockMetaHandler';
 
 export const malcolmSubscribeAction = (path, delta = true) => ({
   type: MalcolmSend,
@@ -141,7 +142,7 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
 
   const state = getState();
   state.malcolm.messagesInFlight = {};
-  dispatch(malcolmSubscribeAction(['.', 'blocks', 'value'], false));
+  dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
   Object.values(state.malcolm.blocks)
     .filter(block => block.name !== '.blocks')
     .forEach(block => {
