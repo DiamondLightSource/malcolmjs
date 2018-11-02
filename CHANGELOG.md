@@ -1,4 +1,13 @@
 # Changelog
+## 1.5.0 (1/11/2018)
+Features: 
+- Added zoom buttons to the layout
+- Added move row buttons to table info pane
+- Updated automated screenshots for docs
+Fixes:
+- Block label updates now applied properly to block on layout upon receipt
+- Table vertical scroll bar no longer causes horizontal scrollbar to appear/unnecessary padding on right of table
+
 ##1.4.0 (25/10/2018)
 Features:
 - Method input behaviour improved: non-required params only initialised and sent when user enters a value and required params are intialised to their default. 
