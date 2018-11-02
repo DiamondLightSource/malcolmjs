@@ -6,6 +6,8 @@ import {
 } from '../malcolmActionCreators';
 import { subscriptionActive } from '../middleware/malcolmReduxMiddleware';
 
+export const rootBlockSubPath = ['.', 'blocks', 'value'];
+
 export const BlockMetaHandler = (
   request,
   changes,

@@ -1,6 +1,7 @@
 import {
   BlockMetaHandler,
   RootBlockHandler,
+  rootBlockSubPath,
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
@@ -28,7 +29,7 @@ const handleMessages = (messages, dispatch, getState) => {
       case 'malcolm:core/Update:1.0': {
         if (
           JSON.stringify(originalRequest.path) ===
-          JSON.stringify(['.', 'blocks', 'value'])
+          JSON.stringify(rootBlockSubPath)
         ) {
           RootBlockHandler(originalRequest, data.value, dispatch, getState());
         }
