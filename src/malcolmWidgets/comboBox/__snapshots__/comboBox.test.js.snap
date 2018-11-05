@@ -1,0 +1,148 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WidgetComboBox renders correctly 1`] = `
+<FormControl
+  className="WidgetComboBox-formControl-2"
+  classes={
+    Object {
+      "fullWidth": "MuiFormControl-fullWidth-7",
+      "marginDense": "MuiFormControl-marginDense-6",
+      "marginNormal": "MuiFormControl-marginNormal-5",
+      "root": "MuiFormControl-root-4",
+    }
+  }
+  component="div"
+  disabled={false}
+  error={false}
+  fullWidth={true}
+  margin="none"
+  required={false}
+  variant="standard"
+>
+  <WithStyles(Select)
+    className="WidgetComboBox-select-3"
+    native={true}
+    onChange={[Function]}
+    value="2"
+  >
+    <option
+      key="0"
+      value="1"
+    >
+      1
+    </option>
+    <option
+      key="1"
+      value="2"
+    >
+      2
+    </option>
+    <option
+      key="2"
+      value="3"
+    >
+      3
+    </option>
+  </WithStyles(Select)>
+</FormControl>
+`;
+
+exports[`WidgetComboBox renders correctly with invalid value 1`] = `
+<FormControl
+  className="WidgetComboBox-formControl-2"
+  classes={
+    Object {
+      "fullWidth": "MuiFormControl-fullWidth-7",
+      "marginDense": "MuiFormControl-marginDense-6",
+      "marginNormal": "MuiFormControl-marginNormal-5",
+      "root": "MuiFormControl-root-4",
+    }
+  }
+  component="div"
+  disabled={false}
+  error={false}
+  fullWidth={true}
+  margin="none"
+  required={false}
+  variant="standard"
+>
+  <WithStyles(Select)
+    className="WidgetComboBox-select-3"
+    native={true}
+    onChange={[Function]}
+    value="4"
+  >
+    <option
+      key="0"
+      value="1"
+    >
+      1
+    </option>
+    <option
+      key="1"
+      value="2"
+    >
+      2
+    </option>
+    <option
+      key="2"
+      value="3"
+    >
+      3
+    </option>
+    <option
+      disabled={true}
+      value="4"
+    >
+      4
+    </option>
+  </WithStyles(Select)>
+</FormControl>
+`;
+
+exports[`WidgetComboBox renders correctly with null initial value 1`] = `
+<FormControl
+  className="WidgetComboBox-formControl-2"
+  classes={
+    Object {
+      "fullWidth": "MuiFormControl-fullWidth-7",
+      "marginDense": "MuiFormControl-marginDense-6",
+      "marginNormal": "MuiFormControl-marginNormal-5",
+      "root": "MuiFormControl-root-4",
+    }
+  }
+  component="div"
+  disabled={false}
+  error={false}
+  fullWidth={true}
+  margin="none"
+  required={false}
+  variant="standard"
+>
+  <WithStyles(Select)
+    className="WidgetComboBox-select-3"
+    native={true}
+    onChange={[Function]}
+    value="1"
+  >
+    <option
+      key="0"
+      value="1"
+    >
+      1
+    </option>
+    <option
+      key="1"
+      value="2"
+    >
+      2
+    </option>
+    <option
+      key="2"
+      value="3"
+    >
+      3
+    </option>
+  </WithStyles(Select)>
+</FormControl>
+`;

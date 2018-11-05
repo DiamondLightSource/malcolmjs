@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MethodArchive renders 2nd tab correctly 1`] = `
+<Connect(WithTheme(TabbedPanel))
+  alwaysUpdate={true}
+  defaultTab={1}
+  openPanels={Object {}}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
+  }
+>
+  <WithStyles(WidgetTable)
+    addRow={[Function]}
+    attribute={
+      Object {
+        "calculated": Object {},
+        "raw": Object {
+          "meta": Object {
+            "elements": Object {
+              "alarm": Object {
+                "label": "Method Alarm state",
+                "tags": Array [
+                  "info:alarm",
+                ],
+              },
+              "timeStamp": Object {
+                "label": "Time sent",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+              "value": Object {
+                "label": "Parameter value",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+            },
+          },
+          "value": Object {
+            "alarm": Array [
+              0,
+            ],
+            "timeStamp": Array [
+              "1970-01-01T00:00:00.000Z",
+            ],
+            "value": Array [
+              0,
+            ],
+          },
+        },
+      }
+    }
+    closePanelHandler={[Function]}
+    eventHandler={[Function]}
+    hideInfo={true}
+    infoClickHandler={[Function]}
+    rowClickHandler={[Function]}
+    setFlag={[Function]}
+  />
+  <LoadableComponent
+    attribute={
+      Object {
+        "alarmState": Array [
+          0,
+        ],
+        "name": undefined,
+        "parent": undefined,
+        "timeStamp": Array [
+          1970-01-01T00:00:00.000Z,
+        ],
+        "value": Array [
+          0,
+        ],
+      }
+    }
+    deriveState={[Function]}
+    openPanels={Object {}}
+  />
+</Connect(WithTheme(TabbedPanel))>
+`;
+
+exports[`MethodArchive renders table correctly for input param 1`] = `
+<Connect(WithTheme(TabbedPanel))
+  alwaysUpdate={true}
+  defaultTab={1}
+  openPanels={Object {}}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
+  }
+>
+  <WithStyles(WidgetTable)
+    addRow={[Function]}
+    attribute={
+      Object {
+        "calculated": Object {},
+        "raw": Object {
+          "meta": Object {
+            "elements": Object {
+              "alarm": Object {
+                "label": "Method Alarm state",
+                "tags": Array [
+                  "info:alarm",
+                ],
+              },
+              "timeStamp": Object {
+                "label": "Time sent",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+              "value": Object {
+                "label": "Parameter value",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+            },
+          },
+          "value": Object {
+            "alarm": Array [
+              0,
+            ],
+            "timeStamp": Array [
+              "1970-01-01T00:00:00.000Z",
+            ],
+            "value": Array [
+              0,
+            ],
+          },
+        },
+      }
+    }
+    closePanelHandler={[Function]}
+    eventHandler={[Function]}
+    hideInfo={true}
+    infoClickHandler={[Function]}
+    rowClickHandler={[Function]}
+    setFlag={[Function]}
+  />
+  <LoadableComponent
+    attribute={
+      Object {
+        "alarmState": Array [
+          0,
+        ],
+        "name": undefined,
+        "parent": undefined,
+        "timeStamp": Array [
+          1970-01-01T00:00:00.000Z,
+        ],
+        "value": Array [
+          0,
+        ],
+      }
+    }
+    deriveState={[Function]}
+    openPanels={Object {}}
+  />
+</Connect(WithTheme(TabbedPanel))>
+`;
+
+exports[`MethodArchive renders table correctly for return param 1`] = `
+<Connect(WithTheme(TabbedPanel))
+  alwaysUpdate={true}
+  defaultTab={1}
+  openPanels={Object {}}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
+  }
+>
+  <WithStyles(WidgetTable)
+    addRow={[Function]}
+    attribute={
+      Object {
+        "calculated": Object {},
+        "raw": Object {
+          "meta": Object {
+            "elements": Object {
+              "alarm": Object {
+                "label": "Method Alarm state",
+                "tags": Array [
+                  "info:alarm",
+                ],
+              },
+              "timeStamp": Object {
+                "label": "Time received",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+              "value": Object {
+                "label": "Parameter value",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+            },
+          },
+          "value": Object {
+            "alarm": Array [
+              0,
+            ],
+            "timeStamp": Array [
+              "1970-01-01T00:00:00.000Z",
+            ],
+            "value": Array [
+              undefined,
+            ],
+          },
+        },
+      }
+    }
+    closePanelHandler={[Function]}
+    eventHandler={[Function]}
+    hideInfo={true}
+    infoClickHandler={[Function]}
+    rowClickHandler={[Function]}
+    setFlag={[Function]}
+  />
+  <LoadableComponent
+    attribute={
+      Object {
+        "alarmState": Array [
+          0,
+        ],
+        "name": undefined,
+        "parent": undefined,
+        "timeStamp": Array [
+          1970-01-01T00:00:01.000Z,
+        ],
+        "value": Array [
+          undefined,
+        ],
+      }
+    }
+    deriveState={[Function]}
+    openPanels={Object {}}
+  />
+</Connect(WithTheme(TabbedPanel))>
+`;

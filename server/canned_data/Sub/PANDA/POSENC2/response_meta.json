@@ -1,0 +1,36 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "Quadrature and step/direction encoder 2", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "inputs", 
+          "inp", 
+          "inpCurrent", 
+          "parameters", 
+          "qperiod", 
+          "qperiodUnits", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "protocol", 
+          "outputs", 
+          "a", 
+          "b", 
+          "readbacks", 
+          "qstate"
+        ]
+      }
+    ]
+  ]
+}

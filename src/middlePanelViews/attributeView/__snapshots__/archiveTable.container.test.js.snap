@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`archiveTable renders correctly 1`] = `
+<div
+  data-cy="table"
+  onClick={[Function]}
+  role="presentation"
+  style={
+    Object {
+      "height": "100%",
+      "position": "relative",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "calc(100% - 12px)",
+        "overflowX": "auto",
+        "overflowY": "hidden",
+        "paddingBottom": "12px",
+      }
+    }
+  >
+    <AutoSizer
+      disableHeight={false}
+      disableWidth={false}
+      onResize={[Function]}
+      style={Object {}}
+    />
+  </div>
+</div>
+`;

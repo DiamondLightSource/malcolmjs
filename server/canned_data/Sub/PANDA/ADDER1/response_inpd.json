@@ -1,0 +1,61 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "ZERO", 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "Position input D", 
+          "choices": [
+            "ZERO", 
+            "ADDER1.OUT", 
+            "ADDER2.OUT", 
+            "COUNTER1.OUT", 
+            "COUNTER2.OUT", 
+            "COUNTER3.OUT", 
+            "COUNTER4.OUT", 
+            "COUNTER5.OUT", 
+            "COUNTER6.OUT", 
+            "COUNTER7.OUT", 
+            "COUNTER8.OUT", 
+            "FILTER.OUT", 
+            "INENC1.VAL", 
+            "INENC2.VAL", 
+            "INENC3.VAL", 
+            "INENC4.VAL", 
+            "PGEN1.OUT", 
+            "PGEN2.OUT", 
+            "QDEC1.OUT", 
+            "QDEC2.OUT", 
+            "QDEC3.OUT", 
+            "QDEC4.OUT"
+          ], 
+          "tags": [
+            "group:inputs", 
+            "sinkPort:int32:ZERO", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "Inpd"
+        }
+      }
+    ]
+  ]
+}

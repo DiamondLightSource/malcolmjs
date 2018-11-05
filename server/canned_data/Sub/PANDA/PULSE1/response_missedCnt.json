@@ -1,0 +1,36 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "value": 0, 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/NumberMeta:1.0", 
+          "dtype": "uint32", 
+          "description": "Number of pulses not produced because of an ERR condition", 
+          "tags": [
+            "group:readbacks", 
+            "widget:textupdate"
+          ], 
+          "writeable": false, 
+          "label": "Missed Cnt"
+        }
+      }
+    ]
+  ]
+}

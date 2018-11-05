@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BlockPortWidget input port renders correctly 1`] = `
+<div
+  className="BlockPortWidget-container-1"
+>
+  <div
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
+    data-name="val1"
+    data-nodeid="node1"
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={
+      Object {
+        "borderColor": "rgba(0,0,0,0)",
+        "marginRight": 0,
+      }
+    }
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
+  <WithStyles(Typography)
+    className="BlockPortWidget-portLabel-6"
+  >
+    val 1
+  </WithStyles(Typography)>
+</div>
+`;
+
+exports[`BlockPortWidget output port renders correctly 1`] = `
+<div
+  className="BlockPortWidget-container-1"
+>
+  <WithStyles(Typography)
+    className="BlockPortWidget-portLabel-6"
+  >
+    val 1
+  </WithStyles(Typography)>
+  <div
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
+    data-name="val1"
+    data-nodeid="node1"
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={
+      Object {
+        "borderColor": "rgba(0,0,0,0)",
+        "marginLeft": 0,
+      }
+    }
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
+</div>
+`;

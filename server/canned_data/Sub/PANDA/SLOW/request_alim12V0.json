@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": "CANNED", 
+  "path": [
+    "PANDA:SLOW", 
+    "alim12V0"
+  ], 
+  "delta": true
+}

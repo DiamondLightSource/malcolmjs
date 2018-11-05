@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Palette renders correctly 1`] = `
+<div
+  className="Palette-container-1"
+>
+  <WithStyles(PaletteItem)
+    clickHandler={[Function]}
+    key="panda:block2"
+    mri="panda:block2"
+    name="block 2"
+  />
+</div>
+`;

@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": "CANNED", 
+  "path": [
+    "PANDA:TTLOUT6", 
+    "inputs"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainMalcolmView renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
+  <Connect(WithStyles(DrawerContainer))
+    childMRI=""
+    childTitle=""
+    parentMRI="test1"
+    parentTitle="Test main view"
+    popOutAction={[Function]}
+  >
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
+    />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(WithStyles(BlockDetails)) />
+    </div>
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;
+
+exports[`MainMalcolmView renders info if child block is .info 1`] = `
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
+  <Connect(WithStyles(DrawerContainer))
+    childMRI=".info"
+    childTitle="Info"
+    parentMRI="test1"
+    parentTitle="Test main view"
+    popOutAction={[Function]}
+  >
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
+    />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(InfoDetails) />
+    </div>
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;
+
+exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
+  <Connect(WithStyles(DrawerContainer))
+    childMRI=".palette"
+    childTitle="Palette"
+    parentMRI="test1"
+    parentTitle="Test main view"
+    popOutAction={[Function]}
+  >
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
+    />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(WithStyles(Palette)) />
+    </div>
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;

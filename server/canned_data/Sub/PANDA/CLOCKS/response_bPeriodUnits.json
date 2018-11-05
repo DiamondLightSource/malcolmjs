@@ -1,0 +1,41 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "ms", 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "Period of clock B output time units", 
+          "choices": [
+            "s", 
+            "ms", 
+            "us"
+          ], 
+          "tags": [
+            "group:parameters", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "B Period Units"
+        }
+      }
+    ]
+  ]
+}

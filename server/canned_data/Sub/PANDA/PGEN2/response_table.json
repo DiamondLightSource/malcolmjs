@@ -1,0 +1,54 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTTable:1.0", 
+        "labels": [
+          "Value"
+        ], 
+        "value": {
+          "typeid": "malcolm:core/Table:1.0", 
+          "value": []
+        }, 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/TableMeta:1.0", 
+          "description": "Table of positions to be output", 
+          "tags": [
+            "widget:table", 
+            "group:parameters", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "Table", 
+          "elements": {
+            "value": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint32", 
+              "description": "The Value", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Value"
+            }
+          }
+        }
+      }
+    ]
+  ]
+}

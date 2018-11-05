@@ -1,0 +1,34 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "<svg version=\"1.1\" viewBox=\"0 0 120 40\" xmlns=\"http://www.w3.org/2000/svg\">\n <path d=\"m80 5c-15 0-26.686-4e-6 -30-2e-6 -3.3137 0-6 6.7157-6 15s2.6863 15 6 15c3.3137 2e-6 20-2e-6 30-2e-6\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\"/>\n <ellipse transform=\"matrix(4,0,0,5.4545,-226,-170.91)\" cx=\"76.5\" cy=\"35\" rx=\"1.5\" ry=\"2.75\" d=\"m 78,35 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\" fill=\"#e6e6e6\" stroke=\"#000\" stroke-width=\".21409\"/>\n <path d=\"m44 20h-14\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <ellipse transform=\"translate(0 -20)\" cx=\"76.5\" cy=\"35\" rx=\"1.5\" ry=\"2.75\" d=\"m 78,35 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"translate(0 -20)\" cx=\"76.5\" cy=\"45\" rx=\"1.5\" ry=\"2.75\" d=\"m 78,45 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n</svg>\n", 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/StringMeta:1.0", 
+          "description": "SVG icon for the Block", 
+          "tags": [
+            "widget:icon"
+          ], 
+          "writeable": false, 
+          "label": "Icon"
+        }
+      }
+    ]
+  ]
+}

@@ -1,0 +1,247 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrawerContainer renders correctly 1`] = `
+<div>
+  <div>
+    <WithStyles(Connect(NavBar)) />
+    <div>
+      Middle
+    </div>
+  </div>
+  <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
+    anchor="left"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
+    }
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        popOutAction={[Function]}
+        title="Parent"
+      />
+      <div>
+        Left
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+  <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
+    anchor="right"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
+    }
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        popOutAction={[Function]}
+        title="Child"
+      />
+      <div>
+        Right
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+  <div>
+    <WithStyles(Drawer)
+      PaperProps={
+        Object {
+          "style": Object {
+            "height": "calc(100vh - 10px)",
+          },
+        }
+      }
+      SlideProps={
+        Object {
+          "direction": "left",
+        }
+      }
+      anchor="left"
+      classes={
+        Object {
+          "paper": "DrawerContainer-drawer-1",
+        }
+      }
+      open={false}
+      transitionDuration={0}
+      variant="persistent"
+    >
+      <div
+        className="DrawerContainer-drawerContents-2"
+      >
+        <DrawerHeader
+          closeAction={[Function]}
+          popOutAction={[Function]}
+          title="Child"
+        />
+        <div>
+          Right
+        </div>
+      </div>
+    </WithStyles(Drawer)>
+    <div
+      style={
+        Object {
+          "backgroundColor": "#fafafa",
+          "minHeight": "100vh",
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "transition": "width 150ms",
+          "width": 0,
+          "zIndex": 9999,
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`DrawerContainer renders correctly with panel transition 1`] = `
+<div>
+  <div>
+    <WithStyles(Connect(NavBar)) />
+    <div>
+      Middle
+    </div>
+  </div>
+  <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
+    anchor="left"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
+    }
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        popOutAction={[Function]}
+        title="Parent"
+      />
+      <div>
+        Left
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+  <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
+    anchor="right"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
+    }
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        popOutAction={[Function]}
+        title="Child"
+      />
+      <div>
+        Right
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+  <div>
+    <WithStyles(Drawer)
+      PaperProps={
+        Object {
+          "style": Object {
+            "height": "calc(100vh - 10px)",
+          },
+        }
+      }
+      SlideProps={
+        Object {
+          "direction": "left",
+        }
+      }
+      anchor="left"
+      classes={
+        Object {
+          "paper": "DrawerContainer-drawer-1",
+        }
+      }
+      open={true}
+      transitionDuration={500}
+      variant="persistent"
+    >
+      <div
+        className="DrawerContainer-drawerContents-2"
+      >
+        <DrawerHeader
+          closeAction={[Function]}
+          popOutAction={[Function]}
+          title="Child"
+        />
+        <div>
+          Right
+        </div>
+      </div>
+    </WithStyles(Drawer)>
+    <div
+      style={
+        Object {
+          "backgroundColor": "#fafafa",
+          "minHeight": "100vh",
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+          "transition": "width 500ms",
+          "width": "calc(100vw - 360px)",
+          "zIndex": 9999,
+        }
+      }
+    />
+  </div>
+</div>
+`;

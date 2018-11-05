@@ -1,0 +1,34 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "FMC Loopback Module ", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "readbacks", 
+          "fmcPrsnt", 
+          "linkUp", 
+          "errorCount", 
+          "laPError", 
+          "laNError", 
+          "gtrefclk", 
+          "fmcClk0", 
+          "fmcClk1", 
+          "parameters", 
+          "softReset", 
+          "extClk", 
+          "loopPeriod"
+        ]
+      }
+    ]
+  ]
+}

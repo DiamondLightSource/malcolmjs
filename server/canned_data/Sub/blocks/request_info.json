@@ -1,0 +1,10 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": "CANNED", 
+  "path": [
+    ".", 
+    "blocks",
+    "value"
+  ], 
+  "delta": false
+}

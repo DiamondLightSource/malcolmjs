@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttributeDetails renders correctly 1`] = `
+<div
+  className="AttributeDetails-div-1"
+  style={Object {}}
+>
+  <WithStyles(Tooltip)
+    id="1"
+    placement="bottom"
+    title=""
+  >
+    <WithStyles(IconButton)
+      className="AttributeDetails-button-4"
+      disableRipple={true}
+      onClick={[Function]}
+      tabIndex="-1"
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={0}
+      />
+    </WithStyles(IconButton)>
+  </WithStyles(Tooltip)>
+  <WithStyles(Typography)
+    className="AttributeDetails-textName-2"
+    onMouseDown={[Function]}
+  >
+    Attribute 1
+     
+  </WithStyles(Typography)>
+  <div
+    className="AttributeDetails-controlContainer-3"
+  >
+    <Connect(WithTheme(AttributeSelector))
+      attributeName="Attribute1"
+      blockName="block1"
+    />
+  </div>
+</div>
+`;
+
+exports[`AttributeDetails shows that it is unable to render unprocessed attributes 1`] = `""`;

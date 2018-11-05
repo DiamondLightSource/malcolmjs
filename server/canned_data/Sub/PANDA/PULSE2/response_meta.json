@@ -1,0 +1,41 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "One-shot pulse delay and stretch 2", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "delay", 
+          "delayUnits", 
+          "width", 
+          "widthUnits", 
+          "inputs", 
+          "inp", 
+          "inpCurrent", 
+          "inpDelay", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "outputs", 
+          "out", 
+          "readbacks", 
+          "errOverflow", 
+          "errPeriod", 
+          "queue", 
+          "missedCnt", 
+          "trigEdge"
+        ]
+      }
+    ]
+  ]
+}

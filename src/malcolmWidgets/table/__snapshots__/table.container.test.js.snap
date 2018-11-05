@@ -1,0 +1,2143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table container renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <WithStyles(WidgetTable)
+    addRow={[Function]}
+    attribute={
+      Object {
+        "calculated": Object {
+          "alarms": Object {},
+          "dirty": false,
+          "name": "layout",
+          "path": Array [
+            "test1",
+            "layout",
+          ],
+        },
+        "localState": Object {
+          "flags": Object {
+            "rows": Array [
+              Object {},
+              Object {},
+              Object {},
+              Object {},
+              Object {},
+            ],
+            "table": Object {
+              "dirty": false,
+              "fresh": true,
+              "timeStamp": Object {
+                "nanoseconds": 0,
+                "secondsPastEpoch": 0,
+                "typeid": "time_t",
+                "userTag": 0,
+              },
+            },
+          },
+          "labels": Array [
+            "repeats",
+            "trigger",
+            "position",
+            "time1",
+            "outa1",
+            "outb1",
+            "outc1",
+            "outd1",
+            "oute1",
+            "outf1",
+            "time2",
+            "outa2",
+            "outb2",
+            "outc2",
+            "outd2",
+            "oute2",
+            "outf2",
+          ],
+          "meta": Object {
+            "description": "Sequencer table of lines",
+            "elements": Object {
+              "outa1": Object {
+                "description": "Output A value during phase 1",
+                "label": "Outa1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outa2": Object {
+                "description": "Output A value during phase 2",
+                "label": "Outa2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb1": Object {
+                "description": "Output B value during phase 1",
+                "label": "Outb1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb2": Object {
+                "description": "Output B value during phase 2",
+                "label": "Outb2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc1": Object {
+                "description": "Output C value during phase 1",
+                "label": "Outc1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc2": Object {
+                "description": "Output C value during phase 2",
+                "label": "Outc2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd1": Object {
+                "description": "Output D value during phase 1",
+                "label": "Outd1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd2": Object {
+                "description": "Output D value during phase 2",
+                "label": "Outd2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute1": Object {
+                "description": "Output E value during phase 1",
+                "label": "Oute1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute2": Object {
+                "description": "Output E value during phase 2",
+                "label": "Oute2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf1": Object {
+                "description": "Output F value during phase 1",
+                "label": "Outf1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf2": Object {
+                "description": "Output F value during phase 2",
+                "label": "Outf2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "position": Object {
+                "description": "The position that can be used in trigger condition",
+                "dtype": "uint32",
+                "label": "Position",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "repeats": Object {
+                "description": "Number of times the line will repeat",
+                "dtype": "uint16",
+                "label": "Repeats",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time1": Object {
+                "description": "The time the optional phase 1 should take",
+                "dtype": "uint32",
+                "label": "Time1",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time2": Object {
+                "description": "The time the mandatory phase 2 should take",
+                "dtype": "uint32",
+                "label": "Time2",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "trigger": Object {
+                "choices": Array [
+                  "Immediate",
+                  "BITA=0",
+                  "BITA=1",
+                  "BITB=0",
+                  "BITB=1",
+                  "BITC=0",
+                  "BITC=1",
+                  "POSA>=POSITION",
+                  "POSA<=POSITION",
+                  "POSB>=POSITION",
+                  "POSB<=POSITION",
+                  "POSC>=POSITION",
+                  "POSC<=POSITION",
+                ],
+                "description": "The trigger condition to start the phases",
+                "label": "Trigger",
+                "tags": Array [
+                  "widget:combo",
+                ],
+                "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+                "writeable": true,
+              },
+            },
+            "label": "Table",
+            "tags": Array [
+              "widget:table",
+              "group:parameters",
+              "config:1",
+            ],
+            "typeid": "malcolm:core/TableMeta:1.0",
+            "writeable": true,
+          },
+          "value": Array [
+            Object {
+              "outa1": true,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSC>=POSITION",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": true,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "BITB=1",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": true,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "Immediate",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": true,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSB<=POSITION",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": true,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSA<=POSITION",
+            },
+          ],
+        },
+        "raw": Object {
+          "alarm": Object {
+            "message": "",
+            "severity": 0,
+            "status": 0,
+            "typeid": "alarm_t",
+          },
+          "labels": Array [
+            "Repeats",
+            "Trigger",
+            "Position",
+            "Time1",
+            "Outa1",
+            "Outb1",
+            "Outc1",
+            "Outd1",
+            "Oute1",
+            "Outf1",
+            "Time2",
+            "Outa2",
+            "Outb2",
+            "Outc2",
+            "Outd2",
+            "Oute2",
+            "Outf2",
+          ],
+          "meta": Object {
+            "description": "Sequencer table of lines",
+            "elements": Object {
+              "outa1": Object {
+                "description": "Output A value during phase 1",
+                "label": "Outa1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outa2": Object {
+                "description": "Output A value during phase 2",
+                "label": "Outa2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb1": Object {
+                "description": "Output B value during phase 1",
+                "label": "Outb1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb2": Object {
+                "description": "Output B value during phase 2",
+                "label": "Outb2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc1": Object {
+                "description": "Output C value during phase 1",
+                "label": "Outc1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc2": Object {
+                "description": "Output C value during phase 2",
+                "label": "Outc2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd1": Object {
+                "description": "Output D value during phase 1",
+                "label": "Outd1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd2": Object {
+                "description": "Output D value during phase 2",
+                "label": "Outd2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute1": Object {
+                "description": "Output E value during phase 1",
+                "label": "Oute1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute2": Object {
+                "description": "Output E value during phase 2",
+                "label": "Oute2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf1": Object {
+                "description": "Output F value during phase 1",
+                "label": "Outf1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf2": Object {
+                "description": "Output F value during phase 2",
+                "label": "Outf2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "position": Object {
+                "description": "The position that can be used in trigger condition",
+                "dtype": "uint32",
+                "label": "Position",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "repeats": Object {
+                "description": "Number of times the line will repeat",
+                "dtype": "uint16",
+                "label": "Repeats",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time1": Object {
+                "description": "The time the optional phase 1 should take",
+                "dtype": "uint32",
+                "label": "Time1",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time2": Object {
+                "description": "The time the mandatory phase 2 should take",
+                "dtype": "uint32",
+                "label": "Time2",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "trigger": Object {
+                "choices": Array [
+                  "Immediate",
+                  "BITA=0",
+                  "BITA=1",
+                  "BITB=0",
+                  "BITB=1",
+                  "BITC=0",
+                  "BITC=1",
+                  "POSA>=POSITION",
+                  "POSA<=POSITION",
+                  "POSB>=POSITION",
+                  "POSB<=POSITION",
+                  "POSC>=POSITION",
+                  "POSC<=POSITION",
+                ],
+                "description": "The trigger condition to start the phases",
+                "label": "Trigger",
+                "tags": Array [
+                  "widget:combo",
+                ],
+                "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+                "writeable": true,
+              },
+            },
+            "label": "Table",
+            "tags": Array [
+              "widget:table",
+              "group:parameters",
+              "config:1",
+            ],
+            "typeid": "malcolm:core/TableMeta:1.0",
+            "writeable": true,
+          },
+          "timeStamp": Object {
+            "nanoseconds": 0,
+            "secondsPastEpoch": 0,
+            "typeid": "time_t",
+            "userTag": 0,
+          },
+          "typeid": "epics:nt/NTTable:1.0",
+          "value": Object {
+            "outa1": Array [
+              true,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outa2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outb1": Array [
+              false,
+              true,
+              false,
+              false,
+              false,
+            ],
+            "outb2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outc1": Array [
+              false,
+              false,
+              true,
+              false,
+              false,
+            ],
+            "outc2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outd1": Array [
+              false,
+              false,
+              false,
+              true,
+              false,
+            ],
+            "outd2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "oute1": Array [
+              false,
+              false,
+              false,
+              false,
+              true,
+            ],
+            "oute2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outf1": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outf2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "position": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "repeats": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "time1": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "time2": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "trigger": Array [
+              "POSC>=POSITION",
+              "BITB=1",
+              "Immediate",
+              "POSB<=POSITION",
+              "POSA<=POSITION",
+            ],
+            "typeid": "malcolm:core/Table:1.0",
+          },
+        },
+      }
+    }
+    closePanelHandler={[Function]}
+    eventHandler={[Function]}
+    infoClickHandler={[Function]}
+    localState={
+      Object {
+        "flags": Object {
+          "rows": Array [
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+          ],
+          "table": Object {
+            "dirty": false,
+            "fresh": true,
+            "timeStamp": Object {
+              "nanoseconds": 0,
+              "secondsPastEpoch": 0,
+              "typeid": "time_t",
+              "userTag": 0,
+            },
+          },
+        },
+        "labels": Array [
+          "repeats",
+          "trigger",
+          "position",
+          "time1",
+          "outa1",
+          "outb1",
+          "outc1",
+          "outd1",
+          "oute1",
+          "outf1",
+          "time2",
+          "outa2",
+          "outb2",
+          "outc2",
+          "outd2",
+          "oute2",
+          "outf2",
+        ],
+        "meta": Object {
+          "description": "Sequencer table of lines",
+          "elements": Object {
+            "outa1": Object {
+              "description": "Output A value during phase 1",
+              "label": "Outa1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outa2": Object {
+              "description": "Output A value during phase 2",
+              "label": "Outa2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outb1": Object {
+              "description": "Output B value during phase 1",
+              "label": "Outb1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outb2": Object {
+              "description": "Output B value during phase 2",
+              "label": "Outb2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outc1": Object {
+              "description": "Output C value during phase 1",
+              "label": "Outc1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outc2": Object {
+              "description": "Output C value during phase 2",
+              "label": "Outc2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outd1": Object {
+              "description": "Output D value during phase 1",
+              "label": "Outd1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outd2": Object {
+              "description": "Output D value during phase 2",
+              "label": "Outd2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "oute1": Object {
+              "description": "Output E value during phase 1",
+              "label": "Oute1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "oute2": Object {
+              "description": "Output E value during phase 2",
+              "label": "Oute2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outf1": Object {
+              "description": "Output F value during phase 1",
+              "label": "Outf1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outf2": Object {
+              "description": "Output F value during phase 2",
+              "label": "Outf2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "position": Object {
+              "description": "The position that can be used in trigger condition",
+              "dtype": "uint32",
+              "label": "Position",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "repeats": Object {
+              "description": "Number of times the line will repeat",
+              "dtype": "uint16",
+              "label": "Repeats",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "time1": Object {
+              "description": "The time the optional phase 1 should take",
+              "dtype": "uint32",
+              "label": "Time1",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "time2": Object {
+              "description": "The time the mandatory phase 2 should take",
+              "dtype": "uint32",
+              "label": "Time2",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "trigger": Object {
+              "choices": Array [
+                "Immediate",
+                "BITA=0",
+                "BITA=1",
+                "BITB=0",
+                "BITB=1",
+                "BITC=0",
+                "BITC=1",
+                "POSA>=POSITION",
+                "POSA<=POSITION",
+                "POSB>=POSITION",
+                "POSB<=POSITION",
+                "POSC>=POSITION",
+                "POSC<=POSITION",
+              ],
+              "description": "The trigger condition to start the phases",
+              "label": "Trigger",
+              "tags": Array [
+                "widget:combo",
+              ],
+              "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+          "label": "Table",
+          "tags": Array [
+            "widget:table",
+            "group:parameters",
+            "config:1",
+          ],
+          "typeid": "malcolm:core/TableMeta:1.0",
+          "writeable": true,
+        },
+        "value": Array [
+          Object {
+            "outa1": true,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSC>=POSITION",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": true,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "BITB=1",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": true,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "Immediate",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": true,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSB<=POSITION",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": true,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSA<=POSITION",
+          },
+        ],
+      }
+    }
+    rowClickHandler={[Function]}
+    setFlag={[Function]}
+    showFooter={true}
+  />
+  <div
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "padding": "4px",
+        "position": "bottom",
+      }
+    }
+  >
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(Typography)>
+        Up to date!
+      </WithStyles(Typography)>
+    </div>
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        method={true}
+        text="Discard changes"
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        method={true}
+        text="Submit"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Table container subelement in url selects row correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <WithStyles(WidgetTable)
+    addRow={[Function]}
+    attribute={
+      Object {
+        "calculated": Object {
+          "alarms": Object {},
+          "dirty": false,
+          "name": "layout",
+          "path": Array [
+            "test1",
+            "layout",
+          ],
+        },
+        "localState": Object {
+          "flags": Object {
+            "rows": Array [
+              Object {},
+              Object {},
+              Object {},
+              Object {},
+              Object {},
+            ],
+            "table": Object {
+              "dirty": false,
+              "fresh": true,
+              "timeStamp": Object {
+                "nanoseconds": 0,
+                "secondsPastEpoch": 0,
+                "typeid": "time_t",
+                "userTag": 0,
+              },
+            },
+          },
+          "labels": Array [
+            "repeats",
+            "trigger",
+            "position",
+            "time1",
+            "outa1",
+            "outb1",
+            "outc1",
+            "outd1",
+            "oute1",
+            "outf1",
+            "time2",
+            "outa2",
+            "outb2",
+            "outc2",
+            "outd2",
+            "oute2",
+            "outf2",
+          ],
+          "meta": Object {
+            "description": "Sequencer table of lines",
+            "elements": Object {
+              "outa1": Object {
+                "description": "Output A value during phase 1",
+                "label": "Outa1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outa2": Object {
+                "description": "Output A value during phase 2",
+                "label": "Outa2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb1": Object {
+                "description": "Output B value during phase 1",
+                "label": "Outb1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb2": Object {
+                "description": "Output B value during phase 2",
+                "label": "Outb2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc1": Object {
+                "description": "Output C value during phase 1",
+                "label": "Outc1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc2": Object {
+                "description": "Output C value during phase 2",
+                "label": "Outc2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd1": Object {
+                "description": "Output D value during phase 1",
+                "label": "Outd1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd2": Object {
+                "description": "Output D value during phase 2",
+                "label": "Outd2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute1": Object {
+                "description": "Output E value during phase 1",
+                "label": "Oute1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute2": Object {
+                "description": "Output E value during phase 2",
+                "label": "Oute2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf1": Object {
+                "description": "Output F value during phase 1",
+                "label": "Outf1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf2": Object {
+                "description": "Output F value during phase 2",
+                "label": "Outf2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "position": Object {
+                "description": "The position that can be used in trigger condition",
+                "dtype": "uint32",
+                "label": "Position",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "repeats": Object {
+                "description": "Number of times the line will repeat",
+                "dtype": "uint16",
+                "label": "Repeats",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time1": Object {
+                "description": "The time the optional phase 1 should take",
+                "dtype": "uint32",
+                "label": "Time1",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time2": Object {
+                "description": "The time the mandatory phase 2 should take",
+                "dtype": "uint32",
+                "label": "Time2",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "trigger": Object {
+                "choices": Array [
+                  "Immediate",
+                  "BITA=0",
+                  "BITA=1",
+                  "BITB=0",
+                  "BITB=1",
+                  "BITC=0",
+                  "BITC=1",
+                  "POSA>=POSITION",
+                  "POSA<=POSITION",
+                  "POSB>=POSITION",
+                  "POSB<=POSITION",
+                  "POSC>=POSITION",
+                  "POSC<=POSITION",
+                ],
+                "description": "The trigger condition to start the phases",
+                "label": "Trigger",
+                "tags": Array [
+                  "widget:combo",
+                ],
+                "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+                "writeable": true,
+              },
+            },
+            "label": "Table",
+            "tags": Array [
+              "widget:table",
+              "group:parameters",
+              "config:1",
+            ],
+            "typeid": "malcolm:core/TableMeta:1.0",
+            "writeable": true,
+          },
+          "value": Array [
+            Object {
+              "outa1": true,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSC>=POSITION",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": true,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "BITB=1",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": true,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "Immediate",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": true,
+              "outd2": false,
+              "oute1": false,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSB<=POSITION",
+            },
+            Object {
+              "outa1": false,
+              "outa2": false,
+              "outb1": false,
+              "outb2": false,
+              "outc1": false,
+              "outc2": false,
+              "outd1": false,
+              "outd2": false,
+              "oute1": true,
+              "oute2": false,
+              "outf1": false,
+              "outf2": false,
+              "position": 0,
+              "repeats": 0,
+              "time1": 0,
+              "time2": 0,
+              "trigger": "POSA<=POSITION",
+            },
+          ],
+        },
+        "raw": Object {
+          "alarm": Object {
+            "message": "",
+            "severity": 0,
+            "status": 0,
+            "typeid": "alarm_t",
+          },
+          "labels": Array [
+            "Repeats",
+            "Trigger",
+            "Position",
+            "Time1",
+            "Outa1",
+            "Outb1",
+            "Outc1",
+            "Outd1",
+            "Oute1",
+            "Outf1",
+            "Time2",
+            "Outa2",
+            "Outb2",
+            "Outc2",
+            "Outd2",
+            "Oute2",
+            "Outf2",
+          ],
+          "meta": Object {
+            "description": "Sequencer table of lines",
+            "elements": Object {
+              "outa1": Object {
+                "description": "Output A value during phase 1",
+                "label": "Outa1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outa2": Object {
+                "description": "Output A value during phase 2",
+                "label": "Outa2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb1": Object {
+                "description": "Output B value during phase 1",
+                "label": "Outb1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outb2": Object {
+                "description": "Output B value during phase 2",
+                "label": "Outb2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc1": Object {
+                "description": "Output C value during phase 1",
+                "label": "Outc1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outc2": Object {
+                "description": "Output C value during phase 2",
+                "label": "Outc2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd1": Object {
+                "description": "Output D value during phase 1",
+                "label": "Outd1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outd2": Object {
+                "description": "Output D value during phase 2",
+                "label": "Outd2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute1": Object {
+                "description": "Output E value during phase 1",
+                "label": "Oute1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "oute2": Object {
+                "description": "Output E value during phase 2",
+                "label": "Oute2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf1": Object {
+                "description": "Output F value during phase 1",
+                "label": "Outf1",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "outf2": Object {
+                "description": "Output F value during phase 2",
+                "label": "Outf2",
+                "tags": Array [
+                  "widget:checkbox",
+                ],
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                "writeable": true,
+              },
+              "position": Object {
+                "description": "The position that can be used in trigger condition",
+                "dtype": "uint32",
+                "label": "Position",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "repeats": Object {
+                "description": "Number of times the line will repeat",
+                "dtype": "uint16",
+                "label": "Repeats",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time1": Object {
+                "description": "The time the optional phase 1 should take",
+                "dtype": "uint32",
+                "label": "Time1",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "time2": Object {
+                "description": "The time the mandatory phase 2 should take",
+                "dtype": "uint32",
+                "label": "Time2",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                "writeable": true,
+              },
+              "trigger": Object {
+                "choices": Array [
+                  "Immediate",
+                  "BITA=0",
+                  "BITA=1",
+                  "BITB=0",
+                  "BITB=1",
+                  "BITC=0",
+                  "BITC=1",
+                  "POSA>=POSITION",
+                  "POSA<=POSITION",
+                  "POSB>=POSITION",
+                  "POSB<=POSITION",
+                  "POSC>=POSITION",
+                  "POSC<=POSITION",
+                ],
+                "description": "The trigger condition to start the phases",
+                "label": "Trigger",
+                "tags": Array [
+                  "widget:combo",
+                ],
+                "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+                "writeable": true,
+              },
+            },
+            "label": "Table",
+            "tags": Array [
+              "widget:table",
+            ],
+            "typeid": "malcolm:core/TableMeta:1.0",
+            "writeable": true,
+          },
+          "timeStamp": Object {
+            "nanoseconds": 0,
+            "secondsPastEpoch": 0,
+            "typeid": "time_t",
+            "userTag": 0,
+          },
+          "typeid": "epics:nt/NTTable:1.0",
+          "value": Object {
+            "outa1": Array [
+              true,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outa2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outb1": Array [
+              false,
+              true,
+              false,
+              false,
+              false,
+            ],
+            "outb2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outc1": Array [
+              false,
+              false,
+              true,
+              false,
+              false,
+            ],
+            "outc2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outd1": Array [
+              false,
+              false,
+              false,
+              true,
+              false,
+            ],
+            "outd2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "oute1": Array [
+              false,
+              false,
+              false,
+              false,
+              true,
+            ],
+            "oute2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outf1": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "outf2": Array [
+              false,
+              false,
+              false,
+              false,
+              false,
+            ],
+            "position": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "repeats": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "time1": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "time2": Array [
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+            "trigger": Array [
+              "POSC>=POSITION",
+              "BITB=1",
+              "Immediate",
+              "POSB<=POSITION",
+              "POSA<=POSITION",
+            ],
+          },
+        },
+      }
+    }
+    closePanelHandler={[Function]}
+    eventHandler={[Function]}
+    infoClickHandler={[Function]}
+    localState={
+      Object {
+        "flags": Object {
+          "rows": Array [
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+          ],
+          "table": Object {
+            "dirty": false,
+            "fresh": true,
+            "timeStamp": Object {
+              "nanoseconds": 0,
+              "secondsPastEpoch": 0,
+              "typeid": "time_t",
+              "userTag": 0,
+            },
+          },
+        },
+        "labels": Array [
+          "repeats",
+          "trigger",
+          "position",
+          "time1",
+          "outa1",
+          "outb1",
+          "outc1",
+          "outd1",
+          "oute1",
+          "outf1",
+          "time2",
+          "outa2",
+          "outb2",
+          "outc2",
+          "outd2",
+          "oute2",
+          "outf2",
+        ],
+        "meta": Object {
+          "description": "Sequencer table of lines",
+          "elements": Object {
+            "outa1": Object {
+              "description": "Output A value during phase 1",
+              "label": "Outa1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outa2": Object {
+              "description": "Output A value during phase 2",
+              "label": "Outa2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outb1": Object {
+              "description": "Output B value during phase 1",
+              "label": "Outb1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outb2": Object {
+              "description": "Output B value during phase 2",
+              "label": "Outb2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outc1": Object {
+              "description": "Output C value during phase 1",
+              "label": "Outc1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outc2": Object {
+              "description": "Output C value during phase 2",
+              "label": "Outc2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outd1": Object {
+              "description": "Output D value during phase 1",
+              "label": "Outd1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outd2": Object {
+              "description": "Output D value during phase 2",
+              "label": "Outd2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "oute1": Object {
+              "description": "Output E value during phase 1",
+              "label": "Oute1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "oute2": Object {
+              "description": "Output E value during phase 2",
+              "label": "Oute2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outf1": Object {
+              "description": "Output F value during phase 1",
+              "label": "Outf1",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "outf2": Object {
+              "description": "Output F value during phase 2",
+              "label": "Outf2",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "position": Object {
+              "description": "The position that can be used in trigger condition",
+              "dtype": "uint32",
+              "label": "Position",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "repeats": Object {
+              "description": "Number of times the line will repeat",
+              "dtype": "uint16",
+              "label": "Repeats",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "time1": Object {
+              "description": "The time the optional phase 1 should take",
+              "dtype": "uint32",
+              "label": "Time1",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "time2": Object {
+              "description": "The time the mandatory phase 2 should take",
+              "dtype": "uint32",
+              "label": "Time2",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "trigger": Object {
+              "choices": Array [
+                "Immediate",
+                "BITA=0",
+                "BITA=1",
+                "BITB=0",
+                "BITB=1",
+                "BITC=0",
+                "BITC=1",
+                "POSA>=POSITION",
+                "POSA<=POSITION",
+                "POSB>=POSITION",
+                "POSB<=POSITION",
+                "POSC>=POSITION",
+                "POSC<=POSITION",
+              ],
+              "description": "The trigger condition to start the phases",
+              "label": "Trigger",
+              "tags": Array [
+                "widget:combo",
+              ],
+              "typeid": "malcolm:core/ChoiceArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+          "label": "Table",
+          "tags": Array [
+            "widget:table",
+            "group:parameters",
+            "config:1",
+          ],
+          "typeid": "malcolm:core/TableMeta:1.0",
+          "writeable": true,
+        },
+        "value": Array [
+          Object {
+            "outa1": true,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSC>=POSITION",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": true,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "BITB=1",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": true,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "Immediate",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": true,
+            "outd2": false,
+            "oute1": false,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSB<=POSITION",
+          },
+          Object {
+            "outa1": false,
+            "outa2": false,
+            "outb1": false,
+            "outb2": false,
+            "outc1": false,
+            "outc2": false,
+            "outd1": false,
+            "outd2": false,
+            "oute1": true,
+            "oute2": false,
+            "outf1": false,
+            "outf2": false,
+            "position": 0,
+            "repeats": 0,
+            "time1": 0,
+            "time2": 0,
+            "trigger": "POSA<=POSITION",
+          },
+        ],
+      }
+    }
+    rowClickHandler={[Function]}
+    selectedRow={1}
+    setFlag={[Function]}
+    showFooter={true}
+  />
+  <div
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "padding": "4px",
+        "position": "bottom",
+      }
+    }
+  >
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(Typography)>
+        Up to date!
+      </WithStyles(Typography)>
+    </div>
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        method={true}
+        text="Discard changes"
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "flexGrow": 1,
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        method={true}
+        text="Submit"
+      />
+    </div>
+  </div>
+</div>
+`;

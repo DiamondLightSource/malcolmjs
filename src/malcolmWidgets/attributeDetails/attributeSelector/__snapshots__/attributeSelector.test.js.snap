@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
+
+exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
+<div
+  className="ButtonAction-container-84"
+>
+  <WithStyles(Button)
+    className="ButtonAction-button-85"
+    color="primary"
+    disabled={true}
+    onClick={[Function]}
+    variant="raised"
+  >
+    testButton
+  </WithStyles(Button)>
+</div>
+`;
+
+exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
+<div
+  className="WidgetTextUpdate-divWrap-117"
+>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-textUpdateWrap-118"
+    style={Object {}}
+  >
+    test value
+  </WithStyles(Typography)>
+</div>
+`;
+
+exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
+<WithStyles(ButtonAction)
+  clickAction={[Function]}
+  text="Edit"
+/>
+`;
+
+exports[`AttributeSelector selects a buttonAction correctly for table 1`] = `
+<WithStyles(ButtonAction)
+  clickAction={[Function]}
+  text="Edit"
+/>
+`;
+
+exports[`AttributeSelector selects a checkbox correctly 1`] = `
+<WithStyles(WidgetCheckbox)
+  CheckState={true}
+  Pending={false}
+  checkEventHandler={[Function]}
+  isUndefined={false}
+/>
+`;
+
+exports[`AttributeSelector selects a comboBox correctly 1`] = `
+<WithStyles(WidgetComboBox)
+  Choices={
+    Array [
+      "1",
+      "2",
+      "3",
+    ]
+  }
+  Pending={false}
+  Value="1"
+  selectEventHandler={[Function]}
+/>
+`;
+
+exports[`AttributeSelector selects a textInput correctly 1`] = `
+<WithStyles(WidgetTextInput)
+  Pending={false}
+  Value="[object Object]"
+  blurHandler={[Function]}
+  continuousSend={false}
+  focusHandler={[Function]}
+  localState={
+    Object {
+      "set": [Function],
+      "value": undefined,
+    }
+  }
+  setFlag={[Function]}
+  submitEventHandler={[Function]}
+/>
+`;
+
+exports[`AttributeSelector selects an LED correctly 1`] = `
+<WithStyles(WidgetLED)
+  LEDState={true}
+  colorBorder="#7986cb"
+  colorCenter="#7986cb"
+/>
+`;
+
+exports[`AttributeSelector selects an textUpdate correctly 1`] = `
+<WithStyles(WidgetTextUpdate)
+  Text="1.23456"
+/>
+`;
+
+exports[`AttributeSelector shows a bug icon if the widget is not handled 1`] = `
+<WithStyles(Tooltip)
+  title="widget:unknown"
+>
+  <pure(BugReportIcon)
+    nativeColor="red"
+  />
+</WithStyles(Tooltip)>
+`;

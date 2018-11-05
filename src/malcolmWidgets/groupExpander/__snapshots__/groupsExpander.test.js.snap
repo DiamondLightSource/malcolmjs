@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupExpander renders when default expanded is false 1`] = `
+<div>
+  <WithStyles(ExpansionPanel)
+    defaultExpanded={false}
+    elevation={0}
+  >
+    <WithStyles(ExpansionPanelSummary)
+      classes={
+        Object {
+          "content": "WidgetGroupExpander-content-3",
+          "expandIcon": "WidgetGroupExpander-expandIcon-4",
+          "expanded": "WidgetGroupExpander-expanded-2",
+          "root": "WidgetGroupExpander-root-1",
+        }
+      }
+      expandIcon={<pure(ExpandMoreIcon) />}
+    >
+      <WithStyles(Typography)
+        className="WidgetGroupExpander-heading-5"
+        variant="subheading"
+      >
+        Test Group
+      </WithStyles(Typography)>
+    </WithStyles(ExpansionPanelSummary)>
+    <WithStyles(ExpansionPanelDetails)
+      classes={
+        Object {
+          "root": "WidgetGroupExpander-detailsRoot-6",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
+      >
+        <div>
+          Attribute 1
+        </div>
+        <div>
+          Attribute 2
+        </div>
+        <div>
+          Attribute 3
+        </div>
+      </div>
+    </WithStyles(ExpansionPanelDetails)>
+  </WithStyles(ExpansionPanel)>
+</div>
+`;
+
+exports[`GroupExpander renders when default expanded is true 1`] = `
+<div>
+  <WithStyles(ExpansionPanel)
+    defaultExpanded={true}
+    elevation={0}
+  >
+    <WithStyles(ExpansionPanelSummary)
+      classes={
+        Object {
+          "content": "WidgetGroupExpander-content-3",
+          "expandIcon": "WidgetGroupExpander-expandIcon-4",
+          "expanded": "WidgetGroupExpander-expanded-2",
+          "root": "WidgetGroupExpander-root-1",
+        }
+      }
+      expandIcon={<pure(ExpandMoreIcon) />}
+    >
+      <WithStyles(Typography)
+        className="WidgetGroupExpander-heading-5"
+        variant="subheading"
+      >
+        Test Group
+      </WithStyles(Typography)>
+    </WithStyles(ExpansionPanelSummary)>
+    <WithStyles(ExpansionPanelDetails)
+      classes={
+        Object {
+          "root": "WidgetGroupExpander-detailsRoot-6",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
+      >
+        <div>
+          Attribute 1
+        </div>
+        <div>
+          Attribute 2
+        </div>
+        <div>
+          Attribute 3
+        </div>
+      </div>
+    </WithStyles(ExpansionPanelDetails)>
+  </WithStyles(ExpansionPanel)>
+</div>
+`;

@@ -1,0 +1,35 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "Configurable clocks ", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "aPeriod", 
+          "aPeriodUnits", 
+          "bPeriod", 
+          "bPeriodUnits", 
+          "cPeriod", 
+          "cPeriodUnits", 
+          "dPeriod", 
+          "dPeriodUnits", 
+          "outputs", 
+          "outa", 
+          "outb", 
+          "outc", 
+          "outd"
+        ]
+      }
+    ]
+  ]
+}

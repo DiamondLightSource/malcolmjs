@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`attributeView renders 1st tab correctly 1`] = `
+<Connect(WithTheme(TabbedPanel))
+  defaultTab={0}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
+  }
+>
+  <Connect(ArchiveTable)
+    attributeName="health"
+    blockName="test1"
+  />
+  <LoadableComponent
+    attributeName="health"
+    blockName="test1"
+    deriveState={[Function]}
+    doTick={true}
+  />
+</Connect(WithTheme(TabbedPanel))>
+`;
+
+exports[`attributeView renders 2nd tab correctly 1`] = `
+<Connect(WithTheme(TabbedPanel))
+  defaultTab={0}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
+  }
+>
+  <Connect(ArchiveTable)
+    attributeName="health"
+    blockName="test1"
+  />
+  <LoadableComponent
+    attributeName="health"
+    blockName="test1"
+    deriveState={[Function]}
+    doTick={true}
+  />
+</Connect(WithTheme(TabbedPanel))>
+`;

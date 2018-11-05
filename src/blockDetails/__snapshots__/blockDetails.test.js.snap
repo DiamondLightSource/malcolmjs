@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Block Details renders correctly when block not found 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <div
+      align="left"
+      style={
+        Object {
+          "fontFamily": "Roboto",
+          "whiteSpace": "pre",
+        }
+      }
+    >
+                      __     __      _____      __     __ 
+                     |\\  \\  |\\  \\   |\\   __  \\  |\\  \\  |\\  \\ 
+                     \\ \\  \\\\_\\  \\ \\ \\  \\|\\  \\ \\ \\ \\\\_\\  \\ 
+                       \\ \\___     \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ 
+                         \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ 
+                                 \\|__|   \\|______|         \\|__| 
+      
+    </div>
+    <br />
+    <br />
+    <WithStyles(Typography)>
+      Block not found....yet
+    </WithStyles(Typography)>
+    <WithStyles(Typography)>
+      it may still be loading and appear later
+    </WithStyles(Typography)>
+    <WithStyles(Typography)>
+      (hint: URLs are case sensitive)
+    </WithStyles(Typography)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders correctly when loading 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
+      Loading...
+    </WithStyles(Typography)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders correctly when metadata loaded and attributes loaded 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="health"
+      key="health"
+    />
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="icon"
+      key="icon"
+    />
+  </div>
+</div>
+`;
+
+exports[`Block Details renders correctly when metadata loaded and waiting for attributes 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
+      Loading...
+    </WithStyles(Typography)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders even if the block is undefined 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+/>
+`;
+
+exports[`Block Details renders groups correctly 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(WidgetGroupExpander)
+      expanded={false}
+      groupName="health 1"
+      key="parameters"
+    />
+  </div>
+</div>
+`;
+
+exports[`Block Details renders methods correctly 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <div>
+      <Connect(WithStyles(MethodDetails))
+        attributeName="save"
+        key="save"
+      />
+    </div>
+  </div>
+</div>
+`;

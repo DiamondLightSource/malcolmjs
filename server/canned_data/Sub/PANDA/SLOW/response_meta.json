@@ -1,0 +1,35 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "Slow control FPGA ", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "readbacks", 
+          "tempPsu", 
+          "tempSfp", 
+          "tempEncL", 
+          "tempPico", 
+          "tempEncR", 
+          "alim12V0", 
+          "pico5V0", 
+          "io5V0", 
+          "sfp3V3", 
+          "fmc15Vn", 
+          "fmc15Vp", 
+          "enc24V", 
+          "fmc12V"
+        ]
+      }
+    ]
+  ]
+}

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfoDetails renders correctly 1`] = `
+<div>
+  <Connect(WithStyles(InfoElement))
+    alarm={null}
+    key="simpleValue"
+    label="simpleValue"
+    tag="info:multiline"
+    value={1}
+  />
+  <Connect(WithStyles(InfoElement))
+    alarm={2}
+    key="inlineValue"
+    label="inline info"
+    tag="info:multiline"
+    value="test"
+  />
+  <Connect(WithStyles(InfoElement))
+    alarm={null}
+    alarmPath="something.else.on.attribute"
+    disabledFlagPath="some.flag.somewhere"
+    key="inlineWithPaths"
+    label="inline info"
+    tag="info:multiline"
+    valuePath="something.on.attribute"
+  />
+  <Connect(WithStyles(InfoElement))
+    alarm={null}
+    key="inlineWithTag"
+    label="inline input"
+    tag="widget:textinput"
+    value="test in"
+  />
+  <WithStyles(WidgetGroupExpander)
+    expanded={true}
+    groupName="groupValues"
+    key="0"
+  >
+    <Connect(WithStyles(InfoElement))
+      alarm={null}
+      key="0"
+      label="simpleInGroup"
+      tag="info:multiline"
+      value="zap"
+    />
+    <Connect(WithStyles(InfoElement))
+      alarm={null}
+      alarmPath="something.else.on.attribute"
+      disabledFlagPath="some.flag.somewhere"
+      key="1"
+      label="in-group info"
+      tag="info:multiline"
+      valuePath="something.on.attribute"
+    />
+    <Connect(WithStyles(InfoElement))
+      alarm={0}
+      key="2"
+      label="arbitraryObject"
+      tag="info:multiline"
+      value="b"
+    />
+  </WithStyles(WidgetGroupExpander)>
+</div>
+`;
