@@ -2,7 +2,7 @@ Developer Workflow
 =====================================
 
 Workflow
-^^^^^^^^^^^^^^^^^^^^^^
+--------
 
 #. Select a story from the waffle board.
 #. Pull the latest version of the ``version1`` branch
@@ -31,20 +31,20 @@ Workflow
 #. Move the story to ``Done``
 
 Story State Transitions
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 Branching Strategy
-^^^^^^^^^^^^^^^^^^
+------------------
 
 Code Development and Testing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 Preparing for a Pull Request
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 
 Pull Request Procedure
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 When a branch is ready to be merged back in then you should create a pull request in GitHub. The description should contain:
 
@@ -62,4 +62,4 @@ Before approving, a reviewer should:
 - run the method for testing as described by the developer as assess the visual impact of the changes
 
 Monitoring Progress in a Sprint
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------

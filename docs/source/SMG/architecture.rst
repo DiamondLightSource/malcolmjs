@@ -4,11 +4,11 @@ Architecture
 ============
 
 Context
-########
+-------
 
 `Malcolm <http://pymalcolm.readthedocs.io/en/latest/>`_ provides a higher level abstraction over EPICS for monitoring and controlling devices (e.g. motor controllers or area detectors). **MalcolmJS** is a user interface for Malcolm that allows blocks to be wired together and more complex behaviours to be programmed into the hardware (e.g. custom scan patterns).
 
-.. figure:: architecture_diagrams/malcolmjs_context.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_context.draw-io.svg
     :align: center
 
     MalcolmJS context within its wider environment
@@ -20,11 +20,11 @@ The overall use case for MalcolmJS is that engineers will be using it to configu
 The other minor use case is to allow engineers to view block attributes on their phone, this will allow them to monitor outputs and tweak inputs without having to go back to their laptop.
 
 Containers
-###########
+----------
 
 The container view for MalcolmJS breaks down in to the main user interface categories as well as the interface for interacting with Malcolm.
 
-.. figure:: architecture_diagrams/malcolmjs_containers.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_containers.draw-io.svg
     :align: center
 
     MalcolmJS container view
@@ -51,7 +51,7 @@ Malcolm works on a subscribe/unsubscribe model - in order to clean up connection
 
 One of the best ways to think about the high level structure for MalcolmJS is to consider the high level user interface mock ups. They show the main sections of the interface and thus how the application breaks down into containers.
 
-.. figure:: architecture_diagrams/malcolmjs_desktop_mockup.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_desktop_mockup.draw-io.svg
     :align: center
 
     MalcolmJS desktop view
@@ -70,7 +70,7 @@ Once they click on a block in the central panel then it will display information
 On a multi-monitor system it can be useful to keep track of block details for various blocks in the tree, this is why there is a pop-out button. The user can choose to show the attributes for a particular block in a standalone window. It it worth noting that this is also what the mobile view would display.
 
 
-.. figure:: architecture_diagrams/malcolmjs_phone_mockup.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_phone_mockup.draw-io.svg
     :align: center
 
     MalcolmJS mobile view
@@ -78,9 +78,9 @@ On a multi-monitor system it can be useful to keep track of block details for va
 The mobile view is simply intended to give engineers a quick view on the information being output from devices whilst adjusting them, it is not meant to be a full MalcolmJS environment. Never-the-less, they can click on an attribute for more information and it will close the draw for the attributes and show graphs/tables/etc. in the central panel just like the desktop version.
 
 Components
-############
+----------
 
-.. figure:: architecture_diagrams/malcolmjs_components.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_components.draw-io.svg
     :align: center
 
     MalcolmJS component view
@@ -88,10 +88,10 @@ Components
 - **Malcolm Interface**
     The Malcolm Interface consists of all the parts needed to integrate it in to the Redux lifecycle. It is better described by the diagram below:
 
-	.. figure:: architecture_diagrams/malcolmjs_redux_integration.draw-io.png
-	    :align: center
+    .. figure:: architecture_diagrams/malcolmjs_redux_integration.draw-io.svg
+        :align: center
 
-	    Malcolm redux integration
+        Malcolm redux integration
 
     By ensuring that components need to create actions using the Malcolm Action Creators and processing data through the Malcolm reducer ensures there is a consistent data model for components to use. Messages intended for the socket are intercepted in the middleware and responses from the socket are injected back into the cycle as a new action in the Malcolm Socket handlers.
 
@@ -107,18 +107,18 @@ Components
 
 
 Deployment View
-###################
+---------------
 
 The primary deployment scenario is where MalcolmJS is packaged up with Malcolm and served from a web server inside Malcolm on the same PANDA box. The websocket connection is to the same server, so there should be no cross-origin issues. During development we'll introduce a proxy when connecting to a test instance.
 
-.. figure:: architecture_diagrams/malcolmjs_deployment.draw-io.png
+.. figure:: architecture_diagrams/malcolmjs_deployment.draw-io.svg
     :align: center
 
     Serving MalcolmJS from the same server as Malcolm
 
 
 Technologies
-#############
+------------
 
 The technology stack selection has been based on the principles of:
 
@@ -127,7 +127,8 @@ The technology stack selection has been based on the principles of:
 - Fitting in with Diamond processes where there are clearly defined technology choices for consistency
 
 By Component
-^^^^^^^^^^^^^
+~~~~~~~~~~~~
+
 - **MalcolmJS redux components**
     A set of components for handling socket communication with Malcolm that intercepts messages intended for Malcolm and sends them, as well as injecting responses back into the Redux one-way data flow. 
 - **MalcolmJS attribute components** 
@@ -136,7 +137,7 @@ By Component
     The other container components needed to layout the MalcolmJS site and wire the presentational compoenents up to the MalcolmJS redux components.
 
 Tools
-^^^^^^^^
+~~~~~
 
 - Create React App for the initial site template
 - Jest unit testing and coverage
@@ -154,7 +155,7 @@ Tools
 - Sphinx for document building
 
 Languages
-^^^^^^^^^^^
+~~~~~~~~~
 
 - Javascript
 - reStructuredText
@@ -162,7 +163,7 @@ Languages
 - yaml
 
 Frameworks
-^^^^^^^^^^^^
+~~~~~~~~~~
 
 - React
 - Redux
@@ -173,10 +174,10 @@ Frameworks
 
 
 Quality
-###############
+-------
 
 Coding Standards
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Static code analysis is done by running ESLint against the code with the `AirBnB rule set <http://airbnb.io/javascript/>`_. Code styling is done with `Prettier <https://prettier.io/>`_ to avoid debates on code styling. These are both enforced as pre-commit hooks with the ``--fix`` option turned on so as much as possible is automatically fixed. This ensures the static code analysis violations remain at zero unless explicitly ignored.
 
@@ -202,12 +203,12 @@ to the description to link the pull request to the issue.
 Pull requests are gated so the automated build in Travis needs to succeed and the reviewer should also take note of the impact on code coverage. The aim is to maintain a high level of coverage (e.g. over 90% is good) but whilst being pragmatic, it is not an exercise in getting a high number but rather making sure the new code is sufficiently tested for maintainability.
 
 Security
-^^^^^^^^^
+~~~~~~~~
 
 There are no current security restrictions on MalcolmJS as it has to be able to communicate with a Malcolm enabled device which are all inside the Diamond internal network and so MalcolmJS will also have to be accessed from inside the network. Once inside the network anyone is allowed the configure the Malcolm settings.
 
 Testing
-^^^^^^^^^
+~~~~~~~
 
 As much effort as possible should be made to automate unit, integration and system testing. MalcolmJS will use as much unit testing as possible, as well as running end-to-end tests against a test server that mimics the socket responses. This should mean very few system tests are needed as we can expand the socket responses of the test server to cover these cases. Where system tests are needed then they will need to be done manually as they will need to be run against an actual PANDA box but could still be based off scripted tests (e.g. using cypress).
 
@@ -216,7 +217,7 @@ Given we are developing a website, usability testing will also be important so w
 One of the big issues with versions prior to version 1 was performance and the time taken to re-render updates. We should also put additional effort into performance testing to make sure the page is at least usable (i.e. it doesn't need to be lightning fast but shouldn't freeze up, it should at least indicate to the user it is still responding but could be waiting for a response).
 
 Attitude Towards Bugs and Technical Debt
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Bugs severely affect the maintainability of the system, as far as is practical we should seek to have a zero bug system - this means that when a bug is identified then it gets prioritised to the top of the backlog and dealt with as soon as possible.
 

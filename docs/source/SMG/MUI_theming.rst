@@ -2,7 +2,7 @@ Styling
 =======
 
 Material-UI Theming
-###################
+-------------------
 
 A useful feature of Material-UI is the provision of theme objects; these allow various styling parameters to be defined
 at a top level and passed down to components which need them.
