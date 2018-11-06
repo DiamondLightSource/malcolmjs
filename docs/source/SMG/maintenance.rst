@@ -2,7 +2,7 @@ Maintenance
 ===========
 
 Useful URLs
-^^^^^^^^^^^
+-----------
 
 ======================= ===========================================================
 Code                     https://github.com/dls-controls/malcolmjs
@@ -14,7 +14,7 @@ PyMalcolm Docs           http://pymalcolm.readthedocs.io/en/latest/
 ======================= ===========================================================
 
 NPM commands
-^^^^^^^^^^^^
+------------
 
 The main commands you are most likely to need during development are:
 ::
@@ -51,20 +51,21 @@ The main commands you are most likely to need during development are:
 
 
 Editing documentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------
+
 User Guide
-#############
+~~~~~~~~~~
 
 Any new features in the UI should be documented in the User Guide, this should be done as part of the story so we can build a user guide over time.
 
 SMG
-#############
+~~~
 
-If you ever need to edit the architecture documents then the png files can be opened in https://www.draw.io/ (or the offline thick client) and changed, you don't need to re-export the images; saving should automatically update the png.
+The diagrams are all made with `draw.io <https://www.draw.io/>`_ and the files exported as svg so they can be versioned in this code base and edited by others. If you edit the diagrams you should export a copy of the updated svg (with "Include a copy of my diagram" checked) back to the ``architectural_diagrams`` folder.
 
 
 The malcolm development server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 The MalcolmJS code base comes with a development server to simulate the messages that go to and from Malcolm.
 
 To run the server you can run the ``server`` or ``server:dev`` npm commands, the server will be started as part of the ``npm start`` target.
@@ -75,12 +76,12 @@ More request/response pairs can be added by adding more files to ``canned_data``
 
 
 Running pyMalcolm + PandA simulator & Generating canned data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------------------------------
 As mentioned above, it is possible to run up a simulator for a PandABox and a corresponding pyMalcolm server to provide a more accurate and complete testing environment.
 It is also necessary to do this to generate updated canned data responses for the simple dev server (required when pyMalcolm or the PandA software is updated).
 
 Simulator
----------
+~~~~~~~~~
 
 In order to run the simulator, there are several things required:
 
@@ -106,7 +107,7 @@ The YAML file for pyMalcolm should contain the following:
         mri: WEB
 
 Canned Data
------------
+~~~~~~~~~~~
 
 Once the PandA simulator and pyMalcolm are running, it is possible to generate a fresh set of canned data. To do this, first copy the CannedData.json
 file from  *<malcolmJS root>/server/canned_data/Pymalcolm_design* into the config directory as specified in the yaml file (for the above config the folder would be */tmp/PANDA*).

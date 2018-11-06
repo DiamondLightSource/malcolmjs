@@ -1,208 +1,183 @@
-.. _glossary_:
+Glossary
+========
 
 .. ##########
 .. links to external PandA related documentation
 .. ##########
 
-.. _PandABlocks-FPGA: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
-.. _Malcolm: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
+.. _PandABlocks-FPGA: https://pandablocks-fpga.readthedocs.io
+.. _malcolm: https://pymalcolm.readthedocs.io
 
+These are some commonly used terms in this documentation.
 
-Glossary
-========
+.. glossary::
 
-.. _attribute_:
+  Attribute
 
-Attribute
----------
+    A property of a `block`.
 
-A property of a `block_`.  
+    Attributes are divided into four categories based on their purpose:
 
-Attributes are divided into four categories based on their purpose:
+        * `Parameter Attribute`
+        * `Input Attribute`
+        * `Output Attribute`
+        * `Readback Attribute`
 
-    * `Parameter <parameter_attribute_>`
-    * `Input <input_attribute_>`
-    * `Output <output_attribute_>`
-    * `Readback <readback_attribute_>`
+  Attribute Group
 
+    A logically grouping of related `attributes <attribute>` within a `block`.
 
-.. _attribute_group_:
+    Within the user interface these are represented as a collapsable block
+    within the overall `Block Information Panel`.
 
-Attribute Group
----------------
 
-A logically grouping of related `attributes <attribute>` within a `block_`. 
+  Block
 
-Within the user interface these are represented as a collapsable block within the overall `block_information_panel_`.
+    The graphical manifestation of a component within a `design`, encapsulating
+    its attributes, methods and connectivity to other blocks.
 
+    Blocks may represent, for example:
 
-.. _block_: 
+        * Input and output controllers (interfaces to the FPGA).
+        * Configurable clocks.
+        * Logic lookup tables and logic gates.
 
-Block
------
+    A Block is defined my its underlying Block specification, which is
+    interrogated by `malcolm`_ and reflected into the user interface. For
+    example, the list of supported blocks available for a PandA device is
+    described in `PandABlocks-FPGA`_ documentation.
 
-The graphical manifestation of a component within a `design_`, encapsulating its attributes, methods and connectivity to other blocks.
 
-Blocks may represent, for example:
+  Block Information Panel
 
-    * Input and output controllers (interfaces to the FPGA).
-    * Configurable clocks.
-    * Logic lookup tables and logic gates.
+    Panel displayed within the user inferface containing details of the
+    `attributes <attribute>` and `methods <method>` associated with the
+    currently selected `block` within the `layout`.
 
-A Block is defined my its underlying Block specification, which is interrogated by `malcolm`_ and reflected into the user interface. For example, the list of supported blocks available for a PandA device is described in `PandABlocks-FPGA`_ documentation.
 
+  Child Block
 
-.. _Block_information_panel_:
+    A `block` within the `layout` of a `Parent Block`.
 
-Block Information Panel
------------------------
+    A Child Block may itself represent a Parent Block if its own functionality
+    can be further decomposed.
 
-Panel displayed within the user inferface containing details of the `attributes <attribute_>` and `methods <method_>` associated with the currently selected `block_` within the `layout_`.
 
+  Design
 
-.. _child_block_:
+    The technical definition of the overall system, or a component within it,
+    describing the `blocks <block>` it contains, their `attributes <attribute>`
+    and the `links <link>` between them.  A Design is represented as a
+    `Parent Block` within the user interface.
 
-Child Block
------------
+    Designs are presented graphically as a `layout` within the 'Layout Panel'
+    on the web interface allowing a user to build, configure and manage the
+    system represented by that Design.
 
-A `block_` within the `layout_` of a `Parent Block <parent_block_>`. 
 
-A Child Block may itself represent a Parent Block if its own functionality can be further decomposed. 
+  Design Element
 
+    A generic term for any `block`, `attribute` or `link` currently forming the
+    focus of interest within the `layout` view of the PandABox User Interface.
 
-.. _design_:
 
-Design
-------
+  Flowgraph
 
-The technical definition of the overall system, or a component within it,  describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `links <link_>` between them.  A Design is represented as a `parent_block_` within the user interface.
+    The graphical representation of a `design` showing the `Design Element`
+    within the Control System as presented within the user interface 'Layout
+    View'.
 
-Designs are presented graphically as a `layout_` within the 'Layout Panel' on the web interface allowing a user to build, configure and manage the system represented by that Design.
 
+  Input Attribute
 
-.. _design_element_:
+    An Input Attribute identifies the value (or stream of values) that will be
+    received into a `block` via a `Sink Port` on the Block to which the
+    attribute relates.  There is a 1:1 mapping between Input Attribute and Sink
+    Port.
 
-Design Element
---------------
 
-A generic term for any `block_`, `attribute_` or `link_` currently forming the focus of interest within the `layout_` view of the PandABox User Interface.  
+  Input Port
 
+    Synonym for `Sink Port`.
 
-.. _flowgraph_:
 
-Flowgraph 
----------
+  Layout
 
-The graphical representation of a `design_` showing the `design_element_` within the Control System as presented within the user interface 'Layout View'.
+    The graphical representation of a `design` within the web interface showing
+    the `blocks <block>` within the Design and the `links <link>` between them
+    based on the selected `Root Block`.
 
 
-.. _input_attribute_:
+  Link
 
-Input Attribute
----------------
+    The mechanism of transferring content from a `Source Port` in one `block`
+    to a `Sink Port` in a second Block.  Links can only be made between ports
+    of the same logical type (e.g. Boolean -> Boolean, int32 -> int32).
 
-An Input Attribute identifies the value (or stream of values) that will be received into a `block_` via a `sink_port_` on the Block to which the attribute relates.  There is a 1:1 mapping between Input Attribute and Sink Port.
 
+  Method
 
-.. _input_port_:
+    Defines an **action** that can be performed by a `block` in support of the
+    purpose of that block.
 
-Input Port
-----------
 
-Synonym for `sink_port_`.
+  Output Attribute
 
+    An Output Attribute identifies the value (or stream of values) that will be
+    transmitted via a `Source Port` out of the `block` to which the attribute
+    relates.  There is a 1:1 mapping between Output Attribute and Source Port.
 
-.. _layout_:
 
-Layout
-------
+  Output Port
 
-The graphical representation of a `design_` within the web interface showing the `blocks <block_>` within the Design and the `links <link_>` between them based on the selected `root_block_`.
+    Synonym for `Source Port`.
 
 
-.. _link_:
+  Parameter Attribute
 
-Link
-----
+    An attribute whose value can be set by a User within a `block` in order to
+    influence the behaviour of that `block`.
 
-The mechanism of transferring content from a `source_port_` in one `block_` to a `sink_port_` in a second Block.  Links can only be made between ports of the same logical type (e.g. Boolean -> Boolean, int32 -> int32). 
 
+  Parent Block
 
-.. _method_:
+    A `block` aggregating one-or-more `Child Blocks <Child Block>` each
+    performing an action or activity in support of its parent's functionality.
 
-Method
-------
+    Parent blocks, together with their attributes and methods are typically
+    presented in the left-hand panel of the web interface when open in Layout
+    View.
 
-Defines an **action** that can be performed by a `block_` in support of the purpose of that block.
+  Readback Attribute
 
+    An Attribute whose value is set automatically by a process within the
+    execution environment.  Readback attributes cannot be set manually via the
+    User Interface.
 
-.. _output_attribute_:
 
-Output Attribute
-----------------
+  Root Block
 
-An Output Attribute identifies the value (or stream of values) that will be transmitted via a `source_port_` out of the `block_` to which the attribute relates.  There is a 1:1 mapping between Output Attribute and Source Port.
+    The outermost entity defining the content presented within the user
+    interface.  If the outermost Block representing a `design` is selected this
+    encapulates the entire `design`, from where a user can 'drill down' to an
+    area of interest.  Otherwise the Root Block represents any configured
+    `block` within the `design`.
 
 
-.. _output_port_:
+  Source Port
 
-Output Port
------------
+    A port on a `block` responsible for transmitting data generated within that
+    Block.
 
-Synonym for `source_port_`.
+    Every Source Port within a Block has a pre-defined type as described in the
+    Block specification.
 
 
-.. _parameter_attribute_:
+  Sink Port
 
-Parameter Attribute
--------------------
+    A port on a `block` responsible for accepting data for utilisation within
+    that Block.
 
-An attribute whose value can be set by a User within a `block_` in order to influence the behaviour of that `block_`.
-
-
-.. _parent_block_:
-
-Parent Block
-------------
-
-A `block_` aggregating one-or-more `Child Blocks <child_block_>` each performing an action or activity in support of its parent's functionality.  
-
-Parent blocks, together with their attributes and methods are typically presented in the left-hand panel of the web interface when open in Layout View.
-
-.. _readback_attribute_:
-
-Readback Attribute
-------------------
-
-An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be set manually via the User Interface.
-
-
-.. _root_block_:
-
-Root Block
-----------
-
-The outermost entity defining the content presented within the user interface.  If the outermost Block representing a `design_` is selected this encapulates the entire `design_`, from where a user can 'drill down' to an area of interest.  Otherwise the Root Block represents any configured `block_` within the `design_`.
-
-
-.. _source_port_:
-
-Source Port
------------
-
-A port on a `block_` responsible for transmitting data generated within that Block.  
-
-Every Source Port within a Block has a pre-defined type as described in the Block specification.  
-
-
-.. _sink_port_:
-
-Sink Port
-----------
-
-A port on a `block_` responsible for accepting data for utilisation within that Block.  
-
-Every Sink Port within a Block has a pre-defined type as described in the Block specification.
-
-
+    Every Sink Port within a Block has a pre-defined type as described in the
+    Block specification.
 
