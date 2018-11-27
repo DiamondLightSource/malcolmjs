@@ -61,7 +61,7 @@ const copyPathToClipboard = (event, path) => {
 const EMPTY_STRING = '';
 
 const AttributeDetails = props => {
-  if (props.widgetTagIndex !== null) {
+  if (![null, -1].includes(props.widgetTagIndex)) {
     const rowHighlight = props.isMainAttribute
       ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
       : {};

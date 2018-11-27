@@ -18,6 +18,7 @@ import {
   MalcolmSelectLinkType,
   MalcolmSimpleLocalState,
   MalcolmClearError,
+  MalcolmMethodReturn,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 import {
@@ -289,6 +290,11 @@ export const malcolmClearLayoutSelect = () => (dispatch, getState) => {
     dispatch(malcolmSelectBlock(block, false))
   );
 };
+
+export const malcolmProcessMethodReturn = payload => ({
+  type: MalcolmMethodReturn,
+  payload,
+});
 
 export default {
   malcolmHailReturn,

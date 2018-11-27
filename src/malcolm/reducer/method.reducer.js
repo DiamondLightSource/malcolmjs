@@ -3,7 +3,7 @@ import blockUtils from '../blockUtils';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import {
   MalcolmUpdateMethodInputType,
-  MalcolmReturn,
+  MalcolmMethodReturn,
   MalcolmArchiveMethodRun,
   MalcolmFlagMethodInputType,
 } from '../malcolm.types';
@@ -223,7 +223,7 @@ const MethodReducer = createReducer(
   {},
   {
     [MalcolmUpdateMethodInputType]: updateMethodInput,
-    [MalcolmReturn]: handleMethodReturn,
+    [MalcolmMethodReturn]: handleMethodReturn,
     [MalcolmArchiveMethodRun]: pushParamsToArchive,
     [MalcolmFlagMethodInputType]: setInputFlag,
   }

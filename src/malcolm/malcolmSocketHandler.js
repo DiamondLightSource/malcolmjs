@@ -9,6 +9,7 @@ import {
   malcolmSetDisconnected,
   malcolmSetFlag,
   malcolmHailReturn,
+  malcolmProcessMethodReturn,
 } from './malcolmActionCreators';
 import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
@@ -62,17 +63,29 @@ const handleMessages = (messages, dispatch, getState) => {
         break;
       }
       case 'malcolm:core/Return:1.0': {
-        if (data.value && data.value.typeid === 'malcolm:core/BlockMeta:1.0') {
-          BlockMetaHandler(
-            originalRequest,
-            data.value,
-            dispatch,
-            messagesInFlight,
-            false,
-            true
-          );
-        } else if (data.value && data.value.typeid.slice(0, 8) === 'epics:nt') {
-          AttributeHandler.processAttribute(originalRequest, data.value);
+        switch (messagesInFlight[data.id].typeid) {
+          case 'malcolm:core/Get:1.0':
+            if (data.value && data.value.typeid) {
+              // Handle return from a Get
+              if (data.value.typeid === 'malcolm:core/BlockMeta:1.0') {
+                BlockMetaHandler(
+                  originalRequest,
+                  data.value,
+                  dispatch,
+                  messagesInFlight,
+                  false,
+                  true
+                );
+              } else if (data.value.typeid.slice(0, 8) === 'epics:nt') {
+                AttributeHandler.processAttribute(originalRequest, data.value);
+              }
+            }
+            break;
+          case 'malcolm:core/Post:1.0':
+            dispatch(malcolmProcessMethodReturn(data));
+            break;
+          default:
+            break;
         }
         dispatch(malcolmHailReturn(data, false));
         dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
