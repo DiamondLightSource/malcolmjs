@@ -10,6 +10,7 @@ import {
   malcolmPutAction,
   malcolmSetFlag,
   malcolmSelectBlock,
+  malcolmSelectLink,
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
 import { snackbarState } from '../../viewState/viewState.actions';
@@ -181,6 +182,7 @@ const deleteLinks = () => (dispatch, getState) => {
         .slice(-1)[0];
       dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
       dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
+      dispatch(malcolmSelectLink(linkId, false));
     }
   });
 };
