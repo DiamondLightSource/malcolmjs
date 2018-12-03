@@ -5,6 +5,7 @@ import {
   MalcolmSend,
   MalcolmMakeBlockVisibleType,
   MalcolmSelectBlock,
+  MalcolmSelectLinkType,
 } from '../malcolm.types';
 import { idSeparator } from '../../layout/layout.component';
 import { sinkPort, sourcePort } from '../malcolmConstants';
@@ -199,16 +200,18 @@ describe('layout actions', () => {
     const action = LayoutActions.deleteLinks();
     action(dispatch, getState);
 
-    expect(actions).toHaveLength(4);
+    expect(actions).toHaveLength(6);
     expect(actions[0].type).toEqual(MalcolmAttributeFlag);
-    expect(actions[2].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[3].type).toEqual(MalcolmAttributeFlag);
     expect(actions[1].type).toEqual(MalcolmSend);
     expect(actions[1].payload.typeid).toEqual('malcolm:core/Put:1.0');
     expect(actions[1].payload.path).toEqual(['PANDA:INENC1', 'testIn2']);
     expect(actions[1].payload.value).toEqual('ZERO');
-    expect(actions[3].type).toEqual(MalcolmSend);
-    expect(actions[3].payload.typeid).toEqual('malcolm:core/Put:1.0');
-    expect(actions[3].payload.path).toEqual(['PANDA', 'testIn1']);
-    expect(actions[3].payload.value).toEqual('ONE');
+    expect(actions[4].type).toEqual(MalcolmSend);
+    expect(actions[4].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[4].payload.path).toEqual(['PANDA', 'testIn1']);
+    expect(actions[4].payload.value).toEqual('ONE');
+    expect(actions[2].type).toEqual(MalcolmSelectLinkType);
+    expect(actions[5].type).toEqual(MalcolmSelectLinkType);
   });
 });
