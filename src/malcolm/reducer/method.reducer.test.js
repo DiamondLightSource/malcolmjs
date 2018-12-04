@@ -3,6 +3,7 @@ import blockUtils from '../blockUtils';
 import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
+  MalcolmMethodReturn,
   MalcolmArchiveMethodRun,
   MalcolmFlagMethodInputType,
 } from '../malcolm.types';
@@ -212,7 +213,7 @@ describe('method reducer', () => {
       value: { output1: 456 },
     };
 
-    const test = runReducer(MalcolmReturn, payload, 'state');
+    const test = runReducer(MalcolmMethodReturn, payload, 'state');
     const attribute =
       test.updatedState.blocks.block1.attributes[test.attribute];
     const archive =
@@ -253,7 +254,7 @@ describe('method reducer', () => {
       value: 456,
     };
 
-    const test = runReducer(MalcolmReturn, payload, 'state');
+    const test = runReducer(MalcolmMethodReturn, payload, 'state');
     expect(
       test.updatedState.blocks.block1.attributes[test.attribute].calculated
         .outputs.output1
@@ -303,7 +304,7 @@ describe('method reducer', () => {
       value: { output1: 456 },
     };
 
-    const attribute = runReducer(MalcolmReturn, payload);
+    const attribute = runReducer(MalcolmMethodReturn, payload);
     expect(attribute.calculated.errorState).toBeTruthy();
   });
 });

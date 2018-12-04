@@ -35,3 +35,4 @@ export const MalcolmSimpleLocalState = 'malcolm:simplelocalstate';
 export const MalcolmIncrementMessageCount = 'malcolm:incrementcounter';
 export const MalcolmClearError = 'malcolm:clearerror';
 export const MalcolmZoom = 'malcolm:zoomlayout';
+export const MalcolmMethodReturn = 'malcolm:methodreturn';

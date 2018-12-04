@@ -7,6 +7,7 @@ import {
 import { subscriptionActive } from '../middleware/malcolmReduxMiddleware';
 
 export const rootBlockSubPath = ['.', 'blocks', 'value'];
+// export const rootBlockSubPath = ['.', 'blocks'];
 
 export const BlockMetaHandler = (
   request,
