@@ -1,4 +1,11 @@
 # Changelog
+## 1.5.1 (4/12/2018)
+Fixes:
+- Deleting links on the layout now causes them to be properly deselected on the state (as such deleting a second link after having made a new link to the same sink port as the first was originaly linked to no longer causes the new link to be deleted)
+- Fixed bug in processing returns for unpacked methods (method returns now fire a new action in the socket handler)
+Misc:
+- Refactored docs
+
 ## 1.5.0 (1/11/2018)
 Features: 
 - Added zoom buttons to the layout
