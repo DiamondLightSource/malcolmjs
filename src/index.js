@@ -6,7 +6,14 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import { blue, orange, green, brown, pink } from '@material-ui/core/colors';
+import {
+  blue,
+  orange,
+  green,
+  brown,
+  pink,
+  purple,
+} from '@material-ui/core/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -81,6 +88,7 @@ const theme = createMuiTheme({
     int32: orange,
     motor: pink,
     NDArray: brown,
+    block: purple,
   },
 });
 
