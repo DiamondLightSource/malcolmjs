@@ -129,7 +129,7 @@ export const selectorFunction = (
           Value={value}
           Pending={flags.isDisabled}
           Choices={objectMeta.choices}
-          selectEventHandler={event => valueHandler(path, event.target.value)}
+          selectEventHandler={setValue => valueHandler(path, setValue)}
         />
       );
     case 'widget:textupdate':

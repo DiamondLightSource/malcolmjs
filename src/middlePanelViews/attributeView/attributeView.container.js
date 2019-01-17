@@ -67,7 +67,12 @@ export const deriveStateFromProps = (props, state) => {
 const TAB_LABELS = ['Table', 'Plot'];
 
 const AttributeViewer = props => (
-  <TabbedPanel tabLabels={TAB_LABELS} defaultTab={0}>
+  <TabbedPanel
+    tabLabels={TAB_LABELS}
+    defaultTab={0}
+    blockName={props.blockName}
+    attributeName={props.attributeName}
+  >
     <ArchiveTable
       blockName={props.blockName}
       attributeName={props.attributeName}

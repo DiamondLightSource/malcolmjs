@@ -22,9 +22,13 @@ const styles = theme => ({
 const WidgetComboBox = props => {
   const value = props.Value !== null ? props.Value : props.Choices[0];
   const options = props.Choices.map((choice, index) => (
-    // Rule prevents behaviour we want in this case
-    // eslint-disable-next-line react/no-array-index-key
-    <option value={choice} key={index}>
+    <option
+      value={choice}
+      // Rule prevents behaviour we want in this case
+      // eslint-disable-next-line react/no-array-index-key
+      key={index}
+      onClick={() => props.selectEventHandler(choice)}
+    >
       {choice}
     </option>
   ));
@@ -41,12 +45,7 @@ const WidgetComboBox = props => {
       fullWidth
       className={props.classes.formControl}
     >
-      <Select
-        native
-        value={value}
-        onChange={props.selectEventHandler}
-        className={props.classes.select}
-      >
+      <Select native value={value} className={props.classes.select}>
         {options}
       </Select>
     </FormControl>
@@ -55,7 +54,7 @@ const WidgetComboBox = props => {
 
 WidgetComboBox.propTypes = {
   Value: PropTypes.string.isRequired,
-  selectEventHandler: PropTypes.func.isRequired,
+  // selectEventHandler: PropTypes.func.isRequired,
   Choices: PropTypes.arrayOf(PropTypes.string).isRequired,
   Pending: PropTypes.bool,
   classes: PropTypes.shape({

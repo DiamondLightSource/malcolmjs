@@ -152,7 +152,7 @@ const MethodDetails = props => {
     );
   }
   return (
-    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
+    <GroupExpander key={props.methodPath} groupName={props.methodName}>
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
@@ -175,13 +175,6 @@ const MethodDetails = props => {
             <Typography
               className={props.classes.textName}
               style={{ cursor: 'pointer' }}
-              onClick={() =>
-                props.labelClickHandler(
-                  props.blockName,
-                  props.attributeName,
-                  `takes.${input[0]}`
-                )
-              }
             >
               {input[1].label}
             </Typography>
@@ -251,13 +244,6 @@ const MethodDetails = props => {
                 <Typography
                   className={props.classes.textName}
                   style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    props.labelClickHandler(
-                      props.blockName,
-                      props.attributeName,
-                      `returns.${output[0]}`
-                    )
-                  }
                 >
                   {output[1].label}
                 </Typography>
@@ -295,13 +281,13 @@ MethodDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
-  // labelClickHandler: PropTypes.func.isRequired,
   writeable: PropTypes.bool.isRequired,
 };
 
 const EMPTY = '';
 const EMPTY_ARRAY = [];
 const EMPTY_OBJECT = {};
+
 const mapStateToProps = (state, ownProps) => {
   let method;
   if (ownProps.attributeName && ownProps.blockName) {
@@ -395,15 +381,6 @@ export const mapDispatchToProps = dispatch => ({
   infoClickHandler: (blockName, attributeName, subElement) => {
     dispatch(
       navigationActions.navigateToInfo(blockName, attributeName, subElement)
-    );
-  },
-  labelClickHandler: (blockName, attributeName, subElement) => {
-    dispatch(
-      navigationActions.navigateToSubElement(
-        blockName,
-        attributeName,
-        subElement
-      )
     );
   },
   runMethod: (path, inputs) => {

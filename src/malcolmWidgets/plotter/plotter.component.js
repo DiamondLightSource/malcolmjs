@@ -63,7 +63,7 @@ const AttributePlotter = props => (
     blockName={props.blockName}
     attributeName={props.attributeName}
     deriveState={deriveStateFromProps}
-    useArchive={false}
+    useRaw
   />
 );
 

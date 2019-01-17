@@ -144,6 +144,9 @@ const displayAttributes = props => {
             ))}
           </GroupExpander>
         ))}
+        {props.methods.length > 0 ? (
+          <GroupDivider classes={props.classes} />
+        ) : null}
         {props.methods.map((method, i) => (
           <div>
             <MethodDetails

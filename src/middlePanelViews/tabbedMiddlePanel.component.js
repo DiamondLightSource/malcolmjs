@@ -100,7 +100,6 @@ class TabbedPanel extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  useSwipeable: false,
   parentPanelOpen: state.viewState.openParentPanel,
   childPanelOpen: state.malcolm.childBlock !== undefined,
 });

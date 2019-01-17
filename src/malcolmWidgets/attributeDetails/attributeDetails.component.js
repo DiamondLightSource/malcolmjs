@@ -30,7 +30,8 @@ const styles = theme => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '50%',
+    minWidth: '50%',
+    maxWidth: '50%',
     padding: 2,
   },
   button: {
@@ -46,7 +47,7 @@ const styles = theme => ({
 const copyPathToClipboard = (event, path) => {
   if (event.button === 1) {
     const dummyElement = document.createElement('textarea');
-    dummyElement.value = JSON.stringify(path);
+    dummyElement.value = path;
     dummyElement.setAttribute('readonly', '');
     dummyElement.style.position = 'absolute';
     dummyElement.style.left = `${event.pageX}px`;
@@ -91,9 +92,12 @@ const AttributeDetails = props => {
         </Tooltip>
         <Typography
           className={props.classes.textName}
-          onMouseDown={event =>
-            copyPathToClipboard(event, [props.blockName, props.attributeName])
-          }
+          onMouseDown={event => {
+            const path =
+              props.pasteOnMiddleClick ||
+              JSON.stringify([props.blockName, props.attributeName]);
+            copyPathToClipboard(event, path);
+          }}
         >
           {props.label}{' '}
         </Typography>
@@ -113,6 +117,7 @@ AttributeDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   blockName: PropTypes.string.isRequired,
   widgetTagIndex: PropTypes.number,
+  pasteOnMiddleClick: PropTypes.string,
   alarm: PropTypes.number,
   message: PropTypes.string,
   label: PropTypes.string.isRequired,
@@ -139,6 +144,7 @@ AttributeDetails.defaultProps = {
   widgetTagIndex: null,
   message: undefined,
   alarm: undefined,
+  pasteOnMiddleClick: null,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -152,10 +158,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let widgetTagIndex = null;
+  let pasteOnMiddleClick = null;
   if (attribute && attribute.raw && attribute.raw.meta) {
     const { tags } = attribute.raw.meta;
     if (tags !== null) {
       widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+      const pvIndex = tags.findIndex(t => t.indexOf('pv:') !== -1);
+      pasteOnMiddleClick =
+        pvIndex !== -1 ? tags[pvIndex].replace('pv:', '') : null;
     }
   }
 
@@ -192,6 +202,7 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
+    pasteOnMiddleClick,
   };
 };
 

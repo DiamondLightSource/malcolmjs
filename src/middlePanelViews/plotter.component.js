@@ -68,7 +68,7 @@ class Plotter extends React.Component {
         if (newState.data[0].x.length > 0 && !userHasChangedLayout) {
           newState.layout.xaxis = {
             ...newState.layout.xaxis,
-            range: props.useArchive
+            range: !props.useRaw
               ? [
                   new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
                   newState.data[0].x.slice(-1)[0],
@@ -168,7 +168,7 @@ class Plotter extends React.Component {
         datarevision: this.state.layout.datarevision + 1,
         xaxis: {
           color: this.props.theme.palette.text.primary,
-          range: this.props.useArchive
+          range: !this.props.useRaw
             ? [
                 new Date(this.state.data[0].x.slice(-1)[0].getTime() - 30000),
                 this.state.data[0].x.slice(-1)[0],
@@ -217,7 +217,7 @@ const mapStateToProps = (state, ownProps, memory) => {
       ownProps.attributeName
     );
     if (attributeIndex !== -1) {
-      attribute = ownProps.useArchive
+      attribute = !ownProps.useRaw
         ? state.malcolm.blockArchive[ownProps.blockName].attributes[
             attributeIndex
           ]
@@ -228,7 +228,7 @@ const mapStateToProps = (state, ownProps, memory) => {
   if (
     !plotterMemory.currentPlotAttribute ||
     attribute.plotTime !== plotterMemory.currentPlotAttribute.plotTime ||
-    !ownProps.useArchive
+    ownProps.useRaw
   ) {
     plotterMemory.currentPlotAttribute = attribute;
   }
@@ -288,12 +288,12 @@ Plotter.propTypes = {
   tickArchive: PropTypes.func.isRequired,
   doTick: PropTypes.bool,
   deriveState: PropTypes.func.isRequired,
-  useArchive: PropTypes.bool,
+  useRaw: PropTypes.bool,
 };
 
 Plotter.defaultProps = {
   doTick: false,
-  useArchive: true,
+  useRaw: false,
 };
 
 const memoizedMapStateToProps = () => {
