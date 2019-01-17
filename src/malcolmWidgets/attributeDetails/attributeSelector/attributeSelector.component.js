@@ -63,6 +63,26 @@ export const getDefaultFromType = objectMeta => {
   }
 };
 
+export const format = (value, displayT) => {
+  switch (displayT.form) {
+    case 'Decimal':
+      return value.toFixed(displayT.precision);
+    case 'Exponential':
+      return value.toExponential(displayT.precision);
+    case 'Engineering': {
+      const mantissa = Math.floor(Math.log10(value));
+      const exponent = Math.sign(mantissa) * Math.floor(Math.abs(mantissa) / 3);
+      return `${value.toFixed(displayT.precision / 10 ** exponent)}E${Math.sign(
+        exponent
+      )}` > 0
+        ? '+'
+        : `-${Math.abs(exponent).toString()}`;
+    }
+    default:
+      return value.toString();
+  }
+};
+
 export const selectorFunction = (
   widgetTag,
   path,
@@ -113,13 +133,25 @@ export const selectorFunction = (
         />
       );
     case 'widget:textupdate':
-      return <TextUpdate Text={value} />;
+      return (
+        <TextUpdate
+          Text={
+            objectMeta.display_t ? format(value, objectMeta.display_t) : value
+          }
+        />
+      );
     case 'widget:title':
-    case 'widget:textinput':
+    case 'widget:textinput': {
+      let displayValue = '';
+      if (objectMeta.display_t) {
+        displayValue = format(value, objectMeta.display_t);
+      } else if (value !== undefined) {
+        displayValue = value.toString();
+      }
       return (
         <WidgetTextInput
           Error={flags.isErrorState}
-          Value={value !== undefined ? value.toString() : ''}
+          Value={displayValue}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
           localState={localState}
@@ -131,7 +163,9 @@ export const selectorFunction = (
           continuousSend={continuousSend}
         />
       );
+    }
     case 'widget:table':
+    case 'widget:plot':
       return (
         <ButtonAction
           text={objectMeta.writeable ? 'Edit' : 'View'}
