@@ -66,9 +66,14 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
         .toarray()
         .map(stamp => stamp.localRunTime.toISOString()),
       alarm: methodArchive.alarmState.toarray(),
-      value: methodArchive.value
-        .toarray()
-        .map(value => value.runParameters[selectedParam[1]]),
+      value:
+        selectedParam[0] === 'takes'
+          ? methodArchive.value
+              .toarray()
+              .map(value => value.runParameters[selectedParam[1]].value)
+          : methodArchive.value
+              .toarray()
+              .map(value => value.returned[selectedParam[1]].value),
     },
     meta: {
       elements: {
@@ -102,9 +107,14 @@ export const dummyArchive = (methodArchive, selectedParam) => ({
           : stamp.localReturnTime
     ),
   alarmState: methodArchive.alarmState.toarray(),
-  value: methodArchive.value
-    .toarray()
-    .map(value => value.runParameters[selectedParam[1]]),
+  value:
+    selectedParam[0] === 'takes'
+      ? methodArchive.value
+          .toarray()
+          .map(value => value.runParameters[selectedParam[1]].value)
+      : methodArchive.value
+          .toarray()
+          .map(value => value.returned[selectedParam[1]].value),
 });
 
 const MethodArchive = props => (

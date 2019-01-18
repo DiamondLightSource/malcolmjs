@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
+  FieldTypes,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
 
@@ -130,7 +131,10 @@ const MethodDetails = props => {
               props.infoClickHandler(props.blockName, props.attributeName)
             }
           >
-            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            <AttributeAlarm
+              alarmSeverity={props.methodAlarm}
+              fieldType={FieldTypes.METHOD}
+            />
           </IconButton>
         </Tooltip>
         <div
@@ -169,7 +173,10 @@ const MethodDetails = props => {
                   )
                 }
               >
-                <AttributeAlarm alarmSeverity={props.inputAlarms[input[0]]} />
+                <AttributeAlarm
+                  alarmSeverity={props.inputAlarms[input[0]]}
+                  fieldType={FieldTypes.PARAMIN}
+                />
               </IconButton>
             </Tooltip>
             <Typography
@@ -194,7 +201,10 @@ const MethodDetails = props => {
               }
               style={{ cursor: 'pointer' }}
             >
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+              <AttributeAlarm
+                alarmSeverity={props.methodAlarm}
+                fieldType={FieldTypes.METHOD}
+              />
             </IconButton>
           </Tooltip>
           <div
@@ -238,7 +248,10 @@ const MethodDetails = props => {
                       )
                     }
                   >
-                    <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                    <AttributeAlarm
+                      alarmSeverity={AlarmStates.NO_ALARM}
+                      fieldType={FieldTypes.PARAMOUT}
+                    />
                   </IconButton>
                 </Tooltip>
                 <Typography
@@ -319,7 +332,7 @@ const mapStateToProps = (state, ownProps) => {
             method.calculated.inputs[input],
             'value'
           )) ||
-        method.calculated.dirtyInputs;
+        (method.calculated.dirtyInputs && method.calculated.dirtyInputs[input]);
 
       const inputIsErrored = false; // TODO: implement individual parameter errors
 

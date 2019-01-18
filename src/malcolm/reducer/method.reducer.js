@@ -97,15 +97,16 @@ const updateMethodInput = (state, payload) => {
         : { value: payload.value, flags: {} };
     }
     attributeCopy.calculated.dirty =
-      (archive &&
-        archive.value.size() === 0 &&
+      archive &&
+      ((archive.value.size() === 0 &&
         Object.keys(attributeCopy.calculated.inputs).length !== 0) ||
-      (archive.value.size() !== 0 &&
-        ((archive.value.get(archive.value.size() - 1).runParameters &&
-          archive.value.get(archive.value.size() - 1).runParameters[
-            payload.name
-          ].value !== attributeCopy.calculated.inputs[payload.name].value) ||
-          !archive.value.get(archive.value.size() - 1).runParameters));
+        (archive.value.size() !== 0 &&
+          ((archive.value.get(archive.value.size() - 1).runParameters &&
+            attributeCopy.calculated.inputs[payload.name] !== undefined &&
+            archive.value.get(archive.value.size() - 1).runParameters[
+              payload.name
+            ].value !== attributeCopy.calculated.inputs[payload.name].value) ||
+            !archive.value.get(archive.value.size() - 1).runParameters)));
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
   }
