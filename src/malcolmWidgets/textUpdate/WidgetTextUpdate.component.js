@@ -21,6 +21,7 @@ const textUpdateBase = {
 const styles = theme => ({
   div: {
     display: 'flex',
+    height: '28px',
     ...baseDiv(theme),
   },
   divWrap: {

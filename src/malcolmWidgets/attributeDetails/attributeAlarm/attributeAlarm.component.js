@@ -6,11 +6,24 @@ import InfoOutline from '@material-ui/icons/InfoOutlined';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import Edit from '@material-ui/icons/Edit';
 import PowerOff from '@material-ui/icons/PowerOff';
+import PlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
+import Reply from '@material-ui/icons/Reply';
+import Forward from '@material-ui/icons/Forward';
+// import SentimentDissatisfied from '@material-ui/icons/SentimentDissatisfied';
+// import SentimentVeryDissatisfied from '@material-ui/icons/SentimentVeryDissatisfied';
+// import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied';
 import Help from '@material-ui/icons/HelpOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import blockUtils from '../../../malcolm/blockUtils';
 import EditError from './EditError.component';
+
+export const FieldTypes = {
+  ATTRIBUTE: 'attirbute',
+  METHOD: 'method',
+  PARAMIN: 'method:takes',
+  PARAMOUT: 'method:returns',
+};
 
 const AlarmStateNumbers = {
   NO_ALARM: 0,
@@ -61,13 +74,41 @@ export const getAlarmState = attribute => {
 
 const AttributeAlarm = props => {
   switch (props.alarmSeverity) {
-    case AlarmStates.NO_ALARM:
-      return <InfoOutline nativeColor={props.theme.palette.primary.light} />;
-
+    case AlarmStates.NO_ALARM: {
+      switch (props.fieldType) {
+        case FieldTypes.ATTRIBUTE:
+          // return <SentimentVerySatisfied nativeColor={props.theme.palette.primary.light}/>;
+          // return <div style={{color: props.theme.palette.primary.light, fontSize: 20}}>A</div>;
+          return (
+            <InfoOutline nativeColor={props.theme.palette.primary.light} />
+          );
+        case FieldTypes.METHOD:
+          // return <div style={{color: props.theme.palette.primary.light, fontSize: 20}}>🎩</div>;
+          return (
+            <PlayCircleOutline
+              nativeColor={props.theme.palette.primary.light}
+            />
+          );
+        case FieldTypes.PARAMIN:
+          return <Forward nativeColor={props.theme.palette.primary.light} />;
+        // return <div style={{color: props.theme.palette.primary.light, fontSize: 20}}>🇵🇳</div>;
+        case FieldTypes.PARAMOUT:
+          return <Reply nativeColor={props.theme.palette.primary.light} />;
+        // return <div style={{color: props.theme.palette.primary.light, fontSize: 20}}>🇳🇴</div>;
+        default:
+          return (
+            <InfoOutline nativeColor={props.theme.palette.primary.light} />
+          );
+      }
+    }
     case AlarmStates.MINOR_ALARM:
+      // return <SentimentDissatisfied nativeColor={props.theme.alarmState.warning} />;
       return <Warning nativeColor={props.theme.alarmState.warning} />;
 
     case AlarmStates.MAJOR_ALARM:
+      // return (
+      //   <SentimentVeryDissatisfied nativeColor={props.theme.alarmState.error} />
+      // );
       return <Error nativeColor={props.theme.alarmState.error} />;
 
     case AlarmStates.INVALID_ALARM:
@@ -101,6 +142,11 @@ const AttributeAlarm = props => {
 AttributeAlarm.propTypes = {
   alarmSeverity: PropTypes.number,
   theme: PropTypes.shape({}),
+  fieldType: PropTypes.string,
+};
+
+AttributeAlarm.defaultProps = {
+  fieldType: FieldTypes.ATTRIBUTE,
 };
 
 export default withTheme()(AttributeAlarm);

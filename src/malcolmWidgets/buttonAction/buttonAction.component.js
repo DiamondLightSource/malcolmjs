@@ -19,13 +19,14 @@ const styles = () => ({
 });
 
 const ButtonAction = props => (
-  <div className={props.classes.container}>
+  <div className={props.classes.container} style={props.style}>
     <Button
       color="primary"
       variant={props.method ? 'raised' : 'flat'}
       className={props.classes.button}
       onClick={props.clickAction}
       disabled={props.disabled}
+      style={props.fontSize ? { fontSize: props.fontSize } : {}}
     >
       {props.text}
     </Button>
@@ -33,6 +34,7 @@ const ButtonAction = props => (
 );
 
 ButtonAction.propTypes = {
+  style: PropTypes.shape({}),
   method: PropTypes.bool,
   text: PropTypes.string.isRequired,
   clickAction: PropTypes.func.isRequired,
@@ -41,11 +43,14 @@ ButtonAction.propTypes = {
     button: PropTypes.string,
     container: PropTypes.string,
   }).isRequired,
+  fontSize: PropTypes.number,
 };
 
 ButtonAction.defaultProps = {
   method: false,
   disabled: false,
+  style: {},
+  fontSize: undefined,
 };
 
 export default withStyles(styles, { withTheme: true })(ButtonAction);

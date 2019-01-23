@@ -17,6 +17,7 @@ import {
   writeLocalState,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
+import LayoutButtonGraphic from '../../buttonAction/layoutButtonGraphic.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
 import { parentPanelTransition } from '../../../viewState/viewState.actions';
@@ -71,12 +72,13 @@ export const format = (value, displayT) => {
       return value.toExponential(displayT.precision);
     case 'Engineering': {
       const mantissa = Math.floor(Math.log10(value));
-      const exponent = Math.sign(mantissa) * Math.floor(Math.abs(mantissa) / 3);
-      return `${value.toFixed(displayT.precision / 10 ** exponent)}E${Math.sign(
-        exponent
-      )}` > 0
-        ? '+'
-        : `-${Math.abs(exponent).toString()}`;
+      const exponent =
+        Math.sign(mantissa) * 3.0 * Math.floor(Math.abs(mantissa) / 3);
+      return `${(value / 10 ** exponent).toFixed(displayT.precision)}E${
+        Math.sign(exponent) >= 0 ? '+' : '-'
+      }${Math.abs(exponent)
+        .toFixed(0)
+        .padStart(2, '0')}`;
     }
     default:
       return value.toString();
@@ -138,6 +140,7 @@ export const selectorFunction = (
           Text={
             objectMeta.display_t ? format(value, objectMeta.display_t) : value
           }
+          Units={(objectMeta.display_t && objectMeta.display_t.units) || null}
         />
       );
     case 'widget:title':
@@ -161,6 +164,7 @@ export const selectorFunction = (
           blurHandler={() => {}}
           forceUpdate={forceUpdate}
           continuousSend={continuousSend}
+          Units={(objectMeta.display_t && objectMeta.display_t.units) || null}
         />
       );
     }
@@ -173,6 +177,24 @@ export const selectorFunction = (
         />
       );
     case 'widget:flowgraph':
+      return (
+        <div style={{ position: 'relative', minHeight: '28px' }}>
+          <LayoutButtonGraphic
+            style={{
+              position: 'absolute',
+              top: '2px',
+              left: '0px',
+              maxWidth: '100%',
+              minWidth: '100%',
+            }}
+          />
+          <ButtonAction
+            text={objectMeta.writeable ? 'Edit' : 'View'}
+            clickAction={() => buttonClickHandler(path)}
+            style={{ position: 'absolute', top: '0px' }}
+          />
+        </div>
+      );
     case 'widget:tree':
       return (
         <ButtonAction

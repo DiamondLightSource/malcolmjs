@@ -113,11 +113,15 @@ const methodHasParameters = method =>
   Object.keys(method.returns.elements).length > 0;
 
 const showDivider = (methods, index) =>
+  (index < methods.length - 1 &&
+    !methodHasParameters(methods[index + 1].raw)) ||
+  index === methods.length - 1;
+/*
   methodHasParameters(methods[index].raw) &&
   ((index < methods.length - 1 &&
     methodHasParameters(methods[index + 1].raw)) ||
     index === methods.length - 1);
-
+   */
 const displayAttributes = props => {
   if (props.attributesAvailable) {
     return (

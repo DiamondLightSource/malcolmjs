@@ -9,6 +9,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import AttributeAlarm, {
   AlarmStates,
   getAlarmState,
+  FieldTypes,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
@@ -87,7 +88,10 @@ const AttributeDetails = props => {
                     )
             }
           >
-            <AttributeAlarm alarmSeverity={props.alarm} />
+            <AttributeAlarm
+              alarmSeverity={props.alarm}
+              fieldType={FieldTypes.ATTRIBUTE}
+            />
           </IconButton>
         </Tooltip>
         <Typography

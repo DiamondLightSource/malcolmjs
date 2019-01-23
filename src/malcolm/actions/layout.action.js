@@ -175,7 +175,7 @@ const deleteLinks = () => (dispatch, getState) => {
       blockMri,
       linkAttr
     );
-    if (portAttribute) {
+    if (portAttribute && portAttribute.raw.meta.writeable) {
       const portNullValue = portAttribute.raw.meta.tags
         .find(t => t.indexOf(sinkPort) > -1)
         .split(':')

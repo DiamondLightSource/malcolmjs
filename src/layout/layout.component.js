@@ -93,11 +93,10 @@ class Layout extends React.Component {
           maxNumberPointsPerLink={0}
           allowLooseLinks={false}
           inverseZoom
-          deleteKeys={
-            !this.props.locked && this.state.hasFocus
-              ? Object.values(deleteKeys)
-              : []
-          }
+          deleteKeys={[]}
+          //   !this.props.locked && this.state.hasFocus
+          //     ? Object.values(deleteKeys)
+          //     : []
         />
       </div>
     );
