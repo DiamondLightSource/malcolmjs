@@ -64,26 +64,29 @@ export const getDefaultFromType = objectMeta => {
   }
 };
 
-export const format = (value, displayT) => {
-  switch (displayT.form) {
-    case 'Decimal':
-      return value.toFixed(displayT.precision);
-    case 'Exponential':
-      return value.toExponential(displayT.precision);
-    case 'Engineering': {
-      const mantissa = Math.floor(Math.log10(value));
-      const exponent =
-        Math.sign(mantissa) * 3.0 * Math.floor(Math.abs(mantissa) / 3);
-      return `${(value / 10 ** exponent).toFixed(displayT.precision)}E${
-        Math.sign(exponent) >= 0 ? '+' : '-'
-      }${Math.abs(exponent)
-        .toFixed(0)
-        .padStart(2, '0')}`;
-    }
-    default:
-      return value.toString();
-  }
-};
+export const format = (value, displayT) => value.toFixed(displayT.precision);
+// switch (displayT.form) {
+//   case 'Decimal':
+//     return value.toFixed(displayT.precision);
+//   case 'Exponential':
+//     return value.toExponential(displayT.precision);
+//   case 'Engineering': {
+//     const mantissa =
+//       value === 0.0 ? 1 : Math.floor(Math.log10(Math.abs(value)));
+//     const exponent =
+//       Math.sign(mantissa) * 3.0 * Math.floor(Math.abs(mantissa) / 3);
+//     return `${Math.sign(value) >= 0 ? '+' : '-'}${(
+//       Math.abs(value) /
+//       10 ** exponent
+//     ).toFixed(displayT.precision)}E${
+//       Math.sign(exponent) >= 0 ? '+' : '-'
+//     }${Math.abs(exponent)
+//       .toFixed(0)
+//       .padStart(2, '0')}`;
+//   }
+//   default:
+//     return value.toString();
+// }
 
 export const selectorFunction = (
   widgetTag,

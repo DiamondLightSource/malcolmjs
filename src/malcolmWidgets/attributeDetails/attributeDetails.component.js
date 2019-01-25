@@ -67,6 +67,14 @@ const AttributeDetails = props => {
     const rowHighlight = props.isMainAttribute
       ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
       : {};
+    let onClick = props.isGrandchild
+      ? () =>
+          props.buttonClickHandlerWithTransition(
+            props.blockName,
+            props.attributeName
+          )
+      : () => props.buttonClickHandler(props.blockName, props.attributeName);
+    onClick = props.alarm === AlarmStates.HELP ? () => {} : onClick;
     return (
       <div className={props.classes.div} style={rowHighlight}>
         <Tooltip id="1" title={props.message} placement="bottom">
@@ -74,19 +82,7 @@ const AttributeDetails = props => {
             tabIndex="-1"
             className={props.classes.button}
             disableRipple
-            onClick={
-              props.isGrandchild
-                ? () =>
-                    props.buttonClickHandlerWithTransition(
-                      props.blockName,
-                      props.attributeName
-                    )
-                : () =>
-                    props.buttonClickHandler(
-                      props.blockName,
-                      props.attributeName
-                    )
-            }
+            onClick={onClick}
           >
             <AttributeAlarm
               alarmSeverity={props.alarm}

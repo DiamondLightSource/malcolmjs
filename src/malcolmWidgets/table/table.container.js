@@ -159,7 +159,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmUpdateTable(path, { insertRow: true }, row));
   },
   setFlag: (path, row, flagType, rowFlags) => {
-    dispatch(malcolmSetTableFlag(path, row, flagType, rowFlags));
+    dispatch(malcolmSetTableFlag(path, { row }, flagType, rowFlags));
   },
   copyTable: path => {
     dispatch(malcolmCopyValue(path));

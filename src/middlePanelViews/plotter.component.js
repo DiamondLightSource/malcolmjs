@@ -114,6 +114,11 @@ class Plotter extends React.Component {
         yaxis: {
           color: props.theme.palette.text.primary,
         },
+        yaxis2: {
+          color: props.theme.palette.text.primary,
+          overlaying: 'y',
+          side: 'right',
+        },
       },
       userChangingViewState: false,
     };
