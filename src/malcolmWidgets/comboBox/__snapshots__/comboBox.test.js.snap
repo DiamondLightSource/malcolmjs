@@ -19,31 +19,33 @@ exports[`WidgetComboBox renders correctly 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
     native={true}
-    onChange={[Function]}
     value="2"
   >
     <option
       key="0"
+      onClick={[Function]}
       value="1"
     >
       1
     </option>
     <option
       key="1"
+      onClick={[Function]}
       value="2"
     >
       2
     </option>
     <option
       key="2"
+      onClick={[Function]}
       value="3"
     >
       3
     </option>
-  </WithStyles(Select)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;
 
@@ -66,26 +68,28 @@ exports[`WidgetComboBox renders correctly with invalid value 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
     native={true}
-    onChange={[Function]}
     value="4"
   >
     <option
       key="0"
+      onClick={[Function]}
       value="1"
     >
       1
     </option>
     <option
       key="1"
+      onClick={[Function]}
       value="2"
     >
       2
     </option>
     <option
       key="2"
+      onClick={[Function]}
       value="3"
     >
       3
@@ -96,7 +100,7 @@ exports[`WidgetComboBox renders correctly with invalid value 1`] = `
     >
       4
     </option>
-  </WithStyles(Select)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;
 
@@ -119,30 +123,32 @@ exports[`WidgetComboBox renders correctly with null initial value 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
     native={true}
-    onChange={[Function]}
     value="1"
   >
     <option
       key="0"
+      onClick={[Function]}
       value="1"
     >
       1
     </option>
     <option
       key="1"
+      onClick={[Function]}
       value="2"
     >
       2
     </option>
     <option
       key="2"
+      onClick={[Function]}
       value="3"
     >
       3
     </option>
-  </WithStyles(Select)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;

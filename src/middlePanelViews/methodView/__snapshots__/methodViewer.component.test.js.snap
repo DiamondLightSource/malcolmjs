@@ -353,11 +353,9 @@ exports[`Method viewer renders output array correctly 1`] = `
         ],
         "typeid": "malcolm:core/StringArrayMeta:1.0",
       },
-      "value": Object {
-        "value": Array [
-          "something finished",
-        ],
-      },
+      "value": Array [
+        "something finished",
+      ],
     }
   }
   rowClickHandler={[Function]}

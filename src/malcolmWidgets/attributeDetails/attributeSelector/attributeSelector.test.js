@@ -175,7 +175,7 @@ describe('AttributeSelector', () => {
     wrapper
       .find('option')
       .last()
-      .simulate('change');
+      .simulate('click');
     const pendingAction = {
       payload: {
         path: ['test1', 'attr'],

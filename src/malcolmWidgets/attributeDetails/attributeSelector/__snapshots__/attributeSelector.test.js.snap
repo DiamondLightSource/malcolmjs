@@ -5,12 +5,14 @@ exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
 exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
 <div
   className="ButtonAction-container-84"
+  style={Object {}}
 >
   <WithStyles(Button)
     className="ButtonAction-button-85"
     color="primary"
     disabled={true}
     onClick={[Function]}
+    style={Object {}}
     variant="raised"
   >
     testButton
@@ -32,10 +34,36 @@ exports[`AttributeSelector selector function returns info:multiline and renders 
 `;
 
 exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
-<WithStyles(ButtonAction)
-  clickAction={[Function]}
-  text="Edit"
-/>
+<div
+  style={
+    Object {
+      "minHeight": "28px",
+      "position": "relative",
+    }
+  }
+>
+  <WithTheme(LayoutButtonGraphic)
+    style={
+      Object {
+        "left": "0px",
+        "maxWidth": "100%",
+        "minWidth": "100%",
+        "position": "absolute",
+        "top": "2px",
+      }
+    }
+  />
+  <WithStyles(ButtonAction)
+    clickAction={[Function]}
+    style={
+      Object {
+        "position": "absolute",
+        "top": "0px",
+      }
+    }
+    text="Edit"
+  />
+</div>
 `;
 
 exports[`AttributeSelector selects a buttonAction correctly for table 1`] = `
@@ -72,6 +100,7 @@ exports[`AttributeSelector selects a comboBox correctly 1`] = `
 exports[`AttributeSelector selects a textInput correctly 1`] = `
 <WithStyles(WidgetTextInput)
   Pending={false}
+  Units={null}
   Value="[object Object]"
   blurHandler={[Function]}
   continuousSend={false}
@@ -98,6 +127,7 @@ exports[`AttributeSelector selects an LED correctly 1`] = `
 exports[`AttributeSelector selects an textUpdate correctly 1`] = `
 <WithStyles(WidgetTextUpdate)
   Text="1.23456"
+  Units={null}
 />
 `;
 

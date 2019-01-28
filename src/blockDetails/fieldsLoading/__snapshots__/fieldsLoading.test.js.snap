@@ -11,7 +11,7 @@ exports[`Fields Loading renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-31 MuiCircularProgress-colorSecondary-35 MuiCircularProgress-indeterminate-33 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-41 MuiCircularProgress-colorSecondary-45 MuiCircularProgress-indeterminate-43 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -21,11 +21,11 @@ exports[`Fields Loading renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-36"
+        className="MuiCircularProgress-svg-46"
         viewBox="22 22 44 44"
       >
         <circle
-          className="MuiCircularProgress-circle-37 MuiCircularProgress-circleIndeterminate-39"
+          className="MuiCircularProgress-circle-47 MuiCircularProgress-circleIndeterminate-49"
           cx={44}
           cy={44}
           fill="none"
@@ -46,7 +46,7 @@ exports[`Fields Loading renders correctly 1`] = `
   >
     <svg
       aria-hidden="true"
-      className="MuiSvgIcon-root-40 FieldsLoading-success-4"
+      className="MuiSvgIcon-root-51 FieldsLoading-success-4"
       color={undefined}
       focusable="false"
       role="presentation"
@@ -70,7 +70,7 @@ exports[`Fields Loading renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-31 MuiCircularProgress-colorSecondary-35 MuiCircularProgress-indeterminate-33 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-41 MuiCircularProgress-colorSecondary-45 MuiCircularProgress-indeterminate-43 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -80,11 +80,11 @@ exports[`Fields Loading renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-36"
+        className="MuiCircularProgress-svg-46"
         viewBox="22 22 44 44"
       >
         <circle
-          className="MuiCircularProgress-circle-37 MuiCircularProgress-circleIndeterminate-39"
+          className="MuiCircularProgress-circle-47 MuiCircularProgress-circleIndeterminate-49"
           cx={44}
           cy={44}
           fill="none"

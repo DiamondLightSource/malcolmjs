@@ -64,9 +64,9 @@ describe('WidgetComboBox', () => {
     wrapper
       .find('option')
       .last()
-      .simulate('change');
+      .simulate('click');
 
     expect(eventAction.mock.calls.length).toEqual(1);
-    expect(eventAction.mock.calls[0][0].target.value).toEqual('3');
+    expect(eventAction.mock.calls[0][0]).toEqual('3');
   });
 });

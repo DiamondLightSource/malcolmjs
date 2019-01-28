@@ -124,6 +124,11 @@ exports[`MethodPlot renders correctly for returns 1`] = `
       "yaxis": Object {
         "color": "#000",
       },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
+      },
     }
   }
   onRelayout={[Function]}
@@ -159,8 +164,8 @@ exports[`MethodPlot renders correctly for takes 1`] = `
           1970-01-01T00:00:00.003Z,
         ],
         "y": Array [
-          0,
-          0,
+          undefined,
+          undefined,
           null,
         ],
       },
@@ -183,8 +188,8 @@ exports[`MethodPlot renders correctly for takes 1`] = `
         ],
         "y": Array [
           null,
-          0,
-          0,
+          undefined,
+          undefined,
         ],
       },
       Object {
@@ -207,7 +212,7 @@ exports[`MethodPlot renders correctly for takes 1`] = `
         "y": Array [
           null,
           null,
-          0,
+          undefined,
         ],
       },
       Object {
@@ -260,6 +265,11 @@ exports[`MethodPlot renders correctly for takes 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }
@@ -398,6 +408,11 @@ exports[`attributePlot renders correctly for bool 1`] = `
       "yaxis": Object {
         "color": "#000",
       },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
+      },
     }
   }
   onRelayout={[Function]}
@@ -535,6 +550,11 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       "yaxis": Object {
         "color": "#000",
       },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
+      },
     }
   }
   onRelayout={[Function]}
@@ -671,6 +691,11 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }

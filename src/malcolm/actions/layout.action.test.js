@@ -72,6 +72,7 @@ describe('layout actions', () => {
                 raw: {
                   meta: {
                     tags: [`${sinkPort}bool:ZERO`],
+                    writeable: true,
                   },
                 },
                 calculated: {
@@ -191,7 +192,7 @@ describe('layout actions', () => {
     expect(actions[5].type).toEqual(MalcolmSelectBlock);
   });
 
-  it('deleteLinks puts null port value to selected link attribute', () => {
+  it('deleteLinks puts null port value to selected link attribute iff writeable', () => {
     state.malcolm.layoutState.selectedLinks = [
       `PANDA${idSeparator}testOut1${idSeparator}PANDA:INENC1${idSeparator}testIn2`,
       `PANDA:INENC1${idSeparator}testOut2${idSeparator}PANDA${idSeparator}testIn1`,
@@ -200,18 +201,12 @@ describe('layout actions', () => {
     const action = LayoutActions.deleteLinks();
     action(dispatch, getState);
 
-    expect(actions).toHaveLength(6);
+    expect(actions).toHaveLength(3);
     expect(actions[0].type).toEqual(MalcolmAttributeFlag);
-    expect(actions[3].type).toEqual(MalcolmAttributeFlag);
     expect(actions[1].type).toEqual(MalcolmSend);
     expect(actions[1].payload.typeid).toEqual('malcolm:core/Put:1.0');
     expect(actions[1].payload.path).toEqual(['PANDA:INENC1', 'testIn2']);
     expect(actions[1].payload.value).toEqual('ZERO');
-    expect(actions[4].type).toEqual(MalcolmSend);
-    expect(actions[4].payload.typeid).toEqual('malcolm:core/Put:1.0');
-    expect(actions[4].payload.path).toEqual(['PANDA', 'testIn1']);
-    expect(actions[4].payload.value).toEqual('ONE');
     expect(actions[2].type).toEqual(MalcolmSelectLinkType);
-    expect(actions[5].type).toEqual(MalcolmSelectLinkType);
   });
 });

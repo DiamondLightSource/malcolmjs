@@ -28,7 +28,9 @@ exports[`archiveTable renders correctly 1`] = `
       disableWidth={false}
       onResize={[Function]}
       style={Object {}}
-    />
+    >
+      <Component />
+    </AutoSizer>
   </div>
 </div>
 `;

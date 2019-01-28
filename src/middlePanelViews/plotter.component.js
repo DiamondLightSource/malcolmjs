@@ -16,8 +16,8 @@ export const comparePlotlyDateString = (date1, date2) => {
   if (
     date1 instanceof Date ||
     date2 instanceof Date ||
-    !(date1 instanceof String) ||
-    !(date2 instanceof String)
+    typeof date1 !== 'string' ||
+    typeof date2 !== 'string'
   ) {
     return false;
   }

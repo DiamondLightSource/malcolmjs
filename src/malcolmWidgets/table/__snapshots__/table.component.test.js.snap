@@ -277,6 +277,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -328,6 +347,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -379,6 +417,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -430,6 +487,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -481,6 +557,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -583,6 +678,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -960,6 +1074,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -1337,6 +1470,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -1714,6 +1866,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2091,6 +2262,25 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2737,6 +2927,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2789,6 +2998,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2841,6 +3069,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2893,6 +3140,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -2945,6 +3211,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -3048,6 +3333,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -3426,6 +3730,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -3804,6 +4127,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -4182,6 +4524,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
@@ -4560,6 +4921,25 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               }
               flags={
                 Object {
+                  "columns": Object {
+                    "outa1": Object {},
+                    "outa2": Object {},
+                    "outb1": Object {},
+                    "outb2": Object {},
+                    "outc1": Object {},
+                    "outc2": Object {},
+                    "outd1": Object {},
+                    "outd2": Object {},
+                    "oute1": Object {},
+                    "oute2": Object {},
+                    "outf1": Object {},
+                    "outf2": Object {},
+                    "position": Object {},
+                    "repeats": Object {},
+                    "time1": Object {},
+                    "time2": Object {},
+                    "trigger": Object {},
+                  },
                   "rows": Array [
                     Object {},
                     Object {},
