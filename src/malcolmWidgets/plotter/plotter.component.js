@@ -13,7 +13,7 @@ import {
   malcolmSetFlag,
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from '../table/virtualizedTable.component';
-import ComboBox from '../comboBox/comboBox.component';
+import ComboBox from '../comboBox/muiCombobox.component';
 import TabbedPanel from '../../middlePanelViews/tabbedMiddlePanel.component';
 
 const LoadablePlotter = Loadable({
@@ -21,14 +21,21 @@ const LoadablePlotter = Loadable({
   loading: () => <Typography>Loading...</Typography>,
 });
 
-const updatePlotData = (oldDataElement, attribute, yData, xData, yAxis) => {
-  const dataElement = oldDataElement;
+const updatePlotData = (attribute, yData, xData, yAxis) => {
+  const dataElement = {
+    x: [],
+    y: [],
+    type: 'scatter',
+    mode: 'lines+points',
+    line: { shape: 'hv' },
+  };
   if (yData) {
     dataElement.y = attribute.raw.value[yData];
     dataElement.x =
       xData && attribute.raw.value[xData]
         ? attribute.raw.value[xData]
         : attribute.raw.value[yData].map((val, ind) => ind);
+    dataElement.name = yData;
     dataElement.visible = attribute.raw.value[yData].map(() => true);
   } else if (isArrayType(attribute.raw.meta)) {
     dataElement.y = attribute.raw.value;
@@ -42,23 +49,17 @@ const updatePlotData = (oldDataElement, attribute, yData, xData, yAxis) => {
 };
 
 export const deriveStateFromProps = (props, state, xData, y1Data, y2Data) => {
-  const { data, layout } = state;
+  const { layout } = state;
   if (props.attribute && props.attribute.raw) {
-    const newData = [...data];
+    const newData = [];
     if (y1Data.length > 0) {
       y1Data.forEach((yData, ind) => {
-        newData[ind] = updatePlotData(
-          data[ind],
-          props.attribute,
-          yData,
-          xData[0]
-        );
+        newData[ind] = updatePlotData(props.attribute, yData, xData[0]);
       });
     }
     if (y2Data.length > 0) {
       y2Data.forEach((yData, ind) => {
         newData[ind + y1Data.length] = updatePlotData(
-          data[ind + y1Data.length],
           props.attribute,
           yData,
           xData[0],
@@ -68,19 +69,22 @@ export const deriveStateFromProps = (props, state, xData, y1Data, y2Data) => {
     }
     layout.datarevision += 1;
     const xDisplay =
-      xData.length > 0
+      xData.length > 0 && xData[0]
         ? props.attribute.raw.meta.elements[xData[0]].display_t
         : {};
     let y1Display;
     let y2Display;
-    if (y1Data.length > 0) {
+    if (y1Data.length > 0 && y1Data[0]) {
       y1Display = props.attribute.raw.meta.elements[y1Data[0]].display_t;
     } else if (isArrayType(props.attribute.raw.meta)) {
       y1Display = props.attribute.raw.meta.display_t;
     }
-    if (y2Data.length > 0) {
+    if (y2Data.length > 0 && y2Data[0]) {
       y2Display = props.attribute.raw.meta.elements[y2Data[0]].display_t;
     }
+    layout.xaxis.range = undefined;
+    layout.yaxis.range = undefined;
+    layout.yaxis2.range = undefined;
     if (xDisplay && xDisplay.limitLow !== xDisplay.limitHigh) {
       layout.xaxis = {
         ...layout.xaxis,
@@ -146,30 +150,45 @@ const WidgetPlotContainer = props => {
     pad(<Typography>X: </Typography>),
     pad(
       <ComboBox
-        Choices={[...labels, '']}
-        Value={xSet.length > 0 ? xSet[0] : ''}
-        selectEventHandler={value => {
-          props.setFlag(props.attribute.calculated.path, 'plotAsX', [value]);
+        Multi
+        Choices={[...labels]}
+        Value={xSet.length > 0 ? xSet : []}
+        selectEventHandler={event => {
+          props.setFlag(
+            props.attribute.calculated.path,
+            'plotAsX',
+            event.target.value.slice(-1)
+          );
         }}
       />
     ),
     pad(<Typography>Y1: </Typography>),
     pad(
       <ComboBox
-        Choices={[...labels, '']}
-        Value={y1Set.length > 0 ? y1Set[0] : ''}
-        selectEventHandler={value => {
-          props.setFlag(props.attribute.calculated.path, 'plotAsY1', [value]);
+        Multi
+        Choices={[...labels]}
+        Value={y1Set.length > 0 ? y1Set : []}
+        selectEventHandler={event => {
+          props.setFlag(
+            props.attribute.calculated.path,
+            'plotAsY1',
+            event.target.value
+          );
         }}
       />
     ),
     pad(<Typography>Y2: </Typography>),
     pad(
       <ComboBox
-        Choices={[...labels, '']}
-        Value={y2Set.length > 0 ? y2Set[0] : ''}
-        selectEventHandler={value => {
-          props.setFlag(props.attribute.calculated.path, 'plotAsY2', [value]);
+        Multi
+        Choices={[...labels]}
+        Value={y2Set.length > 0 ? y2Set : []}
+        selectEventHandler={event => {
+          props.setFlag(
+            props.attribute.calculated.path,
+            'plotAsY2',
+            event.target.value
+          );
         }}
       />
     ),

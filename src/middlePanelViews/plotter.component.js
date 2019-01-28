@@ -65,7 +65,11 @@ class Plotter extends React.Component {
           state.layout.xaxis.range &&
           (!(state.layout.xaxis.range[0] instanceof Date) ||
             !(state.layout.xaxis.range[1] instanceof Date));
-        if (newState.data[0].x.length > 0 && !userHasChangedLayout) {
+        if (
+          newState.data[0] &&
+          newState.data[0].x.length > 0 &&
+          !userHasChangedLayout
+        ) {
           newState.layout.xaxis = {
             ...newState.layout.xaxis,
             range: !props.useRaw
