@@ -60,6 +60,7 @@ exports[`NavControl renders correctly 1`] = `
         "PANDA:mri",
       ]
     }
+    currentPath="PANDA:mri"
     handleClick={[Function]}
     handleClose={[Function]}
     icon={<pure(KeyboardArrowDownIcon) />}
@@ -618,6 +619,7 @@ exports[`NavControl renders correctly when nav element is errored and has no sib
   </WithStyles(Typography)>
   <Component
     anchorEl={null}
+    currentPath="PANDA:mri"
     handleClick={[Function]}
     handleClose={[Function]}
     icon={<pure(KeyboardArrowDownIcon) />}
@@ -905,6 +907,7 @@ exports[`NavControl renders correctly when nav element is errored but has valid 
         "PANDA:mri",
       ]
     }
+    currentPath="PANDA:mri"
     handleClick={[Function]}
     handleClose={[Function]}
     icon={<pure(KeyboardArrowDownIcon) />}
@@ -1204,12 +1207,14 @@ exports[`NavControl selector component renders correctly 1`] = `
     <WithStyles(MenuItem)
       key="layout"
       onClick={[Function]}
+      selected={false}
     >
       layout
     </WithStyles(MenuItem)>
     <WithStyles(MenuItem)
       key="table"
       onClick={[Function]}
+      selected={false}
     >
       table
     </WithStyles(MenuItem)>

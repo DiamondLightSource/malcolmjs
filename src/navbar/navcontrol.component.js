@@ -75,6 +75,7 @@ class NavControl extends Component {
           {nav.label}
         </Typography>
         <NavSelector
+          currentPath={nav.path}
           handleClick={this.handleClick}
           childElements={siblings}
           childElementLabels={siblingLabels}
@@ -108,6 +109,7 @@ export const NavSelector = props => (
     >
       {props.childElements.map((child, i) => (
         <MenuItem
+          selected={child === props.currentPath}
           key={child}
           onClick={() => {
             props.handleClose();
@@ -146,6 +148,7 @@ NavControl.defaultProps = {
 };
 
 NavSelector.propTypes = {
+  currentPath: PropTypes.string,
   childElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   childElementLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleClick: PropTypes.func.isRequired,
@@ -160,6 +163,10 @@ NavSelector.propTypes = {
       }),
     }),
   }).isRequired,
+};
+
+NavSelector.defaultProps = {
+  currentPath: undefined,
 };
 
 export default withStyles(styles, { withTheme: true })(NavControl);
