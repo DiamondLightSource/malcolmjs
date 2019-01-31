@@ -5,6 +5,7 @@ import {
   MalcolmInLayoutDeleteZoneType,
   MalcolmResetPortsType,
   MalcolmZoom,
+  MalcolmOptimisticLayoutUpdate,
 } from '../malcolm.types';
 import {
   malcolmPutAction,
@@ -165,6 +166,13 @@ const deleteBlocks = () => (dispatch, getState) => {
   });
 };
 
+const localUpdateAction = newLayout => ({
+  type: MalcolmOptimisticLayoutUpdate,
+  payload: {
+    newLayout,
+  },
+});
+
 const deleteLinks = () => (dispatch, getState) => {
   const state = getState().malcolm;
 
@@ -180,6 +188,17 @@ const deleteLinks = () => (dispatch, getState) => {
         .find(t => t.indexOf(sinkPort) > -1)
         .split(':')
         .slice(-1)[0];
+
+      const { layout } = state;
+      const newLayout = JSON.parse(JSON.stringify(layout));
+      const blockIndex = layout.blocks.findIndex(
+        block => block.mri === blockMri
+      );
+      const portIndex = layout.blocks[blockIndex].ports.findIndex(
+        port => port.label === linkAttr
+      );
+      newLayout.blocks[blockIndex].ports[portIndex].value = portNullValue;
+      dispatch(localUpdateAction(newLayout));
       dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
       dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
       dispatch(malcolmSelectLink(linkId, false));
@@ -226,4 +245,5 @@ export default {
   deleteLinks,
   zoomToFit,
   zoomInDirection,
+  localUpdateAction,
 };

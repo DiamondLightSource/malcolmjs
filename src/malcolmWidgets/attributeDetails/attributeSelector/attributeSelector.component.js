@@ -140,17 +140,15 @@ export const selectorFunction = (
     case 'widget:textupdate':
       return (
         <TextUpdate
-          Text={
-            objectMeta.display_t ? format(value, objectMeta.display_t) : value
-          }
-          Units={(objectMeta.display_t && objectMeta.display_t.units) || null}
+          Text={objectMeta.display ? format(value, objectMeta.display) : value}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
         />
       );
     case 'widget:title':
     case 'widget:textinput': {
       let displayValue = '';
-      if (objectMeta.display_t) {
-        displayValue = format(value, objectMeta.display_t);
+      if (objectMeta.display) {
+        displayValue = format(value, objectMeta.display);
       } else if (value !== undefined) {
         displayValue = value.toString();
       }
@@ -167,18 +165,30 @@ export const selectorFunction = (
           blurHandler={() => {}}
           forceUpdate={forceUpdate}
           continuousSend={continuousSend}
-          Units={(objectMeta.display_t && objectMeta.display_t.units) || null}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
         />
       );
     }
     case 'widget:table':
-    case 'widget:plot':
       return (
         <ButtonAction
           text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'widget:plot':
+      return objectMeta.insideArray ? (
+        <TextUpdate
+          Text={objectMeta.display ? format(value, objectMeta.display) : value}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
+        />
+      ) : (
+        <ButtonAction
+          text={objectMeta.writeable ? 'Edit' : 'View'}
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
+
     case 'widget:flowgraph':
       return (
         <div style={{ position: 'relative', minHeight: '28px' }}>

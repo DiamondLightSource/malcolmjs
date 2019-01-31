@@ -185,7 +185,9 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     attribute &&
     (attribute.raw &&
       attribute.raw.meta &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph'))
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph') &&
+      attribute.calculated.name === state.mainAttribute &&
+      attribute.calculated.path[0] === state.parentBlock)
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;

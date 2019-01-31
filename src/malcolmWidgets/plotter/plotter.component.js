@@ -14,6 +14,7 @@ import {
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from '../table/virtualizedTable.component';
 import ComboBox from '../comboBox/muiCombobox.component';
+import TextInput from '../textInput/WidgetTextInput.component';
 import TabbedPanel from '../../middlePanelViews/tabbedMiddlePanel.component';
 
 const LoadablePlotter = Loadable({
@@ -21,26 +22,30 @@ const LoadablePlotter = Loadable({
   loading: () => <Typography>Loading...</Typography>,
 });
 
-const updatePlotData = (attribute, yData, xData, yAxis) => {
+const updatePlotData = (attribute, nPoints, yData, xData, yAxis) => {
   const dataElement = {
     x: [],
     y: [],
     type: 'scatter',
     mode: 'lines+points',
-    line: { shape: 'hv' },
+    //  line: { shape: 'hv' },
   };
   if (yData) {
-    dataElement.y = attribute.raw.value[yData];
+    const points = nPoints || attribute.raw.value[yData].length;
+    dataElement.y = attribute.raw.value[yData].slice(0, points);
     dataElement.x =
       xData && attribute.raw.value[xData]
-        ? attribute.raw.value[xData]
-        : attribute.raw.value[yData].map((val, ind) => ind);
+        ? attribute.raw.value[xData].slice(0, points)
+        : attribute.raw.value[yData].slice(0, points).map((val, ind) => ind);
     dataElement.name = yData;
-    dataElement.visible = attribute.raw.value[yData].map(() => true);
+    dataElement.visible = attribute.raw.value[yData]
+      .slice(0, points)
+      .map(() => true);
   } else if (isArrayType(attribute.raw.meta)) {
-    dataElement.y = attribute.raw.value;
-    dataElement.x = attribute.raw.value.map((val, ind) => ind);
-    dataElement.visible = attribute.raw.value.map(() => true);
+    const points = nPoints || attribute.raw.value.length;
+    dataElement.y = attribute.raw.value.slice(0, points);
+    dataElement.x = attribute.raw.value.slice(0, points).map((val, ind) => ind);
+    dataElement.visible = attribute.raw.value.slice(0, points).map(() => true);
   }
   if (yAxis) {
     dataElement.yaxis = yAxis;
@@ -54,13 +59,21 @@ export const deriveStateFromProps = (props, state, xData, y1Data, y2Data) => {
     const newData = [];
     if (y1Data.length > 0) {
       y1Data.forEach((yData, ind) => {
-        newData[ind] = updatePlotData(props.attribute, yData, xData[0]);
+        newData[ind] = updatePlotData(
+          props.attribute,
+          props.nPoints,
+          yData,
+          xData[0]
+        );
       });
+    } else if (isArrayType(props.attribute.raw.meta)) {
+      newData[0] = updatePlotData(props.attribute, props.nPoints);
     }
     if (y2Data.length > 0) {
       y2Data.forEach((yData, ind) => {
         newData[ind + y1Data.length] = updatePlotData(
           props.attribute,
+          props.nPoints,
           yData,
           xData[0],
           'y2'
@@ -70,17 +83,17 @@ export const deriveStateFromProps = (props, state, xData, y1Data, y2Data) => {
     layout.datarevision += 1;
     const xDisplay =
       xData.length > 0 && xData[0]
-        ? props.attribute.raw.meta.elements[xData[0]].display_t
+        ? props.attribute.raw.meta.elements[xData[0]].display
         : {};
     let y1Display;
     let y2Display;
     if (y1Data.length > 0 && y1Data[0]) {
-      y1Display = props.attribute.raw.meta.elements[y1Data[0]].display_t;
+      y1Display = props.attribute.raw.meta.elements[y1Data[0]].display;
     } else if (isArrayType(props.attribute.raw.meta)) {
-      y1Display = props.attribute.raw.meta.display_t;
+      y1Display = props.attribute.raw.meta.display;
     }
     if (y2Data.length > 0 && y2Data[0]) {
-      y2Display = props.attribute.raw.meta.elements[y2Data[0]].display_t;
+      y2Display = props.attribute.raw.meta.elements[y2Data[0]].display;
     }
     layout.xaxis.range = undefined;
     layout.yaxis.range = undefined;
@@ -141,55 +154,75 @@ const WidgetPlotContainer = props => {
   const pad = child => (
     <div style={{ padding: '4px', flexGrow: 1 }}>{child}</div>
   );
-  const labels = Object.keys(props.attribute.raw.meta.elements);
+  const labels = isArrayType(props.attribute.raw.meta)
+    ? ['val']
+    : Object.keys(props.attribute.raw.meta.elements);
   const xSet = findDataColumn(props.attribute, 'X');
   const y1Set = findDataColumn(props.attribute, 'Y1');
   const y2Set = findDataColumn(props.attribute, 'Y2');
+  const axesSelectors = isArrayType(props.attribute.raw.meta)
+    ? []
+    : [
+        pad(<Typography>X: </Typography>),
+        pad(
+          <ComboBox
+            Multi
+            Choices={[...labels]}
+            Value={xSet.length > 0 ? xSet : []}
+            selectEventHandler={event => {
+              props.setFlag(
+                props.attribute.calculated.path,
+                'plotAsX',
+                event.target.value.slice(-1)
+              );
+            }}
+          />
+        ),
+        pad(<Typography>Y1: </Typography>),
+        pad(
+          <ComboBox
+            Multi
+            Choices={[...labels]}
+            Value={y1Set.length > 0 ? y1Set : []}
+            selectEventHandler={event => {
+              props.setFlag(
+                props.attribute.calculated.path,
+                'plotAsY1',
+                event.target.value
+              );
+            }}
+          />
+        ),
+        pad(<Typography>Y2: </Typography>),
+        pad(
+          <ComboBox
+            Multi
+            Choices={[...labels]}
+            Value={y2Set.length > 0 ? y2Set : []}
+            selectEventHandler={event => {
+              props.setFlag(
+                props.attribute.calculated.path,
+                'plotAsY2',
+                event.target.value
+              );
+            }}
+          />
+        ),
+      ];
   const footerItems = [
     ...props.footerItems,
-    pad(<Typography>X: </Typography>),
+    ...axesSelectors,
+    pad(<Typography>N Points: </Typography>),
     pad(
-      <ComboBox
-        Multi
-        Choices={[...labels]}
-        Value={xSet.length > 0 ? xSet : []}
-        selectEventHandler={event => {
+      <TextInput
+        submitEventHandler={event => {
           props.setFlag(
             props.attribute.calculated.path,
-            'plotAsX',
-            event.target.value.slice(-1)
+            'nPoints',
+            parseInt(event.target.value, 10)
           );
         }}
-      />
-    ),
-    pad(<Typography>Y1: </Typography>),
-    pad(
-      <ComboBox
-        Multi
-        Choices={[...labels]}
-        Value={y1Set.length > 0 ? y1Set : []}
-        selectEventHandler={event => {
-          props.setFlag(
-            props.attribute.calculated.path,
-            'plotAsY1',
-            event.target.value
-          );
-        }}
-      />
-    ),
-    pad(<Typography>Y2: </Typography>),
-    pad(
-      <ComboBox
-        Multi
-        Choices={[...labels]}
-        Value={y2Set.length > 0 ? y2Set : []}
-        selectEventHandler={event => {
-          props.setFlag(
-            props.attribute.calculated.path,
-            'plotAsY2',
-            event.target.value
-          );
-        }}
+        setFlag={() => {}}
       />
     ),
   ];
@@ -227,6 +260,7 @@ const WidgetPlotContainer = props => {
                 findDataColumn(props.attribute, 'Y2')
               )
             }
+            nPoints={props.attribute.calculated.nPoints}
             useRaw
           />
           <div
@@ -312,6 +346,7 @@ WidgetPlotContainer.propTypes = {
   attribute: PropTypes.shape({
     calculated: PropTypes.shape({
       path: PropTypes.arrayOf(PropTypes.string),
+      nPoints: PropTypes.number,
     }).isRequired,
     raw: PropTypes.shape({
       meta: PropTypes.shape({

@@ -8,6 +8,7 @@ import {
   MalcolmSelectLinkType,
   MalcolmSelectBlock,
   MalcolmZoom,
+  MalcolmOptimisticLayoutUpdate,
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
@@ -159,6 +160,9 @@ const processLayout = malcolmState => {
     );
 
     if (attribute && attribute.calculated.layout) {
+      if (attribute.calculated.dirty) {
+        return malcolmState.layout;
+      }
       let layoutBlocks = attribute.calculated.layout.blocks
         .filter(b => b.visible)
         .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
@@ -455,6 +459,26 @@ const zoomLayout = (state, payload) => {
   return { ...state, layoutEngine };
 };
 
+const optimisticUpdate = (state, payload) => {
+  const layoutEngineView = state.layoutEngine
+    ? {
+        offset: {
+          x: state.layoutEngine.diagramModel.offsetX,
+          y: state.layoutEngine.diagramModel.offsetY,
+        },
+        zoom: state.layoutEngine.diagramModel.zoom,
+      }
+    : undefined;
+
+  const layoutEngine = buildLayoutEngine(
+    payload.newLayout,
+    state.layoutState.selectedBlocks,
+    state.layoutState.selectedLinks,
+    layoutEngineView
+  );
+  return { ...state, layout: payload.newLayout, layoutEngine };
+};
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -465,6 +489,7 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmSelectLinkType]: selectLink,
     [MalcolmSelectBlock]: selectBlock,
     [MalcolmZoom]: zoomLayout,
+    [MalcolmOptimisticLayoutUpdate]: optimisticUpdate,
   }
 );
 

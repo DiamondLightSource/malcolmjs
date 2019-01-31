@@ -147,8 +147,8 @@ WidgetTextInput.propTypes = {
     ),
   }),
   setFlag: PropTypes.func.isRequired,
-  blurHandler: PropTypes.func.isRequired,
-  focusHandler: PropTypes.func.isRequired,
+  blurHandler: PropTypes.func,
+  focusHandler: PropTypes.func,
   Pending: PropTypes.bool,
   Error: PropTypes.bool,
   isDirty: PropTypes.bool,
@@ -169,6 +169,8 @@ WidgetTextInput.defaultProps = {
   Error: false,
   continuousSend: false,
   localState: { set: () => {} },
+  focusHandler: () => {},
+  blurHandler: () => {},
 };
 
 export default withStyles(styles)(WidgetTextInput);
