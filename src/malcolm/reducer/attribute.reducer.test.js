@@ -243,9 +243,21 @@ describe('attribute reducer', () => {
     expect(state.mainAttribute).toEqual('health');
   });
 
-  it('updateLayout updates the layout if the attribute is called layout', () => {
+  it('updateLayout updates the layout if the attribute is a flowgraph and the main attribute', () => {
+    state.mainAttribute = 'layout';
+    state.parentBlock = 'block1';
     updateLayout(state, state, 'block1', 'layout');
     expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout doesnt update the layout if the attribute is a flowgraph but not the main attribute', () => {
+    state.mainAttribute = 'layout';
+    state.parentBlock = 'block2';
+    updateLayout(state, state, 'block1', 'layout');
+    state.mainAttribute = 'cat';
+    state.parentBlock = 'block1';
+    updateLayout(state, state, 'block1', 'layout');
+    expect(LayoutReducer.processLayout).not.toHaveBeenCalled();
   });
 
   it('updateLayout returns early if the attribute is not found', () => {
