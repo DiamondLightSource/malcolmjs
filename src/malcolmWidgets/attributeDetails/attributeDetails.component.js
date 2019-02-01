@@ -67,14 +67,28 @@ const AttributeDetails = props => {
     const rowHighlight = props.isMainAttribute
       ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
       : {};
-    const onClick = props.isGrandchild
+    let onClick = props.isGrandchild
       ? () =>
           props.buttonClickHandlerWithTransition(
             props.blockName,
             props.attributeName
           )
       : () => props.buttonClickHandler(props.blockName, props.attributeName);
-    // onClick = props.alarm === AlarmStates.HELP ? () => {} : onClick;
+    onClick =
+      props.alarm === AlarmStates.HELP
+        ? () => {
+            const buttonDiv = document.getElementById(
+              `help.${props.attributeName}`
+            );
+            buttonDiv.children[0].dispatchEvent(
+              new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+              })
+            );
+          }
+        : onClick;
     return (
       <div className={props.classes.div} style={rowHighlight}>
         <Tooltip id="1" title={props.message} placement="bottom">

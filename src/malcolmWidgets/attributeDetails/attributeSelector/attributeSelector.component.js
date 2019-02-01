@@ -229,7 +229,11 @@ export const selectorFunction = (
       );
     case 'widget:help':
       return (
-        <ButtonAction text="View" clickAction={() => window.open(value)} />
+        <ButtonAction
+          text="View"
+          clickAction={() => window.open(value)}
+          id={`help.${path[1]}`}
+        />
       );
     case 'info:alarm':
       return <AttributeAlarm alarmSeverity={value} />;

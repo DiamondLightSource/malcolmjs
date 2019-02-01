@@ -19,7 +19,7 @@ const styles = () => ({
 });
 
 const ButtonAction = props => (
-  <div className={props.classes.container} style={props.style}>
+  <div className={props.classes.container} style={props.style} id={props.id}>
     <Button
       color="primary"
       variant={props.method ? 'raised' : 'flat'}
@@ -44,6 +44,7 @@ ButtonAction.propTypes = {
     container: PropTypes.string,
   }).isRequired,
   fontSize: PropTypes.number,
+  id: PropTypes.string,
 };
 
 ButtonAction.defaultProps = {
@@ -51,6 +52,7 @@ ButtonAction.defaultProps = {
   disabled: false,
   style: {},
   fontSize: undefined,
+  id: undefined,
 };
 
 export default withStyles(styles, { withTheme: true })(ButtonAction);
