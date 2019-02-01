@@ -16,6 +16,7 @@ import TableContainer from '../malcolmWidgets/table/table.container';
 import AttributePlotter from '../malcolmWidgets/plotter/plotter.component';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
 import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
+import ConnectedIFrame from '../middlePanelViews/connectIFrame.component';
 import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
@@ -338,7 +339,20 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
-
+    case 'widget:help':
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <ConnectedIFrame
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+            />
+          </div>
+        </div>
+      );
     default:
       return (
         <div
