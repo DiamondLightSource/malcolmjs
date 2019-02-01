@@ -334,8 +334,6 @@ const findAttributeComponent = props => {
             <AttributePlotter
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
-              xData="xData"
-              yData="yData"
             />
           </div>
         </div>
