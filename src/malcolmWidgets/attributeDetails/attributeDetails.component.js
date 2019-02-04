@@ -78,7 +78,7 @@ const AttributeDetails = props => {
       props.alarm === AlarmStates.HELP
         ? () => {
             const buttonDiv = document.getElementById(
-              `help.${props.attributeName}`
+              `help.${props.blockName}.${props.attributeName}`
             );
             buttonDiv.children[0].dispatchEvent(
               new MouseEvent('click', {

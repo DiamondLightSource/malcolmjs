@@ -232,7 +232,7 @@ export const selectorFunction = (
         <ButtonAction
           text="View"
           clickAction={() => window.open(value)}
-          id={`help.${path[1]}`}
+          id={`help.${path[0]}.${path[1]}`}
         />
       );
     case 'info:alarm':
