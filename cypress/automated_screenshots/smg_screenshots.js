@@ -17,11 +17,11 @@ describe('SMG screenshots', () => {
     });
 
     cy.screenshot('attribute-details', {
-      clip: { x: 0, y: 70, width: 360, height: 50 },
+      clip: { x: 0, y: 105, width: 360, height: 50 },
     });
 
     cy.screenshot('methods', {
-      clip: { x: 0, y: 340, width: 360, height: 110 },
+      clip: { x: 0, y: 370, width: 360, height: 110 },
     });
   });
 

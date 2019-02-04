@@ -98,13 +98,9 @@ describe('NavigationReducer.updateNavTypes', () => {
   it('updateNavTypes loads children for each nav element', () => {
     state = NavigationReducer.updateNavTypes(state);
 
-    expect(state.navigation.navigationLists[0].children).toEqual([
-      'layout',
-      'health',
-    ]);
+    expect(state.navigation.navigationLists[0].children).toEqual(['layout']);
     expect(state.navigation.navigationLists[0].childrenLabels).toEqual([
       'Layout',
-      'health',
     ]);
     expect(state.navigation.navigationLists[0].label).toEqual('PANDA');
 

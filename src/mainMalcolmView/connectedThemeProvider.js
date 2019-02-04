@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { blue, green, orange, purple } from '@material-ui/core/colors/index';
+import {
+  blue,
+  pink,
+  brown,
+  orange,
+  purple,
+} from '@material-ui/core/colors/index';
 import {
   MuiThemeProvider,
   createMuiTheme,
@@ -21,8 +27,9 @@ export const theme = (primary, secondary, type) => {
     portColours: {
       bool: blue,
       int32: orange,
-      motor: green,
-      NDArray: purple,
+      motor: pink,
+      NDArray: brown,
+      port: purple,
     },
   });
 };

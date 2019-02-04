@@ -6,6 +6,9 @@ import AttributeSelector, {
   getDefaultFromType,
 } from './attributeSelector.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
+import { parentPanelTransition } from '../../../viewState/viewState.actions';
+
+jest.useFakeTimers();
 
 jest.mock('../../../malcolm/actions/navigation.actions');
 
@@ -61,13 +64,14 @@ describe('AttributeSelector', () => {
     };
   };
 
-  const buildState = attribute => ({
+  const buildState = (attribute, isGrandchild = false) => ({
     malcolm: {
       blocks: {
         PANDA1: {
           attributes: [attribute],
         },
       },
+      childBlock: isGrandchild ? 'PANDA1' : undefined,
     },
   });
 
@@ -218,6 +222,31 @@ describe('AttributeSelector', () => {
 
   it('dispatches path change on flowgraph button click', () => {
     runButtonActionTest('flowgraph');
+  });
+
+  it('dispatches path change and transition actions on button click if is in child pane', () => {
+    const testStore = mockStore(buildState(buildAttribute('table'), true));
+    const wrapper = mount(
+      <AttributeSelector
+        blockName="PANDA1"
+        attributeName="attribute1"
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+
+    jest.runAllTimers();
+
+    const actions = testStore.getActions();
+    expect(actions.length).toEqual(3);
+    expect(actions[0]).toEqual(parentPanelTransition(true));
+    expect(actions[1].type).toEqual('TEST');
+    expect(actions[1].blockName).toEqual('test1');
+    expect(actions[1].attribute).toEqual('attr');
+    expect(actions[2]).toEqual(parentPanelTransition(false));
   });
 
   it('dispatches dirty on focus for textipnut', () => {

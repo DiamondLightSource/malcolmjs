@@ -19,7 +19,7 @@ import {
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
-import { isArrayType } from '../../../malcolm/reducer/method.reducer';
+import { parentPanelTransition } from '../../../viewState/viewState.actions';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -31,7 +31,16 @@ export const malcolmTypes = {
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',
   choiceArray: 'malcolm:core/ChoiceArrayMeta:1.0',
   table: 'malcolm:core/TableMeta:1.0',
+  pointGenerator: 'malcolm:core/PointGeneratorMeta:1.0',
 };
+
+export const isArrayType = meta =>
+  meta &&
+  meta.typeid &&
+  meta.typeid
+    .split('/')[1]
+    .split(':')[0]
+    .slice(-9) === 'ArrayMeta';
 
 export const getDefaultFromType = objectMeta => {
   switch (objectMeta.typeid) {
@@ -47,6 +56,8 @@ export const getDefaultFromType = objectMeta => {
     case malcolmTypes.choice:
     case malcolmTypes.choiceArray:
       return null;
+    case malcolmTypes.pointGenerator:
+      return {};
     default:
       return undefined;
   }
@@ -108,7 +119,7 @@ export const selectorFunction = (
       return (
         <WidgetTextInput
           Error={flags.isErrorState}
-          Value={value !== undefined ? value.toString() : '-'}
+          Value={value !== undefined ? value.toString() : ''}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
           localState={localState}
@@ -146,6 +157,10 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler()}
           disabled={flags.isDisabled}
         />
+      );
+    case 'widget:help':
+      return (
+        <ButtonAction text="View" clickAction={() => window.open(value)} />
       );
     case 'info:alarm':
       return <AttributeAlarm alarmSeverity={value} />;
@@ -191,7 +206,9 @@ const AttributeSelector = props => {
         props.attribute.raw.meta,
         props.attribute.calculated.forceUpdate,
         continuousSend,
-        props.buttonClickHandler,
+        props.isGrandchild
+          ? props.buttonClickHandlerWithTransition
+          : props.buttonClickHandler,
         {
           value: props.attribute.localState,
           set: event =>
@@ -215,6 +232,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     attribute,
+    isGrandchild: ownProps.blockName === state.malcolm.childBlock,
   };
 };
 
@@ -228,7 +246,14 @@ const mapDispatchToProps = dispatch => ({
   },
   buttonClickHandler: path => {
     dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
-    // dispatch(push(`/gui/${path[0]}/${path[1]}`));
+  },
+
+  buttonClickHandlerWithTransition: path => {
+    dispatch(parentPanelTransition(true));
+    setTimeout(() => {
+      dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
+      dispatch(parentPanelTransition(false));
+    }, 550);
   },
   setLocalState: (path, value) => {
     dispatch(writeLocalState(path, value));
@@ -268,6 +293,7 @@ AttributeSelector.propTypes = {
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  buttonClickHandlerWithTransition: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

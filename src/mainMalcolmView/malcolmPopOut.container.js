@@ -9,6 +9,7 @@ import BlockDetails from '../blockDetails/blockDetails.component';
 // eslint-disable-next-line import/no-named-as-default
 import InfoDetails from '../infoDetails/infoDetails.component';
 import NavTypes from '../malcolm/NavTypes';
+import { flagAsPopout } from '../viewState/viewState.actions';
 
 const styles = theme => ({
   container: {
@@ -27,24 +28,30 @@ const styles = theme => ({
   },
 });
 
-const MalcolmPopOut = props => (
-  <div className={props.classes.container}>
-    <AppBar position="static">
-      <Toolbar className={props.classes.toolbar}>
-        <Typography
-          variant="title"
-          color="inherit"
-          className={props.classes.title}
-        >
-          {props.paneTitle}
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    {props.isInfo ? <InfoDetails /> : <BlockDetails parent />}
-  </div>
-);
+const MalcolmPopOut = props => {
+  if (!props.statePopoutFlag) {
+    props.setIsPopout();
+  }
+  return (
+    <div className={props.classes.container}>
+      <AppBar position="static">
+        <Toolbar className={props.classes.toolbar}>
+          <Typography
+            variant="title"
+            color="inherit"
+            className={props.classes.title}
+          >
+            {props.paneTitle}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      {props.isInfo ? <InfoDetails /> : <BlockDetails parent />}
+    </div>
+  );
+};
 
 const mapStateToProps = state => {
+  const statePopoutFlag = state.viewState.popout;
   const parentBlock = state.malcolm.parentBlock
     ? state.malcolm.blocks[state.malcolm.parentBlock]
     : undefined;
@@ -68,10 +75,15 @@ const mapStateToProps = state => {
     parentBlock,
     isInfo,
     paneTitle,
+    statePopoutFlag,
   };
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  setIsPopout: () => {
+    dispatch(flagAsPopout());
+  },
+});
 
 MalcolmPopOut.propTypes = {
   paneTitle: PropTypes.string.isRequired,
@@ -81,6 +93,8 @@ MalcolmPopOut.propTypes = {
     title: PropTypes.string,
   }).isRequired,
   isInfo: PropTypes.bool.isRequired,
+  setIsPopout: PropTypes.func.isRequired,
+  statePopoutFlag: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(

@@ -43,18 +43,18 @@ describe('MainMalcolmView', () => {
 
   it('renders correctly', () => {
     const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders palette if child block is .palette', () => {
     state.malcolm.childBlock = '.palette';
     const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders info if child block is .info', () => {
     state.malcolm.childBlock = '.info';
     const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 });

@@ -54,6 +54,7 @@ class NavControl extends Component {
             handleClose={this.handleClose}
             navigateToChild={navigateToChild}
             icon={<MoreHoriz />}
+            theme={this.props.theme}
           />
         </div>
       );
@@ -74,6 +75,7 @@ class NavControl extends Component {
           {nav.label}
         </Typography>
         <NavSelector
+          currentPath={nav.path}
           handleClick={this.handleClick}
           childElements={siblings}
           childElementLabels={siblingLabels}
@@ -81,6 +83,7 @@ class NavControl extends Component {
           handleClose={this.handleClose}
           navigateToChild={navigateToChild}
           icon={<KeyboardArrowDown />}
+          theme={this.props.theme}
         />
       </div>
     );
@@ -102,9 +105,11 @@ export const NavSelector = props => (
       anchorEl={props.anchorEl}
       open={Boolean(props.anchorEl)}
       onClose={props.handleClose}
+      style={{ color: props.theme.palette.text.primary }}
     >
       {props.childElements.map((child, i) => (
         <MenuItem
+          selected={child === props.currentPath}
           key={child}
           onClick={() => {
             props.handleClose();
@@ -129,6 +134,13 @@ NavControl.propTypes = {
     currentLink: PropTypes.string,
   }).isRequired,
   isFinalNav: PropTypes.bool,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 NavControl.defaultProps = {
@@ -136,6 +148,7 @@ NavControl.defaultProps = {
 };
 
 NavSelector.propTypes = {
+  currentPath: PropTypes.string,
   childElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   childElementLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleClick: PropTypes.func.isRequired,
@@ -143,6 +156,17 @@ NavSelector.propTypes = {
   anchorEl: PropTypes.string.isRequired,
   // navigateToChild: PropTypes.func.isRequired,
   icon: PropTypes.node.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
+};
+
+NavSelector.defaultProps = {
+  currentPath: undefined,
 };
 
 export default withStyles(styles, { withTheme: true })(NavControl);

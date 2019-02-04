@@ -6,6 +6,8 @@ import {
   updateTheme,
   setTheme,
   editTheme,
+  popout,
+  panelDirection,
 } from './viewState.actions';
 import { theme } from '../mainMalcolmView/connectedThemeProvider';
 
@@ -18,6 +20,7 @@ const initialViewState = {
   },
   theme: {},
   footerHeight: 0,
+  transitionParent: false,
 };
 
 const viewStateReducer = (state = initialViewState, action = {}) => {
@@ -73,6 +76,16 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return {
         ...state,
         themeEditor: action.payload.open,
+      };
+    case popout:
+      return {
+        ...state,
+        popout: true,
+      };
+    case panelDirection:
+      return {
+        ...state,
+        transitionParent: action.payload.transition,
       };
     default:
       return state;

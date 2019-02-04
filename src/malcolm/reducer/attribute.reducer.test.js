@@ -3,6 +3,7 @@ import AttributeReducer, {
   portsAreDifferent,
   pushToArchive,
   tickArchive,
+  updateLocalState,
 } from './attribute.reducer';
 import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
@@ -29,7 +30,7 @@ import {
   setTableFlag,
 } from '../../testState.utilities';
 import blockUtils from '../blockUtils';
-import { shouldClearDirtyFlag } from './table.reducer';
+import { shouldClearDirtyFlag, createLocalState } from './table.reducer';
 
 jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
@@ -64,12 +65,12 @@ describe('attribute reducer', () => {
   let state = {};
   let payload = {};
   let payload2 = {};
-  let payload3 = {};
 
   beforeEach(() => {
     injectMockDate(mockNow);
     shouldClearDirtyFlag.mockImplementation(attribute => attribute);
-
+    createLocalState.mockClear();
+    createLocalState.mockImplementation(attribute => attribute);
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
     processNavigationLists.mockClear();
@@ -156,24 +157,6 @@ describe('attribute reducer', () => {
       delta: true,
       id: 2,
       raw: { meta: { tags: ['widget:textinput'] }, value: 'testing#123' },
-    };
-    payload3 = {
-      id: 3,
-      delta: true,
-      raw: {
-        meta: {
-          typeid: malcolmTypes.table,
-          tags: ['widget:table'],
-          elements: {
-            mri: {},
-            name: {},
-            visible: {},
-            x: {},
-            y: {},
-          },
-        },
-        value: JSON.parse(JSON.stringify(payload.raw.value)),
-      },
     };
   });
 
@@ -550,25 +533,13 @@ describe('attribute reducer', () => {
   it('updates table local state if dirty is false', () => {
     const labels = Object.keys(payload.raw.value);
     state = addTableLocalState(state, 'block1', 'table', labels, 3);
-    state = AttributeReducer(
-      state,
-      buildAction(MalcolmAttributeData, payload3)
-    );
     const testAttribute = blockUtils.findAttribute(
       state.blocks,
       'block1',
       'table'
     );
-    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
-      const row = {};
-      labels.forEach(label => {
-        row[label] = payload.raw.value[label][index];
-      });
-      return row;
-    });
-
-    expect(testAttribute.localState).toBeDefined();
-    expect(testAttribute.localState.value).toEqual(expectedState);
+    updateLocalState(testAttribute);
+    expect(createLocalState).toHaveBeenCalledTimes(1);
   });
 
   it('doesnt update table local state if dirty flag is true', () => {
@@ -576,25 +547,13 @@ describe('attribute reducer', () => {
     state = addTableLocalState(state, 'block1', 'table', labels, 3);
     state = setTableFlag(state, 'block1', 'table', 'dirty', true);
     state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
-    state = AttributeReducer(
-      state,
-      buildAction(MalcolmAttributeData, payload3)
-    );
     const testAttribute = blockUtils.findAttribute(
       state.blocks,
       'block1',
       'table'
     );
-    const expectedState = [];
-    for (let i = 0; i < 3; i += 1) {
-      const row = {};
-      labels.forEach(label => {
-        row[label] = '';
-      });
-      expectedState[i] = row;
-    }
-    expect(testAttribute.localState).toBeDefined();
-    expect(testAttribute.localState.value).toEqual(expectedState);
+    updateLocalState(testAttribute);
+    expect(createLocalState).not.toHaveBeenCalled();
   });
 
   it('updates table local state if dirty flag is true but shouldClearDirtyFlag clears', () => {
@@ -608,25 +567,13 @@ describe('attribute reducer', () => {
     state = addTableLocalState(state, 'block1', 'table', labels, 3);
     state = setTableFlag(state, 'block1', 'table', 'dirty', true);
     state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
-    state = AttributeReducer(
-      state,
-      buildAction(MalcolmAttributeData, payload3)
-    );
     const testAttribute = blockUtils.findAttribute(
       state.blocks,
       'block1',
       'table'
     );
-    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
-      const row = {};
-      labels.forEach(label => {
-        row[label] = payload.raw.value[label][index];
-      });
-      return row;
-    });
-
-    expect(testAttribute.localState).toBeDefined();
-    expect(testAttribute.localState.value).toEqual(expectedState);
+    updateLocalState(testAttribute);
+    expect(createLocalState).toHaveBeenCalledTimes(1);
   });
 
   it('updates table local state if dirty flag is true but forceUpdate is true', () => {
@@ -635,25 +582,13 @@ describe('attribute reducer', () => {
     state = setTableFlag(state, 'block1', 'table', 'dirty', true);
     state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
     state = setAttributeFlag(state, 'block1', 'table', 'forceUpdate', true);
-    state = AttributeReducer(
-      state,
-      buildAction(MalcolmAttributeData, payload3)
-    );
     const testAttribute = blockUtils.findAttribute(
       state.blocks,
       'block1',
       'table'
     );
-    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
-      const row = {};
-      labels.forEach(label => {
-        row[label] = payload.raw.value[label][index];
-      });
-      return row;
-    });
-
-    expect(testAttribute.localState).toBeDefined();
-    expect(testAttribute.localState.value).toEqual(expectedState);
+    updateLocalState(testAttribute);
+    expect(createLocalState).toHaveBeenCalledTimes(1);
   });
 
   it('tickArchive does tick', () => {

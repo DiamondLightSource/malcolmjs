@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import PaletteIcon from '@material-ui/icons/Palette';
+import ZoomIn from '@material-ui/icons/ZoomIn';
+import ZoomOut from '@material-ui/icons/ZoomOut';
+import ZoomToFit from '@material-ui/icons/ZoomOutMap';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
+import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
@@ -29,6 +32,8 @@ import {
   updateThemeAction,
 } from '../viewState/viewState.actions';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
+import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import layoutActions from '../malcolm/actions/layout.action';
 
 const styles = theme => {
   const gridLineColor = fade(
@@ -142,7 +147,6 @@ const findAttributeComponent = props => {
         >
           <ThemeEditor
             setThemeProp={props.setThemeProp}
-            updateTheme={props.updateTheme}
             openParent={props.openParent}
             finishEdit={props.closeThemeEditor}
           />
@@ -181,7 +185,7 @@ const findAttributeComponent = props => {
                 disabled={props.layoutLocked}
                 data-cy="palettebutton"
               >
-                <PaletteIcon />
+                <PaletteIcon style={{ fontSize: '36px' }} />
               </Button>
             )}
           </div>
@@ -197,6 +201,50 @@ const findAttributeComponent = props => {
             >
               Auto layout
             </Button>
+          </div>
+          <div
+            className={props.classes.autoLayoutButton}
+            style={{
+              left: props.openParent ? 360 + 29 : 29,
+              top: 12,
+              display: 'flex',
+            }}
+          >
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() => props.zoomInDirection('in')}
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomIn style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() => props.zoomInDirection('out')}
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomOut style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
+            <div style={{ padding: 4 }}>
+              <Button
+                variant="fab"
+                color="secondary"
+                style={{ width: '36px', height: '36px', padding: 4 }}
+                onClick={() =>
+                  props.zoomToFit(props.openParent, props.openChild)
+                }
+                disabled={props.layoutLocked || props.disableAutoLayout}
+              >
+                <ZoomToFit style={{ fontSize: '24px' }} />
+              </Button>
+            </div>
           </div>
         </div>
       );
@@ -224,28 +272,55 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
+
     case 'widget:textupdate':
     case 'widget:multilinetextupdate':
     case 'widget:textinput':
     case 'widget:led':
     case 'widget:checkbox':
     case 'widget:combo':
+      if (!isArrayType({ typeid: props.typeid })) {
+        return (
+          <div className={props.classes.plainBackground}>
+            <div
+              className={props.classes.tableContainer}
+              style={transitionWithPanelStyle}
+            >
+              <AttributeViewer
+                attributeName={props.mainAttribute}
+                blockName={props.parentBlock}
+                widgetTag={widgetTag}
+                typeId={props.typeid}
+                // openPanels={{ parent: props.openParent, child: props.openChild }}
+              />
+            </div>
+          </div>
+        );
+      }
       return (
         <div className={props.classes.plainBackground}>
           <div
             className={props.classes.tableContainer}
             style={transitionWithPanelStyle}
           >
-            <AttributeViewer
+            <TableContainer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
-              widgetTag={widgetTag}
-              typeId={props.typeId}
-              // openPanels={{ parent: props.openParent, child: props.openChild }}
+              subElement={props.mainAttributeSubElements}
+              footerItems={[
+                <Tooltip id="1" title={props.errorMessage} placement="right">
+                  <IconButton className={props.classes.button} disableRipple>
+                    <AttributeAlarm
+                      alarmSeverity={props.mainAttributeAlarmState}
+                    />
+                  </IconButton>
+                </Tooltip>,
+              ]}
             />
           </div>
         </div>
       );
+
     case 'widget:tree':
       return (
         <div className={props.classes.plainBackground}>
@@ -269,7 +344,26 @@ const findAttributeComponent = props => {
         </div>
       );
     default:
-      return <div className={props.classes.plainBackground} />;
+      return (
+        <div
+          className={props.classes.plainBackground}
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          }}
+        >
+          <Typography style={{ fontSize: '20pt' }}>
+            {`Unable to display attribute "${props.mainAttribute}"`}
+          </Typography>
+          <Typography style={{ fontSize: '20pt' }}>
+            No valid widget tag found!
+          </Typography>
+        </div>
+      );
   }
 };
 
@@ -289,8 +383,8 @@ const MiddlePanelContainer = props => (
           verticalAlign: 'middle',
         }}
       >
-        <Typography style={{ fontSize: '24pt' }}>
-          Please select a field to view
+        <Typography style={{ fontSize: '20pt' }}>
+          Please select a field to view from the left hand pane
         </Typography>
       </div>
     )}
@@ -326,7 +420,7 @@ const mapStateToProps = state => {
     openChild: state.malcolm.childBlock !== undefined,
     isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
-    typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
+    typeid: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
     disableAutoLayout:
       state.malcolm.layout && state.malcolm.layout.blocks.length === 0,
@@ -346,6 +440,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateThemeAction());
   },
   closeThemeEditor: () => dispatch(editThemeAction(false)),
+  zoomToFit: (openParent, openChild) =>
+    dispatch(layoutActions.zoomToFit(openParent, openChild)),
+  zoomInDirection: direction =>
+    dispatch(layoutActions.zoomInDirection(direction)),
 });
 
 findAttributeComponent.propTypes = {
@@ -366,6 +464,8 @@ findAttributeComponent.propTypes = {
     plainBackground: PropTypes.string,
   }).isRequired,
   openPalette: PropTypes.func.isRequired,
+  zoomToFit: PropTypes.func.isRequired,
+  zoomInDirection: PropTypes.func.isRequired,
 };
 
 MiddlePanelContainer.propTypes = {

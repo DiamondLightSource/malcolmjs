@@ -17,8 +17,15 @@ import {
   MalcolmRevert,
   MalcolmSelectLinkType,
   MalcolmSimpleLocalState,
+  MalcolmClearError,
+  MalcolmMethodReturn,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
+import {
+  malcolmArchivePost,
+  malcolmFlagMethodInput,
+} from './actions/method.actions';
+import { rootBlockSubPath } from './malcolmHandlers/blockMetaHandler';
 
 export const malcolmSubscribeAction = (path, delta = true) => ({
   type: MalcolmSend,
@@ -72,23 +79,6 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmPostAction = (path, rawParameters) => dispatch => {
-  const parameters = {};
-  Object.keys(rawParameters).forEach(param => {
-    parameters[param] = rawParameters[param].meta
-      ? rawParameters[param].value
-      : rawParameters[param];
-  });
-  dispatch({
-    type: MalcolmSend,
-    payload: {
-      typeid: 'malcolm:core/Post:1.0',
-      path,
-      parameters,
-    },
-  });
-};
-
 export const malcolmSetFlag = (path, flagType, flagState) => ({
   type: MalcolmAttributeFlag,
   payload: {
@@ -97,6 +87,47 @@ export const malcolmSetFlag = (path, flagType, flagState) => ({
     flagState,
   },
 });
+
+export const malcolmPostAction = (path, rawParameters) => (
+  dispatch,
+  getState
+) => {
+  const state = getState().malcolm;
+  const method = blockUtils.findAttribute(state.blocks, path[0], path[1]);
+  const parameters = {};
+  Object.keys(rawParameters).forEach(param => {
+    parameters[param] = rawParameters[param].value;
+  });
+  let missing = [];
+  if (method && method.calculated.isMethod) {
+    missing = method.raw.takes.required.filter(
+      param => !Object.keys(rawParameters).includes(param)
+    );
+  }
+  if (missing.length === 0) {
+    dispatch(malcolmSetFlag(path, 'pending', true));
+    dispatch(malcolmArchivePost(path, rawParameters));
+    dispatch({
+      type: MalcolmSend,
+      payload: {
+        typeid: 'malcolm:core/Post:1.0',
+        path,
+        parameters,
+      },
+    });
+  } else {
+    missing.forEach(param => {
+      dispatch(
+        malcolmFlagMethodInput(
+          path,
+          param,
+          'invalid',
+          `Warning: parameter ${param} is required to run method ${path[1]}`
+        )
+      );
+    });
+  }
+};
 
 export const malcolmNavigationPath = blockPaths => ({
   type: MalcolmNavigationPathUpdate,
@@ -112,7 +143,7 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
 
   const state = getState();
   state.malcolm.messagesInFlight = {};
-  dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+  dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
   Object.values(state.malcolm.blocks)
     .filter(block => block.name !== '.blocks')
     .forEach(block => {
@@ -244,6 +275,13 @@ export const writeLocalState = (path, value) => ({
   },
 });
 
+export const clearError = path => ({
+  type: MalcolmClearError,
+  payload: {
+    path,
+  },
+});
+
 export const malcolmClearLayoutSelect = () => (dispatch, getState) => {
   getState().malcolm.layoutState.selectedLinks.forEach(link =>
     dispatch(malcolmSelectLink(link, false))
@@ -252,6 +290,11 @@ export const malcolmClearLayoutSelect = () => (dispatch, getState) => {
     dispatch(malcolmSelectBlock(block, false))
   );
 };
+
+export const malcolmProcessMethodReturn = payload => ({
+  type: MalcolmMethodReturn,
+  payload,
+});
 
 export default {
   malcolmHailReturn,

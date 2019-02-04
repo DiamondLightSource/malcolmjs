@@ -155,6 +155,6 @@ describe('malcolm redux middleware', () => {
 
     expect(dispatches[2].type).toEqual(MalcolmSend);
     expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[2].payload.path).toEqual(['.', 'blocks']);
+    expect(dispatches[2].payload.path).toEqual(['.', 'blocks', 'value']);
   });
 });

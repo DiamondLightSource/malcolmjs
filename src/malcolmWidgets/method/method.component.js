@@ -12,21 +12,19 @@ import ButtonAction from '../buttonAction/buttonAction.component';
 
 import GroupExpander from '../groupExpander/groupExpander.component';
 import blockUtils from '../../malcolm/blockUtils';
-import {
-  malcolmSetFlag,
-  malcolmPostAction,
-} from '../../malcolm/malcolmActionCreators';
+import { malcolmPostAction } from '../../malcolm/malcolmActionCreators';
 import {
   malcolmUpdateMethodInput,
-  malcolmArchivePost,
+  malcolmFlagMethodInput,
+  malcolmIntialiseMethodParam,
 } from '../../malcolm/actions/method.actions';
 
 import {
   selectorFunction,
   getDefaultFromType,
+  isArrayType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
-import { isArrayType } from '../../malcolm/reducer/method.reducer';
 
 const styles = () => ({
   div: {
@@ -68,28 +66,35 @@ const buildIOComponent = (input, props, isOutput) => {
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
     isErrorState: props.methodErrored && input[1].writeable,
-    isDirty: props.dirtyInputs[input[0]],
+    isDirty:
+      !isOutput &&
+      (props.dirtyInputs[input[0]] ||
+        props.inputValues[input[0]] !== undefined),
   };
   const updateStoreOnEveryValueChange = true;
 
   const valueMap = isOutput ? props.outputValues : props.inputValues;
   let inputValue;
-  if (valueMap[input[0]] !== undefined) {
-    inputValue = valueMap[input[0]];
+  if (valueMap[input[0]] && valueMap[input[0]].value !== undefined) {
+    inputValue = valueMap[input[0]].value;
   } else if (props.defaultValues[input[0]] !== undefined) {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    if (inputValue !== undefined && !isArrayType(input[1])) {
-      props.updateInput(props.methodPath, input[0], inputValue);
-    }
   }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };
-  const setFlag = (path, flagName, isDirty) => {
-    props.updateInput(path, input[0], { isDirty });
+  const setFlag = (path, flagName, flagState) => {
+    props.flagInput(path, input[0], flagName, flagState);
   };
+  const buttonClickHandler =
+    isArrayType(input[1]) && !isOutput
+      ? path => {
+          props.initialiseLocalState(path, ['takes', input[0]]);
+          props.methodParamClickHandler(path);
+        }
+      : props.methodParamClickHandler;
   const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
@@ -103,7 +108,7 @@ const buildIOComponent = (input, props, isOutput) => {
       parameterMeta,
       false,
       updateStoreOnEveryValueChange,
-      props.methodParamClickHandler
+      buttonClickHandler
     );
   }
   return selectorFunction('widget:undefined');
@@ -116,7 +121,7 @@ const MethodDetails = props => {
   ) {
     return (
       <div className={props.classes.div}>
-        <Tooltip title={props.methodErrorMessage}>
+        <Tooltip title={props.methodMessage}>
           <IconButton
             tabIndex="-1"
             className={props.classes.button}
@@ -151,7 +156,7 @@ const MethodDetails = props => {
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
-            <Tooltip title={input[1].description}>
+            <Tooltip title={props.inputInfo[input[0]]}>
               <IconButton
                 tabIndex="-1"
                 className={props.classes.button}
@@ -164,7 +169,7 @@ const MethodDetails = props => {
                   )
                 }
               >
-                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                <AttributeAlarm alarmSeverity={props.inputAlarms[input[0]]} />
               </IconButton>
             </Tooltip>
             <Typography
@@ -186,7 +191,7 @@ const MethodDetails = props => {
           </div>
         ))}
         <div className={props.classes.div}>
-          <Tooltip title={props.methodErrorMessage}>
+          <Tooltip title={props.methodMessage}>
             <IconButton
               tabIndex="-1"
               className={props.classes.button}
@@ -273,10 +278,12 @@ MethodDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
-  methodErrorMessage: PropTypes.string.isRequired,
+  methodMessage: PropTypes.string.isRequired,
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
+  inputInfo: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
+  inputAlarms: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
   outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
@@ -305,10 +312,61 @@ const mapStateToProps = (state, ownProps) => {
     );
   }
 
+  const methodDescription =
+    method && method.raw.description ? method.raw.description : EMPTY;
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.calculated.dirty ? AlarmStates.DIRTY : alarm;
+  alarm =
+    method && method.calculated.errorState && method.calculated.dirty
+      ? AlarmStates.DIRTYANDERROR
+      : alarm;
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
+  const inputAlarms = {};
+  const inputInfo = {};
+  if (method && method.raw.takes.elements) {
+    Object.entries(method.raw.takes.elements).forEach(([input, meta]) => {
+      const inputIsDirty =
+        (method.calculated.inputs[input] instanceof Object &&
+          Object.prototype.hasOwnProperty.call(
+            method.calculated.inputs[input],
+            'value'
+          )) ||
+        method.calculated.dirtyInputs;
+
+      const inputIsErrored = false; // TODO: implement individual parameter errors
+
+      const inputInvalid =
+        method.calculated.inputs[input] &&
+        method.calculated.inputs[input].flags.invalid;
+
+      inputInfo[input] = meta.description;
+      inputAlarms[input] = AlarmStates.NO_ALARM;
+
+      inputInfo[input] = inputInvalid || inputInfo[input];
+      inputAlarms[input] = inputInvalid
+        ? AlarmStates.MINOR_ALARM
+        : inputAlarms[input];
+
+      inputInfo[input] = inputIsDirty ? meta.description : inputInfo[input];
+      inputAlarms[input] = inputIsDirty
+        ? AlarmStates.DIRTY
+        : inputAlarms[input];
+
+      inputInfo[input] = inputIsErrored
+        ? `Error in parameter ${input}`
+        : inputInfo[input];
+      inputAlarms[input] = inputIsErrored
+        ? AlarmStates.MAJOR_ALARM
+        : inputAlarms[input];
+
+      inputAlarms[input] =
+        inputIsDirty && inputIsErrored
+          ? AlarmStates.DIRTYANDERROR
+          : inputAlarms[input];
+    });
+  }
 
   return {
     writeable: method ? method.raw.writeable : false,
@@ -316,14 +374,16 @@ const mapStateToProps = (state, ownProps) => {
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,
     methodErrored: method ? method.calculated.errorState : false,
-    methodErrorMessage:
-      method && method.calculated.errorMessage
+    methodMessage:
+      method && method.calculated.errorState
         ? method.calculated.errorMessage
-        : EMPTY,
+        : methodDescription,
     methodPath: method ? method.calculated.path : EMPTY_ARRAY,
     inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
     dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
+    inputAlarms,
+    inputInfo,
     outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
     outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
     required: method ? method.raw.required : EMPTY_OBJECT,
@@ -347,8 +407,6 @@ export const mapDispatchToProps = dispatch => ({
     );
   },
   runMethod: (path, inputs) => {
-    dispatch(malcolmSetFlag(path, 'pending', true));
-    dispatch(malcolmArchivePost(path, inputs));
     dispatch(malcolmPostAction(path, inputs));
   },
   updateInput: (path, inputName, inputValue) => {
@@ -356,6 +414,12 @@ export const mapDispatchToProps = dispatch => ({
   },
   methodParamClickHandler: path => {
     dispatch(navigationActions.navigateToSubElement(path[0], path[1], path[2]));
+  },
+  flagInput: (path, param, flagType, flagState) => {
+    dispatch(malcolmFlagMethodInput(path, param, flagType, flagState));
+  },
+  initialiseLocalState: (path, selectedParam) => {
+    dispatch(malcolmIntialiseMethodParam(path, selectedParam));
   },
 });
 

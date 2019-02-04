@@ -7,13 +7,13 @@ describe('Child panel', () => {
       cy.visit('/gui/PANDA/layout');
       cy.waitForDetailsToLoad();
 
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('should open when a block is clicked in the layout', () => {
       // click on the block to open the child panel
       cy.contains('TTL output 1').click('left');
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
 
       // check that a property of TTL output 1 is visible in the details panel
       cy.contains('Val Current').should('be.visible');
@@ -22,24 +22,24 @@ describe('Child panel', () => {
     it('should update child panel if already open', () => {
       // first make sure the child panel is open
       cy.contains('TTL output 1').click('left');
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
 
       // click on another block and make sure the details update
       cy.contains('Input encoder 1').click('left');
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
       cy.contains('Clk Period').should('be.visible');
     });
 
     it('should not open the child panel if a block was dragged', () => {
       cy.moveBlock('TTL output 1', { x: 450, y: 280 });
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('should close the palette when a block is dropped on to the layout', () => {
       cy.contains('TTL output 1').should('be.visible');
 
       cy.get('[data-cy=palettebutton]').click('left');
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
       cy
         .get(childPanel)
         .parent()
@@ -54,7 +54,7 @@ describe('Child panel', () => {
         clientY: 180,
       });
 
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('should open the child panel when a link is clicked on', () => {
@@ -66,19 +66,19 @@ describe('Child panel', () => {
         .first()
         .click({ force: true });
 
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
       cy.contains('Sink').should('be.visible');
     });
 
     it('should close the child panel when the layout background is clicked', () => {
       cy.visit('/gui/PANDA/layout/TTLOUT1');
       cy.waitForDetailsToLoad();
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
       cy.contains('Val Current').should('be.visible'); // wait for details to load
 
       // click in an empty part of the layout
       cy.get('#LayoutDiv').click(450, 180);
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('multi-selecting blocks closes child panel', () => {
@@ -86,13 +86,13 @@ describe('Child panel', () => {
       cy.wait(3000, { log: false });
 
       cy.contains('ADDER1').click('left');
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
       cy
         .get('body')
         .type('{shift}', { release: false })
         .contains('BITS')
         .click();
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
   });
 
@@ -107,7 +107,7 @@ describe('Child panel', () => {
         .parent()
         .find('button')
         .click();
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
 
       // confirm info element is present
       cy.contains('Type ID').should('be.visible');
@@ -126,7 +126,7 @@ describe('Child panel', () => {
         .click()
         .click();
 
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('clicking on row alarm should open panel', () => {
@@ -136,10 +136,10 @@ describe('Child panel', () => {
         .find('button')
         .first()
         .click();
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
 
       // confirm info element is present
-      cy.contains('Row local state').should('be.visible');
+      cy.contains('Row remote state').should('be.visible');
     });
 
     it('clicking the table background should close the info panel', () => {
@@ -149,12 +149,12 @@ describe('Child panel', () => {
         .find('button')
         .first()
         .click();
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
 
       // click in the background area
       cy.get('[data-cy=table]').click(100, 400);
 
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('clicking a row control should not open child panel if not already open', () => {
@@ -163,7 +163,7 @@ describe('Child panel', () => {
         .find('input')
         .first()
         .click();
-      cy.get(childPanel).should('not.be.visible');
+      cy.checkFor(childPanel, false);
     });
 
     it('clicking a row control should update child panel if already open', () => {
@@ -172,19 +172,21 @@ describe('Child panel', () => {
         .find('button')
         .first()
         .click();
-      cy.get(childPanel).should('be.visible');
-      // ensure info for row 0
-      cy.get('p:contains(0)').should('have.length', 2);
+      cy.checkFor(childPanel);
+      // ensure info for row 0: top row shift up should be disabled and cypress treats disabled buttons as invisible
+      cy.contains('Shift row up').should('not.be.visible');
+      cy.contains('Shift row down').should('be.visible');
 
       cy
         .get('[data-cy=table]')
         .find('input')
         .last()
         .click({ force: true });
-      cy.get(childPanel).should('be.visible');
-      // ensure info for row 1
+      cy.checkFor(childPanel);
+      // ensure info for row 1: bottom row shift down should be disabled
       cy.wait(2000, { log: false });
-      cy.get('p:contains(1)').should('have.length', 2);
+      cy.contains('Shift row up').should('be.visible');
+      cy.contains('Shift row down').should('not.be.visible');
     });
 
     it('clicking on a column heading should open panel', () => {
@@ -193,7 +195,7 @@ describe('Child panel', () => {
         .get('[data-cy=table]')
         .contains('source')
         .click();
-      cy.get(childPanel).should('be.visible');
+      cy.checkFor(childPanel);
     });
   });
 });

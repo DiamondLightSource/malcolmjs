@@ -1,7 +1,10 @@
 /* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort } from '../malcolm/malcolmConstants';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  isArrayType,
+} from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 // eslint-disable-next-line import/prefer-default-export
 export const buildAttributeInfo = props => {
@@ -77,14 +80,28 @@ export const buildAttributeInfo = props => {
         inline: true,
         alarmStatePath: 'calculated.alarms.errorState',
       };
+      if (props.clearError) {
+        info.acknowledgeError = {
+          showLabel: false,
+          label: 'Acknowledge Error',
+          value: 'Acknowledge Error',
+          disabledPath: 'NOT.calculated.errorState',
+          inline: true,
+          tag: 'info:button',
+          functions: {
+            clickHandler: () => props.clearError(attribute.calculated.path),
+          },
+        };
+      }
       if (
         attribute.raw.meta.tags.some(a =>
           ['widget:table', 'widget:textinput'].includes(a)
         )
       ) {
         info.localState = {
-          label: 'Local State',
-          value: 'Discard',
+          label: 'Discard Local State',
+          value: 'Discard Local State',
+          showLabel: false,
           disabledPath: 'NOT.calculated.dirty',
           inline: true,
           tag: 'info:button',
@@ -97,21 +114,41 @@ export const buildAttributeInfo = props => {
             },
           };
         }
+        if (
+          attribute.raw.meta.tags.some(a => a === 'widget:textinput') &&
+          !isArrayType(attribute.raw.meta)
+        ) {
+          info.remoteState = {
+            label: 'Remote state',
+            value: attribute.raw.value,
+            tag: 'widget:textupdate',
+            inline: true,
+          };
+        }
       }
-      // eslint-disable-next-line prefer-destructuring
-      value = attribute.raw.value;
+      ({ value } = attribute.raw);
+      if (attribute.raw.meta.typeid === malcolmTypes.table) {
+        info.columnHeadings = {
+          label: 'Columns',
+          value: JSON.stringify(Object.keys(attribute.raw.meta.elements)),
+          inline: true,
+        };
+      }
     } else if (
-      attribute.raw.meta.typeid === malcolmTypes.table &&
+      (attribute.raw.meta.typeid === malcolmTypes.table ||
+        isArrayType(attribute.raw.meta)) &&
       attribute.localState
     ) {
       if (props.subElement[0] === 'row') {
         const row = parseInt(props.subElement[1], 10);
         const rowFlags = attribute.localState.flags.rows[row];
-        const isNewRow =
-          row >= attribute.raw.value[attribute.localState.labels[0]].length;
+        const isNewRow = isArrayType(attribute.raw.meta)
+          ? row >= attribute.raw.value.length
+          : row >= attribute.raw.value[attribute.localState.labels[0]].length;
         info.localState = {
           label: 'Row local state',
-          value: 'Discard',
+          showLabel: false,
+          value: 'Discard row local state',
           disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
           inline: true,
           tag: 'info:button',
@@ -119,36 +156,62 @@ export const buildAttributeInfo = props => {
             rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
         };
         const dataRow = {};
-        attribute.localState.labels.forEach(label => {
-          dataRow[label] =
-            row < attribute.raw.value[label].length
-              ? attribute.raw.value[label][row]
+        if (!isArrayType(attribute.raw.meta)) {
+          attribute.localState.labels.forEach(label => {
+            dataRow[label] =
+              row < attribute.raw.value[label].length
+                ? attribute.raw.value[label][row]
+                : 'undefined';
+          });
+        } else {
+          dataRow.value =
+            row < attribute.raw.value.length
+              ? attribute.raw.value[row]
               : 'undefined';
-        });
+        }
+        info.rowOperations = {
+          label: 'Row Operations',
+          moveRowUp: {
+            label: 'Shift row up',
+            value: 'Shift row up',
+            showLabel: false,
+            disabled: row === 0,
+            tag: 'info:button',
+          },
+          moveRowDown: {
+            label: 'Shift row down',
+            value: 'Shift row down',
+            showLabel: false,
+            disabled: row === attribute.localState.value.length - 1,
+            tag: 'info:button',
+          },
+          addRowAbove: {
+            label: 'Insert row above',
+            value: 'Insert row above',
+            showLabel: false,
+            tag: 'info:button',
+          },
+          addRowBelow: {
+            label: 'Insert row below',
+            value: 'Insert row below',
+            showLabel: false,
+            tag: 'info:button',
+          },
+          deleteRow: {
+            label: 'Delete row',
+            value: 'Delete row',
+            inline: true,
+            showLabel: false,
+            tag: 'info:button',
+          },
+        };
         info.rowValue = {
           label: 'Row remote state',
           ...dataRow,
         };
-        info.addRowAbove = {
-          label: 'Insert row above',
-          value: 'Add',
-          inline: true,
-          tag: 'info:button',
-        };
-        info.addRowBelow = {
-          label: 'Insert row below',
-          value: 'Add',
-          inline: true,
-          tag: 'info:button',
-        };
-        info.deleteRow = {
-          label: 'Delete row',
-          value: 'Delete',
-          inline: true,
-          tag: 'info:button',
-        };
+
         if (props.addRow) {
-          info.addRowAbove.functions = {
+          info.rowOperations.addRowAbove.functions = {
             clickHandler: () => {
               props.addRow(props.attribute.calculated.path, row);
               props.changeInfoHandler(
@@ -157,12 +220,12 @@ export const buildAttributeInfo = props => {
               );
             },
           };
-          info.addRowBelow.functions = {
+          info.rowOperations.addRowBelow.functions = {
             clickHandler: () => {
               props.addRow(props.attribute.calculated.path, row, 'below');
             },
           };
-          info.deleteRow.functions = {
+          info.rowOperations.deleteRow.functions = {
             clickHandler: () => {
               if (row >= props.attribute.localState.value.length - 1) {
                 if (row !== 0) {
@@ -178,6 +241,26 @@ export const buildAttributeInfo = props => {
             },
           };
         }
+        if (props.moveRow) {
+          info.rowOperations.moveRowUp.functions = {
+            clickHandler: () => {
+              props.moveRow(props.attribute.calculated.path, row);
+              props.changeInfoHandler(
+                props.attribute.calculated.path,
+                `row.${row - 1}`
+              );
+            },
+          };
+          info.rowOperations.moveRowDown.functions = {
+            clickHandler: () => {
+              props.moveRow(props.attribute.calculated.path, row, 'below');
+              props.changeInfoHandler(
+                props.attribute.calculated.path,
+                `row.${row + 1}`
+              );
+            },
+          };
+        }
         if (props.rowRevertHandler) {
           info.localState.functions = {
             clickHandler: () => {
@@ -189,12 +272,26 @@ export const buildAttributeInfo = props => {
             },
           };
         }
-        info.subElement = props.subElement;
       } else {
         // column info will go here eventually
         info.columnHeading = {
           label: 'Column',
           value: props.subElement[1],
+          inline: true,
+        };
+        info.columnDescription = {
+          label: 'Description',
+          value: attribute.raw.meta.elements[props.subElement[1]].description,
+          inline: true,
+        };
+        info.columnType = {
+          label: 'Type',
+          value: attribute.raw.meta.elements[props.subElement[1]].typeid,
+          inline: true,
+        };
+        info.columnWriteable = {
+          label: 'Writeable',
+          value: attribute.raw.meta.elements[props.subElement[1]].writeable,
           inline: true,
         };
       }
@@ -243,6 +340,21 @@ export const buildAttributeInfo = props => {
             },
           };
         });
+        if (props.clearParamState) {
+          info.takes.discardParams = {
+            showLabel: false,
+            label: 'Discard params',
+            value: 'Discard params',
+            tag: 'info:button',
+            functions: {
+              clickHandler: () => {
+                Object.keys(attribute.raw.takes.elements).forEach(input => {
+                  props.clearParamState(attribute.calculated.path, input);
+                });
+              },
+            },
+          };
+        }
       }
       if (Object.keys(attribute.raw.returns.elements).length > 0) {
         info.returns = { label: 'Output parameter types' };
@@ -265,6 +377,19 @@ export const buildAttributeInfo = props => {
           ? AlarmStates.MAJOR_ALARM
           : null,
       };
+      if (props.clearError) {
+        info.acknowledgeError = {
+          showLabel: false,
+          label: 'Acknowledge Error',
+          value: 'Acknowledge Error',
+          disabledPath: 'NOT.calculated.errorState',
+          inline: true,
+          tag: 'info:button',
+          functions: {
+            clickHandler: () => props.clearError(attribute.calculated.path),
+          },
+        };
+      }
     } else {
       info.parameterType = {
         label: 'Parameter Type',
@@ -294,6 +419,23 @@ export const buildAttributeInfo = props => {
               ? attribute.raw.defaults[props.subElement[1]]
               : 'undefined',
         };
+        if (props.clearParamState) {
+          info.discardParams = {
+            showLabel: false,
+            label: 'Discard param',
+            value: 'Discard param',
+            inline: true,
+            tag: 'info:button',
+            functions: {
+              clickHandler: () => {
+                props.clearParamState(
+                  attribute.calculated.path,
+                  props.subElement[1]
+                );
+              },
+            },
+          };
+        }
       }
     }
   }

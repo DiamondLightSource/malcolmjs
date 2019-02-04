@@ -1,7 +1,7 @@
 import navigationActions from './navigation.actions';
 import NavTypes from '../NavTypes';
 import { MalcolmNewBlock, MalcolmSend } from '../malcolm.types';
-import { buildAttribute } from '../../testState.utilities';
+import { buildAttribute, buildMeta } from '../../testState.utilities';
 import {
   malcolmNewBlockAction,
   malcolmSubscribeAction,
@@ -30,6 +30,9 @@ const buildNavState = () => ({
         },
       ],
     },
+  },
+  viewState: {
+    popout: false,
   },
 });
 
@@ -69,7 +72,7 @@ describe('subscribeToChildren', () => {
           visible: [true, false, true],
         },
         undefined,
-        undefined,
+        buildMeta(['widget:flowgraph']),
         ['Test1', 'Test2', 'Test3']
       ),
     ];

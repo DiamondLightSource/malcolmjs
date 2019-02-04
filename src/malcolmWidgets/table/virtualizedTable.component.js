@@ -16,6 +16,7 @@ import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
+import { isArrayType } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = theme => ({
   header: {
@@ -24,6 +25,7 @@ const styles = theme => ({
     fontFamily: 'Roboto',
     fontWeight: 'normal',
     color: theme.palette.text.primary,
+    paddingRight: '0px !important',
   },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
@@ -69,12 +71,20 @@ const iconWidth = 36;
 
 export const getTableState = props => {
   const tableState = {};
+  const isArray = props.attribute.calculated.isMethod
+    ? isArrayType(props.localState.meta)
+    : isArrayType(props.attribute.raw.meta);
+  tableState.columnLabels = !isArray
+    ? Object.keys(props.attribute.raw.meta.elements)
+    : undefined;
   tableState.columnLabels =
-    props.localState === undefined
-      ? Object.keys(props.attribute.raw.meta.elements)
-      : props.localState.labels;
-  tableState.values =
-    props.localState === undefined
+    props.localState !== undefined
+      ? props.localState.labels
+      : tableState.columnLabels;
+  if (props.localState !== undefined) {
+    tableState.values = props.localState.value;
+  } else {
+    tableState.values = !isArray
       ? props.attribute.raw.value[tableState.columnLabels[0]].map(
           (val, row) => {
             const rowData = {};
@@ -84,7 +94,9 @@ export const getTableState = props => {
             return rowData;
           }
         )
-      : props.localState.value;
+      : JSON.parse(JSON.stringify(props.attribute.raw.value));
+  }
+
   tableState.flags =
     props.localState === undefined
       ? { rows: [], table: {} }
@@ -99,21 +111,23 @@ export const getTableState = props => {
 const getWidgetWidth = tag => widgetWidths[tag];
 
 const getColumnWidths = (divWidth, columnWidgetTags, tableState, hideInfo) => {
-  const fixedWidths = tableState.columnLabels.map((label, index) => {
-    const widgetWidth = getWidgetWidth(columnWidgetTags[index]);
-    if (widgetWidth !== undefined) {
-      return Math.max(
-        getWidgetWidth(columnWidgetTags[index]),
-        11 *
-          (tableState.meta.elements[label].label
-            ? tableState.meta.elements[label].label
-            : label
-          ).length +
-          4
-      );
-    }
-    return undefined;
-  });
+  const fixedWidths = tableState.columnLabels
+    ? tableState.columnLabels.map((label, index) => {
+        const widgetWidth = getWidgetWidth(columnWidgetTags[index]);
+        if (widgetWidth !== undefined) {
+          return Math.max(
+            getWidgetWidth(columnWidgetTags[index]),
+            11 *
+              (tableState.meta.elements[label].label
+                ? tableState.meta.elements[label].label
+                : label
+              ).length +
+              4
+          );
+        }
+        return undefined;
+      })
+    : [undefined];
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
     .reduce((total, val) => total + val, 0);
@@ -311,10 +325,10 @@ const WidgetTable = props => {
     >
       <div
         style={{
-          width: '100%',
-          height: '100%',
+          height: 'calc(100% - 12px)',
           overflowX: 'auto',
           overflowY: 'hidden',
+          paddingBottom: '12px',
         }}
       >
         <AutoSizer>
@@ -393,7 +407,7 @@ const WidgetTable = props => {
         </AutoSizer>
       </div>
       {tableState.meta.writeable ? (
-        <Tooltip id="1" title="Add row to bottom of table" placement="center">
+        <Tooltip id="1" title="Add row to bottom of table" placement="top">
           <Button
             variant="fab"
             color="secondary"

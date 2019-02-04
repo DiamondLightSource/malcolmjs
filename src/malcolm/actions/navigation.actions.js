@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 import { replace, push } from 'react-router-redux';
 import NavTypes from '../NavTypes';
 import {
@@ -89,7 +90,12 @@ const navigateToAttribute = (blockMri, attributeName) => (
       .filter((nav, i) => i <= matchingBlockNav)
       .map(nav => nav.path)
       .join('/')}/${attributeName}`;
-    dispatch(push(newPath));
+    getState().viewState.popout
+      ? window.open(
+          `${window.location.protocol}//${window.location.host}${newPath}`,
+          `${blockMri}.${attributeName}`
+        )
+      : dispatch(push(newPath));
   }
 };
 
@@ -99,21 +105,29 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
 ) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
-
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
+
+  const goTo = path =>
+    getState().viewState.popout
+      ? window.open(
+          `${window.location.protocol}//${window.location.host}${path}`,
+          `${blockMri}.${attributeName}`
+        )
+      : dispatch(push(path));
+
   if (matchingBlockNav > -1) {
     if (subElement !== undefined) {
       const newPath = `/gui/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}.${subElement}/.info`;
-      dispatch(push(newPath));
+      goTo(newPath);
     } else {
       const newPath = `/gui/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}/.info`;
-      dispatch(push(newPath));
+      goTo(newPath);
     }
   }
 };

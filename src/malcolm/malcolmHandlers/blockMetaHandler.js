@@ -4,11 +4,16 @@ import {
   malcolmNewBlockAction,
   malcolmGetAction,
 } from '../malcolmActionCreators';
+import { subscriptionActive } from '../middleware/malcolmReduxMiddleware';
+
+export const rootBlockSubPath = ['.', 'blocks', 'value'];
+// export const rootBlockSubPath = ['.', 'blocks'];
 
 export const BlockMetaHandler = (
   request,
   changes,
   dispatch,
+  messagesInFlight,
   doSubscribe = true,
   doGet = false
 ) => {
@@ -26,10 +31,19 @@ export const BlockMetaHandler = (
 
   if (changes.fields) {
     changes.fields.forEach(field => {
-      if (doSubscribe) {
-        dispatch(malcolmSubscribeAction([...request.path.slice(0, -1), field]));
-      } else if (doGet) {
-        dispatch(malcolmGetAction([...request.path.slice(0, -1), field]));
+      if (
+        !subscriptionActive(
+          [...request.path.slice(0, -1), field],
+          messagesInFlight
+        )
+      ) {
+        if (doSubscribe) {
+          dispatch(
+            malcolmSubscribeAction([...request.path.slice(0, -1), field])
+          );
+        } else if (doGet) {
+          dispatch(malcolmGetAction([...request.path.slice(0, -1), field]));
+        }
       }
     });
   }

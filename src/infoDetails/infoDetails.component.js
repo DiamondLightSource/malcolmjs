@@ -13,7 +13,9 @@ import {
   malcolmUpdateTable,
   malcolmSelectLink,
   malcolmGetAction,
+  clearError,
 } from '../malcolm/malcolmActionCreators';
+import { malcolmClearMethodInput } from '../malcolm/actions/method.actions';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
@@ -137,7 +139,14 @@ export class InfoDetails extends React.Component {
     );
     return (
       <div>
-        {infoElements.map(a => (
+        {[
+          ...infoElements.filter(
+            a => this.state.info[a] && this.state.info[a].tag !== 'info:button'
+          ),
+          ...infoElements.filter(
+            a => this.state.info[a] && this.state.info[a].tag === 'info:button'
+          ),
+        ].map(a => (
           <InfoElement
             key={a}
             label={this.state.info[a].label ? this.state.info[a].label : a}
@@ -200,6 +209,8 @@ export class InfoDetails extends React.Component {
                   attributeName={this.props.attributeName}
                   disabled={this.state.info[group][a].disabled}
                   disabledFlagPath={this.state.info[group][a].disabledPath}
+                  handlers={this.state.info[group][a].functions}
+                  showLabel={this.state.info[group][a].showLabel}
                   infoPath={this.state.info[group][a].infoPath}
                   infoClickHandler={this.props.infoClickHandler}
                 />
@@ -271,8 +282,17 @@ const mapDispatchToProps = dispatch => ({
   addRow: (path, row, modifier) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
   },
+  moveRow: (path, row, modifier) => {
+    dispatch(malcolmUpdateTable(path, { moveRow: true, modifier }, row));
+  },
   unselectLink: path => {
     dispatch(deselectLinkAction(path));
+  },
+  clearParamState: (path, param) => {
+    dispatch(malcolmClearMethodInput(path, param));
+  },
+  clearError: path => {
+    dispatch(clearError(path));
   },
 });
 

@@ -42,11 +42,12 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="-"
+          Value=""
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -182,6 +183,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -227,6 +229,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -316,11 +319,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="-"
+          Value=""
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -361,11 +365,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="-"
+          Value=""
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -434,7 +439,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
+            alarmSeverity={-2}
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -460,6 +465,148 @@ exports[`Method component renders correctly with existing input values 1`] = `
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={true}
+          setFlag={[Function]}
+          submitEventHandler={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="MethodDetails-div-1"
+      key="second"
+    >
+      <WithStyles(Tooltip)
+        title="a test input"
+      >
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
+          tabIndex="-1"
+        >
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={-2}
+          />
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
+      >
+        Second input
+      </WithStyles(Typography)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetTextInput)
+          Error={false}
+          Pending={false}
+          Value="four"
+          blurHandler={[Function]}
+          continuousSend={true}
+          focusHandler={[Function]}
+          forceUpdate={false}
+          isDirty={true}
+          setFlag={[Function]}
+          submitEventHandler={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="MethodDetails-div-1"
+    >
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabIndex="-1"
+        >
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
+      </div>
+    </div>
+  </div>
+</WithStyles(WidgetGroupExpander)>
+`;
+
+exports[`Method component renders correctly with invalid inputs 1`] = `
+<WithStyles(WidgetGroupExpander)
+  expanded={true}
+  groupName="Test"
+  key="Test,Method"
+>
+  <div>
+    <div
+      className="MethodDetails-div-1"
+      key="first"
+    >
+      <WithStyles(Tooltip)
+        title="this is not valid"
+      >
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
+          tabIndex="-1"
+        >
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={1}
+          />
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
+      >
+        First input
+      </WithStyles(Typography)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetTextInput)
+          Error={false}
+          Pending={false}
+          Value="1"
+          blurHandler={[Function]}
+          continuousSend={true}
+          focusHandler={[Function]}
+          forceUpdate={false}
+          isDirty={true}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -500,11 +647,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="four"
+          Value="two"
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -630,11 +778,12 @@ exports[`Method component renders correctly with return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="-"
+          Value=""
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -675,11 +824,12 @@ exports[`Method component renders correctly with return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
-          Value="-"
+          Value=""
           blurHandler={[Function]}
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={false}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -844,7 +994,7 @@ exports[`Method component renders correctly without return value 1`] = `
           tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
+            alarmSeverity={-2}
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -870,6 +1020,7 @@ exports[`Method component renders correctly without return value 1`] = `
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={true}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />
@@ -889,7 +1040,7 @@ exports[`Method component renders correctly without return value 1`] = `
           tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
+            alarmSeverity={-2}
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -915,6 +1066,7 @@ exports[`Method component renders correctly without return value 1`] = `
           continuousSend={true}
           focusHandler={[Function]}
           forceUpdate={false}
+          isDirty={true}
           setFlag={[Function]}
           submitEventHandler={[Function]}
         />

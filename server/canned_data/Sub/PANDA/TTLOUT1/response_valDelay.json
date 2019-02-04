@@ -29,7 +29,7 @@
             "config:1"
           ], 
           "writeable": true, 
-          "label": "Val Delay"
+          "label": "So, the FPGA has a clock rate right? I'm going to delay Val by this many ticks of said clock!"
         }
       }
     ]

@@ -49,6 +49,19 @@ Cypress.Commands.add('waitForSnackbarToDisappear', () => {
     .should('have.length', 0);
 });
 
+Cypress.Commands.add('checkFor', (element, state = true) => {
+  cy.wait(1000);
+  cy.get(element).should(`${state ? '' : 'not.'}be.visible`);
+});
+
+Cypress.Commands.add('waitForComponentToLoad', () => {
+  cy.log('Waiting for component to load');
+  cy.wait(1000, { log: false });
+  cy
+    .contains('Loading', { timeout: 5000, log: false })
+    .should('have.length', 0);
+});
+
 Cypress.Commands.add('waitForDetailsToLoad', () => {
   cy.log('waiting for details to load');
   cy.contains('Health', { log: false });

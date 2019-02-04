@@ -15,16 +15,15 @@ import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
 
 // import ButtonAction from '../buttonAction/buttonAction.component';
-import WidgetTable from '../../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import MethodArchive from './methodArchive.container';
 
 import blockUtils from '../../malcolm/blockUtils';
+import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 import {
-  malcolmUpdateMethodInput,
-  malcolmIntialiseMethodParam,
-} from '../../malcolm/actions/method.actions';
-import { isArrayType } from '../../malcolm/reducer/method.reducer';
-import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+  getDefaultFromType,
+  isArrayType,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const noOp = () => {};
 
@@ -71,7 +70,9 @@ const MethodViewer = props => {
               <div style={{ height: 'calc(100% - 56px)' }}>
                 <JSONInput
                   locale={locale}
-                  placeholder={props.selectedParamValue}
+                  placeholder={
+                    props.selectedParamValue && props.selectedParamValue.value
+                  }
                   viewOnly={!props.selectedParamMeta.writeable}
                   onChange={val => {
                     if (!val.error) {
@@ -106,11 +107,26 @@ const MethodViewer = props => {
         case 'widget:led': {
           if (isArrayType(props.selectedParamMeta)) {
             if (props.selectedParamValue === undefined) {
-              props.initialiseLocalState(
-                props.method.calculated.path,
-                props.selectedParam
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <Typography style={{ fontSize: '20px' }}>
+                    No value parameter value defined
+                  </Typography>
+                  {props.selectedParamMeta.writeable ? (
+                    <Typography style={{ fontSize: '20px' }}>
+                      Press Edit button to initialise
+                    </Typography>
+                  ) : null}
+                </div>
               );
-              return <div>Loading...</div>;
             } else if (
               props.selectedParam[0] === 'returns' ||
               (props.selectedParamValue.meta && props.selectedParamValue.value)
@@ -154,6 +170,7 @@ const MethodViewer = props => {
                   }}
                   infoClickHandler={noOp}
                   rowClickHandler={noOp}
+                  closePanelHandler={noOp}
                 />
               );
             }
@@ -237,11 +254,11 @@ const MethodViewer = props => {
         addRow={noOp}
         infoClickHandler={noOp}
         rowClickHandler={noOp}
+        closePanelHandler={noOp}
       />
     );
   }
-
-  return <div>oops!</div>;
+  return null;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -290,9 +307,6 @@ const mapDispatchToProps = dispatch => ({
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
   },
-  initialiseLocalState: (path, selectedParam) => {
-    dispatch(malcolmIntialiseMethodParam(path, selectedParam));
-  },
 });
 
 MethodViewer.propTypes = {
@@ -331,7 +345,6 @@ MethodViewer.propTypes = {
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   updateInput: PropTypes.func.isRequired,
-  initialiseLocalState: PropTypes.func.isRequired,
 };
 
 MethodViewer.defaultProps = {

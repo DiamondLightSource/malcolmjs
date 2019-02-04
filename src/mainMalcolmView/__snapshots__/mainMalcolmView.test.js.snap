@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MainMalcolmView renders correctly 1`] = `
-<div>
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
   <Connect(WithStyles(DrawerContainer))
     childMRI=""
     childTitle=""
@@ -31,7 +37,13 @@ exports[`MainMalcolmView renders correctly 1`] = `
 `;
 
 exports[`MainMalcolmView renders info if child block is .info 1`] = `
-<div>
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
   <Connect(WithStyles(DrawerContainer))
     childMRI=".info"
     childTitle="Info"
@@ -61,7 +73,13 @@ exports[`MainMalcolmView renders info if child block is .info 1`] = `
 `;
 
 exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
-<div>
+<div
+  style={
+    Object {
+      "color": "rgba(0, 0, 0, 0.87)",
+    }
+  }
+>
   <Connect(WithStyles(DrawerContainer))
     childMRI=".palette"
     childTitle="Palette"

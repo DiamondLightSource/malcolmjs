@@ -22,7 +22,11 @@ exports[`LinkFactory generates react widget 1`] = `
       onMouseEnter={[Function]}
       onMouseLeave={[Function]}
       stroke="rgba(217, 217, 217, 0.4)"
+<<<<<<< HEAD
       strokeLinecap="round"
+=======
+      strokeLinecap="butt"
+>>>>>>> 84a2341207f902a8812a300805818be0cbcac621
       strokeOpacity={0}
       strokeWidth={20}
       style={Object {}}

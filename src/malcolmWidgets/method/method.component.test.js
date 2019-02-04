@@ -5,8 +5,13 @@ import {
   malcolmPostAction,
   malcolmSetFlag,
 } from '../../malcolm/malcolmActionCreators';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmIntialiseMethodParam,
+} from '../../malcolm/actions/method.actions';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
+jest.mock('../../malcolm/actions/navigation.actions');
 jest.mock('../../malcolm/malcolmActionCreators');
 jest.mock('../../malcolm/actions/method.actions');
 
@@ -39,6 +44,11 @@ describe('Method component', () => {
     second: 'four',
   };
 
+  const testInputState = {};
+  Object.keys(testInputValues).forEach(input => {
+    testInputState[input] = { value: testInputValues[input], flags: {} };
+  });
+
   const testOutputValues = {
     first: true,
     second: 'done',
@@ -51,16 +61,28 @@ describe('Method component', () => {
     inputValues,
     outputValues,
     errorMsg,
-    writeable = true
+    writeable = true,
+    flags = {}
   ) => {
+    const inputState = {};
+    Object.keys(inputValues).forEach(input => {
+      inputState[input] = { value: inputValues[input], flags: {} };
+    });
+    Object.keys(flags).forEach(input => {
+      inputState[input] = { ...inputState[input], flags: flags[input] };
+    });
+    const outputState = {};
+    Object.keys(outputValues).forEach(output => {
+      outputState[output] = { value: outputValues[output] };
+    });
     const method = {
       calculated: {
         name: 'Method',
         path: ['Test', 'Method'],
         errorState: !!errorMsg,
         errorMessage: errorMsg,
-        inputs: inputValues,
-        outputs: outputValues,
+        inputs: inputState,
+        outputs: outputState,
       },
       raw: {
         label: 'Test',
@@ -83,6 +105,8 @@ describe('Method component', () => {
   };
 
   beforeEach(() => {
+    navigationActions.navigateToSubElement.mockClear();
+    malcolmIntialiseMethodParam.mockClear();
     malcolmSetFlag.mockClear();
     malcolmUpdateMethodInput.mockClear();
     malcolmPostAction.mockClear();
@@ -133,6 +157,15 @@ describe('Method component', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly with invalid inputs', () => {
+    const wrapper = shallow(
+      testMethod(testInputs, {}, defaultInputs, {}, {}, '', true, {
+        first: { invalid: 'this is not valid' },
+      })
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('renders correctly with existing input values', () => {
     const wrapper = shallow(
       testMethod(testInputs, {}, {}, testInputValues, {}, '')
@@ -170,16 +203,10 @@ describe('Method component', () => {
       .find('button')
       .last()
       .simulate('click');
-    expect(malcolmSetFlag).toHaveBeenCalledTimes(1);
-    expect(malcolmSetFlag).toHaveBeenCalledWith(
-      ['Test', 'Method'],
-      'pending',
-      true
-    );
     expect(malcolmPostAction).toHaveBeenCalledTimes(1);
     expect(malcolmPostAction).toHaveBeenCalledWith(
       ['Test', 'Method'],
-      testInputValues
+      testInputState
     );
   });
 
@@ -203,16 +230,11 @@ describe('Method component', () => {
       .find('input')
       .first()
       .simulate('change', { target: { value: 'test' } });
-    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(2);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(1);
     expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
       ['Test', 'Method', 'takes.first'],
       'first',
       'test'
-    );
-    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
-      ['Test', 'Method', 'takes.first'],
-      'first',
-      { isDirty: true }
     );
   });
 
@@ -220,5 +242,27 @@ describe('Method component', () => {
     testInputs.second.tags = [];
     const wrapper = shallow(testMethod(testInputs, {}, {}, {}, {}, ''));
     expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('buildIOcomponent hooks up initialise state action to view button for array type params', () => {
+    testInputs.first.typeid = 'foo:bar/someArrayMeta:1.6';
+    const wrapper = mount(
+      testMethod(testInputs, testOutputs, {}, testInputValues, {}, '')
+    );
+    wrapper
+      .find('button')
+      .at(1)
+      .simulate('click');
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
+      'Test',
+      'Method',
+      'takes.first'
+    );
+    expect(malcolmIntialiseMethodParam).toHaveBeenCalledTimes(1);
+    expect(malcolmIntialiseMethodParam).toHaveBeenCalledWith(
+      ['Test', 'Method', 'takes.first'],
+      ['takes', 'first']
+    );
   });
 });

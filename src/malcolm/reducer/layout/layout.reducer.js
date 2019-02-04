@@ -7,6 +7,7 @@ import {
   MalcolmResetPortsType,
   MalcolmSelectLinkType,
   MalcolmSelectBlock,
+  MalcolmZoom,
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
@@ -129,9 +130,10 @@ const findHiddenLinks = (layoutBlocks, layoutEngine) => {
             },
           ],
           visible: true,
+          locked: true,
         };
         updatedPort.value = newValue;
-        hiddenLinkEnd.position.x -= 60;
+        hiddenLinkEnd.position.x -= 50;
         hiddenLinkEnd.position.y +=
           blockHeight / 2 - 10 + (portIndex - (inputPorts.length - 1) / 2) * 20;
         hiddenBlocks.push(hiddenLinkEnd);
@@ -426,6 +428,33 @@ const selectBlock = (state, payload) => ({
   },
 });
 
+const zoomLayout = (state, payload) => {
+  const { layoutEngine } = state;
+
+  let zoomFactor;
+  if (payload.zoomToFit) {
+    const xFactor =
+      (layoutEngine.canvas.clientWidth -
+        360 * (payload.openParent + payload.openChild)) /
+      layoutEngine.canvas.scrollWidth;
+    const yFactor =
+      layoutEngine.canvas.clientHeight / layoutEngine.canvas.scrollHeight;
+    zoomFactor = xFactor < yFactor ? xFactor : yFactor;
+  } else {
+    zoomFactor = payload.direction === 'in' ? 1.1 : 0.9;
+  }
+
+  layoutEngine.diagramModel.setZoomLevel(
+    layoutEngine.diagramModel.getZoomLevel() * zoomFactor
+  );
+  layoutEngine.diagramModel.setOffset(
+    payload.openParent ? 360 * payload.openParent : 0,
+    0
+  );
+  layoutEngine.repaintCanvas();
+  return { ...state, layoutEngine };
+};
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -435,6 +464,7 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmResetPortsType]: resetPorts,
     [MalcolmSelectLinkType]: selectLink,
     [MalcolmSelectBlock]: selectBlock,
+    [MalcolmZoom]: zoomLayout,
   }
 );
 

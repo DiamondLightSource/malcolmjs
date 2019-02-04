@@ -13,11 +13,17 @@ import {
   MalcolmMultipleAttributeData,
   MalcolmSimpleLocalState,
 } from '../malcolm.types';
-import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
+  getDefaultFromType,
+  malcolmTypes,
+  isArrayType,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  createLocalState,
   shouldClearDirtyFlag,
   tableHasColumn,
   tableHasRow,
+  arrayHasElement,
 } from './table.reducer';
 import { getMethodParam } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -49,6 +55,10 @@ const hasSubElements = inputAttribute => {
     attribute.calculated.subElements = {
       takes: (param, method) => getMethodParam('takes', param, method),
       returns: (param, method) => getMethodParam('returns', param, method),
+    };
+  } else if (isArrayType(attribute.raw.meta)) {
+    attribute.calculated.subElements = {
+      row: arrayHasElement,
     };
   }
   return attribute;
@@ -82,13 +92,9 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
   if (oldAttribute) {
     let oldMeta;
     let newMeta;
-    // #refactorDuplication
     if (oldAttribute.raw && oldAttribute.raw.meta) {
       oldMeta = oldAttribute.raw.meta;
       newMeta = newAttribute.raw.meta;
-      /* } else if (oldAttribute.meta) {
-      oldMeta = oldAttribute.meta;
-      newMeta = newAttribute.meta; */
     } else {
       return true;
     }
@@ -175,14 +181,11 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 
   const attribute = attributes[matchingAttributeIndex];
 
-  // #refactorDuplication
   if (
     attribute &&
-    ((attribute.raw &&
+    (attribute.raw &&
       attribute.raw.meta &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')) ||
-      (attribute.meta &&
-        attribute.meta.tags.some(t => t === 'widget:flowgraph')))
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph'))
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
@@ -216,53 +219,56 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
-const deepCopy = value =>
-  value !== undefined ? JSON.parse(JSON.stringify(value)) : undefined;
-
-const updateLocalState = attribute => {
+export const updateLocalState = attribute => {
   let updatedAttribute = { ...attribute };
   if (updatedAttribute && updatedAttribute.raw.meta) {
     if (
       updatedAttribute.raw.meta.tags &&
       updatedAttribute.raw.meta.tags.includes('widget:textinput') &&
+      !isArrayType(attribute.raw.meta) &&
       (!updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate)
     ) {
       updatedAttribute.localState = updatedAttribute.raw.value;
     } else if (
-      updatedAttribute.raw.meta.typeid === malcolmTypes.table &&
+      (updatedAttribute.raw.meta.typeid === malcolmTypes.table ||
+        isArrayType(attribute.raw.meta)) &&
       updatedAttribute.localState !== undefined
     ) {
-      const labels = Object.keys(updatedAttribute.raw.meta.elements);
       updatedAttribute = shouldClearDirtyFlag(updatedAttribute);
       if (
         !updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate
       ) {
-        updatedAttribute.calculated.dirty = false;
-        updatedAttribute.localState = {
-          value: updatedAttribute.raw.value[labels[0]].map((value, row) => {
-            const dataRow = {};
-            labels.forEach(label => {
-              dataRow[label] = updatedAttribute.raw.value[label][row];
-            });
-            return dataRow;
-          }),
-          meta: deepCopy(updatedAttribute.raw.meta),
-          labels,
-          flags: {
-            rows: updatedAttribute.raw.value[labels[0]].map(() => ({})),
-            table: {
-              dirty: false,
-              fresh: true,
-              timeStamp: deepCopy(updatedAttribute.raw.timeStamp),
-            },
-          },
-        };
+        updatedAttribute = createLocalState(updatedAttribute);
       } else {
         updatedAttribute.localState.flags.table.fresh = false;
       }
     }
+  }
+  return updatedAttribute;
+};
+
+const presetMethodInputs = attribute => {
+  const updatedAttribute = attribute;
+  if (updatedAttribute && updatedAttribute.calculated.isMethod) {
+    updatedAttribute.calculated.inputs =
+      updatedAttribute.calculated.inputs || {};
+    updatedAttribute.calculated.outputs =
+      updatedAttribute.calculated.outputs || {};
+    Object.entries(updatedAttribute.raw.takes.elements).forEach(
+      ([input, meta]) => {
+        if (
+          updatedAttribute.raw.takes.required.includes(input) &&
+          !updatedAttribute.calculated.inputs[input]
+        ) {
+          updatedAttribute.calculated.inputs[input] = {
+            value: getDefaultFromType(meta),
+            flags: {},
+          };
+        }
+      }
+    );
   }
   return updatedAttribute;
 };
@@ -272,6 +278,7 @@ const checkForSpecialCases = inputAttribute => {
   attribute = updateAttributeChildren(attribute);
   attribute = hasSubElements(attribute);
   attribute = updateLocalState(attribute);
+  attribute = presetMethodInputs(attribute);
 
   return attribute;
 };

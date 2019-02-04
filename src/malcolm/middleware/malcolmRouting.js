@@ -4,6 +4,7 @@ import {
   malcolmNavigationPath,
 } from '../malcolmActionCreators';
 import NavTypes from '../NavTypes';
+import { rootBlockSubPath } from '../malcolmHandlers/blockMetaHandler';
 
 const handleLocationChange = (path, blocks, dispatch, getState) => {
   // remove the first part of the url e.g. /gui/ or /details/
@@ -16,7 +17,7 @@ const handleLocationChange = (path, blocks, dispatch, getState) => {
   // Get the root list of blocks
   if (!blocks['.blocks']) {
     dispatch(malcolmNewBlockAction('.blocks', false, false));
-    dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+    dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
   } else {
     const { navigationLists } = getState().malcolm.navigation;
     const newBlocks = navigationLists.filter(

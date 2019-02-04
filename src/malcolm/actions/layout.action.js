@@ -4,11 +4,13 @@ import {
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
   MalcolmResetPortsType,
+  MalcolmZoom,
 } from '../malcolm.types';
 import {
   malcolmPutAction,
   malcolmSetFlag,
   malcolmSelectBlock,
+  malcolmSelectLink,
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
 import { snackbarState } from '../../viewState/viewState.actions';
@@ -128,7 +130,7 @@ const makeBlockVisible = (mriList, positionList, visibleList) => (
     attributeName
   );
 
-  if (layoutAttribute) {
+  if (layoutAttribute && mri.length > 0) {
     const visibleBlockIndices = mri.map(blockMri =>
       layoutAttribute.raw.value.mri.findIndex(val => val === blockMri)
     );
@@ -180,6 +182,7 @@ const deleteLinks = () => (dispatch, getState) => {
         .slice(-1)[0];
       dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
       dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
+      dispatch(malcolmSelectLink(linkId, false));
     }
   });
 };
@@ -198,6 +201,22 @@ const mouseInsideDeleteZone = insideZone => ({
   },
 });
 
+const zoomToFit = (openParent, openChild) => ({
+  type: MalcolmZoom,
+  payload: {
+    zoomToFit: true,
+    openParent,
+    openChild,
+  },
+});
+
+const zoomInDirection = direction => ({
+  type: MalcolmZoom,
+  payload: {
+    direction,
+  },
+});
+
 export default {
   selectPort,
   makeBlockVisible,
@@ -205,4 +224,6 @@ export default {
   mouseInsideDeleteZone,
   deleteBlocks,
   deleteLinks,
+  zoomToFit,
+  zoomInDirection,
 };

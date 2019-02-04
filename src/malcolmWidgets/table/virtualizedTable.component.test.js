@@ -20,6 +20,8 @@ describe('virtualized table widget', () => {
   let shallow;
   let mount;
   let props;
+  let testArray;
+  let testAttribute;
 
   beforeEach(() => {
     shallow = createShallow();
@@ -31,6 +33,23 @@ describe('virtualized table widget', () => {
       classes: {},
       infoClickHandler: () => {},
     };
+
+    testArray = {
+      meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: ['widget:textinput'] },
+      value: ['a', 'b', 'c'],
+      flags: {
+        rows: [{}, {}, {}],
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: expectedCopy.timeStamp,
+        },
+      },
+    };
+    testAttribute = {
+      calculated: {},
+      raw: { meta: testArray.meta, value: ['a', 'b', 'c'] },
+    };
   });
 
   it('table renders correctly with no selected row', () => {
@@ -38,6 +57,31 @@ describe('virtualized table widget', () => {
       <WidgetTable
         attribute={harderAttribute}
         localState={expectedCopy}
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        addRow={() => {}}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('table renders correctly for array attribute with local state', () => {
+    const wrapper = mount(
+      <WidgetTable
+        attribute={testAttribute}
+        localState={testArray}
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        addRow={() => {}}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('table renders correctly for array attribute without local state', () => {
+    const wrapper = mount(
+      <WidgetTable
+        attribute={testAttribute}
         eventHandler={() => {}}
         setFlag={() => {}}
         addRow={() => {}}

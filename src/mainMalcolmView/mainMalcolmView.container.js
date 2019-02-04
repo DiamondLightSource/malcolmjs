@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withTheme } from '@material-ui/core/styles';
 import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 import MiddlePanelContainer from './middlePanel.container';
@@ -29,7 +30,7 @@ const childPanelSelector = props => {
 };
 
 const MainMalcolmView = props => (
-  <div>
+  <div style={{ color: props.theme.palette.text.primary }}>
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
       parentMRI={props.parentBlock}
@@ -67,15 +68,10 @@ const mapStateToProps = state => {
   const showPalette = navType === NavTypes.Palette;
   const showInfo = navType === NavTypes.Info;
 
-  let parentBlockTitle = parentBlock ? parentBlock.name : '';
-  if (parentBlock && parentBlock.label) {
-    parentBlockTitle = parentBlock.label;
-  }
+  const parentBlockTitle = parentBlock ? parentBlock.name : '';
 
   let childBlockTitle = childBlock ? childBlock.name : '';
-  if (childBlock && childBlock.label) {
-    childBlockTitle = childBlock.label;
-  }
+
   if (showPalette) {
     childBlockTitle = 'Palette';
   } else if (showInfo) {
@@ -90,6 +86,7 @@ const mapStateToProps = state => {
     showPalette,
     showInfo,
     footerHeight: state.viewState.footerHeight,
+    openParent: state.viewState.openParentPanel,
   };
 };
 
@@ -101,6 +98,13 @@ MainMalcolmView.propTypes = {
   parentBlock: PropTypes.string,
   childBlock: PropTypes.string,
   footerHeight: PropTypes.number.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 childPanelSelector.propTypes = {
@@ -115,4 +119,6 @@ MainMalcolmView.defaultProps = {
   childBlock: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainMalcolmView);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withTheme()(MainMalcolmView)
+);

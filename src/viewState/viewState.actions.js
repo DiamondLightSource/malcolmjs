@@ -5,6 +5,8 @@ export const snackbar = 'PUSH_SNACKBAR';
 export const updateTheme = 'CREATE_NEW_THEME';
 export const editTheme = 'EDIT_THEME';
 export const setTheme = 'SET_THEME_PROPS';
+export const popout = 'WINDOW_IS_POPOUT';
+export const panelDirection = 'PANEL_TRANSITION_DIRECTION';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -50,6 +52,16 @@ export const editThemeAction = open => ({
   type: editTheme,
   payload: {
     open,
+  },
+});
+export const flagAsPopout = () => ({
+  type: popout,
+});
+
+export const parentPanelTransition = transition => ({
+  type: panelDirection,
+  payload: {
+    transition,
   },
 });
 

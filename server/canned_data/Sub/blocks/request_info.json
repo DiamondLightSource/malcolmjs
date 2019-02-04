@@ -3,7 +3,8 @@
   "id": "CANNED", 
   "path": [
     ".", 
-    "blocks"
+    "blocks",
+    "value"
   ], 
   "delta": false
 }

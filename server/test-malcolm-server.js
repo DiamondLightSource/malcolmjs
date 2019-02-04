@@ -9,7 +9,7 @@ let pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
 let subscriptions = [];
 let subscribedPaths = {};
 
-const port = 8000
+const port = 8000;
 const io = new WebSocket.Server({port});
 
 io.on('connection', function (socket) {
@@ -36,8 +36,7 @@ console.log('listening on port ', port);
 
 function resetServer() {
   pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
-  subscriptions = [];
-  subscribedPaths = {};
+  handleDisconnect();
 }
 
 function handleMessage(socket, message) {
@@ -48,6 +47,8 @@ function handleMessage(socket, message) {
     handleUnsubscribe(socket, originalId);
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
     let response;
+    let labelResponse = undefined;
+
     if (pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]) {
       pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value = simplifiedMessage.value;
       if (subscribedPaths[JSON.stringify(simplifiedMessage.path)]) {
@@ -68,12 +69,19 @@ function handleMessage(socket, message) {
           const blockMeta = pathIndexedMessages[JSON.stringify([simplifiedMessage.path[0], 'meta'])];
           blockMeta.changes[0][1].label = simplifiedMessage.value;
 
-          response = {
-            ...blockMeta,
+          labelResponse = {
+            //...blockMeta,
+            typeid: 'malcolm:core/Delta:1.0',
+            changes: [
+              [
+                ["label"],
+                simplifiedMessage.value
+              ]
+            ],
             id: parseInt(subscribedPaths[JSON.stringify([simplifiedMessage.path[0], 'meta'])]),
           }
 
-          sendResponse(socket, response);
+          sendResponse(socket, labelResponse);
         }
       }
 
@@ -110,6 +118,10 @@ function handleMessage(socket, message) {
       response = buildErrorMessage(originalId, message);
     }
     sendResponse(socket, response);
+
+    // if (labelResponse) {
+    //   sendResponse(socket, labelResponse)
+    // }
 
   } else if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
     let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);
