@@ -1,4 +1,20 @@
 # Changelog
+## 1.6.0 (4/2/2019)
+Fixes:
+- Attempting to delete read-only link in layout now has no effect
+- Parameter names are no longer clickable
+- Method flag behaviour fixed (was previously getting stuck flagged as dirty)
+Features:
+- TextUpdate/Inputs now display units & formatting
+- Added new plotter widget for graphing table (ALPHA FEATURE)
+- Changed alarm icons for methods and their parameters
+- Clicking currently selected item in a comboBox now sends a fresh put for that value
+Misc:
+- Added new port colour for type "block"
+- Current route/item is now selected in nav drop down menu is now
+- Expanders for methods with parameters now start collapsed
+- Various minor style tweaks
+
 ## 1.5.1 (4/12/2018)
 Fixes:
 - Deleting links on the layout now causes them to be properly deselected on the state (as such deleting a second link after having made a new link to the same sink port as the first was originaly linked to no longer causes the new link to be deleted)
