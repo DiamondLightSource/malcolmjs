@@ -18,7 +18,7 @@ exports[`AttributeDetails renders correctly 1`] = `
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}
-        fieldType="attirbute"
+        fieldType="attribute"
       />
     </WithStyles(IconButton)>
   </WithStyles(Tooltip)>
