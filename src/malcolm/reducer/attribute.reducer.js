@@ -548,6 +548,7 @@ export function revertLocalState(oldState, payload) {
       };
 
       attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+      // TODO: call processLayout and updateLayoutAndEngine here (if required)
     }
     const blocks = { ...state.blocks };
     blocks[blockName] = { ...state.blocks[blockName], attributes };
