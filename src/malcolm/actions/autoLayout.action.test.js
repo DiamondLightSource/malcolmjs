@@ -58,6 +58,12 @@ describe('auto layout actions', () => {
             },
           ],
         },
+        layoutState: {
+          layoutCenter: {
+            x: 1,
+            y: 100,
+          },
+        },
         parentBlock: 'PANDA',
         mainAttribute: 'layout',
         layoutEngine: {

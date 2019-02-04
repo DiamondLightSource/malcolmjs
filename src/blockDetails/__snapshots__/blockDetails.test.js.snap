@@ -109,10 +109,26 @@ exports[`Block Details renders methods correctly 1`] = `
   className="BlockDetails-progressContainer-1"
 >
   <div>
+    <GroupDivider
+      classes={
+        Object {
+          "endDivider": "BlockDetails-endDivider-2",
+          "progressContainer": "BlockDetails-progressContainer-1",
+        }
+      }
+    />
     <div>
       <Connect(WithStyles(MethodDetails))
         attributeName="save"
         key="save"
+      />
+      <GroupDivider
+        classes={
+          Object {
+            "endDivider": "BlockDetails-endDivider-2",
+            "progressContainer": "BlockDetails-progressContainer-1",
+          }
+        }
       />
     </div>
   </div>

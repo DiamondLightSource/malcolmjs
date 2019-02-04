@@ -48,7 +48,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
               "1970-01-01T00:00:00.000Z",
             ],
             "value": Array [
-              0,
+              undefined,
             ],
           },
         },
@@ -73,7 +73,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
           1970-01-01T00:00:00.000Z,
         ],
         "value": Array [
-          0,
+          undefined,
         ],
       }
     }
@@ -131,7 +131,7 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
               "1970-01-01T00:00:00.000Z",
             ],
             "value": Array [
-              0,
+              undefined,
             ],
           },
         },
@@ -156,7 +156,7 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
           1970-01-01T00:00:00.000Z,
         ],
         "value": Array [
-          0,
+          undefined,
         ],
       }
     }

@@ -169,13 +169,13 @@ export const malcolmCopyValue = path => ({
   },
 });
 
-export const malcolmSetTableFlag = (path, row, flagType, flags) => ({
+export const malcolmSetTableFlag = (path, field, flagType, flags) => ({
   type: MalcolmTableFlag,
   payload: {
     path,
-    row,
     flagType,
     flags,
+    ...field,
   },
 });
 

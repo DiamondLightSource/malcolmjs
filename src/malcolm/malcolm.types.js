@@ -36,3 +36,4 @@ export const MalcolmIncrementMessageCount = 'malcolm:incrementcounter';
 export const MalcolmClearError = 'malcolm:clearerror';
 export const MalcolmZoom = 'malcolm:zoomlayout';
 export const MalcolmMethodReturn = 'malcolm:methodreturn';
+export const MalcolmOptimisticLayoutUpdate = 'malcolm:optimisticlayoutupdate';

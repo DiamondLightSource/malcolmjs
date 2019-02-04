@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
+  FieldTypes,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
 
@@ -130,7 +131,10 @@ const MethodDetails = props => {
               props.infoClickHandler(props.blockName, props.attributeName)
             }
           >
-            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            <AttributeAlarm
+              alarmSeverity={props.methodAlarm}
+              fieldType={FieldTypes.METHOD}
+            />
           </IconButton>
         </Tooltip>
         <div
@@ -152,7 +156,7 @@ const MethodDetails = props => {
     );
   }
   return (
-    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
+    <GroupExpander key={props.methodPath} groupName={props.methodName}>
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
@@ -169,19 +173,15 @@ const MethodDetails = props => {
                   )
                 }
               >
-                <AttributeAlarm alarmSeverity={props.inputAlarms[input[0]]} />
+                <AttributeAlarm
+                  alarmSeverity={props.inputAlarms[input[0]]}
+                  fieldType={FieldTypes.PARAMIN}
+                />
               </IconButton>
             </Tooltip>
             <Typography
               className={props.classes.textName}
               style={{ cursor: 'pointer' }}
-              onClick={() =>
-                props.labelClickHandler(
-                  props.blockName,
-                  props.attributeName,
-                  `takes.${input[0]}`
-                )
-              }
             >
               {input[1].label}
             </Typography>
@@ -201,7 +201,10 @@ const MethodDetails = props => {
               }
               style={{ cursor: 'pointer' }}
             >
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+              <AttributeAlarm
+                alarmSeverity={props.methodAlarm}
+                fieldType={FieldTypes.METHOD}
+              />
             </IconButton>
           </Tooltip>
           <div
@@ -245,19 +248,15 @@ const MethodDetails = props => {
                       )
                     }
                   >
-                    <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                    <AttributeAlarm
+                      alarmSeverity={AlarmStates.NO_ALARM}
+                      fieldType={FieldTypes.PARAMOUT}
+                    />
                   </IconButton>
                 </Tooltip>
                 <Typography
                   className={props.classes.textName}
                   style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    props.labelClickHandler(
-                      props.blockName,
-                      props.attributeName,
-                      `returns.${output[0]}`
-                    )
-                  }
                 >
                   {output[1].label}
                 </Typography>
@@ -295,13 +294,13 @@ MethodDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
-  // labelClickHandler: PropTypes.func.isRequired,
   writeable: PropTypes.bool.isRequired,
 };
 
 const EMPTY = '';
 const EMPTY_ARRAY = [];
 const EMPTY_OBJECT = {};
+
 const mapStateToProps = (state, ownProps) => {
   let method;
   if (ownProps.attributeName && ownProps.blockName) {
@@ -333,7 +332,7 @@ const mapStateToProps = (state, ownProps) => {
             method.calculated.inputs[input],
             'value'
           )) ||
-        method.calculated.dirtyInputs;
+        (method.calculated.dirtyInputs && method.calculated.dirtyInputs[input]);
 
       const inputIsErrored = false; // TODO: implement individual parameter errors
 
@@ -395,15 +394,6 @@ export const mapDispatchToProps = dispatch => ({
   infoClickHandler: (blockName, attributeName, subElement) => {
     dispatch(
       navigationActions.navigateToInfo(blockName, attributeName, subElement)
-    );
-  },
-  labelClickHandler: (blockName, attributeName, subElement) => {
-    dispatch(
-      navigationActions.navigateToSubElement(
-        blockName,
-        attributeName,
-        subElement
-      )
     );
   },
   runMethod: (path, inputs) => {

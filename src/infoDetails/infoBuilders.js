@@ -95,7 +95,7 @@ export const buildAttributeInfo = props => {
       }
       if (
         attribute.raw.meta.tags.some(a =>
-          ['widget:table', 'widget:textinput'].includes(a)
+          ['widget:table', 'widget:textinput', 'widget:flowgraph'].includes(a)
         )
       ) {
         info.localState = {

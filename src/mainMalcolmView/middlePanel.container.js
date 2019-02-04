@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import AttributePlotter from '../malcolmWidgets/plotter/plotter.component';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
 import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
 import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
@@ -322,6 +323,22 @@ const findAttributeComponent = props => {
           />
         </div>
       );
+
+    case 'widget:plot':
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <AttributePlotter
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+            />
+          </div>
+        </div>
+      );
+
     default:
       return (
         <div

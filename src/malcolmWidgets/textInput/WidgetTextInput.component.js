@@ -55,6 +55,7 @@ class WidgetTextInput extends React.Component {
         props.localState.value && props.localState.value !== props.Value
           ? props.localState.value
           : props.Value,
+      hasFocus: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.deFocus = this.deFocus.bind(this);
@@ -93,12 +94,14 @@ class WidgetTextInput extends React.Component {
   }
 
   inFocus(event) {
+    this.setState({ ...this.state, hasFocus: true });
     event.target.select();
     this.props.setFlag('dirty', true);
     this.props.focusHandler();
   }
 
   deFocus() {
+    this.setState({ ...this.state, hasFocus: false });
     if (this.state.localValue === this.props.Value) {
       this.props.setFlag('dirty', false);
     }
@@ -106,9 +109,10 @@ class WidgetTextInput extends React.Component {
   }
 
   render() {
-    const endAdornment = this.props.Units ? (
-      <InputAdornment position="end">{this.props.Units}</InputAdornment>
-    ) : null;
+    const endAdornment =
+      this.props.Units && !this.state.hasFocus ? (
+        <InputAdornment position="end">{this.props.Units}</InputAdornment>
+      ) : null;
 
     return (
       <TextField
@@ -143,8 +147,8 @@ WidgetTextInput.propTypes = {
     ),
   }),
   setFlag: PropTypes.func.isRequired,
-  blurHandler: PropTypes.func.isRequired,
-  focusHandler: PropTypes.func.isRequired,
+  blurHandler: PropTypes.func,
+  focusHandler: PropTypes.func,
   Pending: PropTypes.bool,
   Error: PropTypes.bool,
   isDirty: PropTypes.bool,
@@ -165,6 +169,8 @@ WidgetTextInput.defaultProps = {
   Error: false,
   continuousSend: false,
   localState: { set: () => {} },
+  focusHandler: () => {},
+  blurHandler: () => {},
 };
 
 export default withStyles(styles)(WidgetTextInput);

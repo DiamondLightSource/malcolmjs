@@ -64,6 +64,10 @@ export const createLocalState = oldAttribute => {
   const attribute = oldAttribute;
   if (!isArrayType(attribute.raw.meta)) {
     const labels = Object.keys(attribute.raw.meta.elements);
+    const columns = {};
+    labels.forEach(label => {
+      columns[label] = {};
+    });
     attribute.localState = {
       meta: deepCopy(attribute.raw.meta),
       value: attribute.raw.value[labels[0]].map((value, row) => {
@@ -75,6 +79,7 @@ export const createLocalState = oldAttribute => {
       }),
       labels,
       flags: {
+        columns,
         rows: attribute.raw.value[labels[0]].map(() => ({})),
         table: {
           dirty: false,
@@ -218,33 +223,46 @@ const setTableFlag = (state, payload) => {
   const { attributes } = state.blocks[blockName];
   const attribute = { ...attributes[matchingAttributeIndex] };
   if (matchingAttributeIndex >= 0) {
-    attribute.localState.flags.rows[payload.row] = {
-      ...attribute.localState.flags.rows[payload.row],
-      ...payload.flags,
-    };
-    if (
-      payload.flagType === 'selected' &&
-      attribute.localState.flags.table.selectedRow !== payload.row
-    ) {
-      attribute.localState.flags.rows.forEach((row, index) => {
-        attribute.localState.flags.rows[index].selected = index === payload.row;
-      });
-      attribute.localState.flags.table.selectedRow = payload.row;
-    } else {
-      attribute.localState.flags.table[
-        payload.flagType
-      ] = attribute.localState.flags.rows.some(
-        row =>
-          row[`_${payload.flagType}`] ||
-          (payload.flagType === 'dirty' && row._isChanged)
-      );
-      if (payload.flagType === 'dirty') {
-        attribute.calculated.dirty = attribute.localState.flags.table.dirty;
-        attribute.calculated.alarms.dirty = attribute.localState.flags.table
-          .dirty
-          ? AlarmStates.DIRTY
-          : null;
+    if (payload.row !== undefined) {
+      attribute.localState.flags.rows[payload.row] = {
+        ...attribute.localState.flags.rows[payload.row],
+        ...payload.flags,
+      };
+      if (
+        payload.flagType === 'selected' &&
+        attribute.localState.flags.table.selectedRow !== payload.row
+      ) {
+        attribute.localState.flags.rows.forEach((row, index) => {
+          attribute.localState.flags.rows[index].selected =
+            index === payload.row;
+        });
+        attribute.localState.flags.table.selectedRow = payload.row;
+      } else {
+        attribute.localState.flags.table[
+          payload.flagType
+        ] = attribute.localState.flags.rows.some(
+          row =>
+            row[`_${payload.flagType}`] ||
+            (payload.flagType === 'dirty' && row._isChanged)
+        );
+        if (payload.flagType === 'dirty') {
+          attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+          attribute.calculated.alarms.dirty = attribute.localState.flags.table
+            .dirty
+            ? AlarmStates.DIRTY
+            : null;
+        }
       }
+    } else if (payload.column !== undefined) {
+      attribute.localState.flags.columns[payload.column] = {
+        ...attribute.localState.flags.columns[payload.column],
+        ...payload.flags,
+      };
+    } else if (payload.table) {
+      attribute.localState.flags.table = {
+        ...attribute.localState.flags.table,
+        ...payload.flags,
+      };
     }
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };

@@ -136,7 +136,7 @@ const MethodViewer = props => {
                   localState={
                     props.selectedParam[0] === 'returns'
                       ? {
-                          value: props.selectedParamValue,
+                          value: props.selectedParamValue.value,
                           meta: props.selectedParamMeta,
                           flags: { rows: [] },
                         }

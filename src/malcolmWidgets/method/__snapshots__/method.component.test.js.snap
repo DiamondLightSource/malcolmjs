@@ -2,7 +2,6 @@
 
 exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -22,12 +21,12 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -42,6 +41,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value=""
           blurHandler={[Function]}
           continuousSend={true}
@@ -68,12 +68,12 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -113,6 +113,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -138,7 +139,6 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
 
 exports[`Method component renders correctly with default inputs 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -158,12 +158,12 @@ exports[`Method component renders correctly with default inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -178,6 +178,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="1"
           blurHandler={[Function]}
           continuousSend={true}
@@ -204,12 +205,12 @@ exports[`Method component renders correctly with default inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -224,6 +225,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="two"
           blurHandler={[Function]}
           continuousSend={true}
@@ -254,6 +256,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -279,7 +282,6 @@ exports[`Method component renders correctly with default inputs 1`] = `
 
 exports[`Method component renders correctly with empty inputs 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -299,12 +301,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -319,6 +321,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value=""
           blurHandler={[Function]}
           continuousSend={true}
@@ -345,12 +348,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -365,6 +368,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value=""
           blurHandler={[Function]}
           continuousSend={true}
@@ -395,6 +399,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -420,7 +425,6 @@ exports[`Method component renders correctly with empty inputs 1`] = `
 
 exports[`Method component renders correctly with existing input values 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -440,12 +444,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={-2}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -460,6 +464,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="3"
           blurHandler={[Function]}
           continuousSend={true}
@@ -486,12 +491,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={-2}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -506,6 +511,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="four"
           blurHandler={[Function]}
           continuousSend={true}
@@ -536,6 +542,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -561,7 +568,6 @@ exports[`Method component renders correctly with existing input values 1`] = `
 
 exports[`Method component renders correctly with invalid inputs 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -581,12 +587,12 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={1}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -601,6 +607,7 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="1"
           blurHandler={[Function]}
           continuousSend={true}
@@ -627,12 +634,12 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -647,6 +654,7 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="two"
           blurHandler={[Function]}
           continuousSend={true}
@@ -677,6 +685,7 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -715,6 +724,7 @@ exports[`Method component renders correctly with no inputs or outputs 1`] = `
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}
+        fieldType="method"
       />
     </WithStyles(IconButton)>
   </WithStyles(Tooltip)>
@@ -738,7 +748,6 @@ exports[`Method component renders correctly with no inputs or outputs 1`] = `
 
 exports[`Method component renders correctly with return value 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -758,12 +767,12 @@ exports[`Method component renders correctly with return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -778,6 +787,7 @@ exports[`Method component renders correctly with return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value=""
           blurHandler={[Function]}
           continuousSend={true}
@@ -804,12 +814,12 @@ exports[`Method component renders correctly with return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -824,6 +834,7 @@ exports[`Method component renders correctly with return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value=""
           blurHandler={[Function]}
           continuousSend={true}
@@ -854,6 +865,7 @@ exports[`Method component renders correctly with return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
@@ -904,12 +916,12 @@ exports[`Method component renders correctly with return value 1`] = `
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
+              fieldType="method:returns"
             />
           </WithStyles(IconButton)>
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
-          onClick={[Function]}
           style={
             Object {
               "cursor": "pointer",
@@ -946,12 +958,12 @@ exports[`Method component renders correctly with return value 1`] = `
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
+              fieldType="method:returns"
             />
           </WithStyles(IconButton)>
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
-          onClick={[Function]}
           style={
             Object {
               "cursor": "pointer",
@@ -965,6 +977,7 @@ exports[`Method component renders correctly with return value 1`] = `
         >
           <WithStyles(WidgetTextUpdate)
             Text="done"
+            Units={null}
           />
         </div>
       </div>
@@ -975,7 +988,6 @@ exports[`Method component renders correctly with return value 1`] = `
 
 exports[`Method component renders correctly without return value 1`] = `
 <WithStyles(WidgetGroupExpander)
-  expanded={true}
   groupName="Test"
   key="Test,Method"
 >
@@ -995,12 +1007,12 @@ exports[`Method component renders correctly without return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={-2}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -1015,6 +1027,7 @@ exports[`Method component renders correctly without return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="3"
           blurHandler={[Function]}
           continuousSend={true}
@@ -1041,12 +1054,12 @@ exports[`Method component renders correctly without return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={-2}
+            fieldType="method:takes"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        onClick={[Function]}
         style={
           Object {
             "cursor": "pointer",
@@ -1061,6 +1074,7 @@ exports[`Method component renders correctly without return value 1`] = `
         <WithStyles(WidgetTextInput)
           Error={false}
           Pending={false}
+          Units={null}
           Value="four"
           blurHandler={[Function]}
           continuousSend={true}
@@ -1091,6 +1105,7 @@ exports[`Method component renders correctly without return value 1`] = `
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
+            fieldType="method"
           />
         </WithStyles(IconButton)>
       </WithStyles(Tooltip)>

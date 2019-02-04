@@ -9,6 +9,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import AttributeAlarm, {
   AlarmStates,
   getAlarmState,
+  FieldTypes,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
@@ -30,7 +31,8 @@ const styles = theme => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '50%',
+    minWidth: '50%',
+    maxWidth: '50%',
     padding: 2,
   },
   button: {
@@ -46,7 +48,7 @@ const styles = theme => ({
 const copyPathToClipboard = (event, path) => {
   if (event.button === 1) {
     const dummyElement = document.createElement('textarea');
-    dummyElement.value = JSON.stringify(path);
+    dummyElement.value = path;
     dummyElement.setAttribute('readonly', '');
     dummyElement.style.position = 'absolute';
     dummyElement.style.left = `${event.pageX}px`;
@@ -65,6 +67,28 @@ const AttributeDetails = props => {
     const rowHighlight = props.isMainAttribute
       ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
       : {};
+    let onClick = props.isGrandchild
+      ? () =>
+          props.buttonClickHandlerWithTransition(
+            props.blockName,
+            props.attributeName
+          )
+      : () => props.buttonClickHandler(props.blockName, props.attributeName);
+    onClick =
+      props.alarm === AlarmStates.HELP
+        ? () => {
+            const buttonDiv = document.getElementById(
+              `help.${props.blockName}.${props.attributeName}`
+            );
+            buttonDiv.children[0].dispatchEvent(
+              new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+              })
+            );
+          }
+        : onClick;
     return (
       <div className={props.classes.div} style={rowHighlight}>
         <Tooltip id="1" title={props.message} placement="bottom">
@@ -72,28 +96,22 @@ const AttributeDetails = props => {
             tabIndex="-1"
             className={props.classes.button}
             disableRipple
-            onClick={
-              props.isGrandchild
-                ? () =>
-                    props.buttonClickHandlerWithTransition(
-                      props.blockName,
-                      props.attributeName
-                    )
-                : () =>
-                    props.buttonClickHandler(
-                      props.blockName,
-                      props.attributeName
-                    )
-            }
+            onClick={onClick}
           >
-            <AttributeAlarm alarmSeverity={props.alarm} />
+            <AttributeAlarm
+              alarmSeverity={props.alarm}
+              fieldType={FieldTypes.ATTRIBUTE}
+            />
           </IconButton>
         </Tooltip>
         <Typography
           className={props.classes.textName}
-          onMouseDown={event =>
-            copyPathToClipboard(event, [props.blockName, props.attributeName])
-          }
+          onMouseDown={event => {
+            const path =
+              props.pasteOnMiddleClick ||
+              JSON.stringify([props.blockName, props.attributeName]);
+            copyPathToClipboard(event, path);
+          }}
         >
           {props.label}{' '}
         </Typography>
@@ -113,6 +131,7 @@ AttributeDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   blockName: PropTypes.string.isRequired,
   widgetTagIndex: PropTypes.number,
+  pasteOnMiddleClick: PropTypes.string,
   alarm: PropTypes.number,
   message: PropTypes.string,
   label: PropTypes.string.isRequired,
@@ -139,6 +158,7 @@ AttributeDetails.defaultProps = {
   widgetTagIndex: null,
   message: undefined,
   alarm: undefined,
+  pasteOnMiddleClick: null,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -152,10 +172,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let widgetTagIndex = null;
+  let pasteOnMiddleClick = null;
   if (attribute && attribute.raw && attribute.raw.meta) {
     const { tags } = attribute.raw.meta;
     if (tags !== null) {
       widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+      const pvIndex = tags.findIndex(t => t.indexOf('pv:') !== -1);
+      pasteOnMiddleClick =
+        pvIndex !== -1 ? tags[pvIndex].replace('pv:', '') : null;
     }
   }
 
@@ -192,6 +216,7 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
+    pasteOnMiddleClick,
   };
 };
 

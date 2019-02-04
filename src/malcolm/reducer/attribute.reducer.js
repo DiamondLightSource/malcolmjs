@@ -185,7 +185,9 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     attribute &&
     (attribute.raw &&
       attribute.raw.meta &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph'))
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph') &&
+      attribute.calculated.name === state.mainAttribute &&
+      attribute.calculated.path[0] === state.parentBlock)
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
@@ -546,6 +548,7 @@ export function revertLocalState(oldState, payload) {
       };
 
       attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+      // TODO: call processLayout and updateLayoutAndEngine here (if required)
     }
     const blocks = { ...state.blocks };
     blocks[blockName] = { ...state.blocks[blockName], attributes };
