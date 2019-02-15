@@ -64,7 +64,8 @@ export const getDefaultFromType = objectMeta => {
   }
 };
 
-export const format = (value, displayT) => value.toFixed(displayT.precision);
+export const format = (value, displayT) =>
+  typeof value === 'number' ? value.toFixed(displayT.precision) : value;
 // switch (displayT.form) {
 //   case 'Decimal':
 //     return value.toFixed(displayT.precision);

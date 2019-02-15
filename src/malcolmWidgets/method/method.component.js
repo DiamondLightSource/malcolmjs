@@ -179,10 +179,7 @@ const MethodDetails = props => {
                 />
               </IconButton>
             </Tooltip>
-            <Typography
-              className={props.classes.textName}
-              style={{ cursor: 'pointer' }}
-            >
+            <Typography className={props.classes.textName}>
               {input[1].label}
             </Typography>
             <div className={props.classes.controlContainer}>
@@ -254,10 +251,7 @@ const MethodDetails = props => {
                     />
                   </IconButton>
                 </Tooltip>
-                <Typography
-                  className={props.classes.textName}
-                  style={{ cursor: 'pointer' }}
-                >
+                <Typography className={props.classes.textName}>
                   {output[1].label}
                 </Typography>
                 <div className={props.classes.controlContainer}>

@@ -28,7 +28,11 @@
             "widget:textupdate"
           ], 
           "writeable": false, 
-          "label": "Val Scaled"
+          "label": "Val Scaled",
+          "display": {
+            "precision": 4,
+             "units": "mm"
+          }
         }
       }
     ]

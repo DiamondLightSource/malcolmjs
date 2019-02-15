@@ -48,6 +48,19 @@ const activeSubscriptions = [
     index: 0,
     interval: 50,
     update: (response, index) => {
+      const val = 180*((index%500)-1);
+      response.changes[0][1].value = val;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
+      return response;
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "valScaled" ],
+    index: 0,
+    interval: 50,
+    update: (response, index) => {
       const val = 180*(((index%500)/250)-1);
       response.changes[0][1].value = val;
       if (val > -120 && val < 120) {
@@ -59,7 +72,7 @@ const activeSubscriptions = [
       }
       const now = (new Date());
       response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
-      response.changes[0][1].timeStamp.secondsPastEpoch =Math.floor(now.getTime()/1000);
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },

@@ -27,11 +27,6 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -74,11 +69,6 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -164,11 +154,6 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -211,11 +196,6 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -307,11 +287,6 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -354,11 +329,6 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -450,11 +420,6 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -497,11 +462,6 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -593,11 +553,6 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -640,11 +595,6 @@ exports[`Method component renders correctly with invalid inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -773,11 +723,6 @@ exports[`Method component renders correctly with return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -820,11 +765,6 @@ exports[`Method component renders correctly with return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>
@@ -922,11 +862,6 @@ exports[`Method component renders correctly with return value 1`] = `
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
-          style={
-            Object {
-              "cursor": "pointer",
-            }
-          }
         >
           First output
         </WithStyles(Typography)>
@@ -964,11 +899,6 @@ exports[`Method component renders correctly with return value 1`] = `
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
-          style={
-            Object {
-              "cursor": "pointer",
-            }
-          }
         >
           Second output
         </WithStyles(Typography)>
@@ -1013,11 +943,6 @@ exports[`Method component renders correctly without return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         First input
       </WithStyles(Typography)>
@@ -1060,11 +985,6 @@ exports[`Method component renders correctly without return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
-        style={
-          Object {
-            "cursor": "pointer",
-          }
-        }
       >
         Second input
       </WithStyles(Typography)>

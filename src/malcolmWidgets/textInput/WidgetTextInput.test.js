@@ -178,20 +178,4 @@ describe('WidgetTextUpdate', () => {
     expect(setFlag.mock.calls.length).toEqual(1);
     expect(setFlag.mock.calls[0]).toEqual(['forceUpdate', false]);
   });
-
-  it('updates, calls unset flag and sends put with last known malcolm value if forceUpdate is true and is error', () => {
-    const setFlag = jest.fn();
-    const setValue = jest.fn();
-    mount(
-      textInput('Hello World', false, null, true, setFlag, setValue, true, true)
-    );
-    expect(setFlag.mock.calls.length).toEqual(1);
-    expect(setFlag.mock.calls[0]).toEqual(['forceUpdate', false]);
-    expect(setValue.mock.calls.length).toEqual(1);
-    expect(setValue.mock.calls[0]).toEqual([
-      {
-        target: { value: 'Hello World' },
-      },
-    ]);
-  });
 });

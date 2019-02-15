@@ -29,7 +29,11 @@
             "config:1"
           ], 
           "writeable": true, 
-          "label": "Val Scale"
+          "label": "Val Scale",
+          "display": {
+            "precision": 4,
+             "units": "counts/egu"
+          }
         }
       }
     ]
