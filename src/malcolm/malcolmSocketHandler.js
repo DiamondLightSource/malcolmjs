@@ -95,15 +95,16 @@ const handleMessages = (messages, dispatch, getState) => {
       case 'malcolm:core/Error:1.0': {
         if (data.id !== -1) {
           BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-
-          dispatch(
-            snackbarState(
-              true,
-              `Error in attribute ${
-                originalRequest.path.slice(-1)[0]
-              } for block ${originalRequest.path.slice(0, -1)}`
-            )
-          );
+          const loadFailMessage =
+            originalRequest.path.slice(-1)[0] === 'meta'
+              ? `Error in attribute ${
+                  originalRequest.path.slice(-1)[0]
+                } for block ${originalRequest.path.slice(0, -1)}`
+              : `Failed to load block ${originalRequest.path.slice(
+                  0,
+                  -1
+                )} (Error in attribute meta)`;
+          dispatch(snackbarState(true, loadFailMessage));
           dispatch(malcolmHailReturn(data, true));
           dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
           break;

@@ -1,4 +1,13 @@
 # Changelog
+## 1.6.1 (18/2/2019)
+Fixes:
+- Fixed incorrect height on combobox
+- Fixed bug with first edit to textbox following put not working
+- Fixed bug where formatting from display_t was attempting to apply to strings
+Tweaks: 
+- Tweaked style of units for textinput/update
+- Removed cursor styling from method input label
+- Changed reconnect behaviour so resubscribe is attempted only if and when an update to .blocks containing a block's MRI is received
 ## 1.6.0 (4/2/2019)
 Fixes:
 - Attempting to delete read-only link in layout now has no effect
