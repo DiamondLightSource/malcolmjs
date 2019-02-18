@@ -350,7 +350,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
-      'Error in attribute TestAttr for block TestBlock'
+      'Failed to load block TestBlock (Error in attribute meta)'
     );
     expect(dispatches[2].type).toEqual(MalcolmAttributeFlag);
     expect(dispatches[2].payload.path).toEqual(['TestBlock', 'TestAttr']);
