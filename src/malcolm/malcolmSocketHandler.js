@@ -34,7 +34,7 @@ const handleMessages = (messages, dispatch, getState) => {
         ) {
           RootBlockHandler(originalRequest, data.value, dispatch, getState());
         }
-
+        // We don't expect non-delta subscriptions for anything else
         break;
       }
       case 'malcolm:core/Delta:1.0': {

@@ -144,11 +144,11 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
   const state = getState();
   state.malcolm.messagesInFlight = {};
   dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
-  Object.values(state.malcolm.blocks)
-    .filter(block => block.name !== '.blocks')
-    .forEach(block => {
-      dispatch(malcolmSubscribeAction([block.name, 'meta']));
-    });
+  // Object.values(state.malcolm.blocks)
+  //   .filter(block => block.name !== '.blocks')
+  //   .forEach(block => {
+  //     dispatch(malcolmSubscribeAction([block.name, 'meta']));
+  //   });
 };
 
 export const malcolmSetDisconnected = () => ({

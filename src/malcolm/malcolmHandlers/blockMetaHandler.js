@@ -60,6 +60,17 @@ export const RootBlockHandler = (request, blocks, dispatch, state) => {
 
   dispatch(action);
 
+  // Re-subscribe to any blocks which are in .blocks
+  Object.values(state.malcolm.blocks)
+    .filter(
+      block =>
+        block.name !== '.blocks' &&
+        state.malcolm.blocks['.blocks'].children.includes(block.name)
+    )
+    .forEach(block => {
+      // socket reducer/middleware already prevents duplicate subscriptions so we don't need to check here
+      dispatch(malcolmSubscribeAction([block.name, 'meta']));
+    });
   // once we have the list of blocks subscribe to anything in the URL that is a block
   const { navigationLists } = state.malcolm.navigation;
 

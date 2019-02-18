@@ -11,6 +11,7 @@ import {
   MalcolmAttributeFlag,
   MalcolmError,
   MalcolmMultipleAttributeData,
+  MalcolmSend,
 } from './malcolm.types';
 import { snackbar } from '../viewState/viewState.actions';
 
@@ -25,7 +26,12 @@ describe('malcolm socket handler', () => {
 
   const store = {
     dispatch: action => {
-      if (typeof action === 'function') {
+      if (action.type === MalcolmRootBlockMeta) {
+        state.malcolm.blocks['.blocks'] = {
+          children: [...action.payload.blocks],
+        };
+        dispatches.push(action);
+      } else if (typeof action === 'function') {
         action(a => dispatches.push(a), () => state);
       } else {
         dispatches.push(action);
@@ -186,15 +192,11 @@ describe('malcolm socket handler', () => {
 
   it('resets blocks on open or reconnect', () => {
     malcolmWorker.postMessage('socket connected');
-    expect(dispatches.length).toEqual(5);
+    expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
-    expect(dispatches[4].type).toEqual(snackbar);
-    expect(dispatches[4].snackbar.open).toEqual(true);
-    expect(dispatches[4].snackbar.message).toEqual(`Connected to WebSocket`);
-    expect(dispatches[3].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[3].payload.path).toEqual(['Test:TestBlock2', 'meta']);
-    expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[2].payload.path).toEqual(['Test:TestBlock', 'meta']);
+    expect(dispatches[2].type).toEqual(snackbar);
+    expect(dispatches[2].snackbar.open).toEqual(true);
+    expect(dispatches[2].snackbar.message).toEqual(`Connected to WebSocket`);
     expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
     expect(dispatches[1].payload.path).toEqual(['.', 'blocks', 'value']);
   });
@@ -406,6 +408,45 @@ describe('malcolm socket handler', () => {
       'block2',
       'block3',
     ]);
+  });
+
+  it('resubscribes to existing blocks on .blocks update', () => {
+    state.malcolm.blocks.block1 = { name: 'block1', loading: true };
+    state.malcolm.blocks.block2 = { name: 'block2', loading: true };
+    state.malcolm.blocks.block3 = { name: 'block3', loading: true };
+    malcolmWorker.postMessage(
+      JSON.stringify([
+        {
+          data: {
+            typeid: 'malcolm:core/Update:1.0',
+            id: 4,
+            value: ['block1', 'block2', 'block3'],
+          },
+          originalRequest: state.malcolm.messagesInFlight[4],
+        },
+      ])
+    );
+
+    expect(dispatches).toHaveLength(4);
+    expect(dispatches[0].type).toEqual(MalcolmRootBlockMeta);
+    expect(dispatches[1].type).toEqual(MalcolmSend);
+    expect(dispatches[1].payload).toEqual({
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['block1', 'meta'],
+      delta: true,
+    });
+    expect(dispatches[2].type).toEqual(MalcolmSend);
+    expect(dispatches[2].payload).toEqual({
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['block2', 'meta'],
+      delta: true,
+    });
+    expect(dispatches[3].type).toEqual(MalcolmSend);
+    expect(dispatches[3].payload).toEqual({
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['block3', 'meta'],
+      delta: true,
+    });
   });
 
   it('doesnt process an update for if request wasnt for .blocks', () => {

@@ -11,7 +11,7 @@ import {
   MalcolmClearError,
 } from '../malcolm.types';
 
-function updateMessagesInFlight(state, payload) {
+export function updateMessagesInFlight(state, payload) {
   const newState = state;
 
   if (
