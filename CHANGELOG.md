@@ -1,4 +1,8 @@
 # Changelog
+## 1.7b0 (22/2/2019)
+Features:
+- Method run info now sent by server to all clients for calls from any client and stored/displayed in archive
+- Changed text displayed in middle pane when no root block is selected
 ## 1.6.1 (18/2/2019)
 Fixes:
 - Fixed incorrect height on combobox
