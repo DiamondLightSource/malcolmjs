@@ -27,7 +27,11 @@ const handleMessages = (messages, dispatch, getState) => {
   const { messagesInFlight } = getState().malcolm;
   messages.forEach(message => {
     const { originalRequest } = message;
-    if (originalRequest.id && messagesInFlight[originalRequest.id].callback) {
+    if (
+      originalRequest &&
+      originalRequest.id &&
+      messagesInFlight[originalRequest.id].callback
+    ) {
       messagesInFlight[originalRequest.id].callback(message);
     }
   });
@@ -119,10 +123,25 @@ const handleMessages = (messages, dispatch, getState) => {
                       0,
                       -1
                     )} (Error in attribute meta)`
-                  : `Error in attribute ${
+                  : `Error loading attribute ${
                       originalRequest.path.slice(-1)[0]
                     } for block ${originalRequest.path.slice(0, -1)}`;
               dispatch(snackbarState(true, loadFailMessage));
+              dispatch(malcolmHailReturn(data, true));
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              break;
+            }
+            case 'malcolm:core/Put:1.0': {
+              dispatch(
+                snackbarState(
+                  true,
+                  `Failed to write to attribute ${originalRequest.path.slice(
+                    -(1)[[0]]
+                  )} on block ${originalRequest.path.slice(0, -1)} (${
+                    data.message
+                  })`
+                )
+              );
               dispatch(malcolmHailReturn(data, true));
               dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
               break;
@@ -145,7 +164,7 @@ const handleMessages = (messages, dispatch, getState) => {
               dispatch(
                 snackbarState(
                   true,
-                  `Error in messages ${data.id} (${data.message})`
+                  `Error in message ${data.id} (${data.message})`
                 )
               );
               dispatch(malcolmHailReturn(data, true));

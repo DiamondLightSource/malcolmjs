@@ -192,13 +192,11 @@ describe('malcolm socket handler', () => {
 
   it('resets blocks on open or reconnect', () => {
     malcolmWorker.postMessage('socket connected');
-    expect(dispatches.length).toEqual(3);
+    expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
-    expect(dispatches[2].type).toEqual(snackbar);
-    expect(dispatches[2].snackbar.open).toEqual(true);
-    expect(dispatches[2].snackbar.message).toEqual(`Connected to WebSocket`);
-    expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[1].payload.path).toEqual(['.', 'blocks', 'value']);
+    expect(dispatches[1].type).toEqual(snackbar);
+    expect(dispatches[1].snackbar.open).toEqual(true);
+    expect(dispatches[1].snackbar.message).toEqual(`Connected to WebSocket`);
   });
 
   it('does nothing on receiving a non-malcolm message', () => {
@@ -259,14 +257,14 @@ describe('malcolm socket handler', () => {
         tags: [],
       },
     };
-    const message = buildMessage('malcolm:core/Method:1.0', 2, changes);
+    const message = buildMessage('malcolm:core/Method:1.1', 2, changes);
 
     malcolmWorker.postMessage(message);
 
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('malcolm:core/Method:1.0');
+    expect(dispatches[0].payload.typeid).toEqual('malcolm:core/Method:1.1');
   });
 
   it('dispatches a message for unhandled deltas', () => {
@@ -274,12 +272,17 @@ describe('malcolm socket handler', () => {
 
     malcolmWorker.postMessage(message);
 
-    expect(dispatches.length).toEqual(2);
+    expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual('unprocessed_delta');
     expect(dispatches[0].payload.typeid).toEqual('unknown type');
 
     expect(dispatches[1].type).toEqual(MalcolmAttributeData);
     expect(dispatches[1].payload.unableToProcess).toEqual(true);
+    expect(dispatches[2].type).toEqual(snackbar);
+    expect(dispatches[2].snackbar.open).toEqual(true);
+    expect(dispatches[2].snackbar.message).toEqual(
+      'Got object of unknown typeid "unknown type"'
+    );
   });
 
   it('updates snackbar on socket error', () => {
@@ -299,15 +302,18 @@ describe('malcolm socket handler', () => {
     );
   });
 
-  it('updates snackbar on reconnecting socket close', () => {
+  it('updates snackbar and queues root block sub on reconnecting socket close', () => {
     malcolmWorker.postMessage('socket disconnected');
-    expect(dispatches.length).toEqual(2);
+    expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       `WebSocket disconnected; attempting to reconnect...`
     );
     expect(dispatches[1].type).toEqual(MalcolmDisconnected);
+
+    expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[2].payload.path).toEqual(['.', 'blocks', 'value']);
   });
 
   it('updates snackbar on malcolm error (no matching request)', () => {
@@ -350,7 +356,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
-      'Failed to load block TestBlock (Error in attribute meta)'
+      'Failed to write to attribute TestBlock,TestAttr on block TestBlock (Error: this is a test!)'
     );
     expect(dispatches[2].type).toEqual(MalcolmAttributeFlag);
     expect(dispatches[2].payload.path).toEqual(['TestBlock', 'TestAttr']);

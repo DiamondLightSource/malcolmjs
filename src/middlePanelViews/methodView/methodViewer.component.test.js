@@ -23,7 +23,7 @@ const mockTheme = createMuiTheme({
 
 const pushTestData = freshArchive => {
   freshArchive.value.push({
-    runParameters: {
+    took: {
       first: '0',
       second: { someJSON: true },
       third: ['anArray'],
@@ -31,17 +31,17 @@ const pushTestData = freshArchive => {
     returned: { first: false, second: 'someText' },
   });
   freshArchive.timeStamp.push({
-    localRunTime: new Date(0),
-    localReturnTime: new Date(1536583618205),
+    runTime: new Date(0),
+    returnTime: new Date(1536583618205),
   });
   freshArchive.alarmState.push(0);
   freshArchive.value.push({
-    runParameters: { first: 0 },
+    took: { first: 0 },
     returned: {},
   });
   freshArchive.timeStamp.push({
-    localRunTime: new Date(-14258382000),
-    localReturnTime: new Date(123456789),
+    runTime: new Date(-14258382000),
+    returnTime: new Date(123456789),
   });
   freshArchive.alarmState.push(4);
   return freshArchive;
@@ -115,10 +115,12 @@ describe('Method viewer', () => {
         isMethod: true,
       },
       raw: {
-        label: 'Test',
-        defaults: {},
-        takes: { elements: { ...testInputs } },
-        returns: { elements: { ...testOutputs } },
+        meta: {
+          label: 'Test',
+          defaults: {},
+          takes: { elements: { ...testInputs } },
+          returns: { elements: { ...testOutputs } },
+        },
       },
     };
 

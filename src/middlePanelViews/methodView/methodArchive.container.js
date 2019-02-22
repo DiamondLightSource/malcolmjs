@@ -62,9 +62,7 @@ export const deriveStateFromProps = (props, state) => {
 const dummyAttribute = (methodArchive, selectedParam) => ({
   raw: {
     value: {
-      timeStamp: methodArchive.timeStamp
-        .toarray()
-        .map(stamp => stamp.runTime.toISOString()),
+      timeStamp: methodArchive.timeStamp.toarray().map(stamp => stamp.runTime),
       alarm: methodArchive.alarmState.toarray(),
       value:
         selectedParam[0] === 'takes'
@@ -73,7 +71,7 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
               .map(
                 value =>
                   Object.keys(value.took).includes(selectedParam[1])
-                    ? value.took[selectedParam[1]].value
+                    ? value.took[selectedParam[1]]
                     : 'UNDEFINED'
               )
           : methodArchive.value
@@ -81,7 +79,7 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
               .map(
                 value =>
                   Object.keys(value.returned).includes(selectedParam[1])
-                    ? value.returned[selectedParam[1]].value
+                    ? value.returned[selectedParam[1]]
                     : 'UNDEFINED'
               ),
     },
@@ -111,10 +109,7 @@ export const dummyArchive = (methodArchive, selectedParam) => ({
   timeStamp: methodArchive.timeStamp
     .toarray()
     .map(
-      stamp =>
-        selectedParam[0] === 'takes'
-          ? stamp.localRunTime
-          : stamp.localReturnTime
+      stamp => (selectedParam[0] === 'takes' ? stamp.runTime : stamp.returnTime)
     ),
   alarmState: methodArchive.alarmState.toarray(),
   value:
@@ -124,7 +119,7 @@ export const dummyArchive = (methodArchive, selectedParam) => ({
           .map(
             value =>
               Object.keys(value.took).includes(selectedParam[1])
-                ? value.took[selectedParam[1]].value
+                ? value.took[selectedParam[1]]
                 : 'UNDEFINED'
           )
       : methodArchive.value
@@ -132,7 +127,7 @@ export const dummyArchive = (methodArchive, selectedParam) => ({
           .map(
             value =>
               Object.keys(value.returned).includes(selectedParam[1])
-                ? value.returned[selectedParam[1]].value
+                ? value.returned[selectedParam[1]]
                 : 'UNDEFINED'
           ),
 });

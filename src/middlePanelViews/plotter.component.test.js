@@ -58,30 +58,30 @@ describe('MethodPlot', () => {
       alarmState: new MockCircularBuffer(5),
     };
     testArchive.value.push({
-      runParameters: { test1: 0 },
+      took: { test1: 0 },
       returned: { test2: 1 },
     });
     testArchive.timeStamp.push({
-      localRunTime: new Date(0),
-      localReturnTime: new Date(4),
+      runTime: new Date(0),
+      returnTime: new Date(4),
     });
     testArchive.alarmState.push(0);
     testArchive.value.push({
-      runParameters: { test1: 0 },
+      took: { test1: 0 },
       returned: { test2: 1 },
     });
     testArchive.timeStamp.push({
-      localRunTime: new Date(2),
-      localReturnTime: new Date(5),
+      runTime: new Date(2),
+      returnTime: new Date(5),
     });
     testArchive.alarmState.push(1);
     testArchive.value.push({
-      runParameters: { test1: 0 },
+      took: { test1: 0 },
       returned: { test2: 1 },
     });
     testArchive.timeStamp.push({
-      localRunTime: new Date(3),
-      localReturnTime: new Date(6),
+      runTime: new Date(3),
+      returnTime: new Date(6),
     });
     testArchive.alarmState.push(2);
 

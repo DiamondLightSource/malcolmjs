@@ -41,55 +41,57 @@ exports[`Method viewer renders correctly for array once local state is initialis
         ],
       },
       "raw": Object {
-        "defaults": Object {},
-        "label": "Test",
-        "returns": Object {
-          "elements": Object {
-            "first": Object {
-              "label": "First output",
-              "tags": Array [
-                "widget:led",
-              ],
-            },
-            "second": Object {
-              "label": "Second output",
-              "tags": Array [
-                "widget:textupdate",
-              ],
-            },
-            "third": Object {
-              "label": "Third output",
-              "tags": Array [
-                "widget:textupdate",
-              ],
-              "typeid": "malcolm:core/StringArrayMeta:1.0",
+        "meta": Object {
+          "defaults": Object {},
+          "label": "Test",
+          "returns": Object {
+            "elements": Object {
+              "first": Object {
+                "label": "First output",
+                "tags": Array [
+                  "widget:led",
+                ],
+              },
+              "second": Object {
+                "label": "Second output",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+              "third": Object {
+                "label": "Third output",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+                "typeid": "malcolm:core/StringArrayMeta:1.0",
+              },
             },
           },
-        },
-        "takes": Object {
-          "elements": Object {
-            "first": Object {
-              "description": "a test input",
-              "label": "First input",
-              "tags": Array [
-                "widget:textinput",
-              ],
-            },
-            "second": Object {
-              "description": "a test input",
-              "label": "Second input",
-              "tags": Array [
-                "widget:tree",
-              ],
-            },
-            "third": Object {
-              "description": "an array",
-              "label": "Third input",
-              "tags": Array [
-                "widget:textinput",
-              ],
-              "typeid": "malcolm:core/StringArrayMeta:1.0",
-              "writeable": true,
+          "takes": Object {
+            "elements": Object {
+              "first": Object {
+                "description": "a test input",
+                "label": "First input",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+              },
+              "second": Object {
+                "description": "a test input",
+                "label": "Second input",
+                "tags": Array [
+                  "widget:tree",
+                ],
+              },
+              "third": Object {
+                "description": "an array",
+                "label": "Third input",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/StringArrayMeta:1.0",
+                "writeable": true,
+              },
             },
           },
         },
@@ -283,55 +285,57 @@ exports[`Method viewer renders output array correctly 1`] = `
         ],
       },
       "raw": Object {
-        "defaults": Object {},
-        "label": "Test",
-        "returns": Object {
-          "elements": Object {
-            "first": Object {
-              "label": "First output",
-              "tags": Array [
-                "widget:led",
-              ],
-            },
-            "second": Object {
-              "label": "Second output",
-              "tags": Array [
-                "widget:textupdate",
-              ],
-            },
-            "third": Object {
-              "label": "Third output",
-              "tags": Array [
-                "widget:textupdate",
-              ],
-              "typeid": "malcolm:core/StringArrayMeta:1.0",
+        "meta": Object {
+          "defaults": Object {},
+          "label": "Test",
+          "returns": Object {
+            "elements": Object {
+              "first": Object {
+                "label": "First output",
+                "tags": Array [
+                  "widget:led",
+                ],
+              },
+              "second": Object {
+                "label": "Second output",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+              },
+              "third": Object {
+                "label": "Third output",
+                "tags": Array [
+                  "widget:textupdate",
+                ],
+                "typeid": "malcolm:core/StringArrayMeta:1.0",
+              },
             },
           },
-        },
-        "takes": Object {
-          "elements": Object {
-            "first": Object {
-              "description": "a test input",
-              "label": "First input",
-              "tags": Array [
-                "widget:textinput",
-              ],
-            },
-            "second": Object {
-              "description": "a test input",
-              "label": "Second input",
-              "tags": Array [
-                "widget:tree",
-              ],
-            },
-            "third": Object {
-              "description": "an array",
-              "label": "Third input",
-              "tags": Array [
-                "widget:textinput",
-              ],
-              "typeid": "malcolm:core/StringArrayMeta:1.0",
-              "writeable": true,
+          "takes": Object {
+            "elements": Object {
+              "first": Object {
+                "description": "a test input",
+                "label": "First input",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+              },
+              "second": Object {
+                "description": "a test input",
+                "label": "Second input",
+                "tags": Array [
+                  "widget:tree",
+                ],
+              },
+              "third": Object {
+                "description": "an array",
+                "label": "Third input",
+                "tags": Array [
+                  "widget:textinput",
+                ],
+                "typeid": "malcolm:core/StringArrayMeta:1.0",
+                "writeable": true,
+              },
             },
           },
         },
@@ -422,12 +426,6 @@ exports[`Method viewer renders top-level method param archive if no selected par
       "raw": Object {
         "meta": Object {
           "elements": Object {
-            "alarm": Object {
-              "label": "Alarm state",
-              "tags": Array [
-                "info:alarm",
-              ],
-            },
             "copyParams": Object {
               "label": "Reuse run params",
               "tags": Array [
@@ -453,13 +451,15 @@ exports[`Method viewer renders top-level method param archive if no selected par
                 "widget:textupdate",
               ],
             },
+            "source": Object {
+              "label": "Origin",
+              "tags": Array [
+                "info:alarm",
+              ],
+            },
           },
         },
         "value": Object {
-          "alarm": Array [
-            0,
-            4,
-          ],
           "copyParams": Array [
             Object {
               "action": [Function],
@@ -471,16 +471,26 @@ exports[`Method viewer renders top-level method param archive if no selected par
             },
           ],
           "postTime": Array [
-            1970-01-01T00:00:00.000Z,
-            1969-07-19T23:20:18.000Z,
+            "1970-01-01T00:00:00.000Z",
+            "1969-07-19T23:20:18.000Z",
           ],
           "returnStatus": Array [
-            undefined,
-            undefined,
+            "No return received",
+            "No return received",
           ],
           "returnTime": Array [
-            2018-09-10T12:46:58.205Z,
-            1970-01-02T10:17:36.789Z,
+            "2018-09-10T12:46:58.205Z",
+            "1970-01-02T10:17:36.789Z",
+          ],
+          "source": Array [
+            Object {
+              "alarm": 0,
+              "fieldType": "method:returns",
+            },
+            Object {
+              "alarm": 0,
+              "fieldType": "method:returns",
+            },
           ],
         },
       },

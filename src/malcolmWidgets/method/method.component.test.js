@@ -85,11 +85,13 @@ describe('Method component', () => {
         outputs: outputState,
       },
       raw: {
-        label: 'Test',
-        defaults,
-        takes: { elements: { ...inputs } },
-        returns: { elements: { ...outputs } },
-        writeable,
+        meta: {
+          label: 'Test',
+          defaults,
+          takes: { elements: { ...inputs } },
+          returns: { elements: { ...outputs } },
+          writeable,
+        },
       },
     };
 

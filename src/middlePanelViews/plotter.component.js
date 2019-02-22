@@ -219,6 +219,13 @@ class Plotter extends React.Component {
 const mapStateToProps = (state, ownProps, memory) => {
   const plotterMemory = memory;
   let attribute;
+  if (ownProps.attribute) {
+    return {
+      attribute: ownProps.attribute,
+      parentPanelOpen: state.viewState.openParentPanel,
+      childPanelOpen: state.malcolm.childBlock !== undefined,
+    };
+  }
   if (ownProps.attributeName && ownProps.blockName) {
     const attributeIndex = blockUtils.findAttributeIndex(
       state.malcolm.blocks,

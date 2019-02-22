@@ -15,6 +15,7 @@ describe('method reducer', () => {
     id: 2,
     typeid: 'malcolm:core/Post:1.0',
     path: ['block1', 'attr1'],
+    senderLookupID: 0,
   };
   let state;
 
@@ -29,14 +30,19 @@ describe('method reducer', () => {
                 inputs: { input1: { value: 'test', flags: { test: true } } },
               },
               raw: {
-                takes: {
-                  elements: {
-                    input1: {
-                      typeid: malcolmTypes.string,
+                meta: {
+                  takes: {
+                    elements: {
+                      input1: {
+                        typeid: malcolmTypes.string,
+                      },
+                      input2: {
+                        typeid: malcolmTypes.stringArray,
+                      },
                     },
-                    input2: {
-                      typeid: malcolmTypes.stringArray,
-                    },
+                  },
+                  returns: {
+                    elements: {},
                   },
                 },
               },
@@ -190,25 +196,27 @@ describe('method reducer', () => {
     const attribute = runReducer(MalcolmArchiveMethodRun, payload, 'archive');
     expect(attribute.timeStamp.toarray().length).toEqual(1);
     expect(
-      attribute.timeStamp.toarray()[0].localRunTime instanceof Date
+      attribute.timeStamp.toarray()[0].runTime instanceof Date
     ).toBeTruthy();
     expect(attribute.value.toarray().length).toEqual(1);
-    expect(attribute.value.toarray()[0].runParameters).toEqual({
+    expect(attribute.value.toarray()[0].took).toEqual({
       a: 2,
       c: 'd',
     });
   });
 
   it('handleMethodReturn should update the output on a method and push to the archive with return map', () => {
-    state.blocks.block1.attributes[0].raw.returns = {
+    state.blocks.block1.attributes[0].raw.meta.returns = {
       elements: { output1: {} },
     };
     state.blockArchive.block1.attributes[0].timeStamp.push({
-      localRunTime: new Date(0),
+      runTime: new Date(0),
     });
-    state.blockArchive.block1.attributes[0].value.push({ runParameters: {} });
+    state.blockArchive.block1.attributes[0].value.push({ took: {} });
+    state.blockArchive.block1.attributes[0].alarmState.push({});
 
     const payload = {
+      typeid: 'malcolm:core/Return:1.0',
       id: 2,
       value: { output1: 456 },
     };
@@ -220,36 +228,38 @@ describe('method reducer', () => {
       test.updatedState.blockArchive.block1.attributes[test.attribute];
     expect(attribute.calculated.outputs.output1).toEqual({ value: 456 });
     expect(archive.timeStamp.toarray().length).toEqual(1);
+    expect(archive.timeStamp.toarray()[0].runTime instanceof Date).toBeTruthy();
     expect(
-      archive.timeStamp.toarray()[0].localRunTime instanceof Date
+      archive.timeStamp.toarray()[0].returnTime instanceof Date
     ).toBeTruthy();
     expect(
-      archive.timeStamp.toarray()[0].localReturnTime instanceof Date
-    ).toBeTruthy();
-    expect(
-      archive.timeStamp.toarray()[0].localReturnTime -
-        archive.timeStamp.toarray()[0].localRunTime
+      archive.timeStamp.toarray()[0].returnTime -
+        archive.timeStamp.toarray()[0].runTime
     ).not.toEqual(0);
     expect(archive.value.toarray().length).toEqual(1);
     expect(archive.value.toarray()[0].returned).toEqual({
-      output1: { value: 456 },
+      output1: 456,
     });
-    expect(archive.value.toarray()[0].returnStatus).toEqual('Success');
+    expect(archive.value.toarray()[0].returnStatus).toEqual('Run success');
     expect(archive.alarmState.toarray().length).toEqual(1);
   });
 
   it('handleMethodReturn should update the output on a method with return unpacked', () => {
-    state.blocks.block1.attributes[0].raw.returns = {
+    state.blocks.block1.attributes[0].raw.meta.returns = {
       elements: { output1: {} },
     };
-    state.blocks.block1.attributes[0].raw.tags = ['method:return:unpacked'];
+    state.blocks.block1.attributes[0].raw.meta.tags = [
+      'method:return:unpacked',
+    ];
 
     state.blockArchive.block1.attributes[0].timeStamp.push({
-      localRunTime: new Date(0),
+      runTime: new Date(0),
     });
-    state.blockArchive.block1.attributes[0].value.push({ runParameters: {} });
+    state.blockArchive.block1.attributes[0].value.push({ took: {} });
+    state.blockArchive.block1.attributes[0].alarmState.push({});
 
     const payload = {
+      typeid: 'malcolm:core/Return:1.0',
       id: 2,
       value: 456,
     };
@@ -262,10 +272,12 @@ describe('method reducer', () => {
   });
 
   it('handleMethodReturn should do nothing if original request wasnt a post', () => {
-    state.blocks.block1.attributes[0].raw.returns = {
+    state.blocks.block1.attributes[0].raw.meta.returns = {
       elements: { output1: {} },
     };
-    state.blocks.block1.attributes[0].raw.tags = ['method:return:unpacked'];
+    state.blocks.block1.attributes[0].raw.meta.tags = [
+      'method:return:unpacked',
+    ];
 
     state.messagesInFlight = {
       2: {
@@ -276,6 +288,7 @@ describe('method reducer', () => {
     };
 
     const payload = {
+      typeid: 'malcolm:core/Return:1.0',
       id: 2,
       value: 456,
     };
@@ -290,16 +303,17 @@ describe('method reducer', () => {
   });
 
   it('handleMethodReturn should set errorState if return map is missing an output', () => {
-    state.blocks.block1.attributes[0].raw.returns = {
+    state.blocks.block1.attributes[0].raw.meta.returns = {
       elements: { output1: {}, output2: {} },
     };
 
     state.blockArchive.block1.attributes[0].timeStamp.push({
-      localRunTime: new Date(0),
+      runTime: new Date(0),
     });
-    state.blockArchive.block1.attributes[0].value.push({ runParameters: {} });
-
+    state.blockArchive.block1.attributes[0].value.push({ took: {} });
+    state.blockArchive.block1.attributes[0].alarmState.push({});
     const payload = {
+      typeid: 'malcolm:core/Return:1.0',
       id: 2,
       value: { output1: 456 },
     };

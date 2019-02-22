@@ -22,7 +22,7 @@ const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
     if (payload.value[returnVar] !== undefined) {
-      valueMap.outputs[returnVar] = { value: payload.value[returnVar] };
+      valueMap.outputs[returnVar] = payload.value[returnVar];
     } else {
       valueMap.errorState = true;
       valueMap.errorMessage = `MethodError: expected value ${returnVar} missing from return`;
@@ -40,8 +40,12 @@ export const pushServerRunToArchive = (methodArchive, payload) => {
     )
   ) {
     // if both timestamp fields are zero delta didn't actually contain any run information
+    const took = {};
+    payload.raw.took.present.forEach(param => {
+      took[param] = payload.raw.took.value[param];
+    });
     updatedArchive.value.push({
-      took: { ...payload.raw.took.value },
+      took,
       calledWith: [...payload.raw.took.present],
       returned: { ...payload.raw.returned.value },
       returnStatus: 'OK',
@@ -220,18 +224,22 @@ export const handleMethodReturn = (state, payload) => {
       if (payload.typeid === 'malcolm:core/Return:1.0') {
         const returnKeys = Object.keys(attribute.raw.meta.returns.elements);
         if (blockUtils.attributeHasTag(attribute, 'method:return:unpacked')) {
-          valueMap.outputs[returnKeys[0]] = { value: payload.value };
+          valueMap.outputs[returnKeys[0]] = payload.value;
         } else {
           valueMap = mapReturnValues(returnKeys, payload);
         }
+        attribute.calculated.outputs = {};
+        returnKeys.forEach(param => {
+          attribute.calculated.outputs[param] = {
+            value: valueMap.outputs[param],
+          };
+        });
+        if (valueMap.errorState)
+          attribute.calculated.errorState = valueMap.errorState;
+        if (valueMap.errorMessage)
+          attribute.calculated.errorMessage = valueMap.errorMessage;
       }
-      attributes[matchingAttribute] = {
-        ...attributes[matchingAttribute],
-        calculated: {
-          ...attribute.calculated,
-          ...valueMap,
-        },
-      };
+      attributes[matchingAttribute] = attribute;
 
       const archive = blockArchive[blockName].attributes;
       if (archive && archive[matchingAttribute]) {
