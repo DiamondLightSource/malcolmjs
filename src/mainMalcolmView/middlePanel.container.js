@@ -380,7 +380,9 @@ const MiddlePanelContainer = props => (
         }}
       >
         <Typography style={{ fontSize: '20pt' }}>
-          Please select a field to view from the left hand pane
+          {props.parentBlock
+            ? 'Please select a field to view from the left hand pane'
+            : 'Please select a root block to view from the top navigation bar'}
         </Typography>
       </div>
     )}
@@ -464,6 +466,7 @@ MiddlePanelContainer.propTypes = {
     plainBackground: PropTypes.string,
   }).isRequired,
   mainAttribute: PropTypes.string.isRequired,
+  parentBlock: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
