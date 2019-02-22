@@ -25,16 +25,21 @@ import {
   malcolmArchivePost,
   malcolmFlagMethodInput,
 } from './actions/method.actions';
-import { rootBlockSubPath } from './malcolmHandlers/blockMetaHandler';
 
-export const malcolmSubscribeAction = (path, delta = true) => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Subscribe:1.0',
-    path,
-    delta,
-  },
-});
+export const malcolmSubscribeAction = (path, delta = true, callback) => {
+  const action = {
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path,
+      delta,
+    },
+  };
+  if (callback) {
+    action.payload.callback = callback;
+  }
+  return action;
+};
 
 export const malcolmNewBlockAction = (blockName, parent, child) => ({
   type: MalcolmNewBlock,
@@ -93,14 +98,15 @@ export const malcolmPostAction = (path, rawParameters) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const method = blockUtils.findAttribute(state.blocks, path[0], path[1]);
+  const index = blockUtils.findAttributeIndex(state.blocks, path[0], path[1]);
+  const method = state.blocks[path[0]].attributes[index];
   const parameters = {};
   Object.keys(rawParameters).forEach(param => {
     parameters[param] = rawParameters[param].value;
   });
   let missing = [];
   if (method && method.calculated.isMethod) {
-    missing = method.raw.takes.required.filter(
+    missing = method.raw.meta.takes.required.filter(
       param => !Object.keys(rawParameters).includes(param)
     );
   }
@@ -113,6 +119,8 @@ export const malcolmPostAction = (path, rawParameters) => (
         typeid: 'malcolm:core/Post:1.0',
         path,
         parameters,
+        senderLookupID: getState().malcolm.blocks[path[0]].attributes[index]
+          .calculated.lastCallId,
       },
     });
   } else {
@@ -136,20 +144,9 @@ export const malcolmNavigationPath = blockPaths => ({
   },
 });
 
-export const malcolmResetBlocks = () => (dispatch, getState) => {
-  dispatch({
-    type: MalcolmCleanBlocks,
-  });
-
-  const state = getState();
-  state.malcolm.messagesInFlight = {};
-  dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
-  // Object.values(state.malcolm.blocks)
-  //   .filter(block => block.name !== '.blocks')
-  //   .forEach(block => {
-  //     dispatch(malcolmSubscribeAction([block.name, 'meta']));
-  //   });
-};
+export const malcolmResetBlocks = () => ({
+  type: MalcolmCleanBlocks,
+});
 
 export const malcolmSetDisconnected = () => ({
   type: MalcolmDisconnected,

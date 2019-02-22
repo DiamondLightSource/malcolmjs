@@ -108,9 +108,9 @@ export const areAttributesTheSame = (oldAttributes, newAttributes) =>
 
 const GroupDivider = props => <div className={props.classes.endDivider} />;
 
-const methodHasParameters = method =>
-  Object.keys(method.takes.elements).length > 0 ||
-  Object.keys(method.returns.elements).length > 0;
+const methodHasParameters = rawMethod =>
+  Object.keys(rawMethod.meta.takes.elements).length > 0 ||
+  Object.keys(rawMethod.meta.returns.elements).length > 0;
 
 const showDivider = (methods, index) =>
   (index < methods.length - 1 &&

@@ -24,6 +24,11 @@ import {
   getDefaultFromType,
   isArrayType,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import { Sources } from '../../malcolm/reducer/method.reducer';
+import {
+  FieldTypes,
+  AlarmStates,
+} from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 const noOp = () => {};
 
@@ -194,8 +199,8 @@ const MethodViewer = props => {
     const timeStamps = props.methodArchive.timeStamp.toarray();
     const values = props.methodArchive.value.toarray();
     const copyRunParams = row => {
-      const params = values[row].runParameters;
-      Object.keys(props.method.raw.takes.elements).forEach(paramName => {
+      const params = values[row].took;
+      values[row].calledWith.forEach(paramName => {
         props.updateInput(
           props.method.calculated.path,
           paramName,
@@ -206,10 +211,28 @@ const MethodViewer = props => {
     const dummyAttribute = {
       raw: {
         value: {
-          postTime: timeStamps.map(stamp => stamp.localRunTime),
-          returnTime: timeStamps.map(stamp => stamp.localReturnTime),
-          returnStatus: values.map(value => value.returnStatus),
-          alarm: props.methodArchive.alarmState.toarray(),
+          postTime: timeStamps.map(stamp => stamp.runTime.toISOString()),
+          returnTime: timeStamps.map(
+            stamp =>
+              stamp.returnTime
+                ? stamp.returnTime.toISOString()
+                : 'No return received'
+          ),
+          returnStatus: values.map(
+            value =>
+              value.returnStatus !== undefined
+                ? value.returnStatus
+                : 'No return received'
+          ),
+          source: values.map(
+            value =>
+              value.source === Sources.LOCAL
+                ? { alarm: AlarmStates.NO_ALARM, fieldType: FieldTypes.PARAMIN }
+                : {
+                    alarm: AlarmStates.NO_ALARM,
+                    fieldType: FieldTypes.PARAMOUT,
+                  }
+          ),
           copyParams: timeStamps.map(() => ({
             label: 'Copy',
             action: path => {
@@ -219,9 +242,9 @@ const MethodViewer = props => {
         },
         meta: {
           elements: {
-            alarm: {
+            source: {
               tags: ['info:alarm'],
-              label: 'Alarm state',
+              label: 'Origin',
             },
             postTime: {
               tags: ['widget:textupdate'],
@@ -283,7 +306,8 @@ const mapStateToProps = (state, ownProps) => {
   if (selectedParam && selectedParam[0] === undefined) {
     selectedParam = undefined;
   } else if (method && selectedParam && selectedParam[0]) {
-    selectedParamMeta = method.raw[selectedParam[0]].elements[selectedParam[1]];
+    selectedParamMeta =
+      method.raw.meta[selectedParam[0]].elements[selectedParam[1]];
     let ioType;
     if (selectedParam[0] === 'takes') {
       ioType = 'inputs';
@@ -317,8 +341,10 @@ MethodViewer.propTypes = {
       path: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     raw: PropTypes.shape({
-      takes: PropTypes.shape({
-        elements: PropTypes.shape({}),
+      meta: PropTypes.shape({
+        takes: PropTypes.shape({
+          elements: PropTypes.shape({}),
+        }),
       }),
       timeStamp: PropTypes.shape({
         secondsPastEpoch: PropTypes.string,

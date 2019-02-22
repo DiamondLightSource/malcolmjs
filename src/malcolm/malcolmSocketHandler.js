@@ -10,6 +10,7 @@ import {
   malcolmSetFlag,
   malcolmHailReturn,
   malcolmProcessMethodReturn,
+  malcolmSubscribeAction,
 } from './malcolmActionCreators';
 import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
@@ -24,6 +25,12 @@ const handleMessages = (messages, dispatch, getState) => {
   const attributeDeltas = messages.filter(msg => isAttributeDelta(msg));
   const otherMessages = messages.filter(msg => !isAttributeDelta(msg));
   const { messagesInFlight } = getState().malcolm;
+  messages.forEach(message => {
+    const { originalRequest } = message;
+    if (originalRequest.id && messagesInFlight[originalRequest.id].callback) {
+      messagesInFlight[originalRequest.id].callback(message);
+    }
+  });
   otherMessages.forEach(message => {
     const { data, originalRequest } = message;
     switch (data.typeid) {
@@ -44,7 +51,7 @@ const handleMessages = (messages, dispatch, getState) => {
           BlockMetaHandler(originalRequest, object, dispatch, messagesInFlight);
         } else if (typeid.slice(0, 8) === 'epics:nt') {
           // multiple attribute updates are now handled separately.
-        } else if (typeid === 'malcolm:core/Method:1.0') {
+        } else if (typeid === 'malcolm:core/Method:1.1') {
           AttributeHandler.processMethod(originalRequest, object, dispatch);
         } else {
           dispatch({
@@ -57,8 +64,15 @@ const handleMessages = (messages, dispatch, getState) => {
               id: originalRequest && originalRequest.id,
               delta: true,
               unableToProcess: true,
+              raw: {},
             },
           });
+          dispatch(
+            snackbarState(
+              true,
+              `Got object of unknown typeid "${object.typeid}"`
+            )
+          );
         }
         break;
       }
@@ -94,20 +108,48 @@ const handleMessages = (messages, dispatch, getState) => {
 
       case 'malcolm:core/Error:1.0': {
         if (data.id !== -1) {
-          BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-          const loadFailMessage =
-            originalRequest.path.slice(-1)[0] === 'meta'
-              ? `Error in attribute ${
-                  originalRequest.path.slice(-1)[0]
-                } for block ${originalRequest.path.slice(0, -1)}`
-              : `Failed to load block ${originalRequest.path.slice(
-                  0,
-                  -1
-                )} (Error in attribute meta)`;
-          dispatch(snackbarState(true, loadFailMessage));
-          dispatch(malcolmHailReturn(data, true));
-          dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
-          break;
+          switch (messagesInFlight[data.id].typeid) {
+            case 'malcolm:core/Get:1.0':
+            case 'malcolm:core/Subscribe:1.0': {
+              BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
+              const loadFailMessage =
+                originalRequest.path.length % 2 === 0 &&
+                originalRequest.path.slice(-1)[0] === 'meta'
+                  ? `Failed to load block ${originalRequest.path.slice(
+                      0,
+                      -1
+                    )} (Error in attribute meta)`
+                  : `Error in attribute ${
+                      originalRequest.path.slice(-1)[0]
+                    } for block ${originalRequest.path.slice(0, -1)}`;
+              dispatch(snackbarState(true, loadFailMessage));
+              dispatch(malcolmHailReturn(data, true));
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              break;
+            }
+            case 'malcolm:core/Post:1.0': {
+              dispatch(
+                snackbarState(
+                  true,
+                  `Server failed to run method ${
+                    originalRequest.path.slice(-1)[0]
+                  } (${data.message})`
+                )
+              );
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              dispatch(malcolmProcessMethodReturn({ ...data }));
+              dispatch(malcolmHailReturn(data, true));
+              break;
+            }
+            default:
+              dispatch(
+                snackbarState(
+                  true,
+                  `Error in messages ${data.id} (${data.message})`
+                )
+              );
+              dispatch(malcolmHailReturn(data, true));
+          }
         } else {
           dispatch(
             snackbarState(
@@ -115,8 +157,8 @@ const handleMessages = (messages, dispatch, getState) => {
               `Error reported by malcolm server: "${data.message}"`
             )
           );
-          break;
         }
+        break;
       }
       default: {
         break;
@@ -142,6 +184,7 @@ const configureMalcolmSocketHandlers = (store, worker) => {
         )
       );
       store.dispatch(malcolmSetDisconnected());
+      store.dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
     } else if (
       typeof event.data === 'string' &&
       event.data.startsWith('WebSocket Error: ')

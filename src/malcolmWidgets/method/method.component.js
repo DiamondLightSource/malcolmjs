@@ -306,7 +306,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   const methodDescription =
-    method && method.raw.description ? method.raw.description : EMPTY;
+    method && method.raw.meta.description ? method.raw.meta.description : EMPTY;
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
@@ -318,8 +318,8 @@ const mapStateToProps = (state, ownProps) => {
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
   const inputAlarms = {};
   const inputInfo = {};
-  if (method && method.raw.takes.elements) {
-    Object.entries(method.raw.takes.elements).forEach(([input, meta]) => {
+  if (method && method.raw.meta.takes.elements) {
+    Object.entries(method.raw.meta.takes.elements).forEach(([input, meta]) => {
       const inputIsDirty =
         (method.calculated.inputs[input] instanceof Object &&
           Object.prototype.hasOwnProperty.call(
@@ -362,8 +362,8 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    writeable: method ? method.raw.writeable : false,
-    methodName: method ? method.raw.label : 'Not found',
+    writeable: method ? method.raw.meta.writeable : false,
+    methodName: method ? method.raw.meta.label : 'Not found',
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,
     methodErrored: method ? method.calculated.errorState : false,
@@ -372,15 +372,15 @@ const mapStateToProps = (state, ownProps) => {
         ? method.calculated.errorMessage
         : methodDescription,
     methodPath: method ? method.calculated.path : EMPTY_ARRAY,
-    inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
+    inputs: method ? method.raw.meta.takes.elements : EMPTY_OBJECT,
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
     dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
     inputAlarms,
     inputInfo,
-    outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
+    outputs: method ? method.raw.meta.returns.elements : EMPTY_OBJECT,
     outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
-    required: method ? method.raw.required : EMPTY_OBJECT,
-    defaultValues: method ? method.raw.defaults : EMPTY_OBJECT,
+    required: method ? method.raw.meta.required : EMPTY_OBJECT,
+    defaultValues: method ? method.raw.meta.defaults : EMPTY_OBJECT,
   };
 };
 

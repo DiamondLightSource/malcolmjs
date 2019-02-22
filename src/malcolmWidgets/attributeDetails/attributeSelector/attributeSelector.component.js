@@ -36,6 +36,7 @@ export const malcolmTypes = {
 };
 
 export const isArrayType = meta =>
+  // malcolm array types have IDs "malcolm:core/[Number,String]ArrayMeta:1.x"
   meta &&
   meta.typeid &&
   meta.typeid
@@ -237,7 +238,12 @@ export const selectorFunction = (
         />
       );
     case 'info:alarm':
-      return <AttributeAlarm alarmSeverity={value} />;
+      return (
+        <AttributeAlarm
+          alarmSeverity={value.alarm}
+          fieldType={value.fieldType}
+        />
+      );
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return (

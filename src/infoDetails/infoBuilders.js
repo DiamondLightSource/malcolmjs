@@ -11,7 +11,12 @@ export const buildAttributeInfo = props => {
   let value;
   const info = {};
   const { attribute } = props;
-  if (attribute && attribute.raw && attribute.raw.meta) {
+  if (
+    attribute &&
+    attribute.raw &&
+    attribute.raw.meta &&
+    !attribute.calculated.isMethod
+  ) {
     if (props.subElement === undefined) {
       info.path = {
         label: 'Attribute path',
@@ -312,28 +317,28 @@ export const buildAttributeInfo = props => {
       info.meta = {
         label: 'Meta Data',
         malcolmType: {
-          value: attribute.raw.typeid,
+          value: attribute.raw.meta.typeid,
           label: 'Type ID',
           inline: true,
         },
         description: {
-          value: attribute.raw.description,
+          value: attribute.raw.meta.description,
           label: 'Description',
           inline: true,
         },
         writeable: {
-          value: attribute.raw.writeable,
+          value: attribute.raw.meta.writeable,
           label: 'Writeable?',
           inline: true,
           tag: 'widget:led',
         },
       };
-      if (Object.keys(attribute.raw.takes.elements).length > 0) {
+      if (Object.keys(attribute.raw.meta.takes.elements).length > 0) {
         info.takes = { label: 'Input parameter types' };
-        Object.keys(attribute.raw.takes.elements).forEach(input => {
+        Object.keys(attribute.raw.meta.takes.elements).forEach(input => {
           info.takes[input] = {
-            label: attribute.raw.takes.elements[input].label,
-            value: attribute.raw.takes.elements[input].typeid,
+            label: attribute.raw.meta.takes.elements[input].label,
+            value: attribute.raw.meta.takes.elements[input].typeid,
             infoPath: {
               root: attribute.calculated.path,
               subElement: `takes.${input}`,
@@ -348,20 +353,22 @@ export const buildAttributeInfo = props => {
             tag: 'info:button',
             functions: {
               clickHandler: () => {
-                Object.keys(attribute.raw.takes.elements).forEach(input => {
-                  props.clearParamState(attribute.calculated.path, input);
-                });
+                Object.keys(attribute.raw.meta.takes.elements).forEach(
+                  input => {
+                    props.clearParamState(attribute.calculated.path, input);
+                  }
+                );
               },
             },
           };
         }
       }
-      if (Object.keys(attribute.raw.returns.elements).length > 0) {
+      if (Object.keys(attribute.raw.meta.returns.elements).length > 0) {
         info.returns = { label: 'Output parameter types' };
-        Object.keys(attribute.raw.returns.elements).forEach(input => {
+        Object.keys(attribute.raw.meta.returns.elements).forEach(input => {
           info.returns[input] = {
-            label: attribute.raw.returns.elements[input].label,
-            value: attribute.raw.returns.elements[input].typeid,
+            label: attribute.raw.meta.returns.elements[input].label,
+            value: attribute.raw.meta.returns.elements[input].typeid,
             infoPath: {
               root: attribute.calculated.path,
               subElement: `returns.${input}`,
@@ -397,26 +404,30 @@ export const buildAttributeInfo = props => {
         value: props.subElement[0] === 'takes' ? 'Input' : 'Output',
       };
       info.typeid =
-        attribute.raw[props.subElement[0]].elements[props.subElement[1]].typeid;
+        attribute.raw.meta[props.subElement[0]].elements[
+          props.subElement[1]
+        ].typeid;
       info.description = {
         label: 'Description',
         inline: true,
         value:
-          attribute.raw[props.subElement[0]].elements[props.subElement[1]]
+          attribute.raw.meta[props.subElement[0]].elements[props.subElement[1]]
             .description,
       };
       if (props.subElement[0] === 'takes') {
         info.required = {
           label: 'Required?',
           inline: true,
-          value: attribute.raw.takes.required.includes(props.subElement[1]),
+          value: attribute.raw.meta.takes.required.includes(
+            props.subElement[1]
+          ),
         };
         info.defaultValue = {
           label: 'Default Value',
           inline: true,
           value:
-            attribute.raw.defaults[props.subElement[1]] !== undefined
-              ? attribute.raw.defaults[props.subElement[1]]
+            attribute.raw.meta.defaults[props.subElement[1]] !== undefined
+              ? attribute.raw.meta.defaults[props.subElement[1]]
               : 'undefined',
         };
         if (props.clearParamState) {

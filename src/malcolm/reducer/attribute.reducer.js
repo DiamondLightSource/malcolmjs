@@ -25,7 +25,7 @@ import {
   tableHasRow,
   arrayHasElement,
 } from './table.reducer';
-import { getMethodParam } from './method.reducer';
+import { getMethodParam, pushServerRunToArchive } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort, sourcePort } from '../malcolmConstants';
 
@@ -44,6 +44,9 @@ export const updateAttributeChildren = attribute => {
   return updatedAttribute;
 };
 
+export const timestamp2Date = timeStamp =>
+  new Date(timeStamp.secondsPastEpoch * 1000 + timeStamp.nanoseconds / 1000000);
+
 const hasSubElements = inputAttribute => {
   const attribute = inputAttribute;
   if (blockUtils.attributeHasTag(attribute, 'widget:table')) {
@@ -51,7 +54,7 @@ const hasSubElements = inputAttribute => {
       row: tableHasRow,
       col: tableHasColumn,
     };
-  } else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
+  } else if (attribute.raw.typeid === 'malcolm:core/Method:1.1') {
     attribute.calculated.subElements = {
       takes: (param, method) => getMethodParam('takes', param, method),
       returns: (param, method) => getMethodParam('returns', param, method),
@@ -258,10 +261,10 @@ const presetMethodInputs = attribute => {
       updatedAttribute.calculated.inputs || {};
     updatedAttribute.calculated.outputs =
       updatedAttribute.calculated.outputs || {};
-    Object.entries(updatedAttribute.raw.takes.elements).forEach(
+    Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
       ([input, meta]) => {
         if (
-          updatedAttribute.raw.takes.required.includes(input) &&
+          updatedAttribute.raw.meta.takes.required.includes(input) &&
           !updatedAttribute.calculated.inputs[input]
         ) {
           updatedAttribute.calculated.inputs[input] = {
@@ -298,10 +301,7 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
   const nanoSeconds =
     payload.raw.timeStamp.secondsPastEpoch +
     10 ** -9 * payload.raw.timeStamp.nanoseconds;
-  const dateObject = new Date(
-    payload.raw.timeStamp.secondsPastEpoch * 1000 +
-      payload.raw.timeStamp.nanoseconds / 1000000
-  );
+  const dateObject = timestamp2Date(payload.raw.timeStamp);
   if (attributeArchive.connectTime === -1) {
     attributeArchive.connectTime = nanoSeconds;
   }
@@ -320,11 +320,11 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
     plotValue = payload.raw.value === undefined ? undefined : plotValue;
   }
   /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
-    else if (attributeArchive.meta.tags.includes('widget:combo')) {
-    plotValue = attributeArchive.meta.choices.findIndex(
-      val => val === payload.raw.value
-    );
-  } */
+        else if (attributeArchive.meta.tags.includes('widget:combo')) {
+        plotValue = attributeArchive.meta.choices.findIndex(
+          val => val === payload.raw.value
+        );
+      } */
   popAndPush(attributeArchive.plotValue, plotValue);
   attributeArchive.counter += 1;
   attributeArchive.plotTime =
@@ -445,6 +445,11 @@ export function updateAttribute(
             attributeArchive,
             payload,
             alarmState
+          );
+        } else if (attribute.calculated.isMethod) {
+          archive[matchingAttributeIndex] = pushServerRunToArchive(
+            attributeArchive,
+            payload
           );
         }
       }

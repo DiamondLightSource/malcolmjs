@@ -414,7 +414,7 @@ const mapStateToProps = state => {
     mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
-    isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
+    isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.1',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeid: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,

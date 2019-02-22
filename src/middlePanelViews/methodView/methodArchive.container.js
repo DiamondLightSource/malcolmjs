@@ -64,16 +64,26 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
     value: {
       timeStamp: methodArchive.timeStamp
         .toarray()
-        .map(stamp => stamp.localRunTime.toISOString()),
+        .map(stamp => stamp.runTime.toISOString()),
       alarm: methodArchive.alarmState.toarray(),
       value:
         selectedParam[0] === 'takes'
           ? methodArchive.value
               .toarray()
-              .map(value => value.runParameters[selectedParam[1]].value)
+              .map(
+                value =>
+                  Object.keys(value.took).includes(selectedParam[1])
+                    ? value.took[selectedParam[1]].value
+                    : 'UNDEFINED'
+              )
           : methodArchive.value
               .toarray()
-              .map(value => value.returned[selectedParam[1]].value),
+              .map(
+                value =>
+                  Object.keys(value.returned).includes(selectedParam[1])
+                    ? value.returned[selectedParam[1]].value
+                    : 'UNDEFINED'
+              ),
     },
     meta: {
       elements: {
@@ -111,10 +121,20 @@ export const dummyArchive = (methodArchive, selectedParam) => ({
     selectedParam[0] === 'takes'
       ? methodArchive.value
           .toarray()
-          .map(value => value.runParameters[selectedParam[1]].value)
+          .map(
+            value =>
+              Object.keys(value.took).includes(selectedParam[1])
+                ? value.took[selectedParam[1]].value
+                : 'UNDEFINED'
+          )
       : methodArchive.value
           .toarray()
-          .map(value => value.returned[selectedParam[1]].value),
+          .map(
+            value =>
+              Object.keys(value.returned).includes(selectedParam[1])
+                ? value.returned[selectedParam[1]].value
+                : 'UNDEFINED'
+          ),
 });
 
 const MethodArchive = props => (

@@ -7,10 +7,16 @@ import {
   MalcolmArchiveMethodRun,
   MalcolmFlagMethodInputType,
 } from '../malcolm.types';
+import { timestamp2Date } from './attribute.reducer';
 import { isArrayType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
+export const Sources = {
+  LOCAL: 'methodrun:local',
+  REMOTE: 'methodrun:remote',
+};
+
 export const getMethodParam = (type, param, method) =>
-  Object.keys(method.raw[type].elements).includes(`${param}`);
+  Object.keys(method.raw.meta[type].elements).includes(`${param}`);
 
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
@@ -25,6 +31,36 @@ const mapReturnValues = (returnKeys, payload) => {
   return valueMap;
 };
 
+export const pushServerRunToArchive = (methodArchive, payload) => {
+  const updatedArchive = { ...methodArchive };
+  if (
+    !(
+      payload.raw.took.timeStamp.secondsPastEpoch === 0 &&
+      payload.raw.took.timeStamp.secondsPastEpoch === 0
+    )
+  ) {
+    // if both timestamp fields are zero delta didn't actually contain any run information
+    updatedArchive.value.push({
+      took: { ...payload.raw.took.value },
+      calledWith: [...payload.raw.took.present],
+      returned: { ...payload.raw.returned.value },
+      returnStatus: 'OK',
+      source: Sources.REMOTE,
+    });
+    updatedArchive.timeStamp.push({
+      runTime: timestamp2Date(payload.raw.took.timeStamp),
+      returnTime: timestamp2Date(payload.raw.returned.timeStamp),
+    });
+    updatedArchive.alarmState.push(
+      Math.max(
+        payload.raw.took.alarm.severity,
+        payload.raw.returned.alarm.severity
+      )
+    );
+  }
+  return updatedArchive;
+};
+
 const pushParamsToArchive = (state, payload) => {
   const blockName = payload.path[0];
   const attributeName = payload.path[1];
@@ -34,20 +70,30 @@ const pushParamsToArchive = (state, payload) => {
     attributeName
   );
   const blockArchive = { ...state.blockArchive };
+  const blocks = { ...state.blocks };
   if (matchingAttribute >= 0) {
     const { attributes } = blockArchive[blockName];
-    const attribute = attributes[matchingAttribute];
-    attribute.value.push({ runParameters: payload.parameters });
-    attribute.timeStamp.push({ localRunTime: new Date() });
-    attributes[matchingAttribute] = attribute;
+    const archive = attributes[matchingAttribute];
+    const attribute = { ...blocks[blockName].attributes[matchingAttribute] };
+    attribute.calculated.lastCallId = archive.value.size();
+    archive.value.push({
+      took: payload.parameters,
+      returned: null,
+      source: Sources.LOCAL,
+    });
+    archive.timeStamp.push({ runTime: new Date() });
+    archive.alarmState.push({ alarm: AlarmStates.UNDEFINED_ALARM });
+    attributes[matchingAttribute] = archive;
     blockArchive[blockName] = {
       ...state.blockArchive[payload.path[0]],
       attributes,
     };
+    blocks[blockName].attributes[matchingAttribute] = attribute;
   }
   return {
     ...state,
     blockArchive,
+    blocks,
   };
 };
 
@@ -68,11 +114,11 @@ const updateMethodInput = (state, payload) => {
       state.blockArchive[blockName].attributes[matchingAttribute];
     if (
       payload.doInitialise &&
-      isArrayType(attributeCopy.raw.takes.elements[payload.name])
+      isArrayType(attributeCopy.raw.meta.takes.elements[payload.name])
     ) {
       attributeCopy.calculated.inputs[payload.name] = {
         meta: {
-          ...attributeCopy.raw.takes.elements[payload.name],
+          ...attributeCopy.raw.meta.takes.elements[payload.name],
         },
         value: [],
         flags: {
@@ -109,18 +155,6 @@ const updateMethodInput = (state, payload) => {
             !archive.value.get(archive.value.size() - 1).runParameters))); // Method was run with no params sent (?)
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
-
-    // if (archive) {
-    //   if (archive.value.size() === 0 && attributeCopy.calculated.inputs.length !== 0)) {
-    //     attributeCopy.calculate.dirty = true;
-    //   } else if (archive.value.size() !== 0) {
-    //     if(archive.value[-1].runParameters[payload.name].value !== attributeCopy.calculated.inputs[payload.name].value)) {
-    //       attributeCopy.calculate.dirty = true;
-    //     } else if (!archive.value[-1].runParameters) {
-    //
-    //     }
-    //   }
-    // }
   }
   return {
     ...state,
@@ -181,41 +215,43 @@ export const handleMethodReturn = (state, payload) => {
     const blockArchive = { ...state.blockArchive };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
-      const archive = blockArchive[blockName].attributes;
+      const attribute = attributes[matchingAttribute];
       let valueMap = { outputs: {} };
-      const returnKeys = Object.keys(
-        attributes[matchingAttribute].raw.returns.elements
-      );
-      if (
-        blockUtils.attributeHasTag(
-          attributes[matchingAttribute],
-          'method:return:unpacked'
-        )
-      ) {
-        valueMap.outputs[returnKeys[0]] = { value: payload.value };
-      } else {
-        valueMap = mapReturnValues(returnKeys, payload);
+      if (payload.typeid === 'malcolm:core/Return:1.0') {
+        const returnKeys = Object.keys(attribute.raw.meta.returns.elements);
+        if (blockUtils.attributeHasTag(attribute, 'method:return:unpacked')) {
+          valueMap.outputs[returnKeys[0]] = { value: payload.value };
+        } else {
+          valueMap = mapReturnValues(returnKeys, payload);
+        }
       }
       attributes[matchingAttribute] = {
         ...attributes[matchingAttribute],
         calculated: {
-          ...attributes[matchingAttribute].calculated,
+          ...attribute.calculated,
           ...valueMap,
         },
       };
+
+      const archive = blockArchive[blockName].attributes;
       if (archive && archive[matchingAttribute]) {
-        const runParams = archive[matchingAttribute].value.pop();
-        const localRunTime = archive[matchingAttribute].timeStamp.pop();
-        archive[matchingAttribute].value.push({
-          ...runParams,
-          returned: { ...valueMap.outputs },
-          returnStatus: 'Success',
-        });
-        archive[matchingAttribute].timeStamp.push({
-          ...localRunTime,
-          localReturnTime: new Date(),
-        });
-        archive[matchingAttribute].alarmState.push(AlarmStates.NO_ALARM);
+        const runParams = archive[matchingAttribute].value.get(
+          matchingMessage.senderLookupID
+        );
+        const runTime = archive[matchingAttribute].timeStamp.get(
+          matchingMessage.senderLookupID
+        );
+        const alarm = archive[matchingAttribute].alarmState.get(
+          matchingMessage.senderLookupID
+        );
+        runParams.returned = { ...valueMap.outputs };
+        runParams.returnStatus =
+          payload.typeid === 'malcolm:core/Return:1.0'
+            ? 'Run success'
+            : 'Run failed';
+        if (payload.message) runParams.returnStatus += ` (${payload.message})`;
+        runTime.returnTime = new Date();
+        alarm.alarm = AlarmStates.NO_ALARM;
         blockArchive[blockName] = {
           ...state.blockArchive[blockName],
           attributes: archive,
