@@ -144,9 +144,7 @@ export const updateNavigation = (state, attributeName, attribute) => {
   if (
     matchingNav &&
     (matchingNav.children !== attribute.calculated.children ||
-      (attribute.raw.meta && matchingNav.label !== attribute.raw.meta.label) ||
-      (attribute.calculated.isMethod &&
-        matchingNav.label !== attribute.raw.label))
+      (attribute.raw.meta && matchingNav.label !== attribute.raw.meta.label))
   ) {
     navigation = processNavigationLists(
       state.navigation.navigationLists.map(nav => {
@@ -254,7 +252,7 @@ export const updateLocalState = attribute => {
   return updatedAttribute;
 };
 
-const presetMethodInputs = attribute => {
+export const presetMethodInputs = attribute => {
   const updatedAttribute = attribute;
   if (updatedAttribute && updatedAttribute.calculated.isMethod) {
     updatedAttribute.calculated.inputs =
@@ -263,7 +261,12 @@ const presetMethodInputs = attribute => {
       updatedAttribute.calculated.outputs || {};
     Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
       ([input, meta]) => {
-        if (
+        if (attribute.raw.took && attribute.raw.took.present.includes(input)) {
+          updatedAttribute.calculated.inputs[input] = {
+            value: attribute.raw.took.value[input],
+            flags: {},
+          };
+        } else if (
           updatedAttribute.raw.meta.takes.required.includes(input) &&
           !updatedAttribute.calculated.inputs[input]
         ) {

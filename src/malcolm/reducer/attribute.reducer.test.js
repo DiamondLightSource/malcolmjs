@@ -4,6 +4,7 @@ import AttributeReducer, {
   pushToArchive,
   tickArchive,
   updateLocalState,
+  presetMethodInputs,
 } from './attribute.reducer';
 import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
@@ -21,6 +22,7 @@ import {
   addMessageInFlight,
   addBlock,
   buildAttribute,
+  buildMethod,
   addBlockArchive,
   buildBlockArchiveAttribute,
   buildMeta,
@@ -44,6 +46,15 @@ const mockNow = -806952600000;
 const mockDataTime = -14159025000;
 
 const vanillaDate = Date;
+
+const testMethodInputs = {
+  elements: {
+    stringIn: { typeid: malcolmTypes.string },
+    intIn: { typeid: malcolmTypes.number },
+    boolIn: { typeid: malcolmTypes.bool },
+    objectIn: { typeid: malcolmTypes.pointGenerator },
+  },
+};
 
 function injectMockDate(mockDateValue) {
   global.Date = class extends vanillaDate {
@@ -622,5 +633,41 @@ describe('attribute reducer', () => {
     );
     expect(updatedArchive.value.get(1)).toEqual('ticker test!');
     expect(updatedArchive.plotTime).toEqual(8);
+  });
+
+  it('initialises method inputs appropriately if didnt get values from server', () => {
+    const testMethod = buildMethod('testMethod', [], {
+      required: ['stringIn', 'boolIn'],
+      ...testMethodInputs,
+    });
+    const resultMethod = presetMethodInputs(testMethod);
+    expect(resultMethod.calculated.inputs).toBeDefined();
+    expect(resultMethod.calculated.inputs.stringIn.value).toEqual('');
+    expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
+    expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
+    expect(resultMethod.calculated.inputs.objectIn).not.toBeDefined();
+  });
+
+  it('initialises method inputs appropriately if got values from server', () => {
+    const testMethod = buildMethod(
+      'testMethod',
+      [],
+      { required: ['stringIn', 'boolIn'], ...testMethodInputs },
+      {
+        present: ['stringIn', 'objectIn'],
+        value: {
+          stringIn: 'testing',
+          boolIn: true,
+          intIn: 0,
+          objectIn: { isATest: true },
+        },
+      }
+    );
+    const resultMethod = presetMethodInputs(testMethod);
+    expect(resultMethod.calculated.inputs).toBeDefined();
+    expect(resultMethod.calculated.inputs.stringIn.value).toEqual('testing');
+    expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
+    expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
+    expect(resultMethod.calculated.inputs.objectIn.value.isATest).toBeDefined();
   });
 });

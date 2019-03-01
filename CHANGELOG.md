@@ -1,8 +1,13 @@
 # Changelog
-## 1.7b0 (22/2/2019)
+## 1.7b0 (1/3/2019)
 Features:
 - Method run info now sent by server to all clients for calls from any client and stored/displayed in archive
+- Method run params now initialised to last server run if present
+Tweaks:
 - Changed text displayed in middle pane when no root block is selected
+Fixes:
+- Changed socket connect/reconnect behaviour so root block subscription is put on queue to send immedeately following disconnect and wiping of the send queue.
+(this prevents the case where duplicate subscriptions are made if the site connects to the websocket on its first attempt when initially loading)
 ## 1.6.1 (18/2/2019)
 Fixes:
 - Fixed incorrect height on combobox

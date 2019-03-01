@@ -95,6 +95,20 @@ export const buildMeta = (
   typeid,
 });
 
+const buildMethodMeta = (
+  takes = { required: {} },
+  returns = {},
+  writeable = true,
+  label = '',
+  version = 1.1
+) => ({
+  writeable,
+  label,
+  typeid: `malcolm:core/MethodMeta:${version}`,
+  takes,
+  returns,
+});
+
 export const buildAttribute = (
   name,
   path,
@@ -119,6 +133,35 @@ export const buildAttribute = (
     path,
     pending: false,
     children,
+  },
+});
+
+export const buildMethod = (
+  name,
+  path,
+  takes = { elements: {} },
+  took = { value: {}, present: [] },
+  returns = { elements: {} },
+  returned = { value: {} },
+  alarm = 0,
+  loading = false
+) => ({
+  // the data coming back from the server is always stored in raw
+  raw: {
+    took,
+    returned,
+    alarm: {
+      severity: alarm,
+    },
+    meta: buildMethodMeta(takes, returns),
+  },
+  // other additional properties are stored in calculated
+  calculated: {
+    name,
+    loading,
+    path,
+    pending: false,
+    isMethod: true,
   },
 });
 
