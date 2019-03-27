@@ -94,20 +94,63 @@ const handleMessages = (messages, dispatch, getState) => {
 
       case 'malcolm:core/Error:1.0': {
         if (data.id !== -1) {
-          BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-          const loadFailMessage =
-            originalRequest.path.slice(-1)[0] === 'meta'
-              ? `Error in attribute ${
-                  originalRequest.path.slice(-1)[0]
-                } for block ${originalRequest.path.slice(0, -1)}`
-              : `Failed to load block ${originalRequest.path.slice(
-                  0,
-                  -1
-                )} (Error in attribute meta)`;
-          dispatch(snackbarState(true, loadFailMessage));
-          dispatch(malcolmHailReturn(data, true));
-          dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
-          break;
+          switch (messagesInFlight[data.id].typeid) {
+            case 'malcolm:core/Get:1.0':
+            case 'malcolm:core/Subscribe:1.0': {
+              BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
+              const loadFailMessage =
+                originalRequest.path.length % 2 === 0 &&
+                originalRequest.path.slice(-1)[0] === 'meta'
+                  ? `Failed to load block ${originalRequest.path.slice(
+                      0,
+                      -1
+                    )} (Error in attribute meta)`
+                  : `Error loading attribute ${
+                      originalRequest.path.slice(-1)[0]
+                    } for block ${originalRequest.path.slice(0, -1)}`;
+              dispatch(snackbarState(true, loadFailMessage));
+              dispatch(malcolmHailReturn(data, true));
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              break;
+            }
+            case 'malcolm:core/Put:1.0': {
+              dispatch(
+                snackbarState(
+                  true,
+                  `Failed to write to attribute ${originalRequest.path.slice(
+                    -(1)[[0]]
+                  )} on block ${originalRequest.path.slice(0, -1)} (${
+                    data.message
+                  })`
+                )
+              );
+              dispatch(malcolmHailReturn(data, true));
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              break;
+            }
+            case 'malcolm:core/Post:1.0': {
+              dispatch(
+                snackbarState(
+                  true,
+                  `Server failed to run method ${
+                    originalRequest.path.slice(-1)[0]
+                  } (${data.message})`
+                )
+              );
+              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+              dispatch(malcolmProcessMethodReturn({ ...data }));
+              dispatch(malcolmHailReturn(data, true));
+              break;
+            }
+            default:
+              dispatch(
+                snackbarState(
+                  true,
+                  `Error in message ${data.id} (${data.message})`
+                )
+              );
+              dispatch(malcolmHailReturn(data, true));
+          }
         } else {
           dispatch(
             snackbarState(
@@ -115,8 +158,8 @@ const handleMessages = (messages, dispatch, getState) => {
               `Error reported by malcolm server: "${data.message}"`
             )
           );
-          break;
         }
+        break;
       }
       default: {
         break;
