@@ -1,4 +1,7 @@
 # Changelog
+## 1.6.2 (27/03/2019)
+Fixes:
+- Applied fixes/improvements to error messages from 1.7b0
 ## 1.6.1 (18/2/2019)
 Fixes:
 - Fixed incorrect height on combobox
