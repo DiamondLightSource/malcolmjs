@@ -74,9 +74,10 @@ export const getTableState = props => {
   const isArray = props.attribute.calculated.isMethod
     ? isArrayType(props.localState.meta)
     : isArrayType(props.attribute.raw.meta);
-  tableState.columnLabels = !isArray
-    ? Object.keys(props.attribute.raw.meta.elements)
-    : undefined;
+  tableState.columnLabels =
+    !isArray && !props.attribute.calculated.isMethod
+      ? Object.keys(props.attribute.raw.meta.elements)
+      : undefined;
   tableState.columnLabels =
     props.localState !== undefined
       ? props.localState.labels

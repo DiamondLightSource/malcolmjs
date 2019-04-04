@@ -8,7 +8,10 @@ import {
   MalcolmFlagMethodInputType,
 } from '../malcolm.types';
 import { timestamp2Date } from './attribute.reducer';
-import { isArrayType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  isArrayType,
+  malcolmTypes,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const Sources = {
   LOCAL: 'methodrun:local',
@@ -116,19 +119,57 @@ const updateMethodInput = (state, payload) => {
     const archive =
       state.blockArchive[blockName] &&
       state.blockArchive[blockName].attributes[matchingAttribute];
-    if (
-      payload.doInitialise &&
-      isArrayType(attributeCopy.raw.meta.takes.elements[payload.name])
-    ) {
-      attributeCopy.calculated.inputs[payload.name] = {
-        meta: {
-          ...attributeCopy.raw.meta.takes.elements[payload.name],
-        },
-        value: [],
-        flags: {
-          rows: [],
-        },
-      };
+    if (payload.doInitialise) {
+      if (isArrayType(attributeCopy.raw.meta.takes.elements[payload.name])) {
+        attributeCopy.calculated.inputs[payload.name] = {
+          meta: {
+            ...attributeCopy.raw.meta.takes.elements[payload.name],
+          },
+          value: [],
+          flags: {
+            rows: [],
+          },
+        };
+      } else if (
+        attributeCopy.raw.meta.defaults[payload.name] &&
+        attributeCopy.raw.meta.takes.elements[payload.name].typeid ===
+          malcolmTypes.table
+      ) {
+        const labels = Object.keys(
+          attributeCopy.raw.meta.takes.elements[payload.name].elements
+        );
+        const columns = {};
+        labels.forEach(label => {
+          columns[label] = {};
+        });
+        console.log(attributeCopy.raw.meta.defaults[payload.name][labels[0]]);
+        attributeCopy.calculated.inputs[payload.name] = {
+          meta: JSON.parse(
+            JSON.stringify(attributeCopy.raw.meta.takes.elements[payload.name])
+          ),
+          value: attributeCopy.raw.meta.defaults[payload.name][labels[0]].map(
+            (value, row) => {
+              const dataRow = {};
+              labels.forEach(label => {
+                dataRow[label] =
+                  attributeCopy.raw.meta.defaults[payload.name][label][row];
+              });
+              return dataRow;
+            }
+          ),
+          labels,
+          flags: {
+            columns,
+            rows: attributeCopy.raw.meta.defaults[payload.name][labels[0]].map(
+              () => ({})
+            ),
+            table: {},
+          },
+        };
+        console.log('#########################');
+        console.log(attributeCopy.raw.meta.defaults[payload.name]);
+        console.log(attributeCopy.raw.meta);
+      }
     } else if (payload.delete) {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,

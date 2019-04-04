@@ -90,7 +90,7 @@ const buildIOComponent = (input, props, isOutput) => {
     props.flagInput(path, input[0], flagName, flagState);
   };
   const buttonClickHandler =
-    isArrayType(input[1]) && !isOutput
+    (widgetTag === 'widget:table' || isArrayType(input[1])) && !isOutput
       ? path => {
           props.initialiseLocalState(path, ['takes', input[0]]);
           props.methodParamClickHandler(path);
