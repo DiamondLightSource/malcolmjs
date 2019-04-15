@@ -265,7 +265,14 @@ const mapStateToProps = (state, ownProps, memory) => {
         ),
       }));
 
-    stateMemory.methods = block.attributes.filter(a => a.calculated.isMethod);
+    stateMemory.methods = block.attributes.filter(
+      a =>
+        a.calculated.isMethod &&
+        !(
+          block.orphans &&
+          block.orphans.some(orphan => orphan === a.calculated.name)
+        )
+    );
 
     stateMemory.oldAttributes = block.attributes;
   }
