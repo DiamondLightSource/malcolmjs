@@ -262,10 +262,46 @@ export const presetMethodInputs = attribute => {
     Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
       ([input, meta]) => {
         if (attribute.raw.took && attribute.raw.took.present.includes(input)) {
-          updatedAttribute.calculated.inputs[input] = {
-            value: attribute.raw.took.value[input],
-            flags: {},
-          };
+          if (
+            attribute.raw.meta.takes.elements[input].typeid ===
+            malcolmTypes.table
+          ) {
+            const labels = Object.keys(
+              attribute.raw.meta.takes.elements[input].elements
+            );
+            const columns = {};
+            labels.forEach(label => {
+              columns[label] = {};
+            });
+            updatedAttribute.calculated.inputs[input] = {
+              meta: JSON.parse(
+                JSON.stringify(attribute.raw.meta.takes.elements[input])
+              ),
+              value: attribute.raw.took.value[input][labels[0]].map(
+                (value, row) => {
+                  const dataRow = {};
+                  labels.forEach(label => {
+                    dataRow[label] =
+                      attribute.raw.took.value[input][label][row];
+                  });
+                  return dataRow;
+                }
+              ),
+              labels,
+              flags: {
+                columns,
+                rows: attribute.raw.took.value[input][labels[0]].map(
+                  () => ({})
+                ),
+                table: {},
+              },
+            };
+          } else {
+            updatedAttribute.calculated.inputs[input] = {
+              value: attribute.raw.took.value[input],
+              flags: {},
+            };
+          }
         } else if (
           updatedAttribute.raw.meta.takes.required.includes(input) &&
           !updatedAttribute.calculated.inputs[input]

@@ -26,6 +26,8 @@ import {
   malcolmFlagMethodInput,
 } from './actions/method.actions';
 
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+
 export const malcolmSubscribeAction = (path, delta = true, callback) => {
   const action = {
     type: MalcolmSend,
@@ -98,11 +100,31 @@ export const malcolmPostAction = (path, rawParameters) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const index = blockUtils.findAttributeIndex(state.blocks, path[0], path[1]);
-  const method = state.blocks[path[0]].attributes[index];
+  const attributeIndex = blockUtils.findAttributeIndex(
+    state.blocks,
+    path[0],
+    path[1]
+  );
+  const method = state.blocks[path[0]].attributes[attributeIndex];
   const parameters = {};
   Object.keys(rawParameters).forEach(param => {
-    parameters[param] = rawParameters[param].value;
+    if (
+      rawParameters[param].meta &&
+      rawParameters[param].meta.typeid === malcolmTypes.table
+    ) {
+      const labels = JSON.parse(
+        JSON.stringify(Object.keys(method.raw.meta.defaults[param]))
+      );
+      labels.splice(labels.findIndex(el => el === 'typeid'), 1);
+      parameters[param] = method.raw.meta.defaults[param];
+      rawParameters[param].value.forEach((row, rowIndex) => {
+        labels.forEach(label => {
+          parameters[param][label][rowIndex] = row[label];
+        });
+      });
+    } else {
+      parameters[param] = rawParameters[param].value;
+    }
   });
   let missing = [];
   if (method && method.calculated.isMethod) {
@@ -119,8 +141,9 @@ export const malcolmPostAction = (path, rawParameters) => (
         typeid: 'malcolm:core/Post:1.0',
         path,
         parameters,
-        senderLookupID: getState().malcolm.blocks[path[0]].attributes[index]
-          .calculated.lastCallId,
+        senderLookupID: getState().malcolm.blocks[path[0]].attributes[
+          attributeIndex
+        ].calculated.lastCallId,
       },
     });
   } else {

@@ -142,7 +142,6 @@ const updateMethodInput = (state, payload) => {
         labels.forEach(label => {
           columns[label] = {};
         });
-        console.log(attributeCopy.raw.meta.defaults[payload.name][labels[0]]);
         attributeCopy.calculated.inputs[payload.name] = {
           meta: JSON.parse(
             JSON.stringify(attributeCopy.raw.meta.takes.elements[payload.name])
@@ -166,9 +165,6 @@ const updateMethodInput = (state, payload) => {
             table: {},
           },
         };
-        console.log('#########################');
-        console.log(attributeCopy.raw.meta.defaults[payload.name]);
-        console.log(attributeCopy.raw.meta);
       }
     } else if (payload.delete) {
       attributeCopy.calculated.inputs = {

@@ -53,6 +53,10 @@ const testMethodInputs = {
     intIn: { typeid: malcolmTypes.number },
     boolIn: { typeid: malcolmTypes.bool },
     objectIn: { typeid: malcolmTypes.pointGenerator },
+    tableIn: {
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    },
   },
 };
 
@@ -654,12 +658,17 @@ describe('attribute reducer', () => {
       [],
       { required: ['stringIn', 'boolIn'], ...testMethodInputs },
       {
-        present: ['stringIn', 'objectIn'],
+        present: ['stringIn', 'objectIn', 'tableIn'],
         value: {
           stringIn: 'testing',
           boolIn: true,
           intIn: 0,
           objectIn: { isATest: true },
+          tableIn: {
+            column1: ['a', 'b'],
+            column2: [1, 2],
+            typeid: malcolmTypes.table,
+          },
         },
       }
     );
@@ -669,5 +678,19 @@ describe('attribute reducer', () => {
     expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
     expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
     expect(resultMethod.calculated.inputs.objectIn.value.isATest).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.meta).toEqual({
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.value.length).toEqual(2);
+    expect(resultMethod.calculated.inputs.tableIn.value[0]).toEqual({
+      column1: 'a',
+      column2: 1,
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value[1]).toEqual({
+      column1: 'b',
+      column2: 2,
+    });
   });
 });

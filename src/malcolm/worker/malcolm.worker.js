@@ -60,6 +60,7 @@ socketContainer.socket.onclose = () => {
   socketContainer.purge();
   messagesInFlight = {};
   existingAttributes = {};
+  socketContainer.setConnected(false);
   console.log('socket disconnected');
   self.postMessage('socket disconnected');
 };
