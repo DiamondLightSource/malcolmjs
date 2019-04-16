@@ -38,12 +38,14 @@ export const updateAttributeChildren = (attribute, blockList) => {
       updatedAttribute.raw.meta.elements.name
     ) {
       updatedAttribute.raw.value.name.forEach((name, index) => {
-        updatedAttribute.calculated.children[name] = {
-          label: blockList[updatedAttribute.raw.value.mri[index]]
-            ? blockList[updatedAttribute.raw.value.mri[index]].label
-            : 'ERROR: block not in global block list',
-          mri: updatedAttribute.raw.value.mri[index],
-        };
+        if (updatedAttribute.raw.value.mri) {
+          updatedAttribute.calculated.children[name] = {
+            label: blockList[updatedAttribute.raw.value.mri[index]]
+              ? blockList[updatedAttribute.raw.value.mri[index]].label
+              : 'ERROR: block not in global block list',
+            mri: updatedAttribute.raw.value.mri[index],
+          };
+        }
       });
     }
   }
