@@ -114,11 +114,13 @@ export const NavSelector = props => (
           }}
         >
           <Typography align="left" style={{ paddingRight: '4px' }}>
-            {`${child} - `}
+            {props.childElements[child].label === child ? child : `${child} - `}
           </Typography>
-          <Typography variant="caption" align="right">
-            {props.childElements[child].label}
-          </Typography>
+          {props.childElements[child].label === child ? null : (
+            <Typography variant="caption" align="right">
+              {props.childElements[child].label}
+            </Typography>
+          )}
         </MenuItem>
       ))}
     </Menu>

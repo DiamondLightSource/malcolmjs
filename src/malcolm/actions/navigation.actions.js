@@ -49,12 +49,7 @@ const subscribeToChildren = () => (dispatch, getState) => {
         const child = attribute.raw.value.mri[i];
         if (visible && !state.blocks[child]) {
           dispatch(malcolmNewBlockAction(child, false, false));
-          dispatch(
-            malcolmSubscribeAction([child, 'meta'], true, msg => {
-              attribute.calculated.children[attribute.raw.value.name[i]].label =
-                msg.attributeDelta.label;
-            })
-          );
+          dispatch(malcolmSubscribeAction([child, 'meta']));
         }
       });
     }

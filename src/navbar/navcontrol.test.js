@@ -16,7 +16,10 @@ describe('NavControl', () => {
 
     nav = {
       path: 'PANDA:mri',
-      children: { layout: { label: 'layout' }, table: { label: 'table' } },
+      children: {
+        layout: { label: 'Block layout' },
+        table: { label: 'table' },
+      },
       label: 'PANDA',
       parent: {
         basePath: '/',
@@ -48,7 +51,6 @@ describe('NavControl', () => {
       <NavSelector
         handleClick={() => {}}
         childElements={nav.children}
-        childElementLabels={nav.childrenLabels}
         anchorEl="⚓"
         handleClose={() => {}}
         navigateToChild={() => {}}
@@ -66,7 +68,6 @@ describe('NavControl', () => {
       <NavSelector
         handleClick={() => {}}
         childElements={[]}
-        childElementLabels={[]}
         anchorEl=""
         handleClose={() => {}}
         navigateToChild={() => {}}

@@ -29,7 +29,7 @@ import { getMethodParam, pushServerRunToArchive } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort, sourcePort } from '../malcolmConstants';
 
-export const updateAttributeChildren = attribute => {
+export const updateAttributeChildren = (attribute, blockList) => {
   const updatedAttribute = { ...attribute };
   if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
@@ -39,7 +39,9 @@ export const updateAttributeChildren = attribute => {
     ) {
       updatedAttribute.raw.value.name.forEach((name, index) => {
         updatedAttribute.calculated.children[name] = {
-          label: name,
+          label: blockList[updatedAttribute.raw.value.mri[index]]
+            ? blockList[updatedAttribute.raw.value.mri[index]].label
+            : 'ERROR: block not in global block list',
           mri: updatedAttribute.raw.value.mri[index],
         };
       });
@@ -322,9 +324,9 @@ export const presetMethodInputs = attribute => {
   return updatedAttribute;
 };
 
-const checkForSpecialCases = inputAttribute => {
+const checkForSpecialCases = (inputAttribute, blockList) => {
   let attribute = checkForFlowGraph(inputAttribute);
-  attribute = updateAttributeChildren(attribute);
+  attribute = updateAttributeChildren(attribute, blockList);
   attribute = hasSubElements(attribute);
   attribute = updateLocalState(attribute);
   attribute = presetMethodInputs(attribute);
@@ -475,7 +477,10 @@ export function updateAttribute(
               payload.raw.timeStamp.nanoseconds / 1000000
           ).toISOString();
         }
-        attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+        attributes[matchingAttributeIndex] = checkForSpecialCases(
+          attribute,
+          state.blocks['.blocks'].children
+        );
 
         if (payload.raw.timeStamp) {
           const alarmState =

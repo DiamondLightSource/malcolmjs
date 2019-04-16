@@ -29,7 +29,9 @@ export const buildTestState = () => ({
       },
     },
     // see addBlock for more details
-    blocks: {},
+    blocks: {
+      '.blocks': { children: {} },
+    },
     blockArchive: {},
     parentBlock: undefined,
     mainAttribute: undefined,
@@ -80,6 +82,9 @@ export const addBlock = (name, attributes, malcolmState, children = {}) => {
     attributes,
     children,
     orphans: [],
+  };
+  updatedState.blocks['.blocks'].children[name] = {
+    label: name.replace(':', 'ing '),
   };
 };
 

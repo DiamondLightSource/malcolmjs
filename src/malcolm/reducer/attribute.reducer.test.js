@@ -143,7 +143,9 @@ describe('attribute reducer', () => {
       state
     );
     addBlockArchive('block1', [buildBlockArchiveAttribute('layout', 5)], state);
-
+    addBlock('test:block2', [], state);
+    addBlock('test:block3', [], state);
+    addBlock('test:block4', [], state);
     payload = {
       delta: true,
       id: 1,
@@ -188,15 +190,15 @@ describe('attribute reducer', () => {
     ).toHaveLength(3);
     expect(state.blocks.block1.attributes[0].calculated.children).toEqual({
       block2: {
-        label: 'block2',
+        label: 'testing block2',
         mri: 'test:block2',
       },
       block3: {
-        label: 'block3',
+        label: 'testing block3',
         mri: 'test:block3',
       },
       block4: {
-        label: 'block4',
+        label: 'testing block4',
         mri: 'test:block4',
       },
     });

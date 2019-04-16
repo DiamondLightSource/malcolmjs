@@ -437,7 +437,7 @@ exports[`NavControl renders correctly for final 1`] = `
     childElements={
       Object {
         "layout": Object {
-          "label": "layout",
+          "label": "Block layout",
         },
         "table": Object {
           "label": "table",
@@ -1643,7 +1643,7 @@ exports[`NavControl selector component renders correctly 1`] = `
         align="right"
         variant="caption"
       >
-        layout
+        Block layout
       </WithStyles(Typography)>
     </WithStyles(MenuItem)>
     <WithStyles(MenuItem)
@@ -1658,12 +1658,6 @@ exports[`NavControl selector component renders correctly 1`] = `
             "paddingRight": "4px",
           }
         }
-      >
-        table - 
-      </WithStyles(Typography)>
-      <WithStyles(Typography)
-        align="right"
-        variant="caption"
       >
         table
       </WithStyles(Typography)>
