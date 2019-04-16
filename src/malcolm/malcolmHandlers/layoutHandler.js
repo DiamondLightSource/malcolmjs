@@ -10,10 +10,17 @@ const layoutRouteSelected = (blocks, path, dispatch) => {
   if (layoutAttribute && layoutAttribute.calculated.layout) {
     layoutAttribute.calculated.layout.blocks
       .filter(b => b.visible)
-      .forEach(block => {
+      .forEach((block, i) => {
         if (!blocks[block.mri]) {
           dispatch(malcolmNewBlockAction(block.mri, false, false));
-          dispatch(malcolmSubscribeAction([block.mri, 'meta']));
+          dispatch(
+            malcolmSubscribeAction([block.mri, 'meta'], true, msg => {
+              layoutAttribute.calculated.children[
+                layoutAttribute.raw.value.name[i]
+              ].label =
+                msg.attributeDelta.label;
+            })
+          );
         }
       });
   }
@@ -28,7 +35,14 @@ const layoutAttributeReceived = (path, getState, dispatch) => {
         const blockName = layoutAttribute.raw.value.mri[i];
         if (!blocks[blockName]) {
           dispatch(malcolmNewBlockAction(blockName, false, false));
-          dispatch(malcolmSubscribeAction([blockName, 'meta']));
+          dispatch(
+            malcolmSubscribeAction([blockName, 'meta'], true, msg => {
+              layoutAttribute.calculated.children[
+                layoutAttribute.raw.value.name[i]
+              ].label =
+                msg.attributeDelta.label;
+            })
+          );
         }
       }
     });

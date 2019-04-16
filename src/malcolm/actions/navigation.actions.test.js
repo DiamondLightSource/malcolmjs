@@ -88,9 +88,13 @@ describe('subscribeToChildren', () => {
     expect(dispatches[2]).toEqual(
       malcolmNewBlockAction('PANDA:Test3', false, false)
     );
+    expect(dispatches[1].payload.callback).toBeDefined();
+    delete dispatches[1].payload.callback;
     expect(dispatches[1]).toEqual(
       malcolmSubscribeAction(['PANDA:Test1', 'meta'])
     );
+    expect(dispatches[3].payload.callback).toBeDefined();
+    delete dispatches[3].payload.callback;
     expect(dispatches[3]).toEqual(
       malcolmSubscribeAction(['PANDA:Test3', 'meta'])
     );

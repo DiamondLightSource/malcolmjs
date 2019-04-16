@@ -16,13 +16,11 @@ describe('NavControl', () => {
 
     nav = {
       path: 'PANDA:mri',
-      children: ['layout', 'table'],
-      childrenLabels: ['layout', 'table'],
+      children: { layout: { label: 'layout' }, table: { label: 'table' } },
       label: 'PANDA',
       parent: {
         basePath: '/',
-        children: ['PANDA:mri'],
-        childrenLabels: ['PANDA'],
+        children: { 'PANDA:mri': { label: 'PANDA' } },
       },
     };
   });
@@ -132,7 +130,7 @@ describe('NavControl', () => {
   });
 
   it('renders correctly when nav element is errored but has valid siblings', () => {
-    nav.label = 'NotPANDA';
+    nav.path = 'NotPANDA';
     const wrapper = shallow(
       <NavControl nav={nav} navigateToChild={() => {}} />
     );
@@ -140,9 +138,8 @@ describe('NavControl', () => {
   });
 
   it('renders correctly when nav element is errored and has no siblings', () => {
-    nav.label = 'NotPANDA';
+    nav.path = 'NotPANDA';
     nav.parent.children = undefined;
-    nav.parent.childrenLabels = undefined;
     const wrapper = shallow(
       <NavControl nav={nav} navigateToChild={() => {}} />
     );

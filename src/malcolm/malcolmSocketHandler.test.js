@@ -28,8 +28,12 @@ describe('malcolm socket handler', () => {
     dispatch: action => {
       if (action.type === MalcolmRootBlockMeta) {
         state.malcolm.blocks['.blocks'] = {
-          children: [...action.payload.blocks],
+          children: {},
         };
+        action.payload.blocks.mri.forEach((mri, ind) => {
+          state.malcolm.blocks['.blocks'].children[mri] =
+            action.payload.blocks.label[ind];
+        });
         dispatches.push(action);
       } else if (typeof action === 'function') {
         action(a => dispatches.push(a), () => state);
@@ -400,7 +404,10 @@ describe('malcolm socket handler', () => {
           data: {
             typeid: 'malcolm:core/Update:1.0',
             id: 4,
-            value: ['block1', 'block2', 'block3'],
+            value: {
+              mri: ['block1', 'block2', 'block3'],
+              label: ['1st block', '2nd block', '3rd block'],
+            },
           },
           originalRequest: state.malcolm.messagesInFlight[4],
         },
@@ -409,11 +416,10 @@ describe('malcolm socket handler', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual(MalcolmRootBlockMeta);
-    expect(dispatches[0].payload.blocks).toEqual([
-      'block1',
-      'block2',
-      'block3',
-    ]);
+    expect(dispatches[0].payload.blocks).toEqual({
+      label: ['1st block', '2nd block', '3rd block'],
+      mri: ['block1', 'block2', 'block3'],
+    });
   });
 
   it('resubscribes to existing blocks on .blocks update', () => {
@@ -426,7 +432,10 @@ describe('malcolm socket handler', () => {
           data: {
             typeid: 'malcolm:core/Update:1.0',
             id: 4,
-            value: ['block1', 'block2', 'block3'],
+            value: {
+              mri: ['block1', 'block2', 'block3'],
+              label: ['1st block', '2nd block', '3rd block'],
+            },
           },
           originalRequest: state.malcolm.messagesInFlight[4],
         },

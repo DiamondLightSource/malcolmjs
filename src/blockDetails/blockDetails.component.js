@@ -209,7 +209,7 @@ const mapStateToProps = (state, ownProps, memory) => {
   stateMemory.orphans = stateMemory.orphans || [];
   let block;
   const blockList = state.malcolm.blocks['.blocks']
-    ? state.malcolm.blocks['.blocks'].children
+    ? Object.keys(state.malcolm.blocks['.blocks'].children)
     : [];
   if (ownProps.parent) {
     block = state.malcolm.parentBlock

@@ -183,14 +183,23 @@ describe('attribute reducer', () => {
   it('updates children for layout attribute', () => {
     state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
-    expect(state.blocks.block1.attributes[0].calculated.children).toHaveLength(
-      3
-    );
-    expect(state.blocks.block1.attributes[0].calculated.children).toEqual([
-      'block2',
-      'block3',
-      'block4',
-    ]);
+    expect(
+      Object.keys(state.blocks.block1.attributes[0].calculated.children)
+    ).toHaveLength(3);
+    expect(state.blocks.block1.attributes[0].calculated.children).toEqual({
+      block2: {
+        label: 'block2',
+        mri: 'test:block2',
+      },
+      block3: {
+        label: 'block3',
+        mri: 'test:block3',
+      },
+      block4: {
+        label: 'block4',
+        mri: 'test:block4',
+      },
+    });
   });
 
   it('returns state if it is not a delta', () => {

@@ -37,7 +37,12 @@ export const updateAttributeChildren = attribute => {
       updatedAttribute.raw.meta.elements &&
       updatedAttribute.raw.meta.elements.name
     ) {
-      updatedAttribute.calculated.children = updatedAttribute.raw.value.name;
+      updatedAttribute.raw.value.name.forEach((name, index) => {
+        updatedAttribute.calculated.children[name] = {
+          label: name,
+          mri: updatedAttribute.raw.value.mri[index],
+        };
+      });
     }
   }
 
@@ -447,6 +452,7 @@ export function updateAttribute(
             ...payload.calculated,
             loading: false,
             path,
+            parent: state.blocks[blockName],
           },
         };
         if (attribute.raw.alarm) {
@@ -457,6 +463,11 @@ export function updateAttribute(
                 ? attribute.raw.alarm.severity
                 : null,
           };
+        }
+
+        if (payload.raw.meta && payload.raw.meta.label) {
+          state.blocks[blockName].children[attribute.calculated.name].label =
+            payload.raw.meta.label;
         }
         if (payload.raw.timeStamp) {
           attribute.calculated.timeStamp = new Date(

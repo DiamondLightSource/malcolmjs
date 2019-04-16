@@ -70,7 +70,7 @@ export const addBlockArchive = (mri, attributes, malcolmState) => {
   };
 };
 
-export const addBlock = (name, attributes, malcolmState, children = []) => {
+export const addBlock = (name, attributes, malcolmState, children = {}) => {
   const updatedState = malcolmState;
   updatedState.blocks[name] = {
     typeid: 'malcolm:core/BlockMeta:1.0',
@@ -115,7 +115,7 @@ export const buildAttribute = (
   value,
   alarm = 0,
   meta = buildMeta(),
-  children = [],
+  children = {},
   loading = false
 ) => ({
   // the data coming back from the server is always stored in raw

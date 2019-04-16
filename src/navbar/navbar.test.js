@@ -35,26 +35,25 @@ describe('NavBar', () => {
             {
               path: 'PANDA',
               basePath: '/PANDA/',
-              children: ['layout'],
-              childrenLabels: ['layout'],
+              children: { layout: { label: 'layout' } },
             },
             {
               path: 'layout',
-              children: ['SEQ1'],
-              childrenLabels: ['Test layout child #1'],
+              children: { SEQ1: { label: 'Test layout child #1' } },
               basePath: '/PANDA/layout/',
             },
             {
               path: 'PANDA:SEQ1',
-              children: ['Val'],
-              childrenLabels: ['Value'],
+              children: { Val: { label: 'Value' } },
               basePath: '/PANDA/layout/SEQ1/',
             },
           ],
           rootNav: {
             path: '',
-            children: ['PANDA', 'PANDA:SEQ1'],
-            childrenLabels: ['PANDA', 'PANDA:SEQ1'],
+            children: {
+              PANDA: { label: 'PANDA' },
+              'PANDA:SEQ1': { label: 'PANDA:SEQ1' },
+            },
             basePath: '/',
           },
         },

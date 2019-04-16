@@ -41,15 +41,13 @@ class NavControl extends Component {
   render() {
     const { classes, nav, navigateToChild } = this.props;
     const { anchorEl } = this.state;
-    const siblings = nav.parent ? nav.parent.children : [];
-    const siblingLabels = nav.parent ? nav.parent.childrenLabels : [];
+    const siblings = nav.parent ? nav.parent.children : {};
     if (this.props.isFinalNav) {
       return (
         <div className={classes.container}>
           <NavSelector
             handleClick={this.handleClick}
             childElements={nav.children}
-            childElementLabels={nav.childrenLabels}
             anchorEl={anchorEl}
             handleClose={this.handleClose}
             navigateToChild={navigateToChild}
@@ -64,7 +62,7 @@ class NavControl extends Component {
         <Typography
           className={classes.currentLink}
           color={
-            (siblingLabels && siblingLabels.includes(nav.label)) ||
+            (siblings && Object.keys(siblings).includes(nav.path)) ||
             [NavTypes.Info, NavTypes.Palette].includes(nav.navType)
               ? 'default'
               : 'error'
@@ -72,13 +70,12 @@ class NavControl extends Component {
           variant="subheading"
           onClick={() => navigateToChild(nav.path)}
         >
-          {nav.label}
+          {nav.path}
         </Typography>
         <NavSelector
           currentPath={nav.path}
           handleClick={this.handleClick}
           childElements={siblings}
-          childElementLabels={siblingLabels}
           anchorEl={anchorEl}
           handleClose={this.handleClose}
           navigateToChild={navigateToChild}
@@ -94,7 +91,7 @@ export const NavSelector = props => (
   <div style={{ paddingRight: '12px' }}>
     <IconButton
       onClick={props.handleClick}
-      disabled={props.childElements.length === 0}
+      disabled={Object.keys(props.childElements).length === 0}
       data-cy="navmenu"
       style={{ height: '32px', width: '32px', padding: 0 }}
     >
@@ -107,7 +104,7 @@ export const NavSelector = props => (
       onClose={props.handleClose}
       style={{ color: props.theme.palette.text.primary }}
     >
-      {props.childElements.map((child, i) => (
+      {Object.keys(props.childElements).map(child => (
         <MenuItem
           selected={child === props.currentPath}
           key={child}
@@ -116,7 +113,12 @@ export const NavSelector = props => (
             props.navigateToChild(child);
           }}
         >
-          {props.childElementLabels[i]}
+          <Typography align="left" style={{ paddingRight: '4px' }}>
+            {`${child} - `}
+          </Typography>
+          <Typography variant="caption" align="right">
+            {props.childElements[child].label}
+          </Typography>
         </MenuItem>
       ))}
     </Menu>
@@ -149,8 +151,7 @@ NavControl.defaultProps = {
 
 NavSelector.propTypes = {
   currentPath: PropTypes.string,
-  childElements: PropTypes.arrayOf(PropTypes.string).isRequired,
-  childElementLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  childElements: PropTypes.shape({}).isRequired,
   handleClick: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   anchorEl: PropTypes.string.isRequired,
