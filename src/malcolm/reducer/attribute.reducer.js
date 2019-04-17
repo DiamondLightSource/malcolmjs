@@ -34,18 +34,16 @@ export const updateAttributeChildren = (attribute, blockList) => {
   if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
     if (
-      updatedAttribute.raw.meta.elements &&
-      updatedAttribute.raw.meta.elements.name
+      blockUtils.attributeHasTag(updatedAttribute, 'widget:flowgraph') &&
+      updatedAttribute.raw.value
     ) {
       updatedAttribute.raw.value.name.forEach((name, index) => {
-        if (updatedAttribute.raw.value.mri) {
-          updatedAttribute.calculated.children[name] = {
-            label: blockList[updatedAttribute.raw.value.mri[index]]
-              ? blockList[updatedAttribute.raw.value.mri[index]].label
-              : 'ERROR: block not in global block list',
-            mri: updatedAttribute.raw.value.mri[index],
-          };
-        }
+        updatedAttribute.calculated.children[name] = {
+          label: blockList[updatedAttribute.raw.value.mri[index]]
+            ? blockList[updatedAttribute.raw.value.mri[index]].label
+            : 'ERROR: block not in global block list',
+          mri: updatedAttribute.raw.value.mri[index],
+        };
       });
     }
   }
