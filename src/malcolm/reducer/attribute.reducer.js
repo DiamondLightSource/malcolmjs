@@ -324,7 +324,7 @@ export const presetMethodInputs = attribute => {
   return updatedAttribute;
 };
 
-const checkForSpecialCases = (inputAttribute, blockList) => {
+const checkForSpecialCases = (inputAttribute, blockList = {}) => {
   let attribute = checkForFlowGraph(inputAttribute);
   attribute = updateAttributeChildren(attribute, blockList);
   attribute = hasSubElements(attribute);
@@ -607,7 +607,10 @@ export function revertLocalState(oldState, payload) {
         },
       };
 
-      attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+      attributes[matchingAttributeIndex] = checkForSpecialCases(
+        attribute,
+        state.blocks['.blocks'].children
+      );
       // TODO: call processLayout and updateLayoutAndEngine here (if required)
     }
     const blocks = { ...state.blocks };
