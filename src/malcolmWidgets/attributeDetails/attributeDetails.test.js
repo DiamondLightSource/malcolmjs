@@ -10,7 +10,7 @@ jest.mock('../../malcolm/actions/navigation.actions');
 
 jest.useFakeTimers();
 
-describe('AttributeDetails', () => {
+describe('connectedAttributeDetails', () => {
   let shallow;
   let mockStore;
   let state;
@@ -34,28 +34,49 @@ describe('AttributeDetails', () => {
           block1: {
             attributes: [],
           },
+          block2: {
+            attributes: [],
+          },
         },
       },
     };
   });
 
-  const buildAttribute = () => ({
+  const buildAttribute = (number = 1, linkTo = undefined) => ({
     calculated: {
-      name: 'Attribute1',
+      name: `Attribute${number}`,
     },
     raw: {
       alarm: {
         severity: 0,
       },
       meta: {
-        label: 'Attribute 1',
-        tags: ['widget:NOTAWIDGET'],
+        label: `Attribute ${number}`,
+        tags: [
+          'widget:NOTAWIDGET',
+          linkTo !== undefined ? `linkedvalue:${linkTo[1]}:${linkTo[0]}` : '',
+        ],
       },
     },
   });
 
   it('renders correctly', () => {
     const attribute = buildAttribute();
+
+    state.malcolm.blocks.block1.attributes.push(attribute);
+
+    const wrapper = shallow(
+      <AttributeDetails
+        blockName="block1"
+        attributeName="Attribute1"
+        store={mockStore}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders linked attributes correctly', () => {
+    const attribute = buildAttribute(1, ['block2', 'Attribute1']);
 
     state.malcolm.blocks.block1.attributes.push(attribute);
 

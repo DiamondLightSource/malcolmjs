@@ -128,6 +128,9 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
         .join('/')}/${attributeName}/.info`;
       goTo(newPath);
     }
+  } else {
+    const newPath = `/gui/${blockMri}/${attributeName}/.info`;
+    goTo(newPath);
   }
 };
 
