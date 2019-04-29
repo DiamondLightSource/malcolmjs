@@ -16,7 +16,8 @@ import {
 } from '@material-ui/core/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
+import { unregister } from './registerServiceWorker';
 import AppReducer from './AppReducer';
 import AppRouter from './AppRouter';
 import './App.css';
@@ -106,4 +107,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-registerServiceWorker();
+// Disable serviceWorker & fancy caching behaviour for now, causes issues since
+// doesn't cache redirect and seems to completely miss updates sometimes
+// registerServiceWorker();
+unregister();
