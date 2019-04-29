@@ -5,108 +5,10 @@ import 'codemirror/mode/yaml/yaml.js';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/yaml-hint.js';
 
-var yamltext = `# Define the generic Producer, this can be overridden with a
-# site specific .local.yaml file
-type: pvi.producers.AsynProducer
-overridden_by: $(yamlname).local.yaml
-# Define the arguments that the template takes
-takes:
-  - type: builtin.takes.string
-    name: P
-    description: Record prefix part 1
-    default: ""
-    
-  - type: builtin.takes.string
-    name: R
+import lookupTable from '../../lookup_table_data.json';
 
-  - type: builtin.takes.int
-    name: THING
-    default: 41
-
-  - type: builtin.takes.string
-    name: PORT
-    description: Asyn port name
-
-`;
-
-var dummyValidatedObject = {
-
-    valueType: "ObjectArrayMeta",
-    type: {
-
-        "pvi.producers.AsynProducer": {
-
-            valueType: "ObjectMeta",
-            attributes: {    
-                overridden_by: {
-                    valueType: "StringMeta"
-                },
-
-                takes: {
-                    valueType: "ObjectArrayMeta",
-                    type: {
-                        'builtin.takes.string': {
-                            valueType: "ObjectMeta",
-                            attributes: {
-                                name: {
-                                    valueType: "StringMeta"
-                                },
-
-                                description: {
-                                    valueType: "StringMeta"
-                                },
-
-                                default: {
-                                    valueType: "StringMeta"
-                                }
-                            }
-
-                        },
-
-                        'builtin.takes.int': {
-                            valueType: "ObjectMeta",
-                            attributes: {
-                                name: {
-                                    valueType: "StringMeta"
-                                },
-
-                                description: {
-                                    valueType: "StringMeta"
-                                },
-
-                                default: {
-                                    valueType: "IntMeta"
-                                }
-                            }
-
-                        },
-                    }
-                },
-
-
-                pv_prefix: {
-                    valueType: "StringMeta"
-                },
-
-                asyn_port: {
-                    valueType: "StringMeta"
-                },
-
-                template_output: {
-                    valueType: "StringMeta"
-                },
-
-                opi_output: {
-                    valueType: "StringMeta"
-                },
-
-                adl_output: {
-                    valueType: "StringMeta"
-                }
-            }
-        }            
-    }
-};
+var yamltext = `typeid: scanpointgenerator:generator/CompoundGenerator:1.0
+`
 
 class App extends React.Component {
 
@@ -128,7 +30,7 @@ class App extends React.Component {
                 "Ctrl-Space": "autocomplete",
                 "Tab": () => {this.instance.execCommand("insertSoftTab")}
             },
-            hintOptions: {schemaInfo: dummyValidatedObject},
+            hintOptions: {schemaInfo: lookupTable},
             tabSize: 2
         }
 

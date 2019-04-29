@@ -1,0 +1,2142 @@
+{
+
+    "scanpointgenerator:generator/ArrayGenerator:1.0": {
+
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Units"
+          }, 
+          "points": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The array positions", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Points", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:checkbox"
+           ], 
+           "writeable": true, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "points"
+         ]
+        }, 
+        "defaults": {
+         "alternate": false
+        }, 
+        "description": "Generate points from a given list of positions", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/ArrayGenerator:1.0", 
+         "typeid:scanpointgenerator:generator/ArrayGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Units"
+          }, 
+          "points": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The array positions", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Points", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:led"
+           ], 
+           "writeable": false, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "points", 
+          "alternate"
+         ]
+        }
+       },
+
+    "scanpointgenerator:generator/LineGenerator:1.0": {
+
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Units"
+          }, 
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The first position to be generated. e.g. 1.0 or [1.0, 2.0]", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "stop": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The final position to be generated. e.g. 5.0 or [5.0, 10.0]", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Stop", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:checkbox"
+           ], 
+           "writeable": true, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "start", 
+          "stop", 
+          "size"
+         ]
+        }, 
+        "defaults": {
+         "alternate": false
+        }, 
+        "description": "Generate a line of equally spaced N-dimensional points", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/LineGenerator:1.0", 
+         "typeid:scanpointgenerator:generator/LineGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Units"
+          }, 
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The first position to be generated. e.g. 1.0 or [1.0, 2.0]", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "stop": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The final position to be generated. e.g. 5.0 or [5.0, 10.0]", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Stop", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:led"
+           ], 
+           "writeable": false, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "start", 
+          "stop", 
+          "size", 
+          "alternate"
+         ]
+        }
+       },
+
+
+    "scanpointgenerator:generator/LissajousGenerator:1.0": {
+
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Units"
+          }, 
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of the lissajous curve", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "span": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The [height, width] of the curve", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Span", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "lobes": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "Number of x-direction lobes for curve; will have lobes+1 y-direction lobes", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Lobes", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:checkbox"
+           ], 
+           "writeable": true, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "centre", 
+          "span", 
+          "lobes"
+         ]
+        }, 
+        "defaults": {
+         "alternate": false
+        }, 
+        "description": "Generate the points of a Lissajous curve", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/LissajousGenerator:1.0", 
+         "typeid:scanpointgenerator:generator/LissajousGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Units"
+          }, 
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of the lissajous curve", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "span": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The [height, width] of the curve", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Span", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "lobes": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "Number of x-direction lobes for curve; will have lobes+1 y-direction lobes", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Lobes", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:led"
+           ], 
+           "writeable": false, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "centre", 
+          "span", 
+          "lobes", 
+          "alternate"
+         ]
+        }
+       },
+
+    "scanpointgenerator:generator/SpiralGenerator:1.0": {
+
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Units"
+          }, 
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of the lissajous curve", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radius": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Maximum radius of spiral", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Radius", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "scale": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Gap between spiral arcs; higher scale gives fewer points for same radius", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Scale", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:checkbox"
+           ], 
+           "writeable": true, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "centre", 
+          "radius"
+         ]
+        }, 
+        "defaults": {
+         "scale": 1.0, 
+         "alternate": false
+        }, 
+        "description": "Generate the points of an Archimedean spiral", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/SpiralGenerator:1.0", 
+         "typeid:scanpointgenerator:generator/SpiralGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "List of scannable names contributed to each Point", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Axes"
+          }, 
+          "units": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "The units that the scannables are demanded in", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Units"
+          }, 
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of the lissajous curve", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radius": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Maximum radius of spiral", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Radius", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "scale": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Gap between spiral arcs; higher scale gives fewer points for same radius", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Scale", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "alternate": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Whether to reverse on each alternate run of the generator", 
+           "tags": [
+            "widget:led"
+           ], 
+           "writeable": false, 
+           "label": "Alternate"
+          }
+         }, 
+         "required": [
+          "axes", 
+          "units", 
+          "centre", 
+          "radius", 
+          "scale", 
+          "alternate"
+         ]
+        }
+       },
+
+    "scanpointgenerator:generator/StaticPointGenerator:1.0": {
+
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "size"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "Generate 'empty' points with no axis information", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/StaticPointGenerator:1.0", 
+         "typeid:scanpointgenerator:generator/StaticPointGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "size": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "int64", 
+           "description": "The number of Points that this generator will produce", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Size", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 0, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "size"
+         ]
+        }
+       },
+
+    "scanpointgenerator:generator/CompoundGenerator:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "generators": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:generator/ArrayGenerator:1.0", 
+            "scanpointgenerator:generator/LineGenerator:1.0", 
+            "scanpointgenerator:generator/LissajousGenerator:1.0", 
+            "scanpointgenerator:generator/SpiralGenerator:1.0", 
+            "scanpointgenerator:generator/StaticPointGenerator:1.0"
+           ], 
+           "description": "List of Generators to nest", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": true, 
+           "label": "Generators"
+          }, 
+          "excluders": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:excluder/ROIExcluder:1.0"
+           ], 
+           "description": "List of Excluders to filter points by", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": true, 
+           "label": "Excluders"
+          }, 
+          "mutators": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [], 
+           "description": "List of Mutators to apply to each point", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": true, 
+           "label": "Mutators"
+          }, 
+          "duration": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Point durations in seconds (-1 for variable)", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Duration", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "continuous": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Make points continuous (set upper/lower bounds)", 
+           "tags": [
+            "widget:checkbox"
+           ], 
+           "writeable": true, 
+           "label": "Continuous"
+          }
+         }, 
+         "required": [
+          "generators", 
+          "excluders", 
+          "mutators"
+         ]
+        }, 
+        "defaults": {
+         "duration": -1.0, 
+         "continuous": true
+        }, 
+        "description": "Nest N generators, apply exclusion regions to relevant generator pairs\n    and apply any mutators before yielding points", 
+        "tags": [
+         "typeid:scanpointgenerator:generator/CompoundGenerator:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "generators": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:generator/ArrayGenerator:1.0", 
+            "scanpointgenerator:generator/LineGenerator:1.0", 
+            "scanpointgenerator:generator/LissajousGenerator:1.0", 
+            "scanpointgenerator:generator/SpiralGenerator:1.0", 
+            "scanpointgenerator:generator/StaticPointGenerator:1.0"
+           ], 
+           "description": "List of Generators to nest", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": false, 
+           "label": "Generators"
+          }, 
+          "excluders": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:excluder/ROIExcluder:1.0"
+           ], 
+           "description": "List of Excluders to filter points by", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": false, 
+           "label": "Excluders"
+          }, 
+          "mutators": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [], 
+           "description": "List of Mutators to apply to each point", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": false, 
+           "label": "Mutators"
+          }, 
+          "duration": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "Point durations in seconds (-1 for variable)", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Duration", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "continuous": {
+           "typeid": "malcolm:core/BooleanMeta:1.0", 
+           "description": "Make points continuous (set upper/lower bounds)", 
+           "tags": [
+            "widget:led"
+           ], 
+           "writeable": false, 
+           "label": "Continuous"
+          }
+         }, 
+         "required": [
+          "generators", 
+          "excluders", 
+          "mutators", 
+          "duration", 
+          "continuous"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/CircularROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of circle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radius": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The radius of the circle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Radius", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "radius"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/CircularROI:1.0", 
+         "typeid:scanpointgenerator:roi/CircularROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of circle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radius": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The radius of the circle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Radius", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "radius"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/EllipticalROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of ellipse", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "semiaxes": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The semiaxes of ellipse", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Semiaxes", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the ellipse", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "semiaxes"
+         ]
+        }, 
+        "defaults": {
+         "angle": 0.0
+        }, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/EllipticalROI:1.0", 
+         "typeid:scanpointgenerator:roi/EllipticalROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of ellipse", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "semiaxes": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The semiaxes of ellipse", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Semiaxes", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the ellipse", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "semiaxes", 
+          "angle"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/LinearROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start of the line", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "length": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The length of the line", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Length", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the line", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "length", 
+          "angle"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/LinearROI:1.0", 
+         "typeid:scanpointgenerator:roi/LinearROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start of the line", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "length": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The length of the line", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Length", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the line", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "length", 
+          "angle"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/PointROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "point": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The point", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Point", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "point"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/PointROI:1.0", 
+         "typeid:scanpointgenerator:roi/PointROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "point": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The point", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Point", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "point"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/PolygonalROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "points_x": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "x positions for polygon vertices", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Points x", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "points_y": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "y positions for polygon vertices", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Points y", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "points_x", 
+          "points_y"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/PolygonalROI:1.0", 
+         "typeid:scanpointgenerator:roi/PolygonalROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "points_x": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "x positions for polygon vertices", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Points x", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "points_y": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "y positions for polygon vertices", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Points y", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "points_x", 
+          "points_y"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/RectangularROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start point of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "width": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The width of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Width", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "height": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The height of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Height", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "width", 
+          "height"
+         ]
+        }, 
+        "defaults": {
+         "angle": 0.0
+        }, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/RectangularROI:1.0", 
+         "typeid:scanpointgenerator:roi/RectangularROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start point of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "width": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The width of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Width", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "height": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The height of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Height", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "width", 
+          "height", 
+          "angle"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/RectangularROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start point of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "width": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The width of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Width", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "height": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The height of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Height", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the rectangle", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "width", 
+          "height"
+         ]
+        }, 
+        "defaults": {
+         "angle": 0.0
+        }, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/RectangularROI:1.0", 
+         "typeid:scanpointgenerator:roi/RectangularROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "start": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The start point of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Start", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "width": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The width of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Width", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "height": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The height of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Height", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angle": {
+           "typeid": "malcolm:core/NumberMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angle of the rectangle", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Angle", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "start", 
+          "width", 
+          "height", 
+          "angle"
+         ]
+        }
+       },
+
+    "scanpointgenerator:roi/SectorROI:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of sector", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radii": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The radii of sector", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Radii", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angles": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angles of sector", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Angles", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "radii", 
+          "angles"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "", 
+        "tags": [
+         "typeid:scanpointgenerator:roi/SectorROI:1.0", 
+         "typeid:scanpointgenerator:roi/SectorROI:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "centre": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The centre of sector", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Centre", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "radii": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The radii of sector", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Radii", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }, 
+          "angles": {
+           "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+           "dtype": "float64", 
+           "description": "The angles of sector", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Angles", 
+           "display": {
+            "typeid": "display_t", 
+            "limitLow": 0.0, 
+            "limitHigh": 0.0, 
+            "description": "", 
+            "precision": 8, 
+            "units": ""
+           }
+          }
+         }, 
+         "required": [
+          "centre", 
+          "radii", 
+          "angles"
+         ]
+        }
+       },
+
+    "scanpointgenerator:excluder/ROIExcluder:1.0": {
+        "typeid": "malcolm:core/MethodMeta:1.1", 
+        "takes": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "rois": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:roi/CircularROI:1.0", 
+            "scanpointgenerator:roi/EllipticalROI:1.0", 
+            "scanpointgenerator:roi/LinearROI:1.0", 
+            "scanpointgenerator:roi/PointROI:1.0", 
+            "scanpointgenerator:roi/PolygonalROI:1.0", 
+            "scanpointgenerator:roi/RectangularROI:1.0", 
+            "scanpointgenerator:roi/SectorROI:1.0"
+           ], 
+           "description": "List of regions of interest", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": true, 
+           "label": "Rois"
+          }, 
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "Names of axes to exclude points from", 
+           "tags": [
+            "widget:textinput"
+           ], 
+           "writeable": true, 
+           "label": "Axes"
+          }
+         }, 
+         "required": [
+          "rois", 
+          "axes"
+         ]
+        }, 
+        "defaults": {}, 
+        "description": "A class to exclude points outside of regions of interest.", 
+        "tags": [
+         "typeid:scanpointgenerator:excluder/ROIExcluder:1.0", 
+         "typeid:scanpointgenerator:excluder/ROIExcluder:1.0"
+        ], 
+        "writeable": false, 
+        "label": "", 
+        "returns": {
+         "typeid": "malcolm:core/MapMeta:1.0", 
+         "elements": {
+          "rois": {
+           "typeid": "malcolm:core/ObjectArrayMeta:1.0", 
+           "factory": "MyFactory", 
+           "typeids": [
+            "scanpointgenerator:roi/CircularROI:1.0", 
+            "scanpointgenerator:roi/EllipticalROI:1.0", 
+            "scanpointgenerator:roi/LinearROI:1.0", 
+            "scanpointgenerator:roi/PointROI:1.0", 
+            "scanpointgenerator:roi/PolygonalROI:1.0", 
+            "scanpointgenerator:roi/RectangularROI:1.0", 
+            "scanpointgenerator:roi/SectorROI:1.0"
+           ], 
+           "description": "List of regions of interest", 
+           "tags": [
+            "widget:tree"
+           ], 
+           "writeable": false, 
+           "label": "Rois"
+          }, 
+          "axes": {
+           "typeid": "malcolm:core/StringArrayMeta:1.0", 
+           "description": "Names of axes to exclude points from", 
+           "tags": [
+            "widget:textupdate"
+           ], 
+           "writeable": false, 
+           "label": "Axes"
+          }
+         }, 
+         "required": [
+          "rois", 
+          "axes"
+         ]
+        }
+       }
+
+}
