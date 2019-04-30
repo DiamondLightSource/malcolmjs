@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "codemirror": "^5.44.0",
+    "js-yaml": "^3.13.1",
     "react": "^15.5.4",
     "react-codemirror2": "^5.1.0",
     "react-dom": "^15.5.4",

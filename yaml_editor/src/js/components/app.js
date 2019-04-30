@@ -4,6 +4,8 @@ import {Controlled as CodeMirror} from 'react-codemirror2';
 import 'codemirror/mode/yaml/yaml.js';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/yaml-hint.js';
+import 'codemirror/addon/lint/lint.js';
+import 'codemirror/addon/lint/yaml-lint.js';
 
 import lookupTable from '../../lookup_table_data.json';
 
@@ -31,7 +33,9 @@ class App extends React.Component {
                 "Tab": () => {this.instance.execCommand("insertSoftTab")}
             },
             hintOptions: {schemaInfo: lookupTable},
-            tabSize: 2
+            tabSize: 2,
+            gutters: ["CodeMirror-lint-markers"],
+            lint: true
         }
 
         return(
