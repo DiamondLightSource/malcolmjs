@@ -17,7 +17,8 @@ export const rowIsDifferent = (attribute, row) =>
     ? attribute.localState.labels.some(
         label =>
           `${attribute.localState.value[row][label]}` !==
-          `${attribute.raw.value[label][row]}`
+            `${attribute.raw.value[label][row]}` &&
+          attribute.raw.meta.elements[label].writeable
       )
     : attribute.localState.value[row] !== attribute.raw.value[row];
 
@@ -46,9 +47,12 @@ export const shouldClearDirtyFlag = inputAttribute => {
         _isChanged: rowIsDifferent(attribute, index),
       };
     });
-    attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
-      row => row._dirty || row._isChanged
-    );
+    attribute.localState.flags.table.dirty =
+      attribute.localState.flags.rows.some(
+        row => row._dirty || row._isChanged
+      ) ||
+      attribute.localState.value.length !==
+        attribute.raw.value[attribute.localState.labels[0]].length;
     attribute.calculated.dirty = attribute.localState.flags.table.dirty;
     attribute.calculated.alarms.dirty = attribute.localState.flags.table.dirty
       ? AlarmStates.DIRTY
@@ -77,6 +81,7 @@ export const createLocalState = oldAttribute => {
         });
         return dataRow;
       }),
+      userChanges: {},
       labels,
       flags: {
         columns,
@@ -85,6 +90,11 @@ export const createLocalState = oldAttribute => {
           dirty: false,
           fresh: true,
           timeStamp: deepCopy(attribute.raw.timeStamp),
+          extendable:
+            attribute.raw.meta.writeable &&
+            !labels.some(
+              label => !attribute.raw.meta.elements[label].writeable
+            ),
         },
       },
     };
@@ -181,18 +191,25 @@ export const updateTableLocal = (state, payload) => {
       attribute.localState.value[moveTo] = rowValue;
       attribute.localState.flags.rows[payload.row] = {
         ...swapWithFlags,
-        _isChanged: true,
+        _dirty: true,
       };
       attribute.localState.flags.rows[moveTo] = {
         ...rowFlags,
-        _isChanged: true,
+        _dirty: true,
       };
     } else {
       attribute.localState.value[payload.row] = payload.value;
-
+      const _isChanged = rowIsDifferent(attribute, payload.row);
+      if (!attribute.localState.flags.table.extendable) {
+        if (_isChanged) {
+          attribute.localState.userChanges[payload.row] = payload.value;
+        } else if (attribute.localState.userChanges[payload.row]) {
+          delete attribute.localState.userChanges[payload.row];
+        }
+      }
       attribute.localState.flags.rows[payload.row] = {
         ...attribute.localState.flags.rows[payload.row],
-        _isChanged: rowIsDifferent(attribute, [payload.row]),
+        _isChanged,
       };
     }
     attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(

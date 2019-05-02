@@ -495,6 +495,7 @@ exports[`virtualized table widget row renders correctly 1`] = `
         ],
         "table": Object {
           "dirty": false,
+          "extendable": true,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,
@@ -549,6 +550,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
         ],
         "table": Object {
           "dirty": false,
+          "extendable": undefined,
           "fresh": true,
           "timeStamp": undefined,
         },
@@ -610,6 +612,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
           ],
           "table": Object {
             "dirty": false,
+            "extendable": undefined,
             "fresh": true,
             "timeStamp": undefined,
           },
@@ -2228,6 +2231,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
         ],
         "table": Object {
           "dirty": false,
+          "extendable": true,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,
@@ -2441,6 +2445,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
         "typeid": "malcolm:core/TableMeta:1.0",
         "writeable": true,
       },
+      "userChanges": Object {},
       "value": Array [
         Object {
           "outa1": true,
@@ -2941,6 +2946,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -3154,6 +3160,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,

@@ -108,6 +108,7 @@ ReactDOM.render(
 );
 
 // Disable serviceWorker & fancy caching behaviour for now, causes issues since
-// doesn't cache redirect and seems to completely miss updates sometimes
+// doesn't cache redirect and seems to completely miss updates sometimes.
+// N.B. requires HTTPS connection to work on anything other than localhost
 // registerServiceWorker();
 unregister();

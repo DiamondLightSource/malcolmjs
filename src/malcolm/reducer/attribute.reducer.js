@@ -251,8 +251,28 @@ export const updateLocalState = attribute => {
         updatedAttribute.calculated.forceUpdate
       ) {
         updatedAttribute = createLocalState(updatedAttribute);
+        updatedAttribute.calculated.forceUpdate = false;
       } else {
         updatedAttribute.localState.flags.table.fresh = false;
+        if (
+          !isArrayType(attribute.raw.meta) &&
+          !updatedAttribute.localState.flags.table.extendable
+        ) {
+          updatedAttribute.localState.value.forEach((row, index) => {
+            updatedAttribute.localState.labels.forEach(label => {
+              const rowCopy = row;
+              if (
+                !(
+                  updatedAttribute.localState.flags.rows[index]._dirty ||
+                  updatedAttribute.localState.flags.rows[index]._isChanged
+                ) ||
+                !updatedAttribute.raw.meta.elements[label].writeable
+              ) {
+                rowCopy[label] = updatedAttribute.raw.value[label][index];
+              }
+            });
+          });
+        }
       }
     }
   }

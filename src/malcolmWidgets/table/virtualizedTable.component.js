@@ -106,6 +106,18 @@ export const getTableState = props => {
     props.localState === undefined
       ? props.attribute.raw.meta
       : props.localState.meta;
+  if (isArray) {
+    tableState.flags.table = tableState.flags.table || {};
+    tableState.flags.table.extendable = tableState.meta.writeable;
+  } else {
+    tableState.flags.table.extendable =
+      tableState.flags.table.extendable === undefined
+        ? tableState.meta.writeable &&
+          !tableState.columnLabels.some(
+            label => !tableState.meta.elements[label].writeable
+          )
+        : tableState.flags.table.extendable;
+  }
   return tableState;
 };
 
@@ -407,7 +419,7 @@ const WidgetTable = props => {
           }}
         </AutoSizer>
       </div>
-      {tableState.meta.writeable ? (
+      {tableState.flags.table.extendable ? (
         <Tooltip id="1" title="Add row to bottom of table" placement="top">
           <Button
             variant="fab"

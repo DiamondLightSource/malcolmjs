@@ -25,11 +25,19 @@ export const putArrayOrTable = (path, tableState, dispatch) => {
     tableState.labels.forEach(label => {
       value[label] = [];
     });
-    tableState.value.forEach(row => {
-      tableState.labels.forEach(label => {
-        value[label] = [...value[label], row[label]];
+    if (tableState.flags.table.extendable) {
+      tableState.value.forEach(row => {
+        tableState.labels.forEach(label => {
+          value[label] = [...value[label], row[label]];
+        });
       });
-    });
+    } else {
+      Object.keys(tableState.userChanges).forEach(row => {
+        tableState.labels.forEach(label => {
+          value[label] = [...value[label], tableState.userChanges[row][label]];
+        });
+      });
+    }
   } else {
     ({ value } = tableState);
   }
@@ -68,6 +76,10 @@ const TableContainer = props => {
         clickAction={() => props.putTable(path, props.attribute.localState)}
         text="Submit"
         method
+        disabled={
+          !props.attribute.localState ||
+          !props.attribute.localState.meta.writeable
+        }
       />
     ),
   ];
@@ -177,6 +189,9 @@ TableContainer.propTypes = {
   attributeName: PropTypes.string.isRequired,
   attribute: PropTypes.shape({
     localState: PropTypes.shape({
+      meta: PropTypes.shape({
+        writeable: PropTypes.bool,
+      }),
       value: PropTypes.shape({}),
       isDirty: PropTypes.bool,
       flags: PropTypes.shape({

@@ -52,6 +52,7 @@ exports[`Table container renders correctly 1`] = `
             ],
             "table": Object {
               "dirty": false,
+              "extendable": true,
               "fresh": true,
               "timeStamp": Object {
                 "nanoseconds": 0,
@@ -265,6 +266,7 @@ exports[`Table container renders correctly 1`] = `
             "typeid": "malcolm:core/TableMeta:1.0",
             "writeable": true,
           },
+          "userChanges": Object {},
           "value": Array [
             Object {
               "outa1": true,
@@ -740,6 +742,7 @@ exports[`Table container renders correctly 1`] = `
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -953,6 +956,7 @@ exports[`Table container renders correctly 1`] = `
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,
@@ -1102,6 +1106,7 @@ exports[`Table container renders correctly 1`] = `
     >
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        disabled={false}
         method={true}
         text="Submit"
       />
@@ -1162,6 +1167,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
             ],
             "table": Object {
               "dirty": false,
+              "extendable": true,
               "fresh": true,
               "timeStamp": Object {
                 "nanoseconds": 0,
@@ -1375,6 +1381,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
             "typeid": "malcolm:core/TableMeta:1.0",
             "writeable": true,
           },
+          "userChanges": Object {},
           "value": Array [
             Object {
               "outa1": true,
@@ -1847,6 +1854,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -2060,6 +2068,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,
@@ -2210,6 +2219,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     >
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        disabled={false}
         method={true}
         text="Submit"
       />

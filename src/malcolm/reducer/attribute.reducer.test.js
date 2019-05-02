@@ -137,7 +137,13 @@ describe('attribute reducer', () => {
           ['block1', 'table'],
           undefined,
           0,
-          buildMeta(['widget:table'], true, '', malcolmTypes.table)
+          buildMeta(['widget:table'], true, '', malcolmTypes.table, {
+            mri: {},
+            name: {},
+            x: {},
+            y: {},
+            visible: {},
+          })
         ),
       ],
       state
@@ -155,6 +161,9 @@ describe('attribute reducer', () => {
           elements: {
             mri: {},
             name: {},
+            x: {},
+            y: {},
+            visible: {},
           },
         },
         value: {
