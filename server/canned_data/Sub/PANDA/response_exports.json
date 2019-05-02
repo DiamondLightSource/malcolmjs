@@ -1761,7 +1761,7 @@
               "tags": [
                 "widget:combo"
               ], 
-              "writeable": false, 
+              "writeable": true,
               "label": ""
             }, 
             "export": {
