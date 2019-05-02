@@ -31,6 +31,7 @@ Contents
     SMG/performance
     SMG/deployment
     SMG/MUI_theming
+    SMG/yaml_editor
 
 .. toctree::
     :caption: Reference
