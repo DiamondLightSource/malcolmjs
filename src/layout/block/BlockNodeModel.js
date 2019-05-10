@@ -13,6 +13,7 @@ class BlockNodeModel extends NodeModel {
     this.locked = block.locked;
     this.isHiddenLink = block.isHiddenLink;
     this.hasHiddenLink = block.hasHiddenLink;
+    this.alarmState = block.alarmState;
     this.addBlockPort = this.addBlockPort.bind(this);
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);

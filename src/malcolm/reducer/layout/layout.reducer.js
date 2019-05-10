@@ -73,6 +73,16 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       updatedBlock.icon = iconAttribute[0].raw.value;
     }
 
+    const healthAttribute = blockUtils.findAttribute(
+      malcolmState.blocks,
+      layoutBlock.mri,
+      'health'
+    );
+    if (healthAttribute !== undefined) {
+      updatedBlock.alarmState =
+        healthAttribute.raw.alarm && healthAttribute.raw.alarm.severity;
+    }
+
     updatedBlock.ports = buildPorts(matchingBlock);
 
     updatedBlock.loading =
@@ -367,8 +377,12 @@ const isRelevantWidget = attribute => {
 const isLabelAttribute = attribute =>
   attribute.calculated && attribute.calculated.name === 'label';
 
+const isHealthAttribute = attribute =>
+  attribute.calculated && attribute.calculated.name === 'health';
+
 const isRelevantAttribute = attribute =>
-  attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute));
+  (attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute))) ||
+  isHealthAttribute(attribute);
 
 const resetPorts = state => {
   let updatedState = selectPortForLink(state, undefined, true);
