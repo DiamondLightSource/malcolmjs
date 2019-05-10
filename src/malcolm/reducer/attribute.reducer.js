@@ -162,7 +162,8 @@ export const updateNavigation = (state, attributeName, attribute) => {
         }
         return nav.path;
       }),
-      state.blocks
+      state.blocks,
+      state.navigation.viewType
     );
   }
 

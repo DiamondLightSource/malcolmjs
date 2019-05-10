@@ -160,10 +160,11 @@ export const malcolmPostAction = (path, rawParameters) => (
   }
 };
 
-export const malcolmNavigationPath = blockPaths => ({
+export const malcolmNavigationPath = (blockPaths, viewType) => ({
   type: MalcolmNavigationPathUpdate,
   payload: {
     blockPaths,
+    viewType,
   },
 });
 

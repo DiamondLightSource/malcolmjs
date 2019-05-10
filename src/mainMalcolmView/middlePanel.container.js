@@ -364,7 +364,11 @@ const findAttributeComponent = props => {
 };
 
 const MiddlePanelContainer = props => (
-  <div className={props.classes.container} role="presentation">
+  <div
+    className={props.classes.container}
+    role="presentation"
+    style={props.mobile && !props.openHeader ? { marginTop: 0 } : {}}
+  >
     {props.mainAttribute ? (
       findAttributeComponent(props)
     ) : (
@@ -389,7 +393,7 @@ const MiddlePanelContainer = props => (
   </div>
 );
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const attribute = blockUtils.findAttribute(
     state.malcolm.blocks,
     state.malcolm.parentBlock,
@@ -414,8 +418,9 @@ const mapStateToProps = state => {
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
     mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
-    openParent: state.viewState.openParentPanel,
-    openChild: state.malcolm.childBlock !== undefined,
+    openParent: ownProps.mobile ? false : state.viewState.openParentPanel,
+    openChild: ownProps.mobile ? false : state.malcolm.childBlock !== undefined,
+    openHeader: state.viewState.openHeaderBar,
     isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.1',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeid: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
@@ -467,6 +472,8 @@ MiddlePanelContainer.propTypes = {
   }).isRequired,
   mainAttribute: PropTypes.string.isRequired,
   parentBlock: PropTypes.string.isRequired,
+  mobile: PropTypes.bool.isRequired,
+  openHeader: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

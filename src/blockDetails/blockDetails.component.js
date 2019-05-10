@@ -211,7 +211,9 @@ const mapStateToProps = (state, ownProps, memory) => {
   const blockList = state.malcolm.blocks['.blocks']
     ? Object.keys(state.malcolm.blocks['.blocks'].children)
     : [];
-  if (ownProps.parent) {
+  if (ownProps.mri) {
+    block = state.malcolm.blocks[ownProps.mri];
+  } else if (ownProps.parent) {
     block = state.malcolm.parentBlock
       ? state.malcolm.blocks[state.malcolm.parentBlock]
       : undefined;

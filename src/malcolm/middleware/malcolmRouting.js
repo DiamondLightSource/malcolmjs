@@ -12,7 +12,10 @@ const handleLocationChange = (path, blocks, dispatch, getState) => {
     .replace(/\/$/, '') // strip off the trailing /
     .split('/')
     .slice(2);
-  dispatch(malcolmNavigationPath(tokens));
+  const viewType = path
+    .replace(/\/$/, '') // strip off the trailing /
+    .split('/')[1];
+  dispatch(malcolmNavigationPath(tokens, viewType));
 
   // Get the root list of blocks
   if (!blocks['.blocks']) {

@@ -1,4 +1,5 @@
 export const openParentPanelType = 'OPEN_PARENT_PANEL';
+export const openHeaderType = 'OPEN_HEADER_BAR';
 export const updateVersionNumerType = 'UPDATE_VERSION';
 export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
@@ -8,6 +9,11 @@ export const panelDirection = 'PANEL_TRANSITION_DIRECTION';
 export const openParentPanel = open => ({
   type: openParentPanelType,
   openParentPanel: open,
+});
+
+export const openHeaderBar = open => ({
+  type: openHeaderType,
+  openHeader: open,
 });
 
 export const snackbarState = (open, message) => ({

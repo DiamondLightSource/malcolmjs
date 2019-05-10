@@ -1,7 +1,7 @@
 import NavTypes from '../NavTypes';
 import blockUtils from '../blockUtils';
 
-export const processNavigationLists = (paths, blocks) => {
+export const processNavigationLists = (paths, blocks, viewType) => {
   const navigationLists = paths.map(p => ({
     path: p,
     children: [],
@@ -31,13 +31,18 @@ export const processNavigationLists = (paths, blocks) => {
   return {
     navigationLists,
     rootNav,
+    viewType,
   };
 };
 
 function updateNavigationPath(state, payload) {
   return {
     ...state,
-    navigation: processNavigationLists(payload.blockPaths, state.blocks),
+    navigation: processNavigationLists(
+      payload.blockPaths,
+      state.blocks,
+      payload.viewType
+    ),
     parentBlock: undefined,
     childBlock: undefined,
     mainAttribute: undefined,

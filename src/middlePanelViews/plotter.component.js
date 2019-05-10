@@ -123,6 +123,7 @@ class Plotter extends React.Component {
           overlaying: 'y',
           side: 'right',
         },
+        margin: { l: 40, r: 30, t: 30, b: 30 },
       },
       userChangingViewState: false,
     };

@@ -133,7 +133,8 @@ export function updateBlock(state, payload) {
     ) {
       navigation = processNavigationLists(
         state.navigation.navigationLists.map(nav => nav.path),
-        blocks
+        blocks,
+        state.navigation.viewType
       );
     }
 
@@ -204,7 +205,8 @@ export function updateRootBlock(state, payload) {
 
   const navigation = processNavigationLists(
     state.navigation.navigationLists.map(nav => nav.path),
-    blocks
+    blocks,
+    state.navigation.viewType
   );
 
   return NavigationReducer.updateNavTypes({
