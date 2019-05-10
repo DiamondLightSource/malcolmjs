@@ -88,6 +88,7 @@ export const checkForFlowGraph = attribute => {
           y: value.y[i],
         },
         ports: [],
+        alarmState: AlarmStates.NO_ALARM,
         icon: undefined,
         loading: true,
       })),
@@ -202,7 +203,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     return layout;
   }
 
-  if (blockUtils.attributeHasTag(attribute, 'widget:icon')) {
+  if (LayoutReducer.isRelevantAttribute(attribute)) {
     layout = LayoutReducer.processLayout(updatedState);
   } else if (
     isPort(attribute) &&

@@ -7,6 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
 import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
+import AttributeAlarm, {
+  AlarmStates,
+} from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { hiddenLinkIdSeparator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
@@ -23,6 +26,7 @@ const styles = theme => ({
     marginTop: 2,
     marginBottom: 1,
     fontSize: 14,
+    flex: 'auto',
   },
   blockContents: {
     display: 'flex',
@@ -116,10 +120,20 @@ const BlockWidget = props => {
       }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
-      <Typography className={props.classes.title}>
-        {props.node.label}
-      </Typography>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {props.node.alarmState !== AlarmStates.NO_ALARM ? (
+          <div style={{ flex: 'initial' }}>
+            <AttributeAlarm alarmSeverity={props.node.alarmState} />
+          </div>
+        ) : null}
+        <Typography className={props.classes.title}>
+          {props.node.label}
+        </Typography>
 
+        {props.node.alarmState !== AlarmStates.NO_ALARM ? (
+          <div style={{ width: '24px', flex: 'initial' }} />
+        ) : null}
+      </div>
       <div className={props.classes.blockContents} style={{ minHeight }}>
         <div className={props.classes.iconContents}>
           {props.node.icon && props.node.icon !== '<svg/>'
@@ -188,6 +202,7 @@ BlockWidget.propTypes = {
     isHiddenLink: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
+    alarmState: PropTypes.number,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,
