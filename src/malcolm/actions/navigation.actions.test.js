@@ -29,6 +29,7 @@ const buildNavState = () => ({
           blockMri: 'PANDA:SEQ2',
         },
       ],
+      viewType: 'gui',
     },
   },
   viewState: {

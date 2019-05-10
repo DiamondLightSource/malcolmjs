@@ -238,7 +238,7 @@ describe('processNavigationLists', () => {
   });
 
   it('returns the .block blocks in the rootNav', () => {
-    const navLists = processNavigationLists([], blocks);
+    const navLists = processNavigationLists([], blocks, 'gui');
 
     expect(navLists.rootNav.path).toBe('');
     expect(navLists.rootNav.children).toBe(blocks['.blocks'].children);
@@ -246,7 +246,8 @@ describe('processNavigationLists', () => {
 
   it('populates nav lists from blocks if present', () => {
     const paths = ['block1', 'block2'];
-    const navLists = processNavigationLists(paths, blocks).navigationLists;
+    const navLists = processNavigationLists(paths, blocks, 'gui')
+      .navigationLists;
 
     expect(navLists).toHaveLength(2);
     expect(navLists[0].path).toBe('block1');
@@ -258,7 +259,8 @@ describe('processNavigationLists', () => {
 
   it('populates nav lists from attributes of the previous block if no block is found', () => {
     const paths = ['block1', 'layout', 'block3'];
-    const navLists = processNavigationLists(paths, blocks).navigationLists;
+    const navLists = processNavigationLists(paths, blocks, 'gui')
+      .navigationLists;
 
     expect(navLists).toHaveLength(3);
     expect(navLists[0].path).toBe('block1');

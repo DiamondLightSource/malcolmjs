@@ -88,6 +88,9 @@ describe('attribute reducer', () => {
     createLocalState.mockImplementation(attribute => attribute);
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
+    LayoutReducer.isRelevantAttribute.mockImplementation(attr =>
+      blockUtils.attributeHasTag(attr, 'widget:icon')
+    );
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
     LayoutReducer.processLayout.mockImplementation(() => ({

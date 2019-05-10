@@ -8,11 +8,37 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseDown={[Function]}
   onMouseUp={[Function]}
 >
-  <WithStyles(Typography)
-    className="BlockWidget-title-3"
+  <div
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "center",
+      }
+    }
   >
-    block 1
-  </WithStyles(Typography)>
+    <div
+      style={
+        Object {
+          "flex": "initial",
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm) />
+    </div>
+    <WithStyles(Typography)
+      className="BlockWidget-title-3"
+    >
+      block 1
+    </WithStyles(Typography)>
+    <div
+      style={
+        Object {
+          "flex": "initial",
+          "width": "24px",
+        }
+      }
+    />
+  </div>
   <div
     className="BlockWidget-blockContents-4"
     style={
