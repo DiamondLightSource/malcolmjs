@@ -115,7 +115,7 @@ describe('WidgetTable', () => {
 
     wrapper
       .find('input')
-      .at(1)
+      .at(2)
       .simulate('change', { target: { value: 'fish' } });
     expect(setValue.mock.calls.length).toEqual(1);
     expect(setValue.mock.calls[0]).toEqual([

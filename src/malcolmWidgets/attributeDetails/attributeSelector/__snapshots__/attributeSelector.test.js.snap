@@ -4,11 +4,11 @@ exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
 
 exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
 <div
-  className="ButtonAction-container-84"
+  className="ButtonAction-container-157"
   style={Object {}}
 >
   <WithStyles(Button)
-    className="ButtonAction-button-85"
+    className="ButtonAction-button-158"
     color="primary"
     disabled={true}
     onClick={[Function]}
@@ -22,10 +22,10 @@ exports[`AttributeSelector selector function returns info:button and renders cor
 
 exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
 <div
-  className="WidgetTextUpdate-divWrap-118"
+  className="WidgetTextUpdate-divWrap-191"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdateWrap-119"
+    className="WidgetTextUpdate-textUpdateWrap-192"
     style={Object {}}
   >
     test value
@@ -93,6 +93,8 @@ exports[`AttributeSelector selects a comboBox correctly 1`] = `
   }
   Pending={false}
   Value="1"
+  forceOpen={true}
+  mobile={false}
   selectEventHandler={[Function]}
 />
 `;

@@ -154,7 +154,8 @@ export const buildAttribute = (
   alarm = 0,
   meta = buildMeta(),
   children = {},
-  loading = false
+  loading = false,
+  typeid
 ) => ({
   // the data coming back from the server is always stored in raw
   raw: {
@@ -163,6 +164,7 @@ export const buildAttribute = (
       severity: alarm,
     },
     meta,
+    typeid,
   },
   // other additional properties are stored in calculated
   calculated: {

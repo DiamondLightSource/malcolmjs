@@ -103,7 +103,8 @@ export const selectorFunction = (
   continuousSend = false,
   buttonClickHandler = () => {},
   localState,
-  isMobile = false
+  isMobile = false,
+  forceOpen = false
 ) => {
   if (isArrayType(objectMeta) && !objectMeta.insideArray) {
     return (
@@ -139,6 +140,7 @@ export const selectorFunction = (
           Choices={objectMeta.choices}
           selectEventHandler={setValue => valueHandler(path, setValue)}
           mobile={isMobile}
+          forceOpen={forceOpen}
         />
       );
     case 'widget:textupdate':
@@ -299,7 +301,8 @@ const AttributeSelector = props => {
               event.target.value
             ),
         },
-        props.mobile
+        props.mobile,
+        props.forceOpen
       );
     }
   }
@@ -316,7 +319,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     attribute,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
-    mobile: state.viewState.mobileViewIndex !== undefined,
+    mobile: state.viewState && state.viewState.mobileViewIndex !== undefined,
   };
 };
 
@@ -377,9 +380,14 @@ AttributeSelector.propTypes = {
       }),
     }),
   }).isRequired,
+  forceOpen: PropTypes.bool,
   eventHandler: PropTypes.func.isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
   buttonClickHandlerWithTransition: PropTypes.func.isRequired,
+};
+
+AttributeSelector.defaultProps = {
+  forceOpen: false,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

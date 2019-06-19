@@ -63,9 +63,11 @@ const WidgetComboBox = props => {
     >
       <Select
         native={props.mobile}
+        open={props.forceOpen}
         value={value}
         className={props.classes.select}
         onChange={changeHandler}
+        onClose={props.forceOpen ? () => {} : undefined}
       >
         {options}
       </Select>
@@ -83,11 +85,13 @@ WidgetComboBox.propTypes = {
     select: PropTypes.string,
   }).isRequired,
   mobile: PropTypes.bool,
+  forceOpen: PropTypes.bool,
 };
 
 WidgetComboBox.defaultProps = {
   Pending: false,
   mobile: false,
+  forceOpen: false,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetComboBox);

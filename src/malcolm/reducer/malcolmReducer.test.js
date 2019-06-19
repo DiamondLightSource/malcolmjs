@@ -198,7 +198,22 @@ describe('malcolm reducer', () => {
   });
 
   it('updates attribute data and pushes to archive', () => {
-    addBlock('block1', [buildAttribute('health')], state);
+    addBlock(
+      'block1',
+      [
+        buildAttribute(
+          'health',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'epics:nt/NTScalar:1.0'
+        ),
+      ],
+      state
+    );
     addBlockArchive('block1', [buildBlockArchiveAttribute('health', 3)], state);
     addMessageInFlight(1, ['block1', 'health'], state);
 
@@ -225,6 +240,49 @@ describe('malcolm reducer', () => {
     expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
       123456789.00123
     );
+  });
+
+  it('updates attribute data but doesnt push to archive if not scalar', () => {
+    addBlock(
+      'block1',
+      [
+        buildAttribute(
+          'health',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'epics:nt/NOTScalar:1.0'
+        ),
+      ],
+      state
+    );
+    addBlockArchive('block1', [buildBlockArchiveAttribute('health', 3)], state);
+    addMessageInFlight(1, ['block1', 'health'], state);
+
+    const action = {
+      type: MalcolmAttributeData,
+      payload: {
+        id: 1,
+        delta: true,
+        raw: {
+          timeStamp: {
+            secondsPastEpoch: 123456789,
+            nanoseconds: 1230000,
+          },
+        },
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blockArchive.block1.attributes[0].value.counter).toEqual(0);
+    expect(state.blockArchive.block1.attributes[0].timeStamp.counter).toEqual(
+      0
+    );
+    expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(-1);
   });
 
   it('set flag sets attribute pending', () => {
