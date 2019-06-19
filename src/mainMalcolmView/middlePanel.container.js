@@ -136,7 +136,8 @@ const findAttributeComponent = props => {
   }
   const widgetTag = getWidgetType(props.tags);
   const palettePadding = props.showBin ? 4 : 32;
-
+  let zoomButtonIndent = props.openParent ? 360 + 29 : 29;
+  zoomButtonIndent = props.mobile ? 36 : zoomButtonIndent;
   switch (widgetTag) {
     case 'widget:flowgraph':
       return (
@@ -185,7 +186,7 @@ const findAttributeComponent = props => {
           <div
             className={props.classes.autoLayoutButton}
             style={{
-              left: props.openParent ? 360 + 29 : 29,
+              left: zoomButtonIndent,
               top: 12,
               display: 'flex',
             }}
@@ -394,11 +395,17 @@ const MiddlePanelContainer = props => (
 );
 
 const mapStateToProps = (state, ownProps) => {
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    state.malcolm.parentBlock,
-    state.malcolm.mainAttribute
-  );
+  const attribute = ownProps.mri
+    ? blockUtils.findAttribute(
+        state.malcolm.blocks,
+        ownProps.mri[0],
+        ownProps.mri[1]
+      )
+    : blockUtils.findAttribute(
+        state.malcolm.blocks,
+        state.malcolm.parentBlock,
+        state.malcolm.mainAttribute
+      );
 
   let alarm = AlarmStates.PENDING;
   let errorMessage;
@@ -414,8 +421,8 @@ const mapStateToProps = (state, ownProps) => {
   }
   return {
     errorMessage,
-    parentBlock: state.malcolm.parentBlock,
-    mainAttribute: state.malcolm.mainAttribute,
+    parentBlock: ownProps.mri ? ownProps.mri[0] : state.malcolm.parentBlock,
+    mainAttribute: ownProps.mri ? ownProps.mri[1] : state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
     mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
     openParent: ownProps.mobile ? false : state.viewState.openParentPanel,

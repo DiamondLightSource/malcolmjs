@@ -518,11 +518,13 @@ export function updateAttribute(
             JSON.stringify(payload.raw.value)
           );
           */
-          archive[matchingAttributeIndex] = pushToArchive(
-            attributeArchive,
-            payload,
-            alarmState
-          );
+          if (attribute.raw.typeid === 'epics:nt/NTScalar:1.0') {
+            archive[matchingAttributeIndex] = pushToArchive(
+              attributeArchive,
+              payload,
+              alarmState
+            );
+          }
         } else if (attribute.calculated.isMethod) {
           archive[matchingAttributeIndex] = pushServerRunToArchive(
             attributeArchive,

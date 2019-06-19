@@ -10,6 +10,7 @@ import BlockPortWidget from '../blockPort/blockPortWidget.component';
 import AttributeAlarm, {
   AlarmStates,
 } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import AttributeSelector from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { hiddenLinkIdSeparator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
@@ -104,6 +105,21 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
+  let blockGraphic =
+    props.node.icon && props.node.icon !== '<svg/>'
+      ? renderHTML(props.node.icon)
+      : null;
+  blockGraphic = props.node.displayAttribute ? (
+    <div style={{ width: '80%', marginLeft: '16px' }}>
+      <AttributeSelector
+        blockName={props.node.displayAttribute[0]}
+        attributeName={props.node.displayAttribute[1]}
+      />
+    </div>
+  ) : (
+    blockGraphic
+  );
+
   const block = props.node.loading ? (
     <LoadingBlock classes={props.classes} node={props.node} />
   ) : (
@@ -135,11 +151,7 @@ const BlockWidget = props => {
         ) : null}
       </div>
       <div className={props.classes.blockContents} style={{ minHeight }}>
-        <div className={props.classes.iconContents}>
-          {props.node.icon && props.node.icon !== '<svg/>'
-            ? renderHTML(props.node.icon)
-            : null}
-        </div>
+        <div className={props.classes.iconContents}>{blockGraphic}</div>
         <div className={props.classes.inputPortsContainer}>
           {inputPorts.map(p => (
             <BlockPortWidget
@@ -203,6 +215,7 @@ BlockWidget.propTypes = {
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
     alarmState: PropTypes.number,
+    displayAttribute: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

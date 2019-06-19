@@ -5,6 +5,7 @@ export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
 export const popout = 'WINDOW_IS_POPOUT';
 export const panelDirection = 'PANEL_TRANSITION_DIRECTION';
+export const mobileViewIndexType = 'SET_MOBILE_VIEW_INDEX';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -48,6 +49,11 @@ export const parentPanelTransition = transition => ({
   payload: {
     transition,
   },
+});
+
+export const setMobileViewIndex = index => ({
+  type: mobileViewIndexType,
+  payload: { index },
 });
 
 export default {

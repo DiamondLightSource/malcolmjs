@@ -102,7 +102,8 @@ export const selectorFunction = (
   forceUpdate,
   continuousSend = false,
   buttonClickHandler = () => {},
-  localState
+  localState,
+  isMobile = false
 ) => {
   if (isArrayType(objectMeta) && !objectMeta.insideArray) {
     return (
@@ -137,6 +138,7 @@ export const selectorFunction = (
           Pending={flags.isDisabled}
           Choices={objectMeta.choices}
           selectEventHandler={setValue => valueHandler(path, setValue)}
+          mobile={isMobile}
         />
       );
     case 'widget:textupdate':
@@ -296,7 +298,8 @@ const AttributeSelector = props => {
               props.attribute.calculated.path,
               event.target.value
             ),
-        }
+        },
+        props.mobile
       );
     }
   }
@@ -313,6 +316,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     attribute,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
+    mobile: state.viewState.mobileViewIndex !== undefined,
   };
 };
 

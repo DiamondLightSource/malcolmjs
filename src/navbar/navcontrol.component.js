@@ -44,7 +44,7 @@ class NavControl extends Component {
     const siblings = nav.parent ? nav.parent.children : {};
     if (this.props.isFinalNav) {
       return (
-        <div className={classes.container}>
+        <div className={classes.container} style={this.props.divOverride}>
           <NavSelector
             handleClick={this.handleClick}
             childElements={nav.children}
@@ -145,10 +145,12 @@ NavControl.propTypes = {
       }),
     }),
   }).isRequired,
+  divOverride: PropTypes.shape({}),
 };
 
 NavControl.defaultProps = {
   isFinalNav: false,
+  divOverride: undefined,
 };
 
 NavSelector.propTypes = {

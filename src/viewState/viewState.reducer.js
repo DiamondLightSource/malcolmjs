@@ -6,6 +6,7 @@ import {
   showFooterType,
   popout,
   panelDirection,
+  mobileViewIndexType,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -18,6 +19,7 @@ const initialViewState = {
   },
   footerHeight: 0,
   transitionParent: false,
+  mobileViewIndex: undefined,
 };
 
 const viewStateReducer = (state = initialViewState, action = {}) => {
@@ -53,6 +55,11 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return {
         ...state,
         transitionParent: action.payload.transition,
+      };
+    case mobileViewIndexType:
+      return {
+        ...state,
+        mobileViewIndex: action.payload.index,
       };
     default:
       return state;

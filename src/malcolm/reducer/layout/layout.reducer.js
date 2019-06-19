@@ -69,8 +69,17 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       'widget:icon'
     );
 
+    const displayAttribute = blockUtils.findAttributesWithTag(
+      matchingBlock,
+      'block:display'
+    );
+
     if (iconAttribute.length > 0) {
       updatedBlock.icon = iconAttribute[0].raw.value;
+    }
+
+    if (displayAttribute.length > 0) {
+      updatedBlock.displayAttribute = displayAttribute[0].calculated.path;
     }
 
     const healthAttribute = blockUtils.findAttribute(
