@@ -61,16 +61,27 @@ const WidgetComboBox = props => {
       fullWidth
       className={props.classes.formControl}
     >
-      <Select
-        native={props.mobile}
-        open={props.forceOpen}
-        value={value}
-        className={props.classes.select}
-        onChange={changeHandler}
-        onClose={props.forceOpen ? () => {} : undefined}
-      >
-        {options}
-      </Select>
+      {props.forceOpen ? (
+        <Select
+          native={props.mobile}
+          value={value}
+          className={props.classes.select}
+          onChange={changeHandler}
+          open
+          onClose={() => {}}
+        >
+          {options}
+        </Select>
+      ) : (
+        <Select
+          native={props.mobile}
+          value={value}
+          className={props.classes.select}
+          onChange={changeHandler}
+        >
+          {options}
+        </Select>
+      )}
     </FormControl>
   );
 };
