@@ -1,13 +1,27 @@
 # Changelog
-## 1.7b0 (1/3/2019)
+## 1.7.1 (21/6/2019)
+Features:
+- Added health icons to blocks in layout
+- Added experimental mobile view (on host:port/mobile/*)
+Tweaks:
+- Improved redirect behaviour 
+- Changed combobox to non-native select to fix behaviour issue in chrome
+- Prevented non-scalar attributes from being tracked in state log (to help memory issues + since they currently have no way of being viewed)
+Fixes:
+- Fixed memory leak (removed ref to parent in attribute which caused a circular ref)
+## 1.7.0 (2/5/2019)
 Features:
 - Method run info now sent by server to all clients for calls from any client and stored/displayed in archive
 - Method run params now initialised to last server run if present
+- Added labels to nav bar elements
 Tweaks:
+- Changed handling of block list (BREAKING CHANGE, compatible with malcolm 4 only)
 - Changed text displayed in middle pane when no root block is selected
+- Made orphaned methods hidden in block details pane
 Fixes:
 - Changed socket connect/reconnect behaviour so root block subscription is put on queue to send immedeately following disconnect and wiping of the send queue.
 (this prevents the case where duplicate subscriptions are made if the site connects to the websocket on its first attempt when initially loading)
+- Prevented fancy react caching (fixes issue with chrome not loading new page version)
 ## 1.6.1 (18/2/2019)
 Fixes:
 - Fixed incorrect height on combobox
