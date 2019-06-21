@@ -14,9 +14,11 @@ describe('MalcolmJS', () => {
     // click to open combo
     cy.get('[data-cy=combobox]').click();
     // now click an option
-    cy.get('[data-cy=option-1]').click();
-    cy.get('[data-cy=combobox]').should('equal', 'ONE');
+    cy.get('[data-cy=choice-1]').click();
+    cy.get('[data-cy=combobox]').within(() => {
+      cy.get('input').should('have.value', 'ONE');
+    });
     // check the dropdown closed
-    cy.get('[data-cy=option-1]').should('not.exist');
+    cy.get('[data-cy=choice-1]').should('not.exist');
   });
 });
