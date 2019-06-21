@@ -476,7 +476,7 @@ export function updateAttribute(
             ...payload.calculated,
             loading: false,
             path,
-            parent: state.blocks[blockName],
+            parent: blockName,
           },
         };
         if (attribute.raw.alarm) {
