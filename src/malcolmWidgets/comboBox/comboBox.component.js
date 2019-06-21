@@ -40,6 +40,7 @@ const WidgetComboBox = props => {
           // eslint-disable-next-line react/no-array-index-key
           key={index}
           onClick={() => props.selectEventHandler(choice)}
+          data-cy={`choice-${index}`}
         >
           {choice}
         </Typography>
@@ -75,6 +76,7 @@ const WidgetComboBox = props => {
       ) : (
         <Select
           native={props.mobile}
+          data-cy="combobox"
           value={value}
           className={props.classes.select}
           onChange={changeHandler}

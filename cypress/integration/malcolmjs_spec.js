@@ -5,4 +5,18 @@ describe('MalcolmJS', () => {
     cy.title().should('equal', 'MalcolmJS DEV');
     cy.request('/reset');
   });
+
+  it('combobox should work', () => {
+    cy.visit('/details/PANDA:TTLOUT1');
+    cy.waitForDetailsToLoad();
+    cy.contains('Val Current').should('be.visible'); // wait for details to load
+
+    // click to open combo
+    cy.get('[data-cy=combobox]').click();
+    // now click an option
+    cy.get('[data-cy=option-1]').click();
+    cy.get('[data-cy=combobox]').should('equal', 'ONE');
+    // check the dropdown closed
+    cy.get('[data-cy=option-1]').should('not.exist');
+  });
 });
