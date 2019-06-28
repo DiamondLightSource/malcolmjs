@@ -8,11 +8,65 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseDown={[Function]}
   onMouseUp={[Function]}
 >
-  <WithStyles(Typography)
-    className="BlockWidget-title-3"
+  <div
+    className="BlockWidget-alarmDiv-11"
+    style={
+      Object {
+        "zIndex": 999,
+      }
+    }
   >
-    block 1
-  </WithStyles(Typography)>
+    <div
+      style={
+        Object {
+          "left": 1.856,
+          "position": "absolute",
+          "top": 0,
+          "zIndex": 1000,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm) />
+    </div>
+    <div
+      style={
+        Object {
+          "position": "absolute",
+          "top": 0,
+          "zIndex": 999,
+        }
+      }
+    >
+      <svg
+        height="28"
+        width="28"
+      >
+        <circle
+          cx="13.856"
+          cy="13.856"
+          fill="#fff"
+          fillOpacity={0.6}
+          r="13.856"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "center",
+        "position": "relative",
+        "top": 2,
+      }
+    }
+  >
+    <WithStyles(Typography)
+      className="BlockWidget-title-3"
+    >
+      block 1
+    </WithStyles(Typography)>
+  </div>
   <div
     className="BlockWidget-blockContents-4"
     style={

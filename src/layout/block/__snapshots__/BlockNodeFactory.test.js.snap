@@ -4,6 +4,7 @@ exports[`BlockWidgetFactory generates react widget 1`] = `
 <BlockWidget
   classes={
     Object {
+      "alarmDiv": "BlockWidget-alarmDiv-11",
       "block": "BlockWidget-block-1",
       "blockContents": "BlockWidget-blockContents-4",
       "description": "BlockWidget-description-9",

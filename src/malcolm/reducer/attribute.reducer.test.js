@@ -91,6 +91,13 @@ describe('attribute reducer', () => {
         },
       },
     }));
+    LayoutReducer.isRelevantAttribute.mockImplementation(
+      attr =>
+        attr.raw &&
+        attr.raw.meta &&
+        attr.raw.meta.tags &&
+        attr.raw.meta.tags.includes('widget:icon')
+    );
 
     afterEach(() => {
       restoreDate();
