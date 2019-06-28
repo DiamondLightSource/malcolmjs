@@ -75,6 +75,11 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  alarmDiv: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+  },
 });
 
 const portHeight = 23;
@@ -120,19 +125,37 @@ const BlockWidget = props => {
       }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {props.node.alarmState !== AlarmStates.NO_ALARM ? (
-          <div style={{ flex: 'initial' }}>
+      {props.node.alarmState !== AlarmStates.NO_ALARM ? (
+        <div className={props.classes.alarmDiv} style={{ zIndex: 999 }}>
+          <div
+            style={{ zIndex: 1000, position: 'absolute', top: 0, left: 1.856 }}
+          >
             <AttributeAlarm alarmSeverity={props.node.alarmState} />
           </div>
-        ) : null}
+          <div style={{ zIndex: 999, position: 'absolute', top: 0 }}>
+            <svg height="28" width="28">
+              <circle
+                cx="13.856"
+                cy="13.856"
+                r="13.856"
+                fill={props.theme.palette.background.paper}
+                fillOpacity={0.6}
+              />
+            </svg>
+          </div>
+        </div>
+      ) : null}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'relative',
+          top: 2,
+        }}
+      >
         <Typography className={props.classes.title}>
           {props.node.label}
         </Typography>
-
-        {props.node.alarmState !== AlarmStates.NO_ALARM ? (
-          <div style={{ width: '24px', flex: 'initial' }} />
-        ) : null}
       </div>
       <div className={props.classes.blockContents} style={{ minHeight }}>
         <div className={props.classes.iconContents}>
@@ -214,6 +237,14 @@ BlockWidget.propTypes = {
     portContainer: PropTypes.string,
     iconContents: PropTypes.string,
     description: PropTypes.string,
+    alarmDiv: PropTypes.string,
+  }).isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        paper: PropTypes.string,
+      }),
+    }),
   }).isRequired,
 };
 
