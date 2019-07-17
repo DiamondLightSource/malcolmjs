@@ -71,18 +71,18 @@ export function setDisconnected(state) {
                 message: 'Websocket connection to server lost',
               },
             };
+            const archive = newState.blockArchive[blockName];
             if (
-              newState.blockArchive[blockName] &&
-              newState.blockArchive[blockName].attributes[attr] &&
-              newState.blockArchive[blockName].attributes[attr].alarmState.get(
-                newState.blockArchive[blockName].attributes[
-                  attr
-                ].alarmState.size() - 1
+              archive &&
+              archive.attributes[attr] &&
+              archive.attributes[attr].alarmState.size() !== 0 &&
+              archive.attributes[attr].alarmState.get(
+                archive.attributes[attr].alarmState.size() - 1
               ) !== AlarmStates.UNDEFINED_ALARM
             ) {
               const { timeStamp } = attributes[attr].raw;
               pushToArchive(
-                newState.blockArchive[blockName].attributes[attr],
+                archive.attributes[attr],
                 {
                   raw: {
                     timeStamp,
