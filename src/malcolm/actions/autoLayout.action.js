@@ -1,5 +1,6 @@
 /* eslint no-console: ["error", { allow: ["info", "error"] }] */
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
+import layoutActions from './layout.action';
 import { idSeparator } from '../../layout/layout.component';
 import { hiddenLinkIdSeparator } from '../reducer/layout/layout.reducer';
 
@@ -18,11 +19,12 @@ const getNodePadding = (block, port) => {
   return 12;
 };
 
-const runAutoLayout = () => (dispatch, getState) => {
+const runAutoLayout = localOnly => (dispatch, getState) => {
   const state = getState();
   const blocks = state.malcolm.layout.blocks.filter(b => !b.isHiddenLink);
   const { parentBlock, mainAttribute } = state.malcolm;
   const { links } = state.malcolm.layoutEngine.diagramModel;
+  const center = state.malcolm.layoutState.layoutCenter;
   const graph = {
     id: 'root',
     layoutOptions: {
@@ -67,6 +69,29 @@ const runAutoLayout = () => (dispatch, getState) => {
     `Graph can be visualised at https://rtsys.informatik.uni-kiel.de/elklive/json.html`
   );
 
+  const dispatchAction = localOnly
+    ? updatedLayout => {
+        dispatch(malcolmSetFlag([parentBlock, mainAttribute], 'dirty', true));
+        const newLayout = {
+          ...state.malcolm.layout,
+          blocks: updatedLayout.mri.map((mri, i) => ({
+            ...state.malcolm.layout.blocks[i],
+            position: {
+              x: updatedLayout.x[i] + center.x,
+              y: updatedLayout.y[i] + center.y,
+            },
+          })),
+          custom: true,
+        };
+        dispatch(layoutActions.localUpdateAction(newLayout));
+      }
+    : updatedLayout => {
+        dispatch(malcolmSetFlag([parentBlock, mainAttribute], 'pending', true));
+        dispatch(
+          malcolmPutAction([parentBlock, mainAttribute, 'value'], updatedLayout)
+        );
+      };
+
   return (
     import('elkjs/lib/elk.bundled')
       .then(ELK => new ELK().layout(graph))
@@ -96,11 +121,7 @@ const runAutoLayout = () => (dispatch, getState) => {
               mri => graphLayout.children.find(c => c.id === mri).y - centerY
             ),
         };
-
-        dispatch(malcolmSetFlag([parentBlock, mainAttribute], 'pending', true));
-        dispatch(
-          malcolmPutAction([parentBlock, mainAttribute, 'value'], updatedLayout)
-        );
+        dispatchAction(updatedLayout);
       })
       .catch(err => {
         console.error('error creating auto layout');

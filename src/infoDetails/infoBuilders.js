@@ -11,7 +11,12 @@ export const buildAttributeInfo = props => {
   let value;
   const info = {};
   const { attribute } = props;
-  if (attribute && attribute.raw && attribute.raw.meta) {
+  if (
+    attribute &&
+    attribute.raw &&
+    attribute.raw.meta &&
+    !attribute.calculated.isMethod
+  ) {
     if (props.subElement === undefined) {
       info.path = {
         label: 'Attribute path',
@@ -95,7 +100,7 @@ export const buildAttributeInfo = props => {
       }
       if (
         attribute.raw.meta.tags.some(a =>
-          ['widget:table', 'widget:textinput'].includes(a)
+          ['widget:table', 'widget:textinput', 'widget:flowgraph'].includes(a)
         )
       ) {
         info.localState = {
@@ -169,98 +174,101 @@ export const buildAttributeInfo = props => {
               ? attribute.raw.value[row]
               : 'undefined';
         }
-        info.rowOperations = {
-          label: 'Row Operations',
-          moveRowUp: {
-            label: 'Shift row up',
-            value: 'Shift row up',
-            showLabel: false,
-            disabled: row === 0,
-            tag: 'info:button',
-          },
-          moveRowDown: {
-            label: 'Shift row down',
-            value: 'Shift row down',
-            showLabel: false,
-            disabled: row === attribute.localState.value.length - 1,
-            tag: 'info:button',
-          },
-          addRowAbove: {
-            label: 'Insert row above',
-            value: 'Insert row above',
-            showLabel: false,
-            tag: 'info:button',
-          },
-          addRowBelow: {
-            label: 'Insert row below',
-            value: 'Insert row below',
-            showLabel: false,
-            tag: 'info:button',
-          },
-          deleteRow: {
-            label: 'Delete row',
-            value: 'Delete row',
-            inline: true,
-            showLabel: false,
-            tag: 'info:button',
-          },
-        };
+        if (attribute.localState.flags.table.extendable) {
+          info.rowOperations = {
+            label: 'Row Operations',
+            moveRowUp: {
+              label: 'Shift row up',
+              value: 'Shift row up',
+              showLabel: false,
+              disabled: row === 0,
+              tag: 'info:button',
+            },
+            moveRowDown: {
+              label: 'Shift row down',
+              value: 'Shift row down',
+              showLabel: false,
+              disabled: row === attribute.localState.value.length - 1,
+              tag: 'info:button',
+            },
+            addRowAbove: {
+              label: 'Insert row above',
+              value: 'Insert row above',
+              showLabel: false,
+              tag: 'info:button',
+            },
+            addRowBelow: {
+              label: 'Insert row below',
+              value: 'Insert row below',
+              showLabel: false,
+              tag: 'info:button',
+            },
+            deleteRow: {
+              label: 'Delete row',
+              value: 'Delete row',
+              inline: true,
+              showLabel: false,
+              tag: 'info:button',
+            },
+          };
+
+          if (props.addRow) {
+            info.rowOperations.addRowAbove.functions = {
+              clickHandler: () => {
+                props.addRow(props.attribute.calculated.path, row);
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row + 1}`
+                );
+              },
+            };
+            info.rowOperations.addRowBelow.functions = {
+              clickHandler: () => {
+                props.addRow(props.attribute.calculated.path, row, 'below');
+              },
+            };
+            info.rowOperations.deleteRow.functions = {
+              clickHandler: () => {
+                if (row >= props.attribute.localState.value.length - 1) {
+                  if (row !== 0) {
+                    props.changeInfoHandler(
+                      props.attribute.calculated.path,
+                      `row.${row - 1}`
+                    );
+                  } else {
+                    props.closeInfoHandler(props.attribute.calculated.path);
+                  }
+                }
+                props.addRow(props.attribute.calculated.path, row, 'delete');
+              },
+            };
+          }
+          if (props.moveRow) {
+            info.rowOperations.moveRowUp.functions = {
+              clickHandler: () => {
+                props.moveRow(props.attribute.calculated.path, row);
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row - 1}`
+                );
+              },
+            };
+            info.rowOperations.moveRowDown.functions = {
+              clickHandler: () => {
+                props.moveRow(props.attribute.calculated.path, row, 'below');
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row + 1}`
+                );
+              },
+            };
+          }
+        }
         info.rowValue = {
           label: 'Row remote state',
           ...dataRow,
         };
 
-        if (props.addRow) {
-          info.rowOperations.addRowAbove.functions = {
-            clickHandler: () => {
-              props.addRow(props.attribute.calculated.path, row);
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row + 1}`
-              );
-            },
-          };
-          info.rowOperations.addRowBelow.functions = {
-            clickHandler: () => {
-              props.addRow(props.attribute.calculated.path, row, 'below');
-            },
-          };
-          info.rowOperations.deleteRow.functions = {
-            clickHandler: () => {
-              if (row >= props.attribute.localState.value.length - 1) {
-                if (row !== 0) {
-                  props.changeInfoHandler(
-                    props.attribute.calculated.path,
-                    `row.${row - 1}`
-                  );
-                } else {
-                  props.closeInfoHandler(props.attribute.calculated.path);
-                }
-              }
-              props.addRow(props.attribute.calculated.path, row, 'delete');
-            },
-          };
-        }
-        if (props.moveRow) {
-          info.rowOperations.moveRowUp.functions = {
-            clickHandler: () => {
-              props.moveRow(props.attribute.calculated.path, row);
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row - 1}`
-              );
-            },
-          };
-          info.rowOperations.moveRowDown.functions = {
-            clickHandler: () => {
-              props.moveRow(props.attribute.calculated.path, row, 'below');
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row + 1}`
-              );
-            },
-          };
-        }
         if (props.rowRevertHandler) {
           info.localState.functions = {
             clickHandler: () => {
@@ -312,28 +320,28 @@ export const buildAttributeInfo = props => {
       info.meta = {
         label: 'Meta Data',
         malcolmType: {
-          value: attribute.raw.typeid,
+          value: attribute.raw.meta.typeid,
           label: 'Type ID',
           inline: true,
         },
         description: {
-          value: attribute.raw.description,
+          value: attribute.raw.meta.description,
           label: 'Description',
           inline: true,
         },
         writeable: {
-          value: attribute.raw.writeable,
+          value: attribute.raw.meta.writeable,
           label: 'Writeable?',
           inline: true,
           tag: 'widget:led',
         },
       };
-      if (Object.keys(attribute.raw.takes.elements).length > 0) {
+      if (Object.keys(attribute.raw.meta.takes.elements).length > 0) {
         info.takes = { label: 'Input parameter types' };
-        Object.keys(attribute.raw.takes.elements).forEach(input => {
+        Object.keys(attribute.raw.meta.takes.elements).forEach(input => {
           info.takes[input] = {
-            label: attribute.raw.takes.elements[input].label,
-            value: attribute.raw.takes.elements[input].typeid,
+            label: attribute.raw.meta.takes.elements[input].label,
+            value: attribute.raw.meta.takes.elements[input].typeid,
             infoPath: {
               root: attribute.calculated.path,
               subElement: `takes.${input}`,
@@ -348,20 +356,22 @@ export const buildAttributeInfo = props => {
             tag: 'info:button',
             functions: {
               clickHandler: () => {
-                Object.keys(attribute.raw.takes.elements).forEach(input => {
-                  props.clearParamState(attribute.calculated.path, input);
-                });
+                Object.keys(attribute.raw.meta.takes.elements).forEach(
+                  input => {
+                    props.clearParamState(attribute.calculated.path, input);
+                  }
+                );
               },
             },
           };
         }
       }
-      if (Object.keys(attribute.raw.returns.elements).length > 0) {
+      if (Object.keys(attribute.raw.meta.returns.elements).length > 0) {
         info.returns = { label: 'Output parameter types' };
-        Object.keys(attribute.raw.returns.elements).forEach(input => {
+        Object.keys(attribute.raw.meta.returns.elements).forEach(input => {
           info.returns[input] = {
-            label: attribute.raw.returns.elements[input].label,
-            value: attribute.raw.returns.elements[input].typeid,
+            label: attribute.raw.meta.returns.elements[input].label,
+            value: attribute.raw.meta.returns.elements[input].typeid,
             infoPath: {
               root: attribute.calculated.path,
               subElement: `returns.${input}`,
@@ -397,26 +407,30 @@ export const buildAttributeInfo = props => {
         value: props.subElement[0] === 'takes' ? 'Input' : 'Output',
       };
       info.typeid =
-        attribute.raw[props.subElement[0]].elements[props.subElement[1]].typeid;
+        attribute.raw.meta[props.subElement[0]].elements[
+          props.subElement[1]
+        ].typeid;
       info.description = {
         label: 'Description',
         inline: true,
         value:
-          attribute.raw[props.subElement[0]].elements[props.subElement[1]]
+          attribute.raw.meta[props.subElement[0]].elements[props.subElement[1]]
             .description,
       };
       if (props.subElement[0] === 'takes') {
         info.required = {
           label: 'Required?',
           inline: true,
-          value: attribute.raw.takes.required.includes(props.subElement[1]),
+          value: attribute.raw.meta.takes.required.includes(
+            props.subElement[1]
+          ),
         };
         info.defaultValue = {
           label: 'Default Value',
           inline: true,
           value:
-            attribute.raw.defaults[props.subElement[1]] !== undefined
-              ? attribute.raw.defaults[props.subElement[1]]
+            attribute.raw.meta.defaults[props.subElement[1]] !== undefined
+              ? attribute.raw.meta.defaults[props.subElement[1]]
               : 'undefined',
         };
         if (props.clearParamState) {

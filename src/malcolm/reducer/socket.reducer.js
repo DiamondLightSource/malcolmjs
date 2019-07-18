@@ -11,7 +11,7 @@ import {
   MalcolmClearError,
 } from '../malcolm.types';
 
-function updateMessagesInFlight(state, payload) {
+export function updateMessagesInFlight(state, payload) {
   const newState = state;
 
   if (
@@ -41,10 +41,12 @@ function stopTrackingMessage(state, payload) {
 }
 
 export function setDisconnected(state) {
-  const blocks = { ...state.blocks };
+  const newState = { ...state };
+  newState.messagesInFlight = {};
+  const blocks = { ...newState.blocks };
   Object.keys(blocks).forEach(blockName => {
     if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
-      const attributes = [...state.blocks[blockName].attributes];
+      const attributes = [...newState.blocks[blockName].attributes];
       for (let attr = 0; attr < attributes.length; attr += 1) {
         if (Object.prototype.hasOwnProperty.call(attributes[attr], 'raw')) {
           if (
@@ -69,18 +71,18 @@ export function setDisconnected(state) {
                 message: 'Websocket connection to server lost',
               },
             };
+            const archive = newState.blockArchive[blockName];
             if (
-              state.blockArchive[blockName] &&
-              state.blockArchive[blockName].attributes[attr] &&
-              state.blockArchive[blockName].attributes[attr].alarmState.get(
-                state.blockArchive[blockName].attributes[
-                  attr
-                ].alarmState.size() - 1
+              archive &&
+              archive.attributes[attr] &&
+              archive.attributes[attr].alarmState.size() !== 0 &&
+              archive.attributes[attr].alarmState.get(
+                archive.attributes[attr].alarmState.size() - 1
               ) !== AlarmStates.UNDEFINED_ALARM
             ) {
               const { timeStamp } = attributes[attr].raw;
               pushToArchive(
-                state.blockArchive[blockName].attributes[attr],
+                archive.attributes[attr],
                 {
                   raw: {
                     timeStamp,
@@ -93,11 +95,11 @@ export function setDisconnected(state) {
           }
         }
       }
-      blocks[blockName] = { ...state.blocks[blockName], attributes };
+      blocks[blockName] = { ...newState.blocks[blockName], attributes };
     }
   });
   return {
-    ...state,
+    ...newState,
     blocks,
   };
 }

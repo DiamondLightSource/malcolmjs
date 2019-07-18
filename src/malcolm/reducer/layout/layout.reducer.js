@@ -8,6 +8,7 @@ import {
   MalcolmSelectLinkType,
   MalcolmSelectBlock,
   MalcolmZoom,
+  MalcolmOptimisticLayoutUpdate,
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
@@ -68,8 +69,27 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       'widget:icon'
     );
 
+    const displayAttribute = blockUtils.findAttributesWithTag(
+      matchingBlock,
+      'block:display'
+    );
+
     if (iconAttribute.length > 0) {
       updatedBlock.icon = iconAttribute[0].raw.value;
+    }
+
+    if (displayAttribute.length > 0) {
+      updatedBlock.displayAttribute = displayAttribute[0].calculated.path;
+    }
+
+    const healthAttribute = blockUtils.findAttribute(
+      malcolmState.blocks,
+      layoutBlock.mri,
+      'health'
+    );
+    if (healthAttribute !== undefined) {
+      updatedBlock.alarmState =
+        healthAttribute.raw.alarm && healthAttribute.raw.alarm.severity;
     }
 
     updatedBlock.ports = buildPorts(matchingBlock);
@@ -159,6 +179,9 @@ const processLayout = malcolmState => {
     );
 
     if (attribute && attribute.calculated.layout) {
+      if (attribute.calculated.dirty) {
+        return malcolmState.layout;
+      }
       let layoutBlocks = attribute.calculated.layout.blocks
         .filter(b => b.visible)
         .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
@@ -363,8 +386,12 @@ const isRelevantWidget = attribute => {
 const isLabelAttribute = attribute =>
   attribute.calculated && attribute.calculated.name === 'label';
 
+const isHealthAttribute = attribute =>
+  attribute.calculated && attribute.calculated.name === 'health';
+
 const isRelevantAttribute = attribute =>
-  attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute));
+  (attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute))) ||
+  isHealthAttribute(attribute);
 
 const resetPorts = state => {
   let updatedState = selectPortForLink(state, undefined, true);
@@ -455,6 +482,26 @@ const zoomLayout = (state, payload) => {
   return { ...state, layoutEngine };
 };
 
+const optimisticUpdate = (state, payload) => {
+  const layoutEngineView = state.layoutEngine
+    ? {
+        offset: {
+          x: state.layoutEngine.diagramModel.offsetX,
+          y: state.layoutEngine.diagramModel.offsetY,
+        },
+        zoom: state.layoutEngine.diagramModel.zoom,
+      }
+    : undefined;
+
+  const layoutEngine = buildLayoutEngine(
+    payload.newLayout,
+    state.layoutState.selectedBlocks,
+    state.layoutState.selectedLinks,
+    layoutEngineView
+  );
+  return { ...state, layout: payload.newLayout, layoutEngine };
+};
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -465,6 +512,7 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmSelectLinkType]: selectLink,
     [MalcolmSelectBlock]: selectBlock,
     [MalcolmZoom]: zoomLayout,
+    [MalcolmOptimisticLayoutUpdate]: optimisticUpdate,
   }
 );
 

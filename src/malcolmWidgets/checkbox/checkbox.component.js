@@ -11,6 +11,7 @@ const styles = theme => ({
   checkBoxRoot: {
     height: 28,
     width: 28,
+    padding: 0,
     color: lighten(theme.palette.primary.light, 0.1),
     '&$checkBoxChecked': {
       color: theme.palette.primary.light,

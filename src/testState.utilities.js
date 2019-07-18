@@ -29,7 +29,9 @@ export const buildTestState = () => ({
       },
     },
     // see addBlock for more details
-    blocks: {},
+    blocks: {
+      '.blocks': { children: {} },
+    },
     blockArchive: {},
     parentBlock: undefined,
     mainAttribute: undefined,
@@ -54,6 +56,37 @@ export const buildTestState = () => ({
   },
 });
 
+export const buildLocalState = (attribute, length, labels) => {
+  const dummy = [];
+  for (let i = 0; i < length; i += 1) {
+    dummy[i] = '';
+  }
+  const dummyRow = {};
+  labels.forEach(label => {
+    dummyRow[label] = '';
+  });
+  return {
+    value: dummy.map(() => dummyRow),
+    meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+    labels,
+    userChanges: {},
+    flags: {
+      rows: dummy.map(() => ({})),
+      table: {
+        dirty: false,
+        fresh: true,
+        timeStamp:
+          attribute.raw.timeStamp !== undefined
+            ? JSON.parse(JSON.stringify(attribute.raw.timeStamp))
+            : undefined,
+        extendable:
+          attribute.raw.meta.writeable &&
+          !labels.some(label => !attribute.raw.meta.elements[label].writeable),
+      },
+    },
+  };
+};
+
 export const addMessageInFlight = (id, path, malcolmState) => {
   const updatedState = malcolmState;
   updatedState.messagesInFlight[id] = {
@@ -70,7 +103,7 @@ export const addBlockArchive = (mri, attributes, malcolmState) => {
   };
 };
 
-export const addBlock = (name, attributes, malcolmState, children = []) => {
+export const addBlock = (name, attributes, malcolmState, children = {}) => {
   const updatedState = malcolmState;
   updatedState.blocks[name] = {
     typeid: 'malcolm:core/BlockMeta:1.0',
@@ -81,18 +114,37 @@ export const addBlock = (name, attributes, malcolmState, children = []) => {
     children,
     orphans: [],
   };
+  updatedState.blocks['.blocks'].children[name] = {
+    label: name.replace(':', 'ing '),
+  };
 };
 
 export const buildMeta = (
   tags = [],
   writeable = true,
   label = '',
-  typeid = ''
+  typeid = '',
+  elements
 ) => ({
   tags,
   writeable,
   label,
   typeid,
+  elements,
+});
+
+const buildMethodMeta = (
+  takes = { required: {} },
+  returns = {},
+  writeable = true,
+  label = '',
+  version = 1.1
+) => ({
+  writeable,
+  label,
+  typeid: `malcolm:core/MethodMeta:${version}`,
+  takes,
+  returns,
 });
 
 export const buildAttribute = (
@@ -101,8 +153,9 @@ export const buildAttribute = (
   value,
   alarm = 0,
   meta = buildMeta(),
-  children = [],
-  loading = false
+  children = {},
+  loading = false,
+  typeid
 ) => ({
   // the data coming back from the server is always stored in raw
   raw: {
@@ -111,6 +164,7 @@ export const buildAttribute = (
       severity: alarm,
     },
     meta,
+    typeid,
   },
   // other additional properties are stored in calculated
   calculated: {
@@ -119,6 +173,35 @@ export const buildAttribute = (
     path,
     pending: false,
     children,
+  },
+});
+
+export const buildMethod = (
+  name,
+  path,
+  takes = { elements: {} },
+  took = { value: {}, present: [] },
+  returns = { elements: {} },
+  returned = { value: {} },
+  alarm = 0,
+  loading = false
+) => ({
+  // the data coming back from the server is always stored in raw
+  raw: {
+    took,
+    returned,
+    alarm: {
+      severity: alarm,
+    },
+    meta: buildMethodMeta(takes, returns),
+  },
+  // other additional properties are stored in calculated
+  calculated: {
+    name,
+    loading,
+    path,
+    pending: false,
+    isMethod: true,
   },
 });
 
@@ -185,31 +268,22 @@ export const addTableLocalState = (
     blockName,
     attributeName
   );
-  const dummy = [];
-  for (let i = 0; i < length; i += 1) {
-    dummy[i] = '';
-  }
-  const dummyRow = {};
-  labels.forEach(label => {
-    dummyRow[label] = '';
-  });
+
   if (attributeIndex > -1) {
-    updatedState.blocks[blockName].attributes[attributeIndex].localState = {
-      value: dummy.map(() => dummyRow),
-      meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
-      labels,
-      flags: {
-        rows: dummy.map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp:
-            attribute.raw.timeStamp !== undefined
-              ? JSON.parse(JSON.stringify(attribute.raw.timeStamp))
-              : undefined,
-        },
-      },
-    };
+    updatedState.blocks[blockName].attributes[
+      attributeIndex
+    ].localState = buildLocalState(attribute, length, labels);
+    if (
+      updatedState.blocks[blockName].attributes[attributeIndex].raw.value ===
+      undefined
+    ) {
+      updatedState.blocks[blockName].attributes[attributeIndex].raw.value = {};
+      labels.forEach(label => {
+        updatedState.blocks[blockName].attributes[attributeIndex].raw.value[
+          label
+        ] = [];
+      });
+    }
   }
   return updatedState;
 };

@@ -4,6 +4,8 @@ import handleLocationChange from './malcolmRouting';
 function sendMalcolmMessage(worker, payload) {
   const message = { ...payload };
   delete message.type;
+  delete message.callback;
+  delete message.senderLookupID;
   const msg = JSON.stringify(message);
 
   worker.postMessage(msg);

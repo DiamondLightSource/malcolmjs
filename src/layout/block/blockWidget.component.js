@@ -7,6 +7,10 @@ import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
 import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
+import AttributeAlarm, {
+  AlarmStates,
+} from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import AttributeSelector from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { hiddenLinkIdSeparator } from '../../malcolm/reducer/layout/layout.reducer';
 
 const styles = theme => ({
@@ -23,6 +27,7 @@ const styles = theme => ({
     marginTop: 2,
     marginBottom: 1,
     fontSize: 14,
+    flex: 'auto',
   },
   blockContents: {
     display: 'flex',
@@ -71,6 +76,11 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  alarmDiv: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+  },
 });
 
 const portHeight = 23;
@@ -100,6 +110,21 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
+  let blockGraphic =
+    props.node.icon && props.node.icon !== '<svg/>'
+      ? renderHTML(props.node.icon)
+      : null;
+  blockGraphic = props.node.displayAttribute ? (
+    <div style={{ width: '80%', marginLeft: '16px' }}>
+      <AttributeSelector
+        blockName={props.node.displayAttribute[0]}
+        attributeName={props.node.displayAttribute[1]}
+      />
+    </div>
+  ) : (
+    blockGraphic
+  );
+
   const block = props.node.loading ? (
     <LoadingBlock classes={props.classes} node={props.node} />
   ) : (
@@ -116,16 +141,40 @@ const BlockWidget = props => {
       }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
-      <Typography className={props.classes.title}>
-        {props.node.label}
-      </Typography>
-
-      <div className={props.classes.blockContents} style={{ minHeight }}>
-        <div className={props.classes.iconContents}>
-          {props.node.icon && props.node.icon !== '<svg/>'
-            ? renderHTML(props.node.icon)
-            : null}
+      {props.node.alarmState !== AlarmStates.NO_ALARM ? (
+        <div className={props.classes.alarmDiv} style={{ zIndex: 999 }}>
+          <div
+            style={{ zIndex: 1000, position: 'absolute', top: 0, left: 1.856 }}
+          >
+            <AttributeAlarm alarmSeverity={props.node.alarmState} />
+          </div>
+          <div style={{ zIndex: 999, position: 'absolute', top: 0 }}>
+            <svg height="28" width="28">
+              <circle
+                cx="13.856"
+                cy="13.856"
+                r="13.856"
+                fill={props.theme.palette.background.paper}
+                fillOpacity={0.6}
+              />
+            </svg>
+          </div>
         </div>
+      ) : null}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'relative',
+          top: 2,
+        }}
+      >
+        <Typography className={props.classes.title}>
+          {props.node.label}
+        </Typography>
+      </div>
+      <div className={props.classes.blockContents} style={{ minHeight }}>
+        <div className={props.classes.iconContents}>{blockGraphic}</div>
         <div className={props.classes.inputPortsContainer}>
           {inputPorts.map(p => (
             <BlockPortWidget
@@ -188,6 +237,8 @@ BlockWidget.propTypes = {
     isHiddenLink: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
+    alarmState: PropTypes.number,
+    displayAttribute: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,
@@ -199,6 +250,14 @@ BlockWidget.propTypes = {
     portContainer: PropTypes.string,
     iconContents: PropTypes.string,
     description: PropTypes.string,
+    alarmDiv: PropTypes.string,
+  }).isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({
+        paper: PropTypes.string,
+      }),
+    }),
   }).isRequired,
 };
 

@@ -232,11 +232,17 @@ const rowValues = harderAttribute.raw.value[
   return rowData;
 });
 
+const columns = {};
+Object.keys(harderAttribute.raw.meta.elements).forEach(column => {
+  columns[column] = {};
+});
 export const expectedCopy = {
   value: JSON.parse(JSON.stringify(rowValues)),
   meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
   labels: Object.keys(harderAttribute.raw.meta.elements),
+  userChanges: {},
   flags: {
+    columns,
     rows: harderAttribute.raw.value[
       Object.keys(harderAttribute.raw.meta.elements)[0]
     ].map(() => ({})),
@@ -244,6 +250,7 @@ export const expectedCopy = {
       dirty: false,
       fresh: true,
       timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
+      extendable: true,
     },
   },
 };

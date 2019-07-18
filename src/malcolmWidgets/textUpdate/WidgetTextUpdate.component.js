@@ -12,7 +12,6 @@ const baseDiv = theme => ({
 const textUpdateBase = {
   fontSize: '12pt',
   padding: 4,
-  paddingRight: 8,
   textAlign: 'Right',
   width: '80%',
   whiteSpace: 'pre',
@@ -21,6 +20,7 @@ const textUpdateBase = {
 const styles = theme => ({
   div: {
     display: 'flex',
+    height: '28px',
     ...baseDiv(theme),
   },
   divWrap: {
@@ -44,9 +44,10 @@ const styles = theme => ({
   },
   unitBox: {
     color: emphasize(theme.palette.primary.contrastText, 0.2),
-    padding: 4,
-    paddingRight: 2,
-    width: '20%',
+    fontSize: '9pt',
+    padding: 0,
+    paddingTop: 4,
+    maxWidth: '50%',
   },
 });
 

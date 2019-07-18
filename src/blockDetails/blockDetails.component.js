@@ -110,16 +110,20 @@ export const areAttributesTheSame = (oldAttributes, newAttributes) =>
 
 const GroupDivider = props => <div className={props.classes.endDivider} />;
 
-const methodHasParameters = method =>
-  Object.keys(method.takes.elements).length > 0 ||
-  Object.keys(method.returns.elements).length > 0;
+const methodHasParameters = rawMethod =>
+  Object.keys(rawMethod.meta.takes.elements).length > 0 ||
+  Object.keys(rawMethod.meta.returns.elements).length > 0;
 
 const showDivider = (methods, index) =>
+  (index < methods.length - 1 &&
+    !methodHasParameters(methods[index + 1].raw)) ||
+  index === methods.length - 1;
+/*
   methodHasParameters(methods[index].raw) &&
   ((index < methods.length - 1 &&
     methodHasParameters(methods[index + 1].raw)) ||
     index === methods.length - 1);
-
+   */
 const displayAttributes = props => {
   if (props.attributesAvailable) {
     return (
@@ -146,6 +150,9 @@ const displayAttributes = props => {
             ))}
           </GroupExpander>
         ))}
+        {props.methods.length > 0 ? (
+          <GroupDivider classes={props.classes} />
+        ) : null}
         {props.methods.map((method, i) => (
           <div>
             <MethodDetails
@@ -204,9 +211,11 @@ const mapStateToProps = (state, ownProps, memory) => {
   stateMemory.orphans = stateMemory.orphans || [];
   let block;
   const blockList = state.malcolm.blocks['.blocks']
-    ? state.malcolm.blocks['.blocks'].children
+    ? Object.keys(state.malcolm.blocks['.blocks'].children)
     : [];
-  if (ownProps.parent) {
+  if (ownProps.mri) {
+    block = state.malcolm.blocks[ownProps.mri];
+  } else if (ownProps.parent) {
     block = state.malcolm.parentBlock
       ? state.malcolm.blocks[state.malcolm.parentBlock]
       : undefined;
@@ -260,7 +269,14 @@ const mapStateToProps = (state, ownProps, memory) => {
         ),
       }));
 
-    stateMemory.methods = block.attributes.filter(a => a.calculated.isMethod);
+    stateMemory.methods = block.attributes.filter(
+      a =>
+        a.calculated.isMethod &&
+        !(
+          block.orphans &&
+          block.orphans.some(orphan => orphan === a.calculated.name)
+        )
+    );
 
     stateMemory.oldAttributes = block.attributes;
   }

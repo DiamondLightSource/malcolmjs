@@ -27,7 +27,6 @@ const subscribeToNewBlocksInRoute = () => (dispatch, getState) => {
     nav => nav.navType === NavTypes.Block
   );
   const unsubscribedBlocks = blocksInRoute.filter(nav => !blocks[nav.blockMri]);
-
   unsubscribedBlocks.forEach(nav => {
     dispatch(malcolmNewBlockAction(nav.blockMri, false, false));
     dispatch(malcolmSubscribeAction([nav.blockMri, 'meta']));
@@ -83,10 +82,10 @@ const navigateToAttribute = (blockMri, attributeName) => (
     });
   }
 
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
   if (matchingBlockNav > -1) {
-    const newPath = `/gui/${navigationLists
+    const newPath = `/${viewType}/${navigationLists
       .filter((nav, i) => i <= matchingBlockNav)
       .map(nav => nav.path)
       .join('/')}/${attributeName}`;
@@ -104,7 +103,7 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
 
   const goTo = path =>
@@ -117,18 +116,21 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
 
   if (matchingBlockNav > -1) {
     if (subElement !== undefined) {
-      const newPath = `/gui/${navigationLists
+      const newPath = `/${viewType}/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}.${subElement}/.info`;
       goTo(newPath);
     } else {
-      const newPath = `/gui/${navigationLists
+      const newPath = `/${viewType}/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}/.info`;
       goTo(newPath);
     }
+  } else {
+    const newPath = `/${viewType}/${blockMri}/${attributeName}/.info`;
+    goTo(newPath);
   }
 };
 
@@ -137,13 +139,13 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
 
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
 
   if (matchingBlockNav > -1) {
     if (subElement) {
-      const newPath = `/gui/${navigationLists
+      const newPath = `/${viewType}/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}.${subElement}/${navigationLists
@@ -154,7 +156,7 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
         .join('/')}`;
       dispatch(replace(newPath));
     } else {
-      const newPath = `/gui/${navigationLists
+      const newPath = `/${viewType}/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}/${navigationLists
@@ -168,7 +170,7 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
 
 const navigateToPalette = () => (dispatch, getState) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
 
   const lastAttributeNav = [...navigationLists]
     .reverse()
@@ -179,7 +181,7 @@ const navigateToPalette = () => (dispatch, getState) => {
         ? ''
         : '.palette';
 
-    const newPath = `/gui/${navigationLists
+    const newPath = `/${viewType}/${navigationLists
       .filter((nav, i) => i <= navigationLists.length - 1 - lastAttributeNav)
       .map(nav => nav.path)
       .join('/')}/${routeEnding}`;
@@ -194,7 +196,7 @@ const isChildPanelNavType = navType =>
 
 const closeChildPanel = () => (dispatch, getState) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
   if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
     if (navigationLists.slice(-1)[0].navType === NavTypes.Info) {
       const { blockMri } = navigationLists.slice(-3)[0];
@@ -207,7 +209,7 @@ const closeChildPanel = () => (dispatch, getState) => {
         attributeName
       );
       if (attribute && attribute.calculated && attribute.calculated.isMethod) {
-        const newPath = `/gui/${navigationLists
+        const newPath = `/${viewType}/${navigationLists
           .slice(0, -2)
           .map(nav => nav.path)
           .join('/')}/${state.mainAttribute}${
@@ -215,14 +217,14 @@ const closeChildPanel = () => (dispatch, getState) => {
         }`;
         dispatch(push(newPath));
       } else {
-        const newPath = `/gui/${navigationLists
+        const newPath = `/${viewType}/${navigationLists
           .slice(0, -1)
           .map(nav => nav.path)
           .join('/')}`;
         dispatch(push(newPath));
       }
     } else {
-      const newPath = `/gui/${navigationLists
+      const newPath = `/${viewType}/${navigationLists
         .slice(0, -1)
         .map(nav => nav.path)
         .join('/')}`;
@@ -233,7 +235,7 @@ const closeChildPanel = () => (dispatch, getState) => {
 
 const updateChildPanel = newChild => (dispatch, getState) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
 
   if (navigationLists.slice(-1)[0].path === newChild) {
     return; // nothing to do as the child panel is already newChild
@@ -241,12 +243,12 @@ const updateChildPanel = newChild => (dispatch, getState) => {
 
   let newPath;
   if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
-    newPath = `/gui/${navigationLists
+    newPath = `/${viewType}/${navigationLists
       .slice(0, -1)
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   } else {
-    newPath = `/gui/${navigationLists
+    newPath = `/${viewType}/${navigationLists
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   }
@@ -258,7 +260,7 @@ const updateChildPanelWithLink = (blockMri, portName) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
+  const { navigationLists, viewType } = state.navigation;
 
   const layoutAttribute = blockUtils.findAttribute(
     state.blocks,
@@ -278,12 +280,12 @@ const updateChildPanelWithLink = (blockMri, portName) => (
 
   let newPath;
   if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
-    newPath = `/gui/${navigationLists
+    newPath = `/${viewType}/${navigationLists
       .slice(0, -1)
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   } else {
-    newPath = `/gui/${navigationLists
+    newPath = `/${viewType}/${navigationLists
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   }
@@ -295,16 +297,16 @@ const closeInfo = (blockMri, attributeName, subElement) => (
   getState
 ) => {
   const { blocks, mainAttribute, navigation } = getState().malcolm;
-  const { navigationLists } = navigation;
+  const { navigationLists, viewType } = navigation;
   const attribute = blockUtils.findAttribute(blocks, blockMri, attributeName);
   if (attribute && attribute.calculated && attribute.calculated.isMethod) {
-    const newPath = `/gui/${navigationLists
+    const newPath = `/${viewType}/${navigationLists
       .slice(0, -2)
       .map(nav => nav.path)
       .join('/')}/${mainAttribute}${subElement ? `.${subElement}` : ''}`;
     dispatch(push(newPath));
   } else {
-    const newPath = `/gui/${navigationLists
+    const newPath = `/${viewType}/${navigationLists
       .slice(0, -1)
       .map(nav => nav.path)
       .join('/')}`;

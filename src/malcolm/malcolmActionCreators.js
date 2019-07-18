@@ -25,16 +25,23 @@ import {
   malcolmArchivePost,
   malcolmFlagMethodInput,
 } from './actions/method.actions';
-import { rootBlockSubPath } from './malcolmHandlers/blockMetaHandler';
 
-export const malcolmSubscribeAction = (path, delta = true) => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Subscribe:1.0',
-    path,
-    delta,
-  },
-});
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+
+export const malcolmSubscribeAction = (path, delta = true, callback) => {
+  const action = {
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path,
+      delta,
+    },
+  };
+  if (callback) {
+    action.payload.callback = callback;
+  }
+  return action;
+};
 
 export const malcolmNewBlockAction = (blockName, parent, child) => ({
   type: MalcolmNewBlock,
@@ -93,14 +100,35 @@ export const malcolmPostAction = (path, rawParameters) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const method = blockUtils.findAttribute(state.blocks, path[0], path[1]);
+  const attributeIndex = blockUtils.findAttributeIndex(
+    state.blocks,
+    path[0],
+    path[1]
+  );
+  const method = state.blocks[path[0]].attributes[attributeIndex];
   const parameters = {};
   Object.keys(rawParameters).forEach(param => {
-    parameters[param] = rawParameters[param].value;
+    if (
+      rawParameters[param].meta &&
+      rawParameters[param].meta.typeid === malcolmTypes.table
+    ) {
+      const labels = JSON.parse(
+        JSON.stringify(Object.keys(method.raw.meta.defaults[param]))
+      );
+      labels.splice(labels.findIndex(el => el === 'typeid'), 1);
+      parameters[param] = method.raw.meta.defaults[param];
+      rawParameters[param].value.forEach((row, rowIndex) => {
+        labels.forEach(label => {
+          parameters[param][label][rowIndex] = row[label];
+        });
+      });
+    } else {
+      parameters[param] = rawParameters[param].value;
+    }
   });
   let missing = [];
   if (method && method.calculated.isMethod) {
-    missing = method.raw.takes.required.filter(
+    missing = method.raw.meta.takes.required.filter(
       param => !Object.keys(rawParameters).includes(param)
     );
   }
@@ -113,6 +141,9 @@ export const malcolmPostAction = (path, rawParameters) => (
         typeid: 'malcolm:core/Post:1.0',
         path,
         parameters,
+        senderLookupID: getState().malcolm.blocks[path[0]].attributes[
+          attributeIndex
+        ].calculated.lastCallId,
       },
     });
   } else {
@@ -129,27 +160,17 @@ export const malcolmPostAction = (path, rawParameters) => (
   }
 };
 
-export const malcolmNavigationPath = blockPaths => ({
+export const malcolmNavigationPath = (blockPaths, viewType) => ({
   type: MalcolmNavigationPathUpdate,
   payload: {
     blockPaths,
+    viewType,
   },
 });
 
-export const malcolmResetBlocks = () => (dispatch, getState) => {
-  dispatch({
-    type: MalcolmCleanBlocks,
-  });
-
-  const state = getState();
-  state.malcolm.messagesInFlight = {};
-  dispatch(malcolmSubscribeAction(rootBlockSubPath, false));
-  Object.values(state.malcolm.blocks)
-    .filter(block => block.name !== '.blocks')
-    .forEach(block => {
-      dispatch(malcolmSubscribeAction([block.name, 'meta']));
-    });
-};
+export const malcolmResetBlocks = () => ({
+  type: MalcolmCleanBlocks,
+});
 
 export const malcolmSetDisconnected = () => ({
   type: MalcolmDisconnected,
@@ -169,13 +190,13 @@ export const malcolmCopyValue = path => ({
   },
 });
 
-export const malcolmSetTableFlag = (path, row, flagType, flags) => ({
+export const malcolmSetTableFlag = (path, field, flagType, flags) => ({
   type: MalcolmTableFlag,
   payload: {
     path,
-    row,
     flagType,
     flags,
+    ...field,
   },
 });
 

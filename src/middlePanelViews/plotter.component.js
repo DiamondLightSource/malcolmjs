@@ -13,7 +13,12 @@ export const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
 export const comparePlotlyDateString = (date1, date2) => {
   // plotly.js sometimes adds or removes decimal places in the millisecond portion of its stringified date
   // so we take that in to account when comparing two dates
-  if (date1 instanceof Date || date2 instanceof Date) {
+  if (
+    date1 instanceof Date ||
+    date2 instanceof Date ||
+    typeof date1 !== 'string' ||
+    typeof date2 !== 'string'
+  ) {
     return false;
   }
   const date1Split = date1.split('.');
@@ -60,13 +65,19 @@ class Plotter extends React.Component {
           state.layout.xaxis.range &&
           (!(state.layout.xaxis.range[0] instanceof Date) ||
             !(state.layout.xaxis.range[1] instanceof Date));
-        if (newState.data[0].x.length > 0 && !userHasChangedLayout) {
+        if (
+          newState.data[0] &&
+          newState.data[0].x.length > 0 &&
+          !userHasChangedLayout
+        ) {
           newState.layout.xaxis = {
             ...newState.layout.xaxis,
-            range: [
-              new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
-              newState.data[0].x.slice(-1)[0],
-            ],
+            range: !props.useRaw
+              ? [
+                  new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
+                  newState.data[0].x.slice(-1)[0],
+                ]
+              : [newState.data[0].x[0], newState.data[0].x.slice(-1)[0]],
           };
         }
         if (!state.originalXRange && newState.layout.xaxis.range) {
@@ -107,6 +118,12 @@ class Plotter extends React.Component {
         yaxis: {
           color: props.theme.palette.text.primary,
         },
+        yaxis2: {
+          color: props.theme.palette.text.primary,
+          overlaying: 'y',
+          side: 'right',
+        },
+        margin: { l: 40, r: 30, t: 30, b: 30 },
       },
       userChangingViewState: false,
     };
@@ -161,10 +178,12 @@ class Plotter extends React.Component {
         datarevision: this.state.layout.datarevision + 1,
         xaxis: {
           color: this.props.theme.palette.text.primary,
-          range: [
-            new Date(this.state.data[0].x.slice(-1)[0].getTime() - 30000),
-            this.state.data[0].x.slice(-1)[0],
-          ],
+          range: !this.props.useRaw
+            ? [
+                new Date(this.state.data[0].x.slice(-1)[0].getTime() - 30000),
+                this.state.data[0].x.slice(-1)[0],
+              ]
+            : [this.state.data[0].x[0], this.state.data[0].x.slice(-1)[0]],
         },
         yaxis: {
           color: this.props.theme.palette.text.primary,
@@ -201,6 +220,13 @@ class Plotter extends React.Component {
 const mapStateToProps = (state, ownProps, memory) => {
   const plotterMemory = memory;
   let attribute;
+  if (ownProps.attribute) {
+    return {
+      attribute: ownProps.attribute,
+      parentPanelOpen: state.viewState.openParentPanel,
+      childPanelOpen: state.malcolm.childBlock !== undefined,
+    };
+  }
   if (ownProps.attributeName && ownProps.blockName) {
     const attributeIndex = blockUtils.findAttributeIndex(
       state.malcolm.blocks,
@@ -208,16 +234,18 @@ const mapStateToProps = (state, ownProps, memory) => {
       ownProps.attributeName
     );
     if (attributeIndex !== -1) {
-      attribute =
-        state.malcolm.blockArchive[ownProps.blockName].attributes[
-          attributeIndex
-        ];
+      attribute = !ownProps.useRaw
+        ? state.malcolm.blockArchive[ownProps.blockName].attributes[
+            attributeIndex
+          ]
+        : state.malcolm.blocks[ownProps.blockName].attributes[attributeIndex];
     }
   }
 
   if (
     !plotterMemory.currentPlotAttribute ||
-    attribute.plotTime !== plotterMemory.currentPlotAttribute.plotTime
+    attribute.plotTime !== plotterMemory.currentPlotAttribute.plotTime ||
+    ownProps.useRaw
   ) {
     plotterMemory.currentPlotAttribute = attribute;
   }
@@ -277,10 +305,12 @@ Plotter.propTypes = {
   tickArchive: PropTypes.func.isRequired,
   doTick: PropTypes.bool,
   deriveState: PropTypes.func.isRequired,
+  useRaw: PropTypes.bool,
 };
 
 Plotter.defaultProps = {
   doTick: false,
+  useRaw: false,
 };
 
 const memoizedMapStateToProps = () => {

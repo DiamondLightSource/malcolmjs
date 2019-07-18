@@ -3,6 +3,7 @@ import {
   handleErrorMessage,
   handleReturnMessage,
   setDisconnected,
+  updateMessagesInFlight,
 } from './socket.reducer';
 import { pushToArchive, updateAttribute } from './attribute.reducer';
 import {
@@ -37,7 +38,7 @@ describe('socket & message reducer', () => {
     updateAttribute.mockClear();
     state = buildTestState().malcolm;
     addBlock('testBlock', testBlockAttributes, state);
-    addMessageInFlight(1, undefined, state);
+    addMessageInFlight(1, ['.', 'blocks', 'value'], state);
     addMessageInFlight(123, ['testBlock', 'foo'], state);
     attributeIndex = blockUtils.findAttributeIndex(
       state.blocks,
@@ -129,6 +130,9 @@ describe('socket & message reducer', () => {
 
   it('does disconnect', () => {
     state = setDisconnected(state);
+    expect(
+      state.blockArchive.testBlock.attributes[attributeIndex].alarmState.size
+    ).toHaveBeenCalled();
     expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
       false
     );
@@ -147,5 +151,32 @@ describe('socket & message reducer', () => {
       { raw: { timeStamp: undefined, value: 1 } },
       AlarmStates.UNDEFINED_ALARM
     );
+  });
+
+  it('updates messagesInFlight with new message', () => {
+    expect(Object.keys(state.messagesInFlight).length).toEqual(2);
+    let testState = updateMessagesInFlight(state, {
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['testBlock', 'bar'],
+      delta: true,
+      id: 7,
+    });
+    testState = updateMessagesInFlight(testState, {
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['anotherTestBlock', 'foo'],
+      delta: true,
+      id: 8,
+    });
+    expect(Object.keys(testState.messagesInFlight).length).toEqual(4);
+  });
+  it('doesnt update messagesInFlight with new message if message is subscription for path which is already subscribed to', () => {
+    expect(Object.keys(state.messagesInFlight).length).toEqual(2);
+    const testState = updateMessagesInFlight(state, {
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['testBlock', 'foo'],
+      delta: true,
+      id: 7,
+    });
+    expect(Object.keys(testState.messagesInFlight).length).toEqual(2);
   });
 });

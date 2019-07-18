@@ -42,10 +42,12 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
           },
           "value": Object {
             "alarm": Array [
-              0,
+              Object {
+                "alarm": 0,
+              },
             ],
             "timeStamp": Array [
-              "1970-01-01T00:00:00.000Z",
+              1970-01-01T00:00:00.000Z,
             ],
             "value": Array [
               0,
@@ -65,7 +67,9 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
     attribute={
       Object {
         "alarmState": Array [
-          0,
+          Object {
+            "alarm": 0,
+          },
         ],
         "name": undefined,
         "parent": undefined,
@@ -125,10 +129,12 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
           },
           "value": Object {
             "alarm": Array [
-              0,
+              Object {
+                "alarm": 0,
+              },
             ],
             "timeStamp": Array [
-              "1970-01-01T00:00:00.000Z",
+              1970-01-01T00:00:00.000Z,
             ],
             "value": Array [
               0,
@@ -148,7 +154,9 @@ exports[`MethodArchive renders table correctly for input param 1`] = `
     attribute={
       Object {
         "alarmState": Array [
-          0,
+          Object {
+            "alarm": 0,
+          },
         ],
         "name": undefined,
         "parent": undefined,
@@ -208,13 +216,15 @@ exports[`MethodArchive renders table correctly for return param 1`] = `
           },
           "value": Object {
             "alarm": Array [
-              0,
+              Object {
+                "alarm": 0,
+              },
             ],
             "timeStamp": Array [
-              "1970-01-01T00:00:00.000Z",
+              1970-01-01T00:00:00.000Z,
             ],
             "value": Array [
-              undefined,
+              1,
             ],
           },
         },
@@ -231,7 +241,9 @@ exports[`MethodArchive renders table correctly for return param 1`] = `
     attribute={
       Object {
         "alarmState": Array [
-          0,
+          Object {
+            "alarm": 0,
+          },
         ],
         "name": undefined,
         "parent": undefined,
@@ -239,7 +251,7 @@ exports[`MethodArchive renders table correctly for return param 1`] = `
           1970-01-01T00:00:01.000Z,
         ],
         "value": Array [
-          undefined,
+          1,
         ],
       }
     }

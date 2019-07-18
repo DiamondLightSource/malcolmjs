@@ -27,6 +27,19 @@ describe('WidgetComboBox', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly for mobile', () => {
+    const wrapper = shallow(
+      <WidgetComboBox
+        mobile
+        Value="2"
+        Pending={false}
+        Choices={['1', '2', '3']}
+        selectEventHandler={() => {}}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('renders correctly with invalid value', () => {
     const wrapper = shallow(
       <WidgetComboBox
@@ -59,14 +72,15 @@ describe('WidgetComboBox', () => {
         Pending={false}
         Choices={['1', '2', '3']}
         selectEventHandler={eventAction}
+        forceOpen
       />
     );
     wrapper
-      .find('option')
+      .find('Typography')
       .last()
-      .simulate('change');
+      .simulate('click');
 
     expect(eventAction.mock.calls.length).toEqual(1);
-    expect(eventAction.mock.calls[0][0].target.value).toEqual('3');
+    expect(eventAction.mock.calls[0][0]).toEqual('3');
   });
 });

@@ -19,8 +19,63 @@ exports[`WidgetComboBox renders correctly 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
+    data-cy="combobox"
+    native={false}
+    onChange={[Function]}
+    value="2"
+  >
+    <WithStyles(Typography)
+      data-cy="choice-0"
+      key="0"
+      onClick={[Function]}
+      value="1"
+    >
+      1
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-1"
+      key="1"
+      onClick={[Function]}
+      value="2"
+    >
+      2
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-2"
+      key="2"
+      onClick={[Function]}
+      value="3"
+    >
+      3
+    </WithStyles(Typography)>
+  </WithStyles(WithFormControlContext(Select))>
+</FormControl>
+`;
+
+exports[`WidgetComboBox renders correctly for mobile 1`] = `
+<FormControl
+  className="WidgetComboBox-formControl-2"
+  classes={
+    Object {
+      "fullWidth": "MuiFormControl-fullWidth-7",
+      "marginDense": "MuiFormControl-marginDense-6",
+      "marginNormal": "MuiFormControl-marginNormal-5",
+      "root": "MuiFormControl-root-4",
+    }
+  }
+  component="div"
+  disabled={false}
+  error={false}
+  fullWidth={true}
+  margin="none"
+  required={false}
+  variant="standard"
+>
+  <WithStyles(WithFormControlContext(Select))
+    className="WidgetComboBox-select-3"
+    data-cy="combobox"
     native={true}
     onChange={[Function]}
     value="2"
@@ -43,7 +98,7 @@ exports[`WidgetComboBox renders correctly 1`] = `
     >
       3
     </option>
-  </WithStyles(Select)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;
 
@@ -66,37 +121,44 @@ exports[`WidgetComboBox renders correctly with invalid value 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
-    native={true}
+    data-cy="combobox"
+    native={false}
     onChange={[Function]}
     value="4"
   >
-    <option
+    <WithStyles(Typography)
+      data-cy="choice-0"
       key="0"
+      onClick={[Function]}
       value="1"
     >
       1
-    </option>
-    <option
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-1"
       key="1"
+      onClick={[Function]}
       value="2"
     >
       2
-    </option>
-    <option
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-2"
       key="2"
+      onClick={[Function]}
       value="3"
     >
       3
-    </option>
+    </WithStyles(Typography)>
     <option
       disabled={true}
       value="4"
     >
       4
     </option>
-  </WithStyles(Select)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;
 
@@ -119,30 +181,37 @@ exports[`WidgetComboBox renders correctly with null initial value 1`] = `
   required={false}
   variant="standard"
 >
-  <WithStyles(Select)
+  <WithStyles(WithFormControlContext(Select))
     className="WidgetComboBox-select-3"
-    native={true}
+    data-cy="combobox"
+    native={false}
     onChange={[Function]}
     value="1"
   >
-    <option
+    <WithStyles(Typography)
+      data-cy="choice-0"
       key="0"
+      onClick={[Function]}
       value="1"
     >
       1
-    </option>
-    <option
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-1"
       key="1"
+      onClick={[Function]}
       value="2"
     >
       2
-    </option>
-    <option
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      data-cy="choice-2"
       key="2"
+      onClick={[Function]}
       value="3"
     >
       3
-    </option>
-  </WithStyles(Select)>
+    </WithStyles(Typography)>
+  </WithStyles(WithFormControlContext(Select))>
 </FormControl>
 `;

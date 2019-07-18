@@ -4,6 +4,7 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"
@@ -44,6 +45,7 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-layoutArea-2"
@@ -210,6 +212,7 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"
@@ -238,6 +241,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-layoutArea-2"
@@ -404,6 +408,7 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-layoutArea-2"
@@ -570,6 +575,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-layoutArea-2"
@@ -736,6 +742,7 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   role="presentation"
+  style={Object {}}
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"

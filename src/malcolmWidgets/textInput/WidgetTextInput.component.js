@@ -3,21 +3,22 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/core/styles';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const styles = () => ({
+const styles = theme => ({
   textInput: {
     width: '100%',
     maxHeight: '28px',
     verticalAlign: 'bottom',
   },
   inputStyle: {
-    // fontSize: '12pt',
+    fontSize: '12pt',
     textAlign: 'Right',
     padding: '2px',
   },
   InputStyle: {
-    padding: '2px',
     maxHeight: '28px',
+    lineHeight: '28px',
   },
   button: {
     width: '24px',
@@ -27,19 +28,31 @@ const styles = () => ({
       backgroundColor: 'transparent',
     },
   },
+  units: {
+    fontSize: '9pt',
+    marginLeft: '2px',
+    maxWidth: '50%',
+    height: '100%',
+    lineHeight: '28px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    color: emphasize(theme.palette.primary.contrastText, 0.2),
+    display: 'block',
+  },
 });
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["handleKeyUp"] }] */
 class WidgetTextInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (!props.isDirty) {
+      if (props.forceUpdate) {
+        props.setFlag('forceUpdate', false);
+      }
       return {
         localValue: props.Value,
       };
     } else if (props.forceUpdate) {
-      if (props.Error) {
-        props.submitEventHandler({ target: { value: props.Value } });
-      }
       props.setFlag('forceUpdate', false);
       return {
         localValue: props.Value,
@@ -55,6 +68,7 @@ class WidgetTextInput extends React.Component {
         props.localState.value && props.localState.value !== props.Value
           ? props.localState.value
           : props.Value,
+      hasFocus: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.deFocus = this.deFocus.bind(this);
@@ -83,22 +97,24 @@ class WidgetTextInput extends React.Component {
     if (!this.props.isDirty) {
       this.props.setFlag('dirty', true);
     }
+    this.props.localState.set(event);
     this.setState({
       localValue: event.target.value,
     });
-    this.props.localState.set(event);
     if (this.props.continuousSend) {
       this.props.submitEventHandler(event);
     }
   }
 
   inFocus(event) {
+    this.setState({ ...this.state, hasFocus: true });
     event.target.select();
     this.props.setFlag('dirty', true);
     this.props.focusHandler();
   }
 
   deFocus() {
+    this.setState({ ...this.state, hasFocus: false });
     if (this.state.localValue === this.props.Value) {
       this.props.setFlag('dirty', false);
     }
@@ -106,9 +122,16 @@ class WidgetTextInput extends React.Component {
   }
 
   render() {
-    const endAdornment = this.props.Units ? (
-      <InputAdornment position="end">{this.props.Units}</InputAdornment>
-    ) : null;
+    const endAdornment =
+      this.props.Units && !this.state.hasFocus ? (
+        <InputAdornment
+          position="end"
+          className={this.props.classes.units}
+          disableTypography
+        >
+          {this.props.Units}
+        </InputAdornment>
+      ) : null;
 
     return (
       <TextField
@@ -143,8 +166,8 @@ WidgetTextInput.propTypes = {
     ),
   }),
   setFlag: PropTypes.func.isRequired,
-  blurHandler: PropTypes.func.isRequired,
-  focusHandler: PropTypes.func.isRequired,
+  blurHandler: PropTypes.func,
+  focusHandler: PropTypes.func,
   Pending: PropTypes.bool,
   Error: PropTypes.bool,
   isDirty: PropTypes.bool,
@@ -154,6 +177,7 @@ WidgetTextInput.propTypes = {
     InputStyle: PropTypes.string,
     inputStyle: PropTypes.string,
     button: PropTypes.string,
+    units: PropTypes.string,
   }).isRequired,
   continuousSend: PropTypes.bool,
 };
@@ -165,6 +189,8 @@ WidgetTextInput.defaultProps = {
   Error: false,
   continuousSend: false,
   localState: { set: () => {} },
+  focusHandler: () => {},
+  blurHandler: () => {},
 };
 
-export default withStyles(styles)(WidgetTextInput);
+export default withStyles(styles, { withTheme: true })(WidgetTextInput);

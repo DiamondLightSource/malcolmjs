@@ -114,6 +114,8 @@ exports[`WidgetTextUpdate displays with units 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": <WithStyles(InputAdornment)
+        className="WidgetTextInput-units-5"
+        disableTypography={true}
         position="end"
     >
         GW

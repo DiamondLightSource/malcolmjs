@@ -1,6 +1,6 @@
 const alarmStates = [
 
-]
+];
 
 let subscriptionTimers = {};
 
@@ -48,6 +48,19 @@ const activeSubscriptions = [
     index: 0,
     interval: 50,
     update: (response, index) => {
+      const val = 180*((index%500)-1);
+      response.changes[0][1].value = val;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
+      return response;
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "valScaled" ],
+    index: 0,
+    interval: 50,
+    update: (response, index) => {
       const val = 180*(((index%500)/250)-1);
       response.changes[0][1].value = val;
       if (val > -120 && val < 120) {
@@ -59,7 +72,7 @@ const activeSubscriptions = [
       }
       const now = (new Date());
       response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
-      response.changes[0][1].timeStamp.secondsPastEpoch =Math.floor(now.getTime()/1000);
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -87,7 +100,7 @@ const activeSubscriptions = [
       return response;
     },
   },
-]
+];
 
 function pathsMatch(a, b) {
   return a.length === b.length && a.every((a, i) => a === b[i]);
@@ -95,7 +108,7 @@ function pathsMatch(a, b) {
 
 function sendResponse(socket, message) {
   if (socket.readyState === socket.OPEN) {
-    socket.send(JSON.stringify(message))
+    socket.send(JSON.stringify(message));
   }
 }
 
@@ -103,15 +116,15 @@ function checkForActiveSubscription(request, response, socket) {
   const matchingUpdate = activeSubscriptions.findIndex(s => pathsMatch(s.path, request.path));
 
   if (matchingUpdate > -1) {
-    let subscription = activeSubscriptions[matchingUpdate];
+    const subscription = activeSubscriptions[matchingUpdate];
     const timer = setInterval(() => {
-      subscription.index = subscription.index + 1;
+      subscription.index += 1;
       const updatedResponse = subscription.update(response, subscription.index);
       sendResponse(socket, updatedResponse);
     }, subscription.interval);
 
     if (subscriptionTimers[response.id]) {
-      console.log(`timer already exists for ${subscription.path}`)
+      console.log(`timer already exists for ${subscription.path}`);
       clearInterval(subscriptionTimers[response.id]);
     }
 
@@ -126,12 +139,11 @@ function checkForActiveSubscription(request, response, socket) {
 function cancelAllSubscriptions() {
   Object.keys(subscriptionTimers).forEach(k => {
     clearInterval(subscriptionTimers[k]);
-  })
+  });
   subscriptionTimers = {};
 }
-
 
 module.exports = {
   checkForActiveSubscription,
   cancelAllSubscriptions
-}
+};

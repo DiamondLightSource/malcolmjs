@@ -467,6 +467,25 @@ exports[`virtualized table widget row renders correctly 1`] = `
     classes={Object {}}
     flags={
       Object {
+        "columns": Object {
+          "outa1": Object {},
+          "outa2": Object {},
+          "outb1": Object {},
+          "outb2": Object {},
+          "outc1": Object {},
+          "outc2": Object {},
+          "outd1": Object {},
+          "outd2": Object {},
+          "oute1": Object {},
+          "oute2": Object {},
+          "outf1": Object {},
+          "outf2": Object {},
+          "position": Object {},
+          "repeats": Object {},
+          "time1": Object {},
+          "time2": Object {},
+          "trigger": Object {},
+        },
         "rows": Array [
           Object {},
           Object {},
@@ -476,6 +495,7 @@ exports[`virtualized table widget row renders correctly 1`] = `
         ],
         "table": Object {
           "dirty": false,
+          "extendable": true,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,
@@ -530,6 +550,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
         ],
         "table": Object {
           "dirty": false,
+          "extendable": undefined,
           "fresh": true,
           "timeStamp": undefined,
         },
@@ -591,6 +612,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
           ],
           "table": Object {
             "dirty": false,
+            "extendable": undefined,
             "fresh": true,
             "timeStamp": undefined,
           },
@@ -714,30 +736,30 @@ exports[`virtualized table widget table renders correctly for array attribute wi
         "props": Object {},
         "shadows": Array [
           "none",
-          "0px 1px 3px 0px rgba(0, 0, 0, 0.2),0px 1px 1px 0px rgba(0, 0, 0, 0.14),0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
-          "0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12)",
-          "0px 1px 8px 0px rgba(0, 0, 0, 0.2),0px 3px 4px 0px rgba(0, 0, 0, 0.14),0px 3px 3px -2px rgba(0, 0, 0, 0.12)",
-          "0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 5px 8px 0px rgba(0, 0, 0, 0.14),0px 1px 14px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
-          "0px 4px 5px -2px rgba(0, 0, 0, 0.2),0px 7px 10px 1px rgba(0, 0, 0, 0.14),0px 2px 16px 1px rgba(0, 0, 0, 0.12)",
-          "0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0, 0, 0, 0.12)",
-          "0px 5px 6px -3px rgba(0, 0, 0, 0.2),0px 9px 12px 1px rgba(0, 0, 0, 0.14),0px 3px 16px 2px rgba(0, 0, 0, 0.12)",
-          "0px 6px 6px -3px rgba(0, 0, 0, 0.2),0px 10px 14px 1px rgba(0, 0, 0, 0.14),0px 4px 18px 3px rgba(0, 0, 0, 0.12)",
-          "0px 6px 7px -4px rgba(0, 0, 0, 0.2),0px 11px 15px 1px rgba(0, 0, 0, 0.14),0px 4px 20px 3px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 12px 17px 2px rgba(0, 0, 0, 0.14),0px 5px 22px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 13px 19px 2px rgba(0, 0, 0, 0.14),0px 5px 24px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 9px -4px rgba(0, 0, 0, 0.2),0px 14px 21px 2px rgba(0, 0, 0, 0.14),0px 5px 26px 4px rgba(0, 0, 0, 0.12)",
-          "0px 8px 9px -5px rgba(0, 0, 0, 0.2),0px 15px 22px 2px rgba(0, 0, 0, 0.14),0px 6px 28px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 10px -5px rgba(0, 0, 0, 0.2),0px 16px 24px 2px rgba(0, 0, 0, 0.14),0px 6px 30px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 11px -5px rgba(0, 0, 0, 0.2),0px 17px 26px 2px rgba(0, 0, 0, 0.14),0px 6px 32px 5px rgba(0, 0, 0, 0.12)",
-          "0px 9px 11px -5px rgba(0, 0, 0, 0.2),0px 18px 28px 2px rgba(0, 0, 0, 0.14),0px 7px 34px 6px rgba(0, 0, 0, 0.12)",
-          "0px 9px 12px -6px rgba(0, 0, 0, 0.2),0px 19px 29px 2px rgba(0, 0, 0, 0.14),0px 7px 36px 6px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 20px 31px 3px rgba(0, 0, 0, 0.14),0px 8px 38px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 21px 33px 3px rgba(0, 0, 0, 0.14),0px 8px 40px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 14px -6px rgba(0, 0, 0, 0.2),0px 22px 35px 3px rgba(0, 0, 0, 0.14),0px 8px 42px 7px rgba(0, 0, 0, 0.12)",
-          "0px 11px 14px -7px rgba(0, 0, 0, 0.2),0px 23px 36px 3px rgba(0, 0, 0, 0.14),0px 9px 44px 8px rgba(0, 0, 0, 0.12)",
-          "0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0, 0, 0, 0.12)",
+          "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+          "0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12)",
+          "0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12)",
+          "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
+          "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
+          "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
+          "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
+          "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
+          "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
+          "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
+          "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
+          "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
+          "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
+          "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
+          "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
+          "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
+          "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
+          "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
         ],
         "shape": Object {
           "borderRadius": 4,
@@ -772,12 +794,28 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 400,
             "lineHeight": "1.46429em",
           },
+          "body1Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.5,
+          },
           "body2": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.875rem",
             "fontWeight": 500,
             "lineHeight": "1.71429em",
+          },
+          "body2Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.01071em",
+            "lineHeight": 1.5,
           },
           "button": Object {
             "color": "rgba(0, 0, 0, 0.87)",
@@ -786,12 +824,29 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 500,
             "textTransform": "uppercase",
           },
+          "buttonNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.02857em",
+            "lineHeight": 1.75,
+            "textTransform": "uppercase",
+          },
           "caption": Object {
             "color": "rgba(0, 0, 0, 0.54)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.75rem",
             "fontWeight": 400,
             "lineHeight": "1.375em",
+          },
+          "captionNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.03333em",
+            "lineHeight": 1.66,
           },
           "display1": Object {
             "color": "rgba(0, 0, 0, 0.54)",
@@ -831,12 +886,69 @@ exports[`virtualized table widget table renders correctly for array attribute wi
           "fontWeightLight": 300,
           "fontWeightMedium": 500,
           "fontWeightRegular": 400,
+          "h1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "6rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.01562em",
+            "lineHeight": 1,
+          },
+          "h2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3.75rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.00833em",
+            "lineHeight": 1,
+          },
+          "h3": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.04,
+          },
+          "h4": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "2.125rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00735em",
+            "lineHeight": 1.17,
+          },
+          "h5": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.5rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.33,
+          },
+          "h6": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.25rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.0075em",
+            "lineHeight": 1.6,
+          },
           "headline": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "1.5rem",
             "fontWeight": 400,
             "lineHeight": "1.35417em",
+          },
+          "overline": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.08333em",
+            "lineHeight": 2.66,
+            "textTransform": "uppercase",
           },
           "pxToRem": [Function],
           "round": [Function],
@@ -847,6 +959,22 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 400,
             "lineHeight": "1.5em",
           },
+          "subtitle1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.75,
+          },
+          "subtitle2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.00714em",
+            "lineHeight": 1.57,
+          },
           "title": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
@@ -854,6 +982,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 500,
             "lineHeight": "1.16667em",
           },
+          "useNextVariants": false,
         },
         "zIndex": Object {
           "appBar": 1100,
@@ -1241,30 +1370,30 @@ exports[`virtualized table widget table renders correctly for array attribute wi
         "props": Object {},
         "shadows": Array [
           "none",
-          "0px 1px 3px 0px rgba(0, 0, 0, 0.2),0px 1px 1px 0px rgba(0, 0, 0, 0.14),0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
-          "0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12)",
-          "0px 1px 8px 0px rgba(0, 0, 0, 0.2),0px 3px 4px 0px rgba(0, 0, 0, 0.14),0px 3px 3px -2px rgba(0, 0, 0, 0.12)",
-          "0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 5px 8px 0px rgba(0, 0, 0, 0.14),0px 1px 14px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
-          "0px 4px 5px -2px rgba(0, 0, 0, 0.2),0px 7px 10px 1px rgba(0, 0, 0, 0.14),0px 2px 16px 1px rgba(0, 0, 0, 0.12)",
-          "0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0, 0, 0, 0.12)",
-          "0px 5px 6px -3px rgba(0, 0, 0, 0.2),0px 9px 12px 1px rgba(0, 0, 0, 0.14),0px 3px 16px 2px rgba(0, 0, 0, 0.12)",
-          "0px 6px 6px -3px rgba(0, 0, 0, 0.2),0px 10px 14px 1px rgba(0, 0, 0, 0.14),0px 4px 18px 3px rgba(0, 0, 0, 0.12)",
-          "0px 6px 7px -4px rgba(0, 0, 0, 0.2),0px 11px 15px 1px rgba(0, 0, 0, 0.14),0px 4px 20px 3px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 12px 17px 2px rgba(0, 0, 0, 0.14),0px 5px 22px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 13px 19px 2px rgba(0, 0, 0, 0.14),0px 5px 24px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 9px -4px rgba(0, 0, 0, 0.2),0px 14px 21px 2px rgba(0, 0, 0, 0.14),0px 5px 26px 4px rgba(0, 0, 0, 0.12)",
-          "0px 8px 9px -5px rgba(0, 0, 0, 0.2),0px 15px 22px 2px rgba(0, 0, 0, 0.14),0px 6px 28px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 10px -5px rgba(0, 0, 0, 0.2),0px 16px 24px 2px rgba(0, 0, 0, 0.14),0px 6px 30px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 11px -5px rgba(0, 0, 0, 0.2),0px 17px 26px 2px rgba(0, 0, 0, 0.14),0px 6px 32px 5px rgba(0, 0, 0, 0.12)",
-          "0px 9px 11px -5px rgba(0, 0, 0, 0.2),0px 18px 28px 2px rgba(0, 0, 0, 0.14),0px 7px 34px 6px rgba(0, 0, 0, 0.12)",
-          "0px 9px 12px -6px rgba(0, 0, 0, 0.2),0px 19px 29px 2px rgba(0, 0, 0, 0.14),0px 7px 36px 6px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 20px 31px 3px rgba(0, 0, 0, 0.14),0px 8px 38px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 21px 33px 3px rgba(0, 0, 0, 0.14),0px 8px 40px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 14px -6px rgba(0, 0, 0, 0.2),0px 22px 35px 3px rgba(0, 0, 0, 0.14),0px 8px 42px 7px rgba(0, 0, 0, 0.12)",
-          "0px 11px 14px -7px rgba(0, 0, 0, 0.2),0px 23px 36px 3px rgba(0, 0, 0, 0.14),0px 9px 44px 8px rgba(0, 0, 0, 0.12)",
-          "0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0, 0, 0, 0.12)",
+          "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+          "0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12)",
+          "0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12)",
+          "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
+          "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
+          "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
+          "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
+          "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
+          "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
+          "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
+          "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
+          "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
+          "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
+          "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
+          "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
+          "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
+          "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
+          "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
         ],
         "shape": Object {
           "borderRadius": 4,
@@ -1299,12 +1428,28 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 400,
             "lineHeight": "1.46429em",
           },
+          "body1Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.5,
+          },
           "body2": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.875rem",
             "fontWeight": 500,
             "lineHeight": "1.71429em",
+          },
+          "body2Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.01071em",
+            "lineHeight": 1.5,
           },
           "button": Object {
             "color": "rgba(0, 0, 0, 0.87)",
@@ -1313,12 +1458,29 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 500,
             "textTransform": "uppercase",
           },
+          "buttonNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.02857em",
+            "lineHeight": 1.75,
+            "textTransform": "uppercase",
+          },
           "caption": Object {
             "color": "rgba(0, 0, 0, 0.54)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.75rem",
             "fontWeight": 400,
             "lineHeight": "1.375em",
+          },
+          "captionNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.03333em",
+            "lineHeight": 1.66,
           },
           "display1": Object {
             "color": "rgba(0, 0, 0, 0.54)",
@@ -1358,12 +1520,69 @@ exports[`virtualized table widget table renders correctly for array attribute wi
           "fontWeightLight": 300,
           "fontWeightMedium": 500,
           "fontWeightRegular": 400,
+          "h1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "6rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.01562em",
+            "lineHeight": 1,
+          },
+          "h2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3.75rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.00833em",
+            "lineHeight": 1,
+          },
+          "h3": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.04,
+          },
+          "h4": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "2.125rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00735em",
+            "lineHeight": 1.17,
+          },
+          "h5": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.5rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.33,
+          },
+          "h6": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.25rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.0075em",
+            "lineHeight": 1.6,
+          },
           "headline": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "1.5rem",
             "fontWeight": 400,
             "lineHeight": "1.35417em",
+          },
+          "overline": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.08333em",
+            "lineHeight": 2.66,
+            "textTransform": "uppercase",
           },
           "pxToRem": [Function],
           "round": [Function],
@@ -1374,6 +1593,22 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 400,
             "lineHeight": "1.5em",
           },
+          "subtitle1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.75,
+          },
+          "subtitle2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.00714em",
+            "lineHeight": 1.57,
+          },
           "title": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
@@ -1381,6 +1616,7 @@ exports[`virtualized table widget table renders correctly for array attribute wi
             "fontWeight": 500,
             "lineHeight": "1.16667em",
           },
+          "useNextVariants": false,
         },
         "zIndex": Object {
           "appBar": 1100,
@@ -1967,6 +2203,25 @@ exports[`virtualized table widget table renders correctly with no selected row 1
   localState={
     Object {
       "flags": Object {
+        "columns": Object {
+          "outa1": Object {},
+          "outa2": Object {},
+          "outb1": Object {},
+          "outb2": Object {},
+          "outc1": Object {},
+          "outc2": Object {},
+          "outd1": Object {},
+          "outd2": Object {},
+          "oute1": Object {},
+          "oute2": Object {},
+          "outf1": Object {},
+          "outf2": Object {},
+          "position": Object {},
+          "repeats": Object {},
+          "time1": Object {},
+          "time2": Object {},
+          "trigger": Object {},
+        },
         "rows": Array [
           Object {},
           Object {},
@@ -1976,6 +2231,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
         ],
         "table": Object {
           "dirty": false,
+          "extendable": true,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,
@@ -2189,6 +2445,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
         "typeid": "malcolm:core/TableMeta:1.0",
         "writeable": true,
       },
+      "userChanges": Object {},
       "value": Array [
         Object {
           "outa1": true,
@@ -2661,6 +2918,25 @@ exports[`virtualized table widget table renders correctly with no selected row 1
     localState={
       Object {
         "flags": Object {
+          "columns": Object {
+            "outa1": Object {},
+            "outa2": Object {},
+            "outb1": Object {},
+            "outb2": Object {},
+            "outc1": Object {},
+            "outc2": Object {},
+            "outd1": Object {},
+            "outd2": Object {},
+            "oute1": Object {},
+            "oute2": Object {},
+            "outf1": Object {},
+            "outf2": Object {},
+            "position": Object {},
+            "repeats": Object {},
+            "time1": Object {},
+            "time2": Object {},
+            "trigger": Object {},
+          },
           "rows": Array [
             Object {},
             Object {},
@@ -2670,6 +2946,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -2883,6 +3160,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,
@@ -3088,30 +3366,30 @@ exports[`virtualized table widget table renders correctly with no selected row 1
         "props": Object {},
         "shadows": Array [
           "none",
-          "0px 1px 3px 0px rgba(0, 0, 0, 0.2),0px 1px 1px 0px rgba(0, 0, 0, 0.14),0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
-          "0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12)",
-          "0px 1px 8px 0px rgba(0, 0, 0, 0.2),0px 3px 4px 0px rgba(0, 0, 0, 0.14),0px 3px 3px -2px rgba(0, 0, 0, 0.12)",
-          "0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 5px 8px 0px rgba(0, 0, 0, 0.14),0px 1px 14px 0px rgba(0, 0, 0, 0.12)",
-          "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
-          "0px 4px 5px -2px rgba(0, 0, 0, 0.2),0px 7px 10px 1px rgba(0, 0, 0, 0.14),0px 2px 16px 1px rgba(0, 0, 0, 0.12)",
-          "0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0, 0, 0, 0.12)",
-          "0px 5px 6px -3px rgba(0, 0, 0, 0.2),0px 9px 12px 1px rgba(0, 0, 0, 0.14),0px 3px 16px 2px rgba(0, 0, 0, 0.12)",
-          "0px 6px 6px -3px rgba(0, 0, 0, 0.2),0px 10px 14px 1px rgba(0, 0, 0, 0.14),0px 4px 18px 3px rgba(0, 0, 0, 0.12)",
-          "0px 6px 7px -4px rgba(0, 0, 0, 0.2),0px 11px 15px 1px rgba(0, 0, 0, 0.14),0px 4px 20px 3px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 12px 17px 2px rgba(0, 0, 0, 0.14),0px 5px 22px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 13px 19px 2px rgba(0, 0, 0, 0.14),0px 5px 24px 4px rgba(0, 0, 0, 0.12)",
-          "0px 7px 9px -4px rgba(0, 0, 0, 0.2),0px 14px 21px 2px rgba(0, 0, 0, 0.14),0px 5px 26px 4px rgba(0, 0, 0, 0.12)",
-          "0px 8px 9px -5px rgba(0, 0, 0, 0.2),0px 15px 22px 2px rgba(0, 0, 0, 0.14),0px 6px 28px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 10px -5px rgba(0, 0, 0, 0.2),0px 16px 24px 2px rgba(0, 0, 0, 0.14),0px 6px 30px 5px rgba(0, 0, 0, 0.12)",
-          "0px 8px 11px -5px rgba(0, 0, 0, 0.2),0px 17px 26px 2px rgba(0, 0, 0, 0.14),0px 6px 32px 5px rgba(0, 0, 0, 0.12)",
-          "0px 9px 11px -5px rgba(0, 0, 0, 0.2),0px 18px 28px 2px rgba(0, 0, 0, 0.14),0px 7px 34px 6px rgba(0, 0, 0, 0.12)",
-          "0px 9px 12px -6px rgba(0, 0, 0, 0.2),0px 19px 29px 2px rgba(0, 0, 0, 0.14),0px 7px 36px 6px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 20px 31px 3px rgba(0, 0, 0, 0.14),0px 8px 38px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 21px 33px 3px rgba(0, 0, 0, 0.14),0px 8px 40px 7px rgba(0, 0, 0, 0.12)",
-          "0px 10px 14px -6px rgba(0, 0, 0, 0.2),0px 22px 35px 3px rgba(0, 0, 0, 0.14),0px 8px 42px 7px rgba(0, 0, 0, 0.12)",
-          "0px 11px 14px -7px rgba(0, 0, 0, 0.2),0px 23px 36px 3px rgba(0, 0, 0, 0.14),0px 9px 44px 8px rgba(0, 0, 0, 0.12)",
-          "0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0, 0, 0, 0.12)",
+          "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+          "0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12)",
+          "0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12)",
+          "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
+          "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
+          "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
+          "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
+          "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
+          "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
+          "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
+          "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
+          "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
+          "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
+          "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
+          "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
+          "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
+          "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
+          "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
+          "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
+          "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
+          "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
         ],
         "shape": Object {
           "borderRadius": 4,
@@ -3146,12 +3424,28 @@ exports[`virtualized table widget table renders correctly with no selected row 1
             "fontWeight": 400,
             "lineHeight": "1.46429em",
           },
+          "body1Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.5,
+          },
           "body2": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.875rem",
             "fontWeight": 500,
             "lineHeight": "1.71429em",
+          },
+          "body2Next": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.01071em",
+            "lineHeight": 1.5,
           },
           "button": Object {
             "color": "rgba(0, 0, 0, 0.87)",
@@ -3160,12 +3454,29 @@ exports[`virtualized table widget table renders correctly with no selected row 1
             "fontWeight": 500,
             "textTransform": "uppercase",
           },
+          "buttonNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.02857em",
+            "lineHeight": 1.75,
+            "textTransform": "uppercase",
+          },
           "caption": Object {
             "color": "rgba(0, 0, 0, 0.54)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "0.75rem",
             "fontWeight": 400,
             "lineHeight": "1.375em",
+          },
+          "captionNext": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.03333em",
+            "lineHeight": 1.66,
           },
           "display1": Object {
             "color": "rgba(0, 0, 0, 0.54)",
@@ -3205,12 +3516,69 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           "fontWeightLight": 300,
           "fontWeightMedium": 500,
           "fontWeightRegular": 400,
+          "h1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "6rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.01562em",
+            "lineHeight": 1,
+          },
+          "h2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3.75rem",
+            "fontWeight": 300,
+            "letterSpacing": "-0.00833em",
+            "lineHeight": 1,
+          },
+          "h3": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "3rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.04,
+          },
+          "h4": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "2.125rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00735em",
+            "lineHeight": 1.17,
+          },
+          "h5": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.5rem",
+            "fontWeight": 400,
+            "letterSpacing": "0em",
+            "lineHeight": 1.33,
+          },
+          "h6": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1.25rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.0075em",
+            "lineHeight": 1.6,
+          },
           "headline": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
             "fontSize": "1.5rem",
             "fontWeight": 400,
             "lineHeight": "1.35417em",
+          },
+          "overline": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.75rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.08333em",
+            "lineHeight": 2.66,
+            "textTransform": "uppercase",
           },
           "pxToRem": [Function],
           "round": [Function],
@@ -3221,6 +3589,22 @@ exports[`virtualized table widget table renders correctly with no selected row 1
             "fontWeight": 400,
             "lineHeight": "1.5em",
           },
+          "subtitle1": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "1rem",
+            "fontWeight": 400,
+            "letterSpacing": "0.00938em",
+            "lineHeight": 1.75,
+          },
+          "subtitle2": Object {
+            "color": "rgba(0, 0, 0, 0.87)",
+            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "letterSpacing": "0.00714em",
+            "lineHeight": 1.57,
+          },
           "title": Object {
             "color": "rgba(0, 0, 0, 0.87)",
             "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
@@ -3228,6 +3612,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
             "fontWeight": 500,
             "lineHeight": "1.16667em",
           },
+          "useNextVariants": false,
         },
         "zIndex": Object {
           "appBar": 1100,
@@ -3845,12 +4230,13 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           classes={
             Object {
               "popper": "MuiTooltip-popper-7",
-              "tooltip": "MuiTooltip-tooltip-8",
-              "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom-13",
-              "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft-10",
-              "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight-11",
-              "tooltipPlacementTop": "MuiTooltip-tooltipPlacementTop-12",
-              "touch": "MuiTooltip-touch-9",
+              "popperInteractive": "MuiTooltip-popperInteractive-8",
+              "tooltip": "MuiTooltip-tooltip-9",
+              "tooltipPlacementBottom": "MuiTooltip-tooltipPlacementBottom-14",
+              "tooltipPlacementLeft": "MuiTooltip-tooltipPlacementLeft-11",
+              "tooltipPlacementRight": "MuiTooltip-tooltipPlacementRight-12",
+              "tooltipPlacementTop": "MuiTooltip-tooltipPlacementTop-13",
+              "touch": "MuiTooltip-touch-10",
             }
           }
           disableFocusListener={false}
@@ -3859,6 +4245,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
           enterDelay={0}
           enterTouchDelay={1000}
           id="1"
+          interactive={false}
           leaveDelay={0}
           leaveTouchDelay={1500}
           placement="top"
@@ -3966,30 +4353,30 @@ exports[`virtualized table widget table renders correctly with no selected row 1
               "props": Object {},
               "shadows": Array [
                 "none",
-                "0px 1px 3px 0px rgba(0, 0, 0, 0.2),0px 1px 1px 0px rgba(0, 0, 0, 0.14),0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
-                "0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12)",
-                "0px 1px 8px 0px rgba(0, 0, 0, 0.2),0px 3px 4px 0px rgba(0, 0, 0, 0.14),0px 3px 3px -2px rgba(0, 0, 0, 0.12)",
-                "0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-                "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 5px 8px 0px rgba(0, 0, 0, 0.14),0px 1px 14px 0px rgba(0, 0, 0, 0.12)",
-                "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
-                "0px 4px 5px -2px rgba(0, 0, 0, 0.2),0px 7px 10px 1px rgba(0, 0, 0, 0.14),0px 2px 16px 1px rgba(0, 0, 0, 0.12)",
-                "0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0, 0, 0, 0.12)",
-                "0px 5px 6px -3px rgba(0, 0, 0, 0.2),0px 9px 12px 1px rgba(0, 0, 0, 0.14),0px 3px 16px 2px rgba(0, 0, 0, 0.12)",
-                "0px 6px 6px -3px rgba(0, 0, 0, 0.2),0px 10px 14px 1px rgba(0, 0, 0, 0.14),0px 4px 18px 3px rgba(0, 0, 0, 0.12)",
-                "0px 6px 7px -4px rgba(0, 0, 0, 0.2),0px 11px 15px 1px rgba(0, 0, 0, 0.14),0px 4px 20px 3px rgba(0, 0, 0, 0.12)",
-                "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 12px 17px 2px rgba(0, 0, 0, 0.14),0px 5px 22px 4px rgba(0, 0, 0, 0.12)",
-                "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 13px 19px 2px rgba(0, 0, 0, 0.14),0px 5px 24px 4px rgba(0, 0, 0, 0.12)",
-                "0px 7px 9px -4px rgba(0, 0, 0, 0.2),0px 14px 21px 2px rgba(0, 0, 0, 0.14),0px 5px 26px 4px rgba(0, 0, 0, 0.12)",
-                "0px 8px 9px -5px rgba(0, 0, 0, 0.2),0px 15px 22px 2px rgba(0, 0, 0, 0.14),0px 6px 28px 5px rgba(0, 0, 0, 0.12)",
-                "0px 8px 10px -5px rgba(0, 0, 0, 0.2),0px 16px 24px 2px rgba(0, 0, 0, 0.14),0px 6px 30px 5px rgba(0, 0, 0, 0.12)",
-                "0px 8px 11px -5px rgba(0, 0, 0, 0.2),0px 17px 26px 2px rgba(0, 0, 0, 0.14),0px 6px 32px 5px rgba(0, 0, 0, 0.12)",
-                "0px 9px 11px -5px rgba(0, 0, 0, 0.2),0px 18px 28px 2px rgba(0, 0, 0, 0.14),0px 7px 34px 6px rgba(0, 0, 0, 0.12)",
-                "0px 9px 12px -6px rgba(0, 0, 0, 0.2),0px 19px 29px 2px rgba(0, 0, 0, 0.14),0px 7px 36px 6px rgba(0, 0, 0, 0.12)",
-                "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 20px 31px 3px rgba(0, 0, 0, 0.14),0px 8px 38px 7px rgba(0, 0, 0, 0.12)",
-                "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 21px 33px 3px rgba(0, 0, 0, 0.14),0px 8px 40px 7px rgba(0, 0, 0, 0.12)",
-                "0px 10px 14px -6px rgba(0, 0, 0, 0.2),0px 22px 35px 3px rgba(0, 0, 0, 0.14),0px 8px 42px 7px rgba(0, 0, 0, 0.12)",
-                "0px 11px 14px -7px rgba(0, 0, 0, 0.2),0px 23px 36px 3px rgba(0, 0, 0, 0.14),0px 9px 44px 8px rgba(0, 0, 0, 0.12)",
-                "0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0, 0, 0, 0.12)",
+                "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+                "0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12)",
+                "0px 1px 8px 0px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 3px 3px -2px rgba(0,0,0,0.12)",
+                "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+                "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
+                "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
+                "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
+                "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
+                "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
+                "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
+                "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
+                "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
+                "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
+                "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
+                "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
+                "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
+                "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
+                "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
+                "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
+                "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
+                "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
+                "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
+                "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
+                "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
               ],
               "shape": Object {
                 "borderRadius": 4,
@@ -4024,12 +4411,28 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   "fontWeight": 400,
                   "lineHeight": "1.46429em",
                 },
+                "body1Next": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "1rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.00938em",
+                  "lineHeight": 1.5,
+                },
                 "body2": Object {
                   "color": "rgba(0, 0, 0, 0.87)",
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": "0.875rem",
                   "fontWeight": 500,
                   "lineHeight": "1.71429em",
+                },
+                "body2Next": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "0.875rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.01071em",
+                  "lineHeight": 1.5,
                 },
                 "button": Object {
                   "color": "rgba(0, 0, 0, 0.87)",
@@ -4038,12 +4441,29 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   "fontWeight": 500,
                   "textTransform": "uppercase",
                 },
+                "buttonNext": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "0.875rem",
+                  "fontWeight": 500,
+                  "letterSpacing": "0.02857em",
+                  "lineHeight": 1.75,
+                  "textTransform": "uppercase",
+                },
                 "caption": Object {
                   "color": "rgba(0, 0, 0, 0.54)",
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": "0.75rem",
                   "fontWeight": 400,
                   "lineHeight": "1.375em",
+                },
+                "captionNext": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "0.75rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.03333em",
+                  "lineHeight": 1.66,
                 },
                 "display1": Object {
                   "color": "rgba(0, 0, 0, 0.54)",
@@ -4083,12 +4503,69 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 "fontWeightLight": 300,
                 "fontWeightMedium": 500,
                 "fontWeightRegular": 400,
+                "h1": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "6rem",
+                  "fontWeight": 300,
+                  "letterSpacing": "-0.01562em",
+                  "lineHeight": 1,
+                },
+                "h2": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "3.75rem",
+                  "fontWeight": 300,
+                  "letterSpacing": "-0.00833em",
+                  "lineHeight": 1,
+                },
+                "h3": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "3rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0em",
+                  "lineHeight": 1.04,
+                },
+                "h4": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "2.125rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.00735em",
+                  "lineHeight": 1.17,
+                },
+                "h5": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "1.5rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0em",
+                  "lineHeight": 1.33,
+                },
+                "h6": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "1.25rem",
+                  "fontWeight": 500,
+                  "letterSpacing": "0.0075em",
+                  "lineHeight": 1.6,
+                },
                 "headline": Object {
                   "color": "rgba(0, 0, 0, 0.87)",
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
                   "fontSize": "1.5rem",
                   "fontWeight": 400,
                   "lineHeight": "1.35417em",
+                },
+                "overline": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "0.75rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.08333em",
+                  "lineHeight": 2.66,
+                  "textTransform": "uppercase",
                 },
                 "pxToRem": [Function],
                 "round": [Function],
@@ -4099,6 +4576,22 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   "fontWeight": 400,
                   "lineHeight": "1.5em",
                 },
+                "subtitle1": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "1rem",
+                  "fontWeight": 400,
+                  "letterSpacing": "0.00938em",
+                  "lineHeight": 1.75,
+                },
+                "subtitle2": Object {
+                  "color": "rgba(0, 0, 0, 0.87)",
+                  "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+                  "fontSize": "0.875rem",
+                  "fontWeight": 500,
+                  "letterSpacing": "0.00714em",
+                  "lineHeight": 1.57,
+                },
                 "title": Object {
                   "color": "rgba(0, 0, 0, 0.87)",
                   "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
@@ -4106,6 +4599,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   "fontWeight": 500,
                   "lineHeight": "1.16667em",
                 },
+                "useNextVariants": false,
               },
               "zIndex": Object {
                 "appBar": 1100,
@@ -4142,32 +4636,32 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 className="WidgetTable-addRowButton-6"
                 classes={
                   Object {
-                    "colorInherit": "MuiButton-colorInherit-35",
-                    "contained": "MuiButton-contained-25",
-                    "containedPrimary": "MuiButton-containedPrimary-26",
-                    "containedSecondary": "MuiButton-containedSecondary-27",
-                    "disabled": "MuiButton-disabled-34",
-                    "extendedFab": "MuiButton-extendedFab-32",
-                    "fab": "MuiButton-fab-31",
-                    "flat": "MuiButton-flat-19",
-                    "flatPrimary": "MuiButton-flatPrimary-20",
-                    "flatSecondary": "MuiButton-flatSecondary-21",
-                    "focusVisible": "MuiButton-focusVisible-33",
-                    "fullWidth": "MuiButton-fullWidth-39",
-                    "label": "MuiButton-label-15",
-                    "mini": "MuiButton-mini-36",
-                    "outlined": "MuiButton-outlined-22",
-                    "outlinedPrimary": "MuiButton-outlinedPrimary-23",
-                    "outlinedSecondary": "MuiButton-outlinedSecondary-24",
-                    "raised": "MuiButton-raised-28",
-                    "raisedPrimary": "MuiButton-raisedPrimary-29",
-                    "raisedSecondary": "MuiButton-raisedSecondary-30",
-                    "root": "MuiButton-root-14",
-                    "sizeLarge": "MuiButton-sizeLarge-38",
-                    "sizeSmall": "MuiButton-sizeSmall-37",
-                    "text": "MuiButton-text-16",
-                    "textPrimary": "MuiButton-textPrimary-17",
-                    "textSecondary": "MuiButton-textSecondary-18",
+                    "colorInherit": "MuiButton-colorInherit-36",
+                    "contained": "MuiButton-contained-26",
+                    "containedPrimary": "MuiButton-containedPrimary-27",
+                    "containedSecondary": "MuiButton-containedSecondary-28",
+                    "disabled": "MuiButton-disabled-35",
+                    "extendedFab": "MuiButton-extendedFab-33",
+                    "fab": "MuiButton-fab-32",
+                    "flat": "MuiButton-flat-20",
+                    "flatPrimary": "MuiButton-flatPrimary-21",
+                    "flatSecondary": "MuiButton-flatSecondary-22",
+                    "focusVisible": "MuiButton-focusVisible-34",
+                    "fullWidth": "MuiButton-fullWidth-40",
+                    "label": "MuiButton-label-16",
+                    "mini": "MuiButton-mini-37",
+                    "outlined": "MuiButton-outlined-23",
+                    "outlinedPrimary": "MuiButton-outlinedPrimary-24",
+                    "outlinedSecondary": "MuiButton-outlinedSecondary-25",
+                    "raised": "MuiButton-raised-29",
+                    "raisedPrimary": "MuiButton-raisedPrimary-30",
+                    "raisedSecondary": "MuiButton-raisedSecondary-31",
+                    "root": "MuiButton-root-15",
+                    "sizeLarge": "MuiButton-sizeLarge-39",
+                    "sizeSmall": "MuiButton-sizeSmall-38",
+                    "text": "MuiButton-text-17",
+                    "textPrimary": "MuiButton-textPrimary-18",
+                    "textSecondary": "MuiButton-textSecondary-19",
                   }
                 }
                 color="secondary"
@@ -4191,12 +4685,12 @@ exports[`virtualized table widget table renders correctly with no selected row 1
               >
                 <WithStyles(ButtonBase)
                   aria-describedby={null}
-                  className="MuiButton-root-14 MuiButton-fab-31 MuiButton-contained-25 MuiButton-containedSecondary-27 MuiButton-raised-28 MuiButton-raisedSecondary-30 WidgetTable-addRowButton-6"
+                  className="MuiButton-root-15 MuiButton-fab-32 MuiButton-contained-26 MuiButton-containedSecondary-28 MuiButton-raised-29 MuiButton-raisedSecondary-31 WidgetTable-addRowButton-6"
                   component="button"
                   data-cy="addrowbutton"
                   disabled={false}
                   focusRipple={true}
-                  focusVisibleClassName="MuiButton-focusVisible-33"
+                  focusVisibleClassName="MuiButton-focusVisible-34"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
@@ -4210,12 +4704,12 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   <ButtonBase
                     aria-describedby={null}
                     centerRipple={false}
-                    className="MuiButton-root-14 MuiButton-fab-31 MuiButton-contained-25 MuiButton-containedSecondary-27 MuiButton-raised-28 MuiButton-raisedSecondary-30 WidgetTable-addRowButton-6"
+                    className="MuiButton-root-15 MuiButton-fab-32 MuiButton-contained-26 MuiButton-containedSecondary-28 MuiButton-raised-29 MuiButton-raisedSecondary-31 WidgetTable-addRowButton-6"
                     classes={
                       Object {
-                        "disabled": "MuiButtonBase-disabled-41",
-                        "focusVisible": "MuiButtonBase-focusVisible-42",
-                        "root": "MuiButtonBase-root-40",
+                        "disabled": "MuiButtonBase-disabled-42",
+                        "focusVisible": "MuiButtonBase-focusVisible-43",
+                        "root": "MuiButtonBase-root-41",
                       }
                     }
                     component="button"
@@ -4224,7 +4718,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     disableTouchRipple={false}
                     disabled={false}
                     focusRipple={true}
-                    focusVisibleClassName="MuiButton-focusVisible-33"
+                    focusVisibleClassName="MuiButton-focusVisible-34"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -4238,11 +4732,12 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   >
                     <button
                       aria-describedby={null}
-                      className="MuiButtonBase-root-40 MuiButton-root-14 MuiButton-fab-31 MuiButton-contained-25 MuiButton-containedSecondary-27 MuiButton-raised-28 MuiButton-raisedSecondary-30 WidgetTable-addRowButton-6"
+                      className="MuiButtonBase-root-41 MuiButton-root-15 MuiButton-fab-32 MuiButton-contained-26 MuiButton-containedSecondary-28 MuiButton-raised-29 MuiButton-raisedSecondary-31 WidgetTable-addRowButton-6"
                       data-cy="addrowbutton"
                       disabled={false}
                       onBlur={[Function]}
                       onClick={[Function]}
+                      onContextMenu={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
                       onKeyUp={[Function]}
@@ -4258,7 +4753,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       type="button"
                     >
                       <span
-                        className="MuiButton-label-15"
+                        className="MuiButton-label-16"
                       >
                         <pure(AddIcon)
                           style={
@@ -4287,15 +4782,15 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                               <SvgIcon
                                 classes={
                                   Object {
-                                    "colorAction": "MuiSvgIcon-colorAction-46",
-                                    "colorDisabled": "MuiSvgIcon-colorDisabled-48",
-                                    "colorError": "MuiSvgIcon-colorError-47",
-                                    "colorPrimary": "MuiSvgIcon-colorPrimary-44",
-                                    "colorSecondary": "MuiSvgIcon-colorSecondary-45",
-                                    "fontSizeInherit": "MuiSvgIcon-fontSizeInherit-49",
-                                    "fontSizeLarge": "MuiSvgIcon-fontSizeLarge-51",
-                                    "fontSizeSmall": "MuiSvgIcon-fontSizeSmall-50",
-                                    "root": "MuiSvgIcon-root-43",
+                                    "colorAction": "MuiSvgIcon-colorAction-47",
+                                    "colorDisabled": "MuiSvgIcon-colorDisabled-49",
+                                    "colorError": "MuiSvgIcon-colorError-48",
+                                    "colorPrimary": "MuiSvgIcon-colorPrimary-45",
+                                    "colorSecondary": "MuiSvgIcon-colorSecondary-46",
+                                    "fontSizeInherit": "MuiSvgIcon-fontSizeInherit-50",
+                                    "fontSizeLarge": "MuiSvgIcon-fontSizeLarge-52",
+                                    "fontSizeSmall": "MuiSvgIcon-fontSizeSmall-51",
+                                    "root": "MuiSvgIcon-root-44",
                                   }
                                 }
                                 color="inherit"
@@ -4311,7 +4806,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                               >
                                 <svg
                                   aria-hidden="true"
-                                  className="MuiSvgIcon-root-43"
+                                  className="MuiSvgIcon-root-44"
                                   focusable="false"
                                   role="presentation"
                                   style={
@@ -4335,314 +4830,56 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           </AddIcon>
                         </pure(AddIcon)>
                       </span>
-                      <WithStyles(TouchRipple)
-                        center={false}
-                        innerRef={[Function]}
+                      <NoSsr
+                        defer={false}
+                        fallback={null}
                       >
-                        <TouchRipple
+                        <WithStyles(TouchRipple)
                           center={false}
-                          classes={
-                            Object {
-                              "child": "MuiTouchRipple-child-56",
-                              "childLeaving": "MuiTouchRipple-childLeaving-57",
-                              "childPulsate": "MuiTouchRipple-childPulsate-58",
-                              "ripple": "MuiTouchRipple-ripple-53",
-                              "ripplePulsate": "MuiTouchRipple-ripplePulsate-55",
-                              "rippleVisible": "MuiTouchRipple-rippleVisible-54",
-                              "root": "MuiTouchRipple-root-52",
-                            }
-                          }
+                          innerRef={[Function]}
                         >
-                          <TransitionGroup
-                            childFactory={[Function]}
-                            className="MuiTouchRipple-root-52"
-                            component="span"
-                            enter={true}
-                            exit={true}
+                          <TouchRipple
+                            center={false}
+                            classes={
+                              Object {
+                                "child": "MuiTouchRipple-child-57",
+                                "childLeaving": "MuiTouchRipple-childLeaving-58",
+                                "childPulsate": "MuiTouchRipple-childPulsate-59",
+                                "ripple": "MuiTouchRipple-ripple-54",
+                                "ripplePulsate": "MuiTouchRipple-ripplePulsate-56",
+                                "rippleVisible": "MuiTouchRipple-rippleVisible-55",
+                                "root": "MuiTouchRipple-root-53",
+                              }
+                            }
                           >
-                            <span
-                              className="MuiTouchRipple-root-52"
-                            />
-                          </TransitionGroup>
-                        </TouchRipple>
-                      </WithStyles(TouchRipple)>
+                            <TransitionGroup
+                              childFactory={[Function]}
+                              className="MuiTouchRipple-root-53"
+                              component="span"
+                              enter={true}
+                              exit={true}
+                            >
+                              <span
+                                className="MuiTouchRipple-root-53"
+                              />
+                            </TransitionGroup>
+                          </TouchRipple>
+                        </WithStyles(TouchRipple)>
+                      </NoSsr>
                     </button>
                   </ButtonBase>
                 </WithStyles(ButtonBase)>
               </Button>
             </WithStyles(Button)>
           </RootRef>
-          <WithTheme(Popper)
+          <Popper
             className="MuiTooltip-popper-7"
+            disablePortal={false}
             id={null}
             open={false}
             placement="top"
             transition={true}
-          >
-            <Popper
-              className="MuiTooltip-popper-7"
-              disablePortal={false}
-              id={null}
-              open={false}
-              placement="top"
-              theme={
-                Object {
-                  "breakpoints": Object {
-                    "between": [Function],
-                    "down": [Function],
-                    "keys": Array [
-                      "xs",
-                      "sm",
-                      "md",
-                      "lg",
-                      "xl",
-                    ],
-                    "only": [Function],
-                    "up": [Function],
-                    "values": Object {
-                      "lg": 1280,
-                      "md": 960,
-                      "sm": 600,
-                      "xl": 1920,
-                      "xs": 0,
-                    },
-                    "width": [Function],
-                  },
-                  "direction": "ltr",
-                  "mixins": Object {
-                    "gutters": [Function],
-                    "toolbar": Object {
-                      "@media (min-width:0px) and (orientation: landscape)": Object {
-                        "minHeight": 48,
-                      },
-                      "@media (min-width:600px)": Object {
-                        "minHeight": 64,
-                      },
-                      "minHeight": 56,
-                    },
-                  },
-                  "overrides": Object {},
-                  "palette": Object {
-                    "action": Object {
-                      "active": "rgba(0, 0, 0, 0.54)",
-                      "disabled": "rgba(0, 0, 0, 0.26)",
-                      "disabledBackground": "rgba(0, 0, 0, 0.12)",
-                      "hover": "rgba(0, 0, 0, 0.08)",
-                      "hoverOpacity": 0.08,
-                      "selected": "rgba(0, 0, 0, 0.14)",
-                    },
-                    "augmentColor": [Function],
-                    "background": Object {
-                      "default": "#fafafa",
-                      "paper": "#fff",
-                    },
-                    "common": Object {
-                      "black": "#000",
-                      "white": "#fff",
-                    },
-                    "contrastThreshold": 3,
-                    "divider": "rgba(0, 0, 0, 0.12)",
-                    "error": Object {
-                      "contrastText": "#fff",
-                      "dark": "#d32f2f",
-                      "light": "#e57373",
-                      "main": "#f44336",
-                    },
-                    "getContrastText": [Function],
-                    "grey": Object {
-                      "100": "#f5f5f5",
-                      "200": "#eeeeee",
-                      "300": "#e0e0e0",
-                      "400": "#bdbdbd",
-                      "50": "#fafafa",
-                      "500": "#9e9e9e",
-                      "600": "#757575",
-                      "700": "#616161",
-                      "800": "#424242",
-                      "900": "#212121",
-                      "A100": "#d5d5d5",
-                      "A200": "#aaaaaa",
-                      "A400": "#303030",
-                      "A700": "#616161",
-                    },
-                    "primary": Object {
-                      "contrastText": "#fff",
-                      "dark": "#303f9f",
-                      "light": "#7986cb",
-                      "main": "#3f51b5",
-                    },
-                    "secondary": Object {
-                      "contrastText": "#fff",
-                      "dark": "#c51162",
-                      "light": "#ff4081",
-                      "main": "#f50057",
-                    },
-                    "text": Object {
-                      "disabled": "rgba(0, 0, 0, 0.38)",
-                      "hint": "rgba(0, 0, 0, 0.38)",
-                      "primary": "rgba(0, 0, 0, 0.87)",
-                      "secondary": "rgba(0, 0, 0, 0.54)",
-                    },
-                    "tonalOffset": 0.2,
-                    "type": "light",
-                  },
-                  "props": Object {},
-                  "shadows": Array [
-                    "none",
-                    "0px 1px 3px 0px rgba(0, 0, 0, 0.2),0px 1px 1px 0px rgba(0, 0, 0, 0.14),0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
-                    "0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12)",
-                    "0px 1px 8px 0px rgba(0, 0, 0, 0.2),0px 3px 4px 0px rgba(0, 0, 0, 0.14),0px 3px 3px -2px rgba(0, 0, 0, 0.12)",
-                    "0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-                    "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 5px 8px 0px rgba(0, 0, 0, 0.14),0px 1px 14px 0px rgba(0, 0, 0, 0.12)",
-                    "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
-                    "0px 4px 5px -2px rgba(0, 0, 0, 0.2),0px 7px 10px 1px rgba(0, 0, 0, 0.14),0px 2px 16px 1px rgba(0, 0, 0, 0.12)",
-                    "0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0, 0, 0, 0.12)",
-                    "0px 5px 6px -3px rgba(0, 0, 0, 0.2),0px 9px 12px 1px rgba(0, 0, 0, 0.14),0px 3px 16px 2px rgba(0, 0, 0, 0.12)",
-                    "0px 6px 6px -3px rgba(0, 0, 0, 0.2),0px 10px 14px 1px rgba(0, 0, 0, 0.14),0px 4px 18px 3px rgba(0, 0, 0, 0.12)",
-                    "0px 6px 7px -4px rgba(0, 0, 0, 0.2),0px 11px 15px 1px rgba(0, 0, 0, 0.14),0px 4px 20px 3px rgba(0, 0, 0, 0.12)",
-                    "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 12px 17px 2px rgba(0, 0, 0, 0.14),0px 5px 22px 4px rgba(0, 0, 0, 0.12)",
-                    "0px 7px 8px -4px rgba(0, 0, 0, 0.2),0px 13px 19px 2px rgba(0, 0, 0, 0.14),0px 5px 24px 4px rgba(0, 0, 0, 0.12)",
-                    "0px 7px 9px -4px rgba(0, 0, 0, 0.2),0px 14px 21px 2px rgba(0, 0, 0, 0.14),0px 5px 26px 4px rgba(0, 0, 0, 0.12)",
-                    "0px 8px 9px -5px rgba(0, 0, 0, 0.2),0px 15px 22px 2px rgba(0, 0, 0, 0.14),0px 6px 28px 5px rgba(0, 0, 0, 0.12)",
-                    "0px 8px 10px -5px rgba(0, 0, 0, 0.2),0px 16px 24px 2px rgba(0, 0, 0, 0.14),0px 6px 30px 5px rgba(0, 0, 0, 0.12)",
-                    "0px 8px 11px -5px rgba(0, 0, 0, 0.2),0px 17px 26px 2px rgba(0, 0, 0, 0.14),0px 6px 32px 5px rgba(0, 0, 0, 0.12)",
-                    "0px 9px 11px -5px rgba(0, 0, 0, 0.2),0px 18px 28px 2px rgba(0, 0, 0, 0.14),0px 7px 34px 6px rgba(0, 0, 0, 0.12)",
-                    "0px 9px 12px -6px rgba(0, 0, 0, 0.2),0px 19px 29px 2px rgba(0, 0, 0, 0.14),0px 7px 36px 6px rgba(0, 0, 0, 0.12)",
-                    "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 20px 31px 3px rgba(0, 0, 0, 0.14),0px 8px 38px 7px rgba(0, 0, 0, 0.12)",
-                    "0px 10px 13px -6px rgba(0, 0, 0, 0.2),0px 21px 33px 3px rgba(0, 0, 0, 0.14),0px 8px 40px 7px rgba(0, 0, 0, 0.12)",
-                    "0px 10px 14px -6px rgba(0, 0, 0, 0.2),0px 22px 35px 3px rgba(0, 0, 0, 0.14),0px 8px 42px 7px rgba(0, 0, 0, 0.12)",
-                    "0px 11px 14px -7px rgba(0, 0, 0, 0.2),0px 23px 36px 3px rgba(0, 0, 0, 0.14),0px 9px 44px 8px rgba(0, 0, 0, 0.12)",
-                    "0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0, 0, 0, 0.12)",
-                  ],
-                  "shape": Object {
-                    "borderRadius": 4,
-                  },
-                  "spacing": Object {
-                    "unit": 8,
-                  },
-                  "transitions": Object {
-                    "create": [Function],
-                    "duration": Object {
-                      "complex": 375,
-                      "enteringScreen": 225,
-                      "leavingScreen": 195,
-                      "short": 250,
-                      "shorter": 200,
-                      "shortest": 150,
-                      "standard": 300,
-                    },
-                    "easing": Object {
-                      "easeIn": "cubic-bezier(0.4, 0, 1, 1)",
-                      "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
-                      "easeOut": "cubic-bezier(0.0, 0, 0.2, 1)",
-                      "sharp": "cubic-bezier(0.4, 0, 0.6, 1)",
-                    },
-                    "getAutoHeightDuration": [Function],
-                  },
-                  "typography": Object {
-                    "body1": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "0.875rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.46429em",
-                    },
-                    "body2": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "0.875rem",
-                      "fontWeight": 500,
-                      "lineHeight": "1.71429em",
-                    },
-                    "button": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "0.875rem",
-                      "fontWeight": 500,
-                      "textTransform": "uppercase",
-                    },
-                    "caption": Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "0.75rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.375em",
-                    },
-                    "display1": Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "2.125rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.20588em",
-                    },
-                    "display2": Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "2.8125rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.13333em",
-                      "marginLeft": "-.02em",
-                    },
-                    "display3": Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "3.5rem",
-                      "fontWeight": 400,
-                      "letterSpacing": "-.02em",
-                      "lineHeight": "1.30357em",
-                      "marginLeft": "-.02em",
-                    },
-                    "display4": Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "7rem",
-                      "fontWeight": 300,
-                      "letterSpacing": "-.04em",
-                      "lineHeight": "1.14286em",
-                      "marginLeft": "-.04em",
-                    },
-                    "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                    "fontSize": 14,
-                    "fontWeightLight": 300,
-                    "fontWeightMedium": 500,
-                    "fontWeightRegular": 400,
-                    "headline": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "1.5rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.35417em",
-                    },
-                    "pxToRem": [Function],
-                    "round": [Function],
-                    "subheading": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "1rem",
-                      "fontWeight": 400,
-                      "lineHeight": "1.5em",
-                    },
-                    "title": Object {
-                      "color": "rgba(0, 0, 0, 0.87)",
-                      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-                      "fontSize": "1.3125rem",
-                      "fontWeight": 500,
-                      "lineHeight": "1.16667em",
-                    },
-                  },
-                  "zIndex": Object {
-                    "appBar": 1100,
-                    "drawer": 1200,
-                    "mobileStepper": 1000,
-                    "modal": 1300,
-                    "snackbar": 1400,
-                    "tooltip": 1500,
-                  },
-                }
-              }
-              transition={true}
-            />
-          </WithTheme(Popper)>
+          />
         </Tooltip>
       </WithStyles(Tooltip)>
     </div>

@@ -17,6 +17,7 @@ import {
   writeLocalState,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
+import LayoutButtonGraphic from '../../buttonAction/layoutButtonGraphic.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
 import { parentPanelTransition } from '../../../viewState/viewState.actions';
@@ -35,6 +36,7 @@ export const malcolmTypes = {
 };
 
 export const isArrayType = meta =>
+  // malcolm array types have IDs "malcolm:core/[Number,String]ArrayMeta:1.x"
   meta &&
   meta.typeid &&
   meta.typeid
@@ -63,6 +65,31 @@ export const getDefaultFromType = objectMeta => {
   }
 };
 
+export const format = (value, displayT) =>
+  typeof value === 'number' ? value.toFixed(displayT.precision) : value;
+// switch (displayT.form) {
+//   case 'Decimal':
+//     return value.toFixed(displayT.precision);
+//   case 'Exponential':
+//     return value.toExponential(displayT.precision);
+//   case 'Engineering': {
+//     const mantissa =
+//       value === 0.0 ? 1 : Math.floor(Math.log10(Math.abs(value)));
+//     const exponent =
+//       Math.sign(mantissa) * 3.0 * Math.floor(Math.abs(mantissa) / 3);
+//     return `${Math.sign(value) >= 0 ? '+' : '-'}${(
+//       Math.abs(value) /
+//       10 ** exponent
+//     ).toFixed(displayT.precision)}E${
+//       Math.sign(exponent) >= 0 ? '+' : '-'
+//     }${Math.abs(exponent)
+//       .toFixed(0)
+//       .padStart(2, '0')}`;
+//   }
+//   default:
+//     return value.toString();
+// }
+
 export const selectorFunction = (
   widgetTag,
   path,
@@ -75,7 +102,9 @@ export const selectorFunction = (
   forceUpdate,
   continuousSend = false,
   buttonClickHandler = () => {},
-  localState
+  localState,
+  isMobile = false,
+  forceOpen = false
 ) => {
   if (isArrayType(objectMeta) && !objectMeta.insideArray) {
     return (
@@ -109,17 +138,30 @@ export const selectorFunction = (
           Value={value}
           Pending={flags.isDisabled}
           Choices={objectMeta.choices}
-          selectEventHandler={event => valueHandler(path, event.target.value)}
+          selectEventHandler={setValue => valueHandler(path, setValue)}
+          mobile={isMobile}
+          forceOpen={forceOpen}
         />
       );
     case 'widget:textupdate':
-      return <TextUpdate Text={value} />;
+      return (
+        <TextUpdate
+          Text={objectMeta.display ? format(value, objectMeta.display) : value}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
+        />
+      );
     case 'widget:title':
-    case 'widget:textinput':
+    case 'widget:textinput': {
+      let displayValue = '';
+      if (objectMeta.display) {
+        displayValue = format(value, objectMeta.display);
+      } else if (value !== undefined) {
+        displayValue = value.toString();
+      }
       return (
         <WidgetTextInput
           Error={flags.isErrorState}
-          Value={value !== undefined ? value.toString() : ''}
+          Value={displayValue}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
           localState={localState}
@@ -129,8 +171,10 @@ export const selectorFunction = (
           blurHandler={() => {}}
           forceUpdate={forceUpdate}
           continuousSend={continuousSend}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
         />
       );
+    }
     case 'widget:table':
       return (
         <ButtonAction
@@ -138,7 +182,38 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'widget:plot':
+      return objectMeta.insideArray ? (
+        <TextUpdate
+          Text={objectMeta.display ? format(value, objectMeta.display) : value}
+          Units={(objectMeta.display && objectMeta.display.units) || null}
+        />
+      ) : (
+        <ButtonAction
+          text={objectMeta.writeable ? 'Edit' : 'View'}
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
+
     case 'widget:flowgraph':
+      return (
+        <div style={{ position: 'relative', minHeight: '28px' }}>
+          <LayoutButtonGraphic
+            style={{
+              position: 'absolute',
+              top: '2px',
+              left: '0px',
+              maxWidth: '100%',
+              minWidth: '100%',
+            }}
+          />
+          <ButtonAction
+            text={objectMeta.writeable ? 'Edit' : 'View'}
+            clickAction={() => buttonClickHandler(path)}
+            style={{ position: 'absolute', top: '0px' }}
+          />
+        </div>
+      );
     case 'widget:tree':
       return (
         <ButtonAction
@@ -160,10 +235,19 @@ export const selectorFunction = (
       );
     case 'widget:help':
       return (
-        <ButtonAction text="View" clickAction={() => window.open(value)} />
+        <ButtonAction
+          text="View"
+          clickAction={() => window.open(value)}
+          id={`help.${path[0]}.${path[1]}`}
+        />
       );
     case 'info:alarm':
-      return <AttributeAlarm alarmSeverity={value} />;
+      return (
+        <AttributeAlarm
+          alarmSeverity={value.alarm}
+          fieldType={value.fieldType}
+        />
+      );
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return (
@@ -216,7 +300,9 @@ const AttributeSelector = props => {
               props.attribute.calculated.path,
               event.target.value
             ),
-        }
+        },
+        props.mobile,
+        props.forceOpen
       );
     }
   }
@@ -233,6 +319,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     attribute,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
+    mobile: state.viewState && state.viewState.mobileViewIndex !== undefined,
   };
 };
 
@@ -262,23 +349,25 @@ const mapDispatchToProps = dispatch => ({
 
 AttributeSelector.propTypes = {
   attribute: PropTypes.shape({
-    meta: PropTypes.shape({
-      tags: PropTypes.arrayOf(PropTypes.string),
-      choices: PropTypes.arrayOf(PropTypes.string),
-      writeable: PropTypes.bool,
-    }),
-    path: PropTypes.arrayOf(PropTypes.string),
-    value: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number,
-      PropTypes.string,
-      PropTypes.shape({}),
-    ]),
-    pending: PropTypes.bool,
-    errorState: PropTypes.bool,
-    dirty: PropTypes.bool,
-    alarm: PropTypes.shape({
-      severity: PropTypes.number,
+    raw: PropTypes.shape({
+      meta: PropTypes.shape({
+        tags: PropTypes.arrayOf(PropTypes.string),
+        choices: PropTypes.arrayOf(PropTypes.string),
+        writeable: PropTypes.bool,
+      }),
+      path: PropTypes.arrayOf(PropTypes.string),
+      value: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.number,
+        PropTypes.string,
+        PropTypes.shape({}),
+      ]),
+      pending: PropTypes.bool,
+      errorState: PropTypes.bool,
+      dirty: PropTypes.bool,
+      alarm: PropTypes.shape({
+        severity: PropTypes.number,
+      }),
     }),
   }).isRequired,
   theme: PropTypes.shape({
@@ -291,9 +380,14 @@ AttributeSelector.propTypes = {
       }),
     }),
   }).isRequired,
+  forceOpen: PropTypes.bool,
   eventHandler: PropTypes.func.isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
   buttonClickHandlerWithTransition: PropTypes.func.isRequired,
+};
+
+AttributeSelector.defaultProps = {
+  forceOpen: false,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

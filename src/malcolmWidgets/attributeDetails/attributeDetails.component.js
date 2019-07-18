@@ -6,14 +6,22 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
+import MoreHoriz from '@material-ui/icons/MoreHoriz';
+import BugReport from '@material-ui/icons/BugReport';
 import AttributeAlarm, {
   AlarmStates,
   getAlarmState,
+  FieldTypes,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import { parentPanelTransition } from '../../viewState/viewState.actions';
+import {
+  malcolmSubscribeAction,
+  malcolmNewBlockAction,
+} from '../../malcolm/malcolmActionCreators';
 
 const styles = theme => ({
   div: {
@@ -30,7 +38,8 @@ const styles = theme => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '50%',
+    minWidth: '50%',
+    maxWidth: '50%',
     padding: 2,
   },
   button: {
@@ -46,7 +55,7 @@ const styles = theme => ({
 const copyPathToClipboard = (event, path) => {
   if (event.button === 1) {
     const dummyElement = document.createElement('textarea');
-    dummyElement.value = JSON.stringify(path);
+    dummyElement.value = path;
     dummyElement.setAttribute('readonly', '');
     dummyElement.style.position = 'absolute';
     dummyElement.style.left = `${event.pageX}px`;
@@ -61,48 +70,89 @@ const copyPathToClipboard = (event, path) => {
 const EMPTY_STRING = '';
 
 const AttributeDetails = props => {
-  if (![null, -1].includes(props.widgetTagIndex)) {
+  if (props.isLinked !== 0 && props.widgetTagIndex === null) {
+    props.subscribeToLinked(props.blockName);
+  }
+  if (![null, -1].includes(props.widgetTagIndex) || props.isLinked !== 0) {
     const rowHighlight = props.isMainAttribute
       ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
       : {};
-    return (
-      <div className={props.classes.div} style={rowHighlight}>
-        <Tooltip id="1" title={props.message} placement="bottom">
-          <IconButton
-            tabIndex="-1"
-            className={props.classes.button}
-            disableRipple
-            onClick={
-              props.isGrandchild
-                ? () =>
-                    props.buttonClickHandlerWithTransition(
-                      props.blockName,
-                      props.attributeName
-                    )
-                : () =>
-                    props.buttonClickHandler(
-                      props.blockName,
-                      props.attributeName
-                    )
-            }
-          >
-            <AttributeAlarm alarmSeverity={props.alarm} />
-          </IconButton>
-        </Tooltip>
-        <Typography
-          className={props.classes.textName}
-          onMouseDown={event =>
-            copyPathToClipboard(event, [props.blockName, props.attributeName])
+    let onClick = props.isGrandchild
+      ? () =>
+          props.buttonClickHandlerWithTransition(
+            props.blockName,
+            props.attributeName
+          )
+      : () => props.buttonClickHandler(props.blockName, props.attributeName);
+    onClick =
+      props.alarm === AlarmStates.HELP
+        ? () => {
+            const buttonDiv = document.getElementById(
+              `help.${props.blockName}.${props.attributeName}`
+            );
+            buttonDiv.children[0].dispatchEvent(
+              new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+              })
+            );
           }
-        >
-          {props.label}{' '}
-        </Typography>
-        <div className={props.classes.controlContainer}>
-          <AttributeSelector
-            blockName={props.blockName}
-            attributeName={props.attributeName}
-          />
+        : onClick;
+    const linkLevel = [null];
+    if (props.isLinked > 1) {
+      linkLevel[0] = <MoreHoriz />;
+      linkLevel[1] = <SubdirectoryArrowRight />;
+    } else if (props.isLinked === 1) {
+      linkLevel[0] = <SubdirectoryArrowRight />;
+    }
+    const displayComponent = [null, -1].includes(props.widgetTagIndex) ? (
+      <BugReport nativeColor="red" />
+    ) : (
+      <AttributeSelector
+        blockName={props.blockName}
+        attributeName={props.attributeName}
+      />
+    );
+    return (
+      <div>
+        <div className={props.classes.div} style={rowHighlight}>
+          <Tooltip id="1" title={props.message} placement="bottom">
+            <IconButton
+              tabIndex="-1"
+              className={props.classes.button}
+              disableRipple
+              onClick={onClick}
+            >
+              <AttributeAlarm
+                alarmSeverity={props.alarm}
+                fieldType={FieldTypes.ATTRIBUTE}
+              />
+            </IconButton>
+          </Tooltip>
+          {linkLevel}
+          <Typography
+            className={props.classes.textName}
+            onMouseDown={event => {
+              const path =
+                props.pasteOnMiddleClick ||
+                JSON.stringify([props.blockName, props.attributeName]);
+              copyPathToClipboard(event, path);
+            }}
+          >
+            {props.isLinked ? 'Linked Value' : props.label}{' '}
+          </Typography>
+          <div className={props.classes.controlContainer}>
+            {displayComponent}
+          </div>
         </div>
+        {props.linkedAttributePath !== null && props.isLinked < 10 ? (
+          <ConnectedAttributeDetails
+            attributeName={props.linkedAttributePath[1]}
+            blockName={props.linkedAttributePath[0]}
+            isLinked={props.isLinked + 1}
+          />
+        ) : null}
       </div>
     );
   }
@@ -112,7 +162,10 @@ const AttributeDetails = props => {
 AttributeDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   blockName: PropTypes.string.isRequired,
+  isLinked: PropTypes.number,
+  linkedAttributePath: PropTypes.arrayOf(PropTypes.string),
   widgetTagIndex: PropTypes.number,
+  pasteOnMiddleClick: PropTypes.string,
   alarm: PropTypes.number,
   message: PropTypes.string,
   label: PropTypes.string.isRequired,
@@ -124,6 +177,7 @@ AttributeDetails.propTypes = {
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
   buttonClickHandlerWithTransition: PropTypes.func.isRequired,
+  subscribeToLinked: PropTypes.func.isRequired,
   isMainAttribute: PropTypes.bool.isRequired,
   isGrandchild: PropTypes.bool.isRequired,
   theme: PropTypes.shape({
@@ -139,6 +193,9 @@ AttributeDetails.defaultProps = {
   widgetTagIndex: null,
   message: undefined,
   alarm: undefined,
+  pasteOnMiddleClick: null,
+  linkedAttributePath: null,
+  isLinked: 0,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -152,10 +209,24 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let widgetTagIndex = null;
+  let pasteOnMiddleClick = null;
+  let linkedAttributePath = null;
   if (attribute && attribute.raw && attribute.raw.meta) {
     const { tags } = attribute.raw.meta;
     if (tags !== null) {
       widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+      const pvIndex = tags.findIndex(t => t.indexOf('pv:') !== -1);
+      pasteOnMiddleClick =
+        pvIndex !== -1 ? tags[pvIndex].replace('pv:', '') : null;
+      const linkTagIndex = tags.findIndex(
+        t => t.indexOf('linkedvalue:') !== -1
+      );
+      if (linkTagIndex !== -1) {
+        const tempArray = tags[linkTagIndex]
+          .replace('linkedvalue:', '')
+          .split(':');
+        linkedAttributePath = [tempArray.slice(1).join(':'), tempArray[0]];
+      }
     }
   }
 
@@ -192,6 +263,8 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
+    pasteOnMiddleClick,
+    linkedAttributePath,
   };
 };
 
@@ -206,9 +279,14 @@ const mapDispatchToProps = dispatch => ({
   buttonClickHandler: (blockName, attributeName) => {
     dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },
+  subscribeToLinked: blockMri => {
+    dispatch(malcolmNewBlockAction(blockMri, false, false));
+    dispatch(malcolmSubscribeAction([blockMri, 'meta']));
+  },
 });
 
-export const AttributeDetailsComponent = AttributeDetails;
-export default connect(mapStateToProps, mapDispatchToProps)(
+const ConnectedAttributeDetails = connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(AttributeDetails)
 );
+export const AttributeDetailsComponent = AttributeDetails;
+export default ConnectedAttributeDetails;

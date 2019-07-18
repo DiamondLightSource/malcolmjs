@@ -39,8 +39,8 @@ class TabbedPanel extends React.Component {
 
   render() {
     const { tabValue } = this.state;
-    const { theme } = this.props;
-    const disablePlotView = false; /* !(
+    const { theme, disablePlotView } = this.props;
+    /* const disablePlotView =  !(
       ['widget:led', 'widget:checkbox', 'widget:combo'].includes(
         this.props.widgetTag
       ) ||
@@ -100,7 +100,6 @@ class TabbedPanel extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  useSwipeable: false,
   parentPanelOpen: state.viewState.openParentPanel,
   childPanelOpen: state.malcolm.childBlock !== undefined,
 });
@@ -126,6 +125,7 @@ TabbedPanel.propTypes = {
   plotTime: PropTypes.number,
   alwaysUpdate: PropTypes.bool,
   tabLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  disablePlotView: PropTypes.bool,
 };
 
 TabbedPanel.defaultProps = {
@@ -133,6 +133,7 @@ TabbedPanel.defaultProps = {
   useSwipeable: false,
   plotTime: 0,
   alwaysUpdate: false,
+  disablePlotView: false,
 };
 
 export default connect(mapStateToProps)(withTheme()(TabbedPanel));

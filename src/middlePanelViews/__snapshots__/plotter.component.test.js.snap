@@ -22,8 +22,8 @@ exports[`MethodPlot renders correctly for returns 1`] = `
           1970-01-01T00:00:00.006Z,
         ],
         "y": Array [
-          undefined,
-          undefined,
+          1,
+          1,
           null,
         ],
       },
@@ -46,8 +46,8 @@ exports[`MethodPlot renders correctly for returns 1`] = `
         ],
         "y": Array [
           null,
-          undefined,
-          undefined,
+          1,
+          1,
         ],
       },
       Object {
@@ -70,7 +70,7 @@ exports[`MethodPlot renders correctly for returns 1`] = `
         "y": Array [
           null,
           null,
-          undefined,
+          1,
         ],
       },
       Object {
@@ -111,6 +111,12 @@ exports[`MethodPlot renders correctly for returns 1`] = `
           "color": "#000",
         },
       },
+      "margin": Object {
+        "b": 30,
+        "l": 40,
+        "r": 30,
+        "t": 30,
+      },
       "paper_bgcolor": "#424242",
       "parent": undefined,
       "plot_bgcolor": "#424242",
@@ -123,6 +129,11 @@ exports[`MethodPlot renders correctly for returns 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }
@@ -248,6 +259,12 @@ exports[`MethodPlot renders correctly for takes 1`] = `
           "color": "#000",
         },
       },
+      "margin": Object {
+        "b": 30,
+        "l": 40,
+        "r": 30,
+        "t": 30,
+      },
       "paper_bgcolor": "#424242",
       "parent": undefined,
       "plot_bgcolor": "#424242",
@@ -260,6 +277,11 @@ exports[`MethodPlot renders correctly for takes 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }
@@ -385,6 +407,12 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#000",
         },
       },
+      "margin": Object {
+        "b": 30,
+        "l": 40,
+        "r": 30,
+        "t": 30,
+      },
       "paper_bgcolor": "#424242",
       "parent": "test1",
       "plot_bgcolor": "#424242",
@@ -397,6 +425,11 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }
@@ -522,6 +555,12 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#000",
         },
       },
+      "margin": Object {
+        "b": 30,
+        "l": 40,
+        "r": 30,
+        "t": 30,
+      },
       "paper_bgcolor": "#424242",
       "parent": "test1",
       "plot_bgcolor": "#424242",
@@ -534,6 +573,11 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }
@@ -659,6 +703,12 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#000",
         },
       },
+      "margin": Object {
+        "b": 30,
+        "l": 40,
+        "r": 30,
+        "t": 30,
+      },
       "paper_bgcolor": "#424242",
       "parent": "test1",
       "plot_bgcolor": "#424242",
@@ -671,6 +721,11 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
       "yaxis": Object {
         "color": "#000",
+      },
+      "yaxis2": Object {
+        "color": "#000",
+        "overlaying": "y",
+        "side": "right",
       },
     }
   }

@@ -17,7 +17,8 @@ export const rowIsDifferent = (attribute, row) =>
     ? attribute.localState.labels.some(
         label =>
           `${attribute.localState.value[row][label]}` !==
-          `${attribute.raw.value[label][row]}`
+            `${attribute.raw.value[label][row]}` &&
+          attribute.raw.meta.elements[label].writeable
       )
     : attribute.localState.value[row] !== attribute.raw.value[row];
 
@@ -46,9 +47,12 @@ export const shouldClearDirtyFlag = inputAttribute => {
         _isChanged: rowIsDifferent(attribute, index),
       };
     });
-    attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
-      row => row._dirty || row._isChanged
-    );
+    attribute.localState.flags.table.dirty =
+      attribute.localState.flags.rows.some(
+        row => row._dirty || row._isChanged
+      ) ||
+      attribute.localState.value.length !==
+        attribute.raw.value[attribute.localState.labels[0]].length;
     attribute.calculated.dirty = attribute.localState.flags.table.dirty;
     attribute.calculated.alarms.dirty = attribute.localState.flags.table.dirty
       ? AlarmStates.DIRTY
@@ -64,6 +68,10 @@ export const createLocalState = oldAttribute => {
   const attribute = oldAttribute;
   if (!isArrayType(attribute.raw.meta)) {
     const labels = Object.keys(attribute.raw.meta.elements);
+    const columns = {};
+    labels.forEach(label => {
+      columns[label] = {};
+    });
     attribute.localState = {
       meta: deepCopy(attribute.raw.meta),
       value: attribute.raw.value[labels[0]].map((value, row) => {
@@ -73,13 +81,20 @@ export const createLocalState = oldAttribute => {
         });
         return dataRow;
       }),
+      userChanges: {},
       labels,
       flags: {
+        columns,
         rows: attribute.raw.value[labels[0]].map(() => ({})),
         table: {
           dirty: false,
           fresh: true,
           timeStamp: deepCopy(attribute.raw.timeStamp),
+          extendable:
+            attribute.raw.meta.writeable &&
+            !labels.some(
+              label => !attribute.raw.meta.elements[label].writeable
+            ),
         },
       },
     };
@@ -176,18 +191,25 @@ export const updateTableLocal = (state, payload) => {
       attribute.localState.value[moveTo] = rowValue;
       attribute.localState.flags.rows[payload.row] = {
         ...swapWithFlags,
-        _isChanged: true,
+        _dirty: true,
       };
       attribute.localState.flags.rows[moveTo] = {
         ...rowFlags,
-        _isChanged: true,
+        _dirty: true,
       };
     } else {
       attribute.localState.value[payload.row] = payload.value;
-
+      const _isChanged = rowIsDifferent(attribute, payload.row);
+      if (!attribute.localState.flags.table.extendable) {
+        if (_isChanged) {
+          attribute.localState.userChanges[payload.row] = payload.value;
+        } else if (attribute.localState.userChanges[payload.row]) {
+          delete attribute.localState.userChanges[payload.row];
+        }
+      }
       attribute.localState.flags.rows[payload.row] = {
         ...attribute.localState.flags.rows[payload.row],
-        _isChanged: rowIsDifferent(attribute, [payload.row]),
+        _isChanged,
       };
     }
     attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
@@ -218,33 +240,46 @@ const setTableFlag = (state, payload) => {
   const { attributes } = state.blocks[blockName];
   const attribute = { ...attributes[matchingAttributeIndex] };
   if (matchingAttributeIndex >= 0) {
-    attribute.localState.flags.rows[payload.row] = {
-      ...attribute.localState.flags.rows[payload.row],
-      ...payload.flags,
-    };
-    if (
-      payload.flagType === 'selected' &&
-      attribute.localState.flags.table.selectedRow !== payload.row
-    ) {
-      attribute.localState.flags.rows.forEach((row, index) => {
-        attribute.localState.flags.rows[index].selected = index === payload.row;
-      });
-      attribute.localState.flags.table.selectedRow = payload.row;
-    } else {
-      attribute.localState.flags.table[
-        payload.flagType
-      ] = attribute.localState.flags.rows.some(
-        row =>
-          row[`_${payload.flagType}`] ||
-          (payload.flagType === 'dirty' && row._isChanged)
-      );
-      if (payload.flagType === 'dirty') {
-        attribute.calculated.dirty = attribute.localState.flags.table.dirty;
-        attribute.calculated.alarms.dirty = attribute.localState.flags.table
-          .dirty
-          ? AlarmStates.DIRTY
-          : null;
+    if (payload.row !== undefined) {
+      attribute.localState.flags.rows[payload.row] = {
+        ...attribute.localState.flags.rows[payload.row],
+        ...payload.flags,
+      };
+      if (
+        payload.flagType === 'selected' &&
+        attribute.localState.flags.table.selectedRow !== payload.row
+      ) {
+        attribute.localState.flags.rows.forEach((row, index) => {
+          attribute.localState.flags.rows[index].selected =
+            index === payload.row;
+        });
+        attribute.localState.flags.table.selectedRow = payload.row;
+      } else {
+        attribute.localState.flags.table[
+          payload.flagType
+        ] = attribute.localState.flags.rows.some(
+          row =>
+            row[`_${payload.flagType}`] ||
+            (payload.flagType === 'dirty' && row._isChanged)
+        );
+        if (payload.flagType === 'dirty') {
+          attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+          attribute.calculated.alarms.dirty = attribute.localState.flags.table
+            .dirty
+            ? AlarmStates.DIRTY
+            : null;
+        }
       }
+    } else if (payload.column !== undefined) {
+      attribute.localState.flags.columns[payload.column] = {
+        ...attribute.localState.flags.columns[payload.column],
+        ...payload.flags,
+      };
+    } else if (payload.table) {
+      attribute.localState.flags.table = {
+        ...attribute.localState.flags.table,
+        ...payload.flags,
+      };
     }
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };

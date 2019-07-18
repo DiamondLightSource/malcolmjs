@@ -3,12 +3,14 @@
 exports[`ButtonAction renders correctly 1`] = `
 <div
   className="ButtonAction-container-1"
+  style={Object {}}
 >
   <WithStyles(Button)
     className="ButtonAction-button-2"
     color="primary"
     disabled={false}
     onClick={[Function]}
+    style={Object {}}
     variant="flat"
   >
     View

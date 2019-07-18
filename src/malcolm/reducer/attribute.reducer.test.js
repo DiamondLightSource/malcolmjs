@@ -4,6 +4,7 @@ import AttributeReducer, {
   pushToArchive,
   tickArchive,
   updateLocalState,
+  presetMethodInputs,
 } from './attribute.reducer';
 import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
@@ -21,6 +22,7 @@ import {
   addMessageInFlight,
   addBlock,
   buildAttribute,
+  buildMethod,
   addBlockArchive,
   buildBlockArchiveAttribute,
   buildMeta,
@@ -44,6 +46,19 @@ const mockNow = -806952600000;
 const mockDataTime = -14159025000;
 
 const vanillaDate = Date;
+
+const testMethodInputs = {
+  elements: {
+    stringIn: { typeid: malcolmTypes.string },
+    intIn: { typeid: malcolmTypes.number },
+    boolIn: { typeid: malcolmTypes.bool },
+    objectIn: { typeid: malcolmTypes.pointGenerator },
+    tableIn: {
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    },
+  },
+};
 
 function injectMockDate(mockDateValue) {
   global.Date = class extends vanillaDate {
@@ -73,6 +88,9 @@ describe('attribute reducer', () => {
     createLocalState.mockImplementation(attribute => attribute);
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
+    LayoutReducer.isRelevantAttribute.mockImplementation(attr =>
+      blockUtils.attributeHasTag(attr, 'widget:icon')
+    );
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
     LayoutReducer.processLayout.mockImplementation(() => ({
@@ -122,13 +140,21 @@ describe('attribute reducer', () => {
           ['block1', 'table'],
           undefined,
           0,
-          buildMeta(['widget:table'], true, '', malcolmTypes.table)
+          buildMeta(['widget:table'], true, '', malcolmTypes.table, {
+            mri: {},
+            name: {},
+            x: {},
+            y: {},
+            visible: {},
+          })
         ),
       ],
       state
     );
     addBlockArchive('block1', [buildBlockArchiveAttribute('layout', 5)], state);
-
+    addBlock('test:block2', [], state);
+    addBlock('test:block3', [], state);
+    addBlock('test:block4', [], state);
     payload = {
       delta: true,
       id: 1,
@@ -138,6 +164,9 @@ describe('attribute reducer', () => {
           elements: {
             mri: {},
             name: {},
+            x: {},
+            y: {},
+            visible: {},
           },
         },
         value: {
@@ -168,14 +197,23 @@ describe('attribute reducer', () => {
   it('updates children for layout attribute', () => {
     state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
-    expect(state.blocks.block1.attributes[0].calculated.children).toHaveLength(
-      3
-    );
-    expect(state.blocks.block1.attributes[0].calculated.children).toEqual([
-      'block2',
-      'block3',
-      'block4',
-    ]);
+    expect(
+      Object.keys(state.blocks.block1.attributes[0].calculated.children)
+    ).toHaveLength(3);
+    expect(state.blocks.block1.attributes[0].calculated.children).toEqual({
+      block2: {
+        label: 'testing block2',
+        mri: 'test:block2',
+      },
+      block3: {
+        label: 'testing block3',
+        mri: 'test:block3',
+      },
+      block4: {
+        label: 'testing block4',
+        mri: 'test:block4',
+      },
+    });
   });
 
   it('returns state if it is not a delta', () => {
@@ -243,9 +281,21 @@ describe('attribute reducer', () => {
     expect(state.mainAttribute).toEqual('health');
   });
 
-  it('updateLayout updates the layout if the attribute is called layout', () => {
+  it('updateLayout updates the layout if the attribute is a flowgraph and the main attribute', () => {
+    state.mainAttribute = 'layout';
+    state.parentBlock = 'block1';
     updateLayout(state, state, 'block1', 'layout');
     expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout doesnt update the layout if the attribute is a flowgraph but not the main attribute', () => {
+    state.mainAttribute = 'layout';
+    state.parentBlock = 'block2';
+    updateLayout(state, state, 'block1', 'layout');
+    state.mainAttribute = 'cat';
+    state.parentBlock = 'block1';
+    updateLayout(state, state, 'block1', 'layout');
+    expect(LayoutReducer.processLayout).not.toHaveBeenCalled();
   });
 
   it('updateLayout returns early if the attribute is not found', () => {
@@ -610,5 +660,60 @@ describe('attribute reducer', () => {
     );
     expect(updatedArchive.value.get(1)).toEqual('ticker test!');
     expect(updatedArchive.plotTime).toEqual(8);
+  });
+
+  it('initialises method inputs appropriately if didnt get values from server', () => {
+    const testMethod = buildMethod('testMethod', [], {
+      required: ['stringIn', 'boolIn'],
+      ...testMethodInputs,
+    });
+    const resultMethod = presetMethodInputs(testMethod);
+    expect(resultMethod.calculated.inputs).toBeDefined();
+    expect(resultMethod.calculated.inputs.stringIn.value).toEqual('');
+    expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
+    expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
+    expect(resultMethod.calculated.inputs.objectIn).not.toBeDefined();
+  });
+
+  it('initialises method inputs appropriately if got values from server', () => {
+    const testMethod = buildMethod(
+      'testMethod',
+      [],
+      { required: ['stringIn', 'boolIn'], ...testMethodInputs },
+      {
+        present: ['stringIn', 'objectIn', 'tableIn'],
+        value: {
+          stringIn: 'testing',
+          boolIn: true,
+          intIn: 0,
+          objectIn: { isATest: true },
+          tableIn: {
+            column1: ['a', 'b'],
+            column2: [1, 2],
+            typeid: malcolmTypes.table,
+          },
+        },
+      }
+    );
+    const resultMethod = presetMethodInputs(testMethod);
+    expect(resultMethod.calculated.inputs).toBeDefined();
+    expect(resultMethod.calculated.inputs.stringIn.value).toEqual('testing');
+    expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
+    expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
+    expect(resultMethod.calculated.inputs.objectIn.value.isATest).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.meta).toEqual({
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.value.length).toEqual(2);
+    expect(resultMethod.calculated.inputs.tableIn.value[0]).toEqual({
+      column1: 'a',
+      column2: 1,
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value[1]).toEqual({
+      column1: 'b',
+      column2: 2,
+    });
   });
 });

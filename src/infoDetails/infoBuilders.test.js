@@ -4,38 +4,19 @@ import {
 } from '../malcolmWidgets/table/table.stories';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { buildAttributeInfo } from './infoBuilders';
+import { buildLocalState } from '../testState.utilities';
 
 describe('info builder', () => {
   let props;
+  let labels;
+
   beforeEach(() => {
     props = {
       attribute: JSON.parse(JSON.stringify(harderAttribute)),
       path: ['test1', 'layout'],
     };
+    labels = Object.keys(props.attribute.raw.meta.elements);
   });
-
-  const buildLocalState = rawAttribute => {
-    const labels = Object.keys(rawAttribute.meta.elements);
-    return {
-      meta: JSON.parse(JSON.stringify(rawAttribute.meta)),
-      value: rawAttribute.value[labels[0]].map((value, row) => {
-        const dataRow = {};
-        labels.forEach(label => {
-          dataRow[label] = rawAttribute.value[label][row];
-        });
-        return dataRow;
-      }),
-      labels,
-      flags: {
-        rows: rawAttribute.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(rawAttribute.timeStamp)),
-        },
-      },
-    };
-  };
 
   it('attribute info builder returns empty object if attribute.raw not found', () => {
     props.attribute.raw = undefined;
@@ -157,7 +138,7 @@ describe('info builder', () => {
   it('attribute info builder generates correct structure for attribute with sub-element defined', () => {
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState = buildLocalState(props.attribute, 5, labels);
     props.subElement = ['row', '1'];
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
@@ -205,7 +186,7 @@ describe('info builder', () => {
     props.changeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 
     props.subElement = ['row', '1'];
     const infoObject = buildAttributeInfo(props);
@@ -244,7 +225,7 @@ describe('info builder', () => {
     props.changeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 
     props.subElement = [
       'row',
@@ -264,7 +245,6 @@ describe('info builder', () => {
   });
 
   it('table delete row methods fires info close if only remaining row selected', () => {
-    const labels = Object.keys(props.attribute.raw.meta.elements);
     const dataRow = {};
     labels.forEach(label => {
       [, dataRow[label]] = props.attribute.raw.value[label];
@@ -273,7 +253,7 @@ describe('info builder', () => {
     props.closeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState = buildLocalState(props.attribute, 5, labels);
     props.attribute.localState.value = [dataRow];
 
     props.subElement = ['row', '0'];
@@ -288,7 +268,6 @@ describe('info builder', () => {
   });
 
   it('adds click handler to local state info element if it exists', () => {
-    const labels = Object.keys(props.attribute.raw.meta.elements);
     const dataRow = {};
     labels.forEach(label => {
       [, dataRow[label]] = props.attribute.raw.value[label];
@@ -296,7 +275,7 @@ describe('info builder', () => {
     props.rowRevertHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 
     props.subElement = ['row', '0'];
     const infoObject = buildAttributeInfo(props);

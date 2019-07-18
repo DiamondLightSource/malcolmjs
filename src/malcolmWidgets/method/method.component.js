@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
+  FieldTypes,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
 
@@ -89,7 +90,7 @@ const buildIOComponent = (input, props, isOutput) => {
     props.flagInput(path, input[0], flagName, flagState);
   };
   const buttonClickHandler =
-    isArrayType(input[1]) && !isOutput
+    (widgetTag === 'widget:table' || isArrayType(input[1])) && !isOutput
       ? path => {
           props.initialiseLocalState(path, ['takes', input[0]]);
           props.methodParamClickHandler(path);
@@ -130,7 +131,10 @@ const MethodDetails = props => {
               props.infoClickHandler(props.blockName, props.attributeName)
             }
           >
-            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            <AttributeAlarm
+              alarmSeverity={props.methodAlarm}
+              fieldType={FieldTypes.METHOD}
+            />
           </IconButton>
         </Tooltip>
         <div
@@ -152,7 +156,7 @@ const MethodDetails = props => {
     );
   }
   return (
-    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
+    <GroupExpander key={props.methodPath} groupName={props.methodName}>
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
@@ -169,20 +173,13 @@ const MethodDetails = props => {
                   )
                 }
               >
-                <AttributeAlarm alarmSeverity={props.inputAlarms[input[0]]} />
+                <AttributeAlarm
+                  alarmSeverity={props.inputAlarms[input[0]]}
+                  fieldType={FieldTypes.PARAMIN}
+                />
               </IconButton>
             </Tooltip>
-            <Typography
-              className={props.classes.textName}
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                props.labelClickHandler(
-                  props.blockName,
-                  props.attributeName,
-                  `takes.${input[0]}`
-                )
-              }
-            >
+            <Typography className={props.classes.textName}>
               {input[1].label}
             </Typography>
             <div className={props.classes.controlContainer}>
@@ -201,7 +198,10 @@ const MethodDetails = props => {
               }
               style={{ cursor: 'pointer' }}
             >
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+              <AttributeAlarm
+                alarmSeverity={props.methodAlarm}
+                fieldType={FieldTypes.METHOD}
+              />
             </IconButton>
           </Tooltip>
           <div
@@ -245,20 +245,13 @@ const MethodDetails = props => {
                       )
                     }
                   >
-                    <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                    <AttributeAlarm
+                      alarmSeverity={AlarmStates.NO_ALARM}
+                      fieldType={FieldTypes.PARAMOUT}
+                    />
                   </IconButton>
                 </Tooltip>
-                <Typography
-                  className={props.classes.textName}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    props.labelClickHandler(
-                      props.blockName,
-                      props.attributeName,
-                      `returns.${output[0]}`
-                    )
-                  }
-                >
+                <Typography className={props.classes.textName}>
                   {output[1].label}
                 </Typography>
                 <div className={props.classes.controlContainer}>
@@ -295,13 +288,13 @@ MethodDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
-  // labelClickHandler: PropTypes.func.isRequired,
   writeable: PropTypes.bool.isRequired,
 };
 
 const EMPTY = '';
 const EMPTY_ARRAY = [];
 const EMPTY_OBJECT = {};
+
 const mapStateToProps = (state, ownProps) => {
   let method;
   if (ownProps.attributeName && ownProps.blockName) {
@@ -313,7 +306,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   const methodDescription =
-    method && method.raw.description ? method.raw.description : EMPTY;
+    method && method.raw.meta.description ? method.raw.meta.description : EMPTY;
   let alarm = AlarmStates.NO_ALARM;
   alarm =
     method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
@@ -325,15 +318,15 @@ const mapStateToProps = (state, ownProps) => {
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
   const inputAlarms = {};
   const inputInfo = {};
-  if (method && method.raw.takes.elements) {
-    Object.entries(method.raw.takes.elements).forEach(([input, meta]) => {
+  if (method && method.raw.meta.takes.elements) {
+    Object.entries(method.raw.meta.takes.elements).forEach(([input, meta]) => {
       const inputIsDirty =
         (method.calculated.inputs[input] instanceof Object &&
           Object.prototype.hasOwnProperty.call(
             method.calculated.inputs[input],
             'value'
           )) ||
-        method.calculated.dirtyInputs;
+        (method.calculated.dirtyInputs && method.calculated.dirtyInputs[input]);
 
       const inputIsErrored = false; // TODO: implement individual parameter errors
 
@@ -369,8 +362,8 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    writeable: method ? method.raw.writeable : false,
-    methodName: method ? method.raw.label : 'Not found',
+    writeable: method ? method.raw.meta.writeable : false,
+    methodName: method ? method.raw.meta.label : 'Not found',
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,
     methodErrored: method ? method.calculated.errorState : false,
@@ -379,15 +372,15 @@ const mapStateToProps = (state, ownProps) => {
         ? method.calculated.errorMessage
         : methodDescription,
     methodPath: method ? method.calculated.path : EMPTY_ARRAY,
-    inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
+    inputs: method ? method.raw.meta.takes.elements : EMPTY_OBJECT,
     inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
     dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
     inputAlarms,
     inputInfo,
-    outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
+    outputs: method ? method.raw.meta.returns.elements : EMPTY_OBJECT,
     outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
-    required: method ? method.raw.required : EMPTY_OBJECT,
-    defaultValues: method ? method.raw.defaults : EMPTY_OBJECT,
+    required: method ? method.raw.meta.required : EMPTY_OBJECT,
+    defaultValues: method ? method.raw.meta.defaults : EMPTY_OBJECT,
   };
 };
 
@@ -395,15 +388,6 @@ export const mapDispatchToProps = dispatch => ({
   infoClickHandler: (blockName, attributeName, subElement) => {
     dispatch(
       navigationActions.navigateToInfo(blockName, attributeName, subElement)
-    );
-  },
-  labelClickHandler: (blockName, attributeName, subElement) => {
-    dispatch(
-      navigationActions.navigateToSubElement(
-        blockName,
-        attributeName,
-        subElement
-      )
     );
   },
   runMethod: (path, inputs) => {

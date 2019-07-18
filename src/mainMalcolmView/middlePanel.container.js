@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { fade, emphasize } from '@material-ui/core/styles/colorManipulator';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import AttributePlotter from '../malcolmWidgets/plotter/plotter.component';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
 import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
 import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
@@ -156,7 +157,8 @@ const findAttributeComponent = props => {
   }
   const widgetTag = getWidgetType(props.tags);
   const palettePadding = props.showBin ? 4 : 32;
-
+  let zoomButtonIndent = props.openParent ? 360 + 29 : 29;
+  zoomButtonIndent = props.mobile ? 36 : zoomButtonIndent;
   switch (widgetTag) {
     case 'widget:flowgraph':
       return (
@@ -205,7 +207,7 @@ const findAttributeComponent = props => {
           <div
             className={props.classes.autoLayoutButton}
             style={{
-              left: props.openParent ? 360 + 29 : 29,
+              left: zoomButtonIndent,
               top: 12,
               display: 'flex',
             }}
@@ -343,6 +345,22 @@ const findAttributeComponent = props => {
           />
         </div>
       );
+
+    case 'widget:plot':
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <AttributePlotter
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+            />
+          </div>
+        </div>
+      );
+
     default:
       return (
         <div
@@ -368,7 +386,11 @@ const findAttributeComponent = props => {
 };
 
 const MiddlePanelContainer = props => (
-  <div className={props.classes.container} role="presentation">
+  <div
+    className={props.classes.container}
+    role="presentation"
+    style={props.mobile && !props.openHeader ? { marginTop: 0 } : {}}
+  >
     {props.mainAttribute ? (
       findAttributeComponent(props)
     ) : (
@@ -384,19 +406,27 @@ const MiddlePanelContainer = props => (
         }}
       >
         <Typography style={{ fontSize: '20pt' }}>
-          Please select a field to view from the left hand pane
+          {props.parentBlock
+            ? 'Please select a field to view from the left hand pane'
+            : 'Please select a root block to view from the top navigation bar'}
         </Typography>
       </div>
     )}
   </div>
 );
 
-const mapStateToProps = state => {
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    state.malcolm.parentBlock,
-    state.malcolm.mainAttribute
-  );
+const mapStateToProps = (state, ownProps) => {
+  const attribute = ownProps.mri
+    ? blockUtils.findAttribute(
+        state.malcolm.blocks,
+        ownProps.mri[0],
+        ownProps.mri[1]
+      )
+    : blockUtils.findAttribute(
+        state.malcolm.blocks,
+        state.malcolm.parentBlock,
+        state.malcolm.mainAttribute
+      );
 
   let alarm = AlarmStates.PENDING;
   let errorMessage;
@@ -412,13 +442,14 @@ const mapStateToProps = state => {
   }
   return {
     errorMessage,
-    parentBlock: state.malcolm.parentBlock,
-    mainAttribute: state.malcolm.mainAttribute,
+    parentBlock: ownProps.mri ? ownProps.mri[0] : state.malcolm.parentBlock,
+    mainAttribute: ownProps.mri ? ownProps.mri[1] : state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
     mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
-    openParent: state.viewState.openParentPanel,
-    openChild: state.malcolm.childBlock !== undefined,
-    isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
+    openParent: ownProps.mobile ? false : state.viewState.openParentPanel,
+    openChild: ownProps.mobile ? false : state.malcolm.childBlock !== undefined,
+    openHeader: state.viewState.openHeaderBar,
+    isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.1',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeid: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
@@ -474,6 +505,9 @@ MiddlePanelContainer.propTypes = {
     container: PropTypes.string,
     plainBackground: PropTypes.string,
   }).isRequired,
+  parentBlock: PropTypes.string.isRequired,
+  mobile: PropTypes.bool.isRequired,
+  openHeader: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

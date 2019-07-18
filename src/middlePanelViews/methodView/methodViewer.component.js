@@ -24,6 +24,11 @@ import {
   getDefaultFromType,
   isArrayType,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import { Sources } from '../../malcolm/reducer/method.reducer';
+import {
+  FieldTypes,
+  AlarmStates,
+} from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 const noOp = () => {};
 
@@ -136,7 +141,7 @@ const MethodViewer = props => {
                   localState={
                     props.selectedParam[0] === 'returns'
                       ? {
-                          value: props.selectedParamValue,
+                          value: props.selectedParamValue.value,
                           meta: props.selectedParamMeta,
                           flags: { rows: [] },
                         }
@@ -184,8 +189,92 @@ const MethodViewer = props => {
             />
           );
         }
+        case 'widget:table': {
+          if (
+            props.selectedParamValue !== undefined &&
+            (props.selectedParam[0] === 'returns' ||
+              (props.selectedParamValue.meta && props.selectedParamValue.value))
+          ) {
+            return (
+              <WidgetTable
+                localState={
+                  props.selectedParam[0] === 'returns'
+                    ? {
+                        value: props.selectedParamValue.value,
+                        meta: props.selectedParamMeta,
+                        flags: { rows: [] },
+                      }
+                    : props.selectedParamValue
+                }
+                attribute={props.method}
+                eventHandler={
+                  props.selectedParam[0] === 'takes' &&
+                  props.selectedParamMeta.writeable
+                    ? (path, value, row) => {
+                        const newValue = [...props.selectedParamValue.value];
+                        newValue[row] = value;
+                        props.updateInput(
+                          path,
+                          props.selectedParam[1],
+                          newValue
+                        );
+                      }
+                    : noOp
+                }
+                setFlag={() => {}}
+                addRow={() => {
+                  props.updateInput(
+                    props.method.calculated.path,
+                    props.selectedParam[1],
+                    [
+                      ...props.selectedParamValue.value,
+                      getDefaultFromType(props.selectedParamMeta),
+                    ]
+                  );
+                }}
+                infoClickHandler={noOp}
+                rowClickHandler={noOp}
+                closePanelHandler={noOp}
+              />
+            );
+          }
+          return (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+              }}
+            >
+              <Typography style={{ fontSize: '20px' }}>
+                No value parameter value defined
+              </Typography>
+              {props.selectedParamMeta.writeable ? (
+                <Typography style={{ fontSize: '20px' }}>
+                  Press Edit button to initialise
+                </Typography>
+              ) : null}
+            </div>
+          );
+        }
         default:
-          return <div />;
+          return (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+              }}
+            >
+              <Typography style={{ fontSize: '20px' }}>
+                {`Error: Don't know how to display widget type ${widgetTag}!`}
+              </Typography>
+            </div>
+          );
       }
     } else {
       return <Typography>No results yet...run method first!</Typography>;
@@ -194,8 +283,8 @@ const MethodViewer = props => {
     const timeStamps = props.methodArchive.timeStamp.toarray();
     const values = props.methodArchive.value.toarray();
     const copyRunParams = row => {
-      const params = values[row].runParameters;
-      Object.keys(props.method.raw.takes.elements).forEach(paramName => {
+      const params = values[row].took;
+      values[row].calledWith.forEach(paramName => {
         props.updateInput(
           props.method.calculated.path,
           paramName,
@@ -206,10 +295,28 @@ const MethodViewer = props => {
     const dummyAttribute = {
       raw: {
         value: {
-          postTime: timeStamps.map(stamp => stamp.localRunTime),
-          returnTime: timeStamps.map(stamp => stamp.localReturnTime),
-          returnStatus: values.map(value => value.returnStatus),
-          alarm: props.methodArchive.alarmState.toarray(),
+          postTime: timeStamps.map(stamp => stamp.runTime.toISOString()),
+          returnTime: timeStamps.map(
+            stamp =>
+              stamp.returnTime
+                ? stamp.returnTime.toISOString()
+                : 'No return received'
+          ),
+          returnStatus: values.map(
+            value =>
+              value.returnStatus !== undefined
+                ? value.returnStatus
+                : 'No return received'
+          ),
+          source: values.map(
+            value =>
+              value.source === Sources.LOCAL
+                ? { alarm: AlarmStates.NO_ALARM, fieldType: FieldTypes.PARAMIN }
+                : {
+                    alarm: AlarmStates.NO_ALARM,
+                    fieldType: FieldTypes.PARAMOUT,
+                  }
+          ),
           copyParams: timeStamps.map(() => ({
             label: 'Copy',
             action: path => {
@@ -219,9 +326,9 @@ const MethodViewer = props => {
         },
         meta: {
           elements: {
-            alarm: {
+            source: {
               tags: ['info:alarm'],
-              label: 'Alarm state',
+              label: 'Origin',
             },
             postTime: {
               tags: ['widget:textupdate'],
@@ -283,7 +390,8 @@ const mapStateToProps = (state, ownProps) => {
   if (selectedParam && selectedParam[0] === undefined) {
     selectedParam = undefined;
   } else if (method && selectedParam && selectedParam[0]) {
-    selectedParamMeta = method.raw[selectedParam[0]].elements[selectedParam[1]];
+    selectedParamMeta =
+      method.raw.meta[selectedParam[0]].elements[selectedParam[1]];
     let ioType;
     if (selectedParam[0] === 'takes') {
       ioType = 'inputs';
@@ -317,8 +425,10 @@ MethodViewer.propTypes = {
       path: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     raw: PropTypes.shape({
-      takes: PropTypes.shape({
-        elements: PropTypes.shape({}),
+      meta: PropTypes.shape({
+        takes: PropTypes.shape({
+          elements: PropTypes.shape({}),
+        }),
       }),
       timeStamp: PropTypes.shape({
         secondsPastEpoch: PropTypes.string,

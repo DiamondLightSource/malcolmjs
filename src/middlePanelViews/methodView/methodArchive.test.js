@@ -15,14 +15,14 @@ describe('MethodArchive', () => {
       alarmState: new MockCircularBuffer(5),
     };
     testArchive.value.push({
-      runParameters: { test1: 0 },
+      took: { test1: 0 },
       returned: { test2: 1 },
     });
     testArchive.timeStamp.push({
-      localRunTime: new Date(0),
-      localReturnTime: new Date(1000),
+      runTime: new Date(0),
+      returnTime: new Date(1000),
     });
-    testArchive.alarmState.push(0);
+    testArchive.alarmState.push({ alarm: 0 });
   });
 
   it('renders table correctly for input param', () => {

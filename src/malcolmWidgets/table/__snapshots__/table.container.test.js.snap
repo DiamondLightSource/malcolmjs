@@ -24,6 +24,25 @@ exports[`Table container renders correctly 1`] = `
         },
         "localState": Object {
           "flags": Object {
+            "columns": Object {
+              "outa1": Object {},
+              "outa2": Object {},
+              "outb1": Object {},
+              "outb2": Object {},
+              "outc1": Object {},
+              "outc2": Object {},
+              "outd1": Object {},
+              "outd2": Object {},
+              "oute1": Object {},
+              "oute2": Object {},
+              "outf1": Object {},
+              "outf2": Object {},
+              "position": Object {},
+              "repeats": Object {},
+              "time1": Object {},
+              "time2": Object {},
+              "trigger": Object {},
+            },
             "rows": Array [
               Object {},
               Object {},
@@ -33,6 +52,7 @@ exports[`Table container renders correctly 1`] = `
             ],
             "table": Object {
               "dirty": false,
+              "extendable": true,
               "fresh": true,
               "timeStamp": Object {
                 "nanoseconds": 0,
@@ -246,6 +266,7 @@ exports[`Table container renders correctly 1`] = `
             "typeid": "malcolm:core/TableMeta:1.0",
             "writeable": true,
           },
+          "userChanges": Object {},
           "value": Array [
             Object {
               "outa1": true,
@@ -693,6 +714,25 @@ exports[`Table container renders correctly 1`] = `
     localState={
       Object {
         "flags": Object {
+          "columns": Object {
+            "outa1": Object {},
+            "outa2": Object {},
+            "outb1": Object {},
+            "outb2": Object {},
+            "outc1": Object {},
+            "outc2": Object {},
+            "outd1": Object {},
+            "outd2": Object {},
+            "oute1": Object {},
+            "oute2": Object {},
+            "outf1": Object {},
+            "outf2": Object {},
+            "position": Object {},
+            "repeats": Object {},
+            "time1": Object {},
+            "time2": Object {},
+            "trigger": Object {},
+          },
           "rows": Array [
             Object {},
             Object {},
@@ -702,6 +742,7 @@ exports[`Table container renders correctly 1`] = `
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -915,6 +956,7 @@ exports[`Table container renders correctly 1`] = `
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,
@@ -1064,6 +1106,7 @@ exports[`Table container renders correctly 1`] = `
     >
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        disabled={false}
         method={true}
         text="Submit"
       />
@@ -1096,6 +1139,25 @@ exports[`Table container subelement in url selects row correctly 1`] = `
         },
         "localState": Object {
           "flags": Object {
+            "columns": Object {
+              "outa1": Object {},
+              "outa2": Object {},
+              "outb1": Object {},
+              "outb2": Object {},
+              "outc1": Object {},
+              "outc2": Object {},
+              "outd1": Object {},
+              "outd2": Object {},
+              "oute1": Object {},
+              "oute2": Object {},
+              "outf1": Object {},
+              "outf2": Object {},
+              "position": Object {},
+              "repeats": Object {},
+              "time1": Object {},
+              "time2": Object {},
+              "trigger": Object {},
+            },
             "rows": Array [
               Object {},
               Object {},
@@ -1105,6 +1167,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
             ],
             "table": Object {
               "dirty": false,
+              "extendable": true,
               "fresh": true,
               "timeStamp": Object {
                 "nanoseconds": 0,
@@ -1318,6 +1381,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
             "typeid": "malcolm:core/TableMeta:1.0",
             "writeable": true,
           },
+          "userChanges": Object {},
           "value": Array [
             Object {
               "outa1": true,
@@ -1762,6 +1826,25 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     localState={
       Object {
         "flags": Object {
+          "columns": Object {
+            "outa1": Object {},
+            "outa2": Object {},
+            "outb1": Object {},
+            "outb2": Object {},
+            "outc1": Object {},
+            "outc2": Object {},
+            "outd1": Object {},
+            "outd2": Object {},
+            "oute1": Object {},
+            "oute2": Object {},
+            "outf1": Object {},
+            "outf2": Object {},
+            "position": Object {},
+            "repeats": Object {},
+            "time1": Object {},
+            "time2": Object {},
+            "trigger": Object {},
+          },
           "rows": Array [
             Object {},
             Object {},
@@ -1771,6 +1854,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
           ],
           "table": Object {
             "dirty": false,
+            "extendable": true,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -1984,6 +2068,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
+        "userChanges": Object {},
         "value": Array [
           Object {
             "outa1": true,
@@ -2134,6 +2219,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     >
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        disabled={false}
         method={true}
         text="Submit"
       />
