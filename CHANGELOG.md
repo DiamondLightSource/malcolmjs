@@ -1,4 +1,9 @@
 # Changelog
+## 1.7.2 (19/7/2019)
+Features:
+- Added ability to set theme via query params + simple theme editor 
+Fixes:
+- Fixed bug which caused client to error when remote socket disconnected
 ## 1.7.1 (21/6/2019)
 Features:
 - Added health icons to blocks in layout
