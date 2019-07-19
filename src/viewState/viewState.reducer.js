@@ -1,10 +1,4 @@
-import {
-  blue,
-  orange,
-  pink,
-  purple,
-  brown,
-} from '@material-ui/core/colors/index';
+import queryString from 'query-string';
 import {
   openParentPanelType,
   openHeaderType,
@@ -18,7 +12,10 @@ import {
   panelDirection,
   mobileViewIndexType,
 } from './viewState.actions';
-import { theme } from '../mainMalcolmView/connectedThemeProvider';
+import {
+  themeConstructor,
+  defaultTheme,
+} from '../mainMalcolmView/connectedThemeProvider';
 
 const initialViewState = {
   openParentPanel: true,
@@ -29,23 +26,17 @@ const initialViewState = {
     open: false,
   },
   theme: {
-    alarmState: {
-      warning: '#e6c01c',
-      error: '#e8001f',
-      disconnected: '#9d07bb',
-    },
-    // port colours should not use the themes secondary colour, it is used to highlight blocks and links
-    portColours: {
-      bool: blue,
-      int32: orange,
-      motor: pink,
-      NDArray: brown,
-      block: purple,
-    },
+    ...JSON.parse(JSON.stringify(defaultTheme)),
+    muiTheme: themeConstructor(
+      defaultTheme.primary,
+      defaultTheme.secondary,
+      defaultTheme.type
+    ),
   },
   footerHeight: 0,
   transitionParent: false,
   mobileViewIndex: undefined,
+  version: undefined,
 };
 
 const viewStateReducer = (state = initialViewState, action = {}) => {
@@ -54,11 +45,24 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return { ...state, openParentPanel: action.openParentPanel };
     case openHeaderType:
       return { ...state, openHeaderBar: action.openHeader };
-    case updateVersionNumerType:
+    case updateVersionNumerType: {
+      const newTheme = state.theme;
       if (document) {
         document.title = `${action.payload.title} ${action.payload.version}`;
+        const { primary, secondary, type } = queryString.parse(
+          window.location.search
+        );
+        newTheme.primary = primary || defaultTheme.primary;
+        newTheme.type = type || defaultTheme.type;
+        newTheme.secondary = secondary || defaultTheme.secondary;
+        newTheme.muiTheme = themeConstructor(
+          newTheme.primary,
+          newTheme.secondary,
+          newTheme.type
+        );
       }
-      return state;
+      return { ...state, version: action.payload.version, theme: newTheme };
+    }
     case snackbar:
       return {
         ...state,
@@ -78,16 +82,11 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       };
     }
     case updateTheme: {
-      const { primary, secondary, type } = state.theme;
-      window.localStorage.setItem(
-        `MalcolmJsMuiTheme`,
-        JSON.stringify({ primary, secondary, type })
-      );
       return {
         ...state,
         theme: {
           ...state.theme,
-          muiTheme: theme(
+          muiTheme: themeConstructor(
             state.theme.primary,
             state.theme.secondary,
             state.theme.type
@@ -98,7 +97,7 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
     case editTheme:
       return {
         ...state,
-        themeEditor: action.payload.open,
+        themeEditor: !state.themeEditor,
       };
     case popout:
       return {

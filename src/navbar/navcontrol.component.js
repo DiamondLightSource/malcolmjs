@@ -64,7 +64,7 @@ class NavControl extends Component {
           color={
             (siblings && Object.keys(siblings).includes(nav.path)) ||
             [NavTypes.Info, NavTypes.Palette].includes(nav.navType)
-              ? 'default'
+              ? 'inherit'
               : 'error'
           }
           variant="subheading"

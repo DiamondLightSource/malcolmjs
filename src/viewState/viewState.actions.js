@@ -55,11 +55,8 @@ export const setThemeAction = (property, value) => ({
   },
 });
 
-export const editThemeAction = open => ({
+export const editThemeAction = () => ({
   type: editTheme,
-  payload: {
-    open,
-  },
 });
 export const flagAsPopout = () => ({
   type: popout,
@@ -76,6 +73,7 @@ export const setMobileViewIndex = index => ({
   type: mobileViewIndexType,
   payload: { index },
 });
+
 export default {
   openParentPanel,
 };

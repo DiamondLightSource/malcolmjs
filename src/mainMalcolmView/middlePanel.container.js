@@ -27,11 +27,6 @@ import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import ThemeEditor from './themeEditor';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
-import {
-  editThemeAction,
-  setThemeAction,
-  updateThemeAction,
-} from '../viewState/viewState.actions';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
 import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import layoutActions from '../malcolm/actions/layout.action';
@@ -146,11 +141,7 @@ const findAttributeComponent = props => {
           className={props.classes.tableContainer}
           style={transitionWithPanelStyle}
         >
-          <ThemeEditor
-            setThemeProp={props.setThemeProp}
-            openParent={props.openParent}
-            finishEdit={props.closeThemeEditor}
-          />
+          <ThemeEditor openParent={props.openParent} />
         </div>
       </div>
     );
@@ -391,7 +382,7 @@ const MiddlePanelContainer = props => (
     role="presentation"
     style={props.mobile && !props.openHeader ? { marginTop: 0 } : {}}
   >
-    {props.mainAttribute ? (
+    {props.mainAttribute || props.themeEditor ? (
       findAttributeComponent(props)
     ) : (
       <div
@@ -466,11 +457,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(navigationActions.navigateToPalette());
   },
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
-  setThemeProp: (property, value) => {
-    dispatch(setThemeAction(property, value));
-    dispatch(updateThemeAction());
-  },
-  closeThemeEditor: () => dispatch(editThemeAction(false)),
   zoomToFit: (openParent, openChild) =>
     dispatch(layoutActions.zoomToFit(openParent, openChild)),
   zoomInDirection: direction =>
@@ -500,6 +486,7 @@ findAttributeComponent.propTypes = {
 };
 
 MiddlePanelContainer.propTypes = {
+  themeEditor: PropTypes.bool.isRequired,
   mainAttribute: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,

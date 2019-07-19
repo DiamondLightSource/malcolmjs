@@ -6,7 +6,6 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import { blue } from '@material-ui/core/colors';
 import './index.css';
 // import registerServiceWorker from './registerServiceWorker';
 import { unregister } from './registerServiceWorker';
@@ -23,10 +22,6 @@ import {
 } from './malcolm/actions/socket.actions';
 import ReduxTimingMiddleware from './userTimingMiddleware';
 import ConnectedThemeProvider from './mainMalcolmView/connectedThemeProvider';
-import {
-  setThemeAction,
-  updateThemeAction,
-} from './viewState/viewState.actions';
 
 require('typeface-roboto');
 
@@ -68,15 +63,6 @@ store.dispatch(configureSocket(worker));
 setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
-
-const savedTheme = JSON.parse(window.localStorage.getItem(`MalcolmJsMuiTheme`));
-const { primary, secondary, type } = savedTheme || {};
-store.dispatch(setThemeAction('primary', primary || blue));
-store.dispatch(setThemeAction('type', type || 'dark'));
-if (secondary) {
-  store.dispatch(setThemeAction('secondary', secondary));
-}
-store.dispatch(updateThemeAction());
 
 ReactDOM.render(
   <Provider store={store}>

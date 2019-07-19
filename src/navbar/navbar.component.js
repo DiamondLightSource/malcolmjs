@@ -10,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
+import Settings from '@material-ui/icons/Settings';
 import {
   openParentPanel,
   editThemeAction,
@@ -74,23 +75,23 @@ const styles = theme => ({
 const NavBar = props => (
   <AppBar
     className={classNames(props.classes.appBar, {
-      [props.classes.appBarShift]: props.open,
-      [props.classes[`appBarShift-left`]]: props.open,
+      [props.classes.appBarShift]: props.parentPanelOpen,
+      [props.classes[`appBarShift-left`]]: props.parentPanelOpen,
     })}
   >
-    <Toolbar disableGutters={!props.open}>
+    <Toolbar disableGutters={!props.parentPanelOpen}>
       <IconButton
         onClick={props.openParent}
         className={classNames(
           props.classes.menuButton,
-          props.open && props.classes.hide
+          props.parentPanelOpen && props.classes.hide
         )}
       >
         <MenuIcon />
       </IconButton>
       <div
         className={classNames(props.classes.title, {
-          [props.classes.titleShift]: props.open,
+          [props.classes.titleShift]: props.parentPanelOpen,
         })}
       >
         {props.navigation.length === 0 ? (
@@ -119,10 +120,15 @@ const NavBar = props => (
           />
         ) : null}
       </div>
-      <div
-        style={{ height: 48, width: 3, cursor: 'pointer' }}
-        onClick={props.openThemeEditor}
-      />
+      <IconButton
+        onClick={props.toggleThemeEditor}
+        style={{
+          position: 'absolute',
+          right: props.childPanelOpen ? '364px' : '4px',
+        }}
+      >
+        <Settings />
+      </IconButton>
     </Toolbar>
   </AppBar>
 );
@@ -133,7 +139,10 @@ const mapStateToProps = state => {
       ? state.malcolm.navigation.rootNav
       : state.malcolm.navigation.navigationLists.slice(-1)[0];
   return {
-    open: state.viewState.openParentPanel,
+    parentPanelOpen: state.viewState.openParentPanel,
+    childPanelOpen:
+      state.viewState.mobileViewIndex === undefined &&
+      state.malcolm.childBlock !== undefined,
     navigation: state.malcolm.navigation.navigationLists,
     finalNav,
     finalNavHasChildren:
@@ -143,7 +152,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
-  openThemeEditor: () => dispatch(editThemeAction(true)),
+  toggleThemeEditor: () => dispatch(editThemeAction()),
   navigateToChild: (basePath, child) => {
     dispatch(push(`/gui${basePath}${child}`));
     dispatch(navigationActions.subscribeToChildren());
@@ -151,7 +160,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 NavBar.propTypes = {
-  open: PropTypes.bool.isRequired,
+  parentPanelOpen: PropTypes.bool.isRequired,
+  childPanelOpen: PropTypes.bool.isRequired,
   navigation: PropTypes.arrayOf(
     PropTypes.shape({
       path: PropTypes.string,
@@ -165,7 +175,7 @@ NavBar.propTypes = {
   }),
   finalNavHasChildren: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
-  openThemeEditor: PropTypes.func.isRequired,
+  toggleThemeEditor: PropTypes.func.isRequired,
   navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string,

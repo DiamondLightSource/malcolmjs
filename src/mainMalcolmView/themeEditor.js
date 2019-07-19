@@ -5,6 +5,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withTheme } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import queryString from 'query-string';
+import {
+  editThemeAction,
+  setThemeAction,
+  updateThemeAction,
+} from '../viewState/viewState.actions';
 
 const ThemeEditor = props => (
   <div style={{ padding: '16px' }}>
@@ -30,7 +39,7 @@ const ThemeEditor = props => (
                 height: 32,
                 backgroundColor: colors[color][400],
               }}
-              onClick={() => props.setThemeProp('primary', colors[color])}
+              onClick={() => props.setThemeProp('primary', color)}
             />
           </Tooltip>
         ))}
@@ -57,7 +66,7 @@ const ThemeEditor = props => (
                 height: 32,
                 backgroundColor: colors[color][400],
               }}
-              onClick={() => props.setThemeProp('secondary', colors[color])}
+              onClick={() => props.setThemeProp('secondary', color)}
             />
           </Tooltip>
         ))}
@@ -80,7 +89,7 @@ const ThemeEditor = props => (
         Dark
       </Button>
     </div>
-    <Button onClick={props.finishEdit}>Done!</Button>
+    <Button onClick={() => props.finishEdit(props.currentTheme)}>Done!</Button>
   </div>
 );
 
@@ -88,10 +97,34 @@ ThemeEditor.propTypes = {
   openParentPanel: PropTypes.bool,
   finishEdit: PropTypes.func.isRequired,
   setThemeProp: PropTypes.func.isRequired,
+  currentTheme: PropTypes.shape({}).isRequired,
 };
 
 ThemeEditor.defaultProps = {
   openParentPanel: false,
 };
 
-export default ThemeEditor;
+const mapStateToProps = state => ({
+  currentTheme: state.viewState.theme,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setThemeProp: (property, value) => {
+    dispatch(setThemeAction(property, value));
+    dispatch(updateThemeAction());
+  },
+  finishEdit: palette => {
+    const tempTheme = {};
+    tempTheme.primary = palette.primary || 'blue';
+    tempTheme.type = palette.type || 'dark';
+    if (palette.secondary) {
+      tempTheme.secondary = palette.secondary;
+    }
+    dispatch(editThemeAction());
+    dispatch(push({ search: queryString.stringify(tempTheme) }));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withTheme()(ThemeEditor)
+);

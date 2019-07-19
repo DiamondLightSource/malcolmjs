@@ -1,36 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  blue,
-  pink,
-  brown,
-  orange,
-  purple,
-} from '@material-ui/core/colors/index';
+import * as colors from '@material-ui/core/colors';
 import {
   MuiThemeProvider,
   createMuiTheme,
 } from '@material-ui/core/styles/index';
 
-export const theme = (primary, secondary, type) => {
+export const defaultTheme = {
+  primary: 'blue',
+  secondary: 'green',
+  type: 'dark',
+  alarmState: {
+    warning: '#e6c01c',
+    error: '#e8001f',
+    disconnected: '#9d07bb',
+  },
+  // port colours should not use the themes secondary colour, it is used to highlight blocks and links
+  portColours: {
+    bool: colors.blue,
+    int32: colors.orange,
+    motor: colors.pink,
+    NDArray: colors.brown,
+    block: colors.purple,
+  },
+};
+
+export const themeConstructor = (primary, secondary, type) => {
   const palette =
-    secondary !== undefined ? { type, primary, secondary } : { type, primary };
+    secondary !== undefined
+      ? { type, primary: colors[primary], secondary: colors[secondary] }
+      : { type, primary: colors[primary] };
   return createMuiTheme({
     palette,
-    alarmState: {
-      warning: '#e6c01c',
-      error: '#e8001f',
-      disconnected: '#9d07bb',
-    },
-    // port colours should not use the themes secondary colour, it is used to highlight blocks and links
-    portColours: {
-      bool: blue,
-      int32: orange,
-      motor: pink,
-      NDArray: brown,
-      port: purple,
-    },
+    alarmState: defaultTheme.alarmState,
+    portColours: defaultTheme.portColours,
   });
 };
 const ConnectedThemeProvider = props => (

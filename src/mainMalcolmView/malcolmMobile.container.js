@@ -186,7 +186,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(openHeaderBar(true));
   },
   navigateToChild: (basePath, child) => {
-    dispatch(push(`/mobile${basePath}${child}`));
+    dispatch(push(`/gui${basePath}${child}`));
     dispatch(navigationActions.subscribeToChildren());
   },
   setViewIndex: index => {
