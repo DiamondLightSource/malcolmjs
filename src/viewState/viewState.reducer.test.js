@@ -31,7 +31,7 @@ describe('view state reducer', () => {
       updateVersionNumber('1.2.3', 'MalcolmJS')
     );
 
-    expect(newState).toBe(state);
+    expect(newState).toEqual({ ...state, version: '1.2.3' });
     expect(document.title).toEqual('MalcolmJS 1.2.3');
   });
 

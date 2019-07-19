@@ -154,7 +154,12 @@ const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
   toggleThemeEditor: () => dispatch(editThemeAction()),
   navigateToChild: (basePath, child) => {
-    dispatch(push(`/gui${basePath}${child}`));
+    dispatch(
+      push({
+        pathname: `/gui${basePath}${child}`,
+        search: window.location.search,
+      })
+    );
     dispatch(navigationActions.subscribeToChildren());
   },
 });

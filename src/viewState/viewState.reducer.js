@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+import * as colors from '@material-ui/core/colors';
 import {
   openParentPanelType,
   openHeaderType,
@@ -17,6 +18,30 @@ import {
   defaultTheme,
 } from '../mainMalcolmView/connectedThemeProvider';
 
+const getInitialTheme = () => {
+  const newTheme = JSON.parse(JSON.stringify(defaultTheme));
+  const { primary, secondary, type } = queryString.parse(
+    window.location.search
+  );
+  if (
+    (!primary || (primary && Object.keys(colors).includes(primary))) &&
+    (!secondary || (secondary && Object.keys(colors).includes(secondary))) &&
+    (!type || (type && ['light', 'dark'].includes(type)))
+  ) {
+    newTheme.primary = primary || defaultTheme.primary;
+    newTheme.type = type || defaultTheme.type;
+    newTheme.secondary = secondary || defaultTheme.secondary;
+  }
+  return {
+    ...newTheme,
+    muiTheme: themeConstructor(
+      newTheme.primary,
+      newTheme.secondary,
+      newTheme.type
+    ),
+  };
+};
+
 const initialViewState = {
   openParentPanel: true,
   openChildPanel: true,
@@ -25,14 +50,7 @@ const initialViewState = {
     message: '',
     open: false,
   },
-  theme: {
-    ...JSON.parse(JSON.stringify(defaultTheme)),
-    muiTheme: themeConstructor(
-      defaultTheme.primary,
-      defaultTheme.secondary,
-      defaultTheme.type
-    ),
-  },
+  theme: getInitialTheme(),
   footerHeight: 0,
   transitionParent: false,
   mobileViewIndex: undefined,
@@ -46,22 +64,10 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
     case openHeaderType:
       return { ...state, openHeaderBar: action.openHeader };
     case updateVersionNumerType: {
-      const newTheme = state.theme;
       if (document) {
         document.title = `${action.payload.title} ${action.payload.version}`;
-        const { primary, secondary, type } = queryString.parse(
-          window.location.search
-        );
-        newTheme.primary = primary || defaultTheme.primary;
-        newTheme.type = type || defaultTheme.type;
-        newTheme.secondary = secondary || defaultTheme.secondary;
-        newTheme.muiTheme = themeConstructor(
-          newTheme.primary,
-          newTheme.secondary,
-          newTheme.type
-        );
       }
-      return { ...state, version: action.payload.version, theme: newTheme };
+      return { ...state, version: action.payload.version };
     }
     case snackbar:
       return {

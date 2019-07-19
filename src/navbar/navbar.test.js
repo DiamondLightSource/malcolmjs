@@ -123,7 +123,9 @@ describe('NavBar', () => {
     const actions = store.getActions();
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
-    expect(actions[0].payload.args).toEqual(['/gui/PANDA:SEQ1']);
+    expect(actions[0].payload.args).toEqual([
+      { pathname: '/gui/PANDA:SEQ1', search: '' },
+    ]);
     expect(actions[1]).toBeInstanceOf(Function);
     const thunkResult = actions[1](store.dispatch, store.getState);
     expect(thunkResult).toEqual(
@@ -140,7 +142,7 @@ describe('NavBar', () => {
       .find('IconButton')
       .at(2)
       .simulate('click');
-    // click on PANDA:SEQ1 in the list of blocks
+    // click on SEQ1 in the list of blocks layout
     wrapper
       .find('MenuItem')
       .at(0)
@@ -149,7 +151,9 @@ describe('NavBar', () => {
     const actions = store.getActions();
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
-    expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout']);
+    expect(actions[0].payload.args).toEqual([
+      { pathname: '/gui/PANDA/layout', search: '' },
+    ]);
     expect(actions[1]).toBeInstanceOf(Function);
     const thunkResult = actions[1](store.dispatch, store.getState);
     expect(thunkResult).toEqual(
@@ -157,16 +161,16 @@ describe('NavBar', () => {
     );
   });
 
-  it('navigating to new root item changes the route', () => {
+  it('navigating to new parent block item changes the route', () => {
     const store = mockStore(state);
     const wrapper = mount(<NavBar store={store} />);
 
     // PANDA drop down
     wrapper
       .find('IconButton')
-      .last()
+      .at(4)
       .simulate('click');
-    // click on PANDA:SEQ1 in the list of blocks
+    // click on Val in the list of SEQ1's fields
     wrapper
       .find('MenuItem')
       .at(0)
@@ -175,7 +179,9 @@ describe('NavBar', () => {
     const actions = store.getActions();
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
-    expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout/SEQ1/Val']);
+    expect(actions[0].payload.args).toEqual([
+      { pathname: '/gui/PANDA/layout/SEQ1/Val', search: '' },
+    ]);
     expect(actions[1]).toBeInstanceOf(Function);
     const thunkResult = actions[1](store.dispatch, store.getState);
     expect(thunkResult).toEqual(
