@@ -76,9 +76,11 @@ const blockLoadingSpinner = notFound =>
       </div>
       <br />
       <br />
-      <Typography>Block not found....yet</Typography>
-      <Typography>it may still be loading and appear later</Typography>
-      <Typography>(hint: URLs are case sensitive)</Typography>
+      <Typography color="inherit">Block not found....yet</Typography>
+      <Typography color="inherit">
+        it may still be loading and appear later
+      </Typography>
+      <Typography color="inherit">(hint: URLs are case sensitive)</Typography>
     </div>
   ) : (
     <div>

@@ -177,7 +177,7 @@
               "tags": [
                 "widget:textinput"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Repeats"
             }, 
             "trigger": {
@@ -201,7 +201,7 @@
               "tags": [
                 "widget:combo"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Trigger"
             }, 
             "position": {
@@ -211,7 +211,7 @@
               "tags": [
                 "widget:textinput"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Position"
             }, 
             "time1": {
@@ -221,7 +221,7 @@
               "tags": [
                 "widget:textinput"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Time1"
             }, 
             "outa1": {
@@ -230,7 +230,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outa1"
             }, 
             "outb1": {
@@ -239,7 +239,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outb1"
             }, 
             "outc1": {
@@ -248,7 +248,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outc1"
             }, 
             "outd1": {
@@ -257,7 +257,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outd1"
             }, 
             "oute1": {
@@ -266,7 +266,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Oute1"
             }, 
             "outf1": {
@@ -275,7 +275,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outf1"
             }, 
             "time2": {
@@ -285,7 +285,7 @@
               "tags": [
                 "widget:textinput"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Time2"
             }, 
             "outa2": {
@@ -294,7 +294,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outa2"
             }, 
             "outb2": {
@@ -303,7 +303,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outb2"
             }, 
             "outc2": {
@@ -312,7 +312,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outc2"
             }, 
             "outd2": {
@@ -321,7 +321,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outd2"
             }, 
             "oute2": {
@@ -330,7 +330,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Oute2"
             }, 
             "outf2": {
@@ -339,7 +339,7 @@
               "tags": [
                 "widget:checkbox"
               ], 
-              "writeable": false, 
+              "writeable": true, 
               "label": "Outf2"
             }
           }

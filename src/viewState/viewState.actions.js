@@ -3,6 +3,9 @@ export const openHeaderType = 'OPEN_HEADER_BAR';
 export const updateVersionNumerType = 'UPDATE_VERSION';
 export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
+export const updateTheme = 'CREATE_NEW_THEME';
+export const editTheme = 'EDIT_THEME';
+export const setTheme = 'SET_THEME_PROPS';
 export const popout = 'WINDOW_IS_POPOUT';
 export const panelDirection = 'PANEL_TRANSITION_DIRECTION';
 export const mobileViewIndexType = 'SET_MOBILE_VIEW_INDEX';
@@ -40,6 +43,21 @@ export const showFooterAction = footerHeight => ({
   },
 });
 
+export const updateThemeAction = () => ({
+  type: updateTheme,
+});
+
+export const setThemeAction = (property, value) => ({
+  type: setTheme,
+  payload: {
+    property,
+    value,
+  },
+});
+
+export const editThemeAction = () => ({
+  type: editTheme,
+});
 export const flagAsPopout = () => ({
   type: popout,
 });

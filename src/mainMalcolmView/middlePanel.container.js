@@ -25,6 +25,7 @@ import blockUtils from '../malcolm/blockUtils';
 
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
+import ThemeEditor from './themeEditor';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
 import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
@@ -130,6 +131,17 @@ const findAttributeComponent = props => {
               </Tooltip>,
             ]}
           />
+        </div>
+      </div>
+    );
+  } else if (props.themeEditor) {
+    return (
+      <div className={props.classes.plainBackground}>
+        <div
+          className={props.classes.tableContainer}
+          style={transitionWithPanelStyle}
+        >
+          <ThemeEditor openParent={props.openParent} />
         </div>
       </div>
     );
@@ -370,7 +382,7 @@ const MiddlePanelContainer = props => (
     role="presentation"
     style={props.mobile && !props.openHeader ? { marginTop: 0 } : {}}
   >
-    {props.mainAttribute ? (
+    {props.mainAttribute || props.themeEditor ? (
       findAttributeComponent(props)
     ) : (
       <div
@@ -435,6 +447,7 @@ const mapStateToProps = (state, ownProps) => {
     disableAutoLayout:
       state.malcolm.layout && state.malcolm.layout.blocks.length === 0,
     layoutLocked: state.malcolm.layout && state.malcolm.layout.locked,
+    themeEditor: state.viewState.themeEditor,
   };
 };
 
@@ -473,11 +486,12 @@ findAttributeComponent.propTypes = {
 };
 
 MiddlePanelContainer.propTypes = {
+  themeEditor: PropTypes.bool.isRequired,
+  mainAttribute: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
     plainBackground: PropTypes.string,
   }).isRequired,
-  mainAttribute: PropTypes.string.isRequired,
   parentBlock: PropTypes.string.isRequired,
   mobile: PropTypes.bool.isRequired,
   openHeader: PropTypes.bool.isRequired,

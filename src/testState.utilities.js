@@ -46,13 +46,18 @@ export const buildTestState = () => ({
   },
   // all the state purely about the MalcolmJS interface
   viewState: {
-    footerHeight: 0,
-    openChildPanel: true,
     openParentPanel: true,
+    openChildPanel: true,
+    openHeaderBar: true,
     snackbar: {
-      open: false,
       message: '',
+      open: false,
     },
+    theme: { primary: 'blue', type: 'dark', muiTheme: {} },
+    footerHeight: 0,
+    transitionParent: false,
+    mobileViewIndex: undefined,
+    version: undefined,
   },
 });
 

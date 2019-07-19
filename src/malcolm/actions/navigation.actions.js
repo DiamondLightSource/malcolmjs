@@ -94,7 +94,7 @@ const navigateToAttribute = (blockMri, attributeName) => (
           `${window.location.protocol}//${window.location.host}${newPath}`,
           `${blockMri}.${attributeName}`
         )
-      : dispatch(push(newPath));
+      : dispatch(push({ pathname: newPath, search: window.location.search }));
   }
 };
 
@@ -112,7 +112,7 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
           `${window.location.protocol}//${window.location.host}${path}`,
           `${blockMri}.${attributeName}`
         )
-      : dispatch(push(path));
+      : dispatch(push({ pathname: path, search: window.location.search }));
 
   if (matchingBlockNav > -1) {
     if (subElement !== undefined) {
@@ -154,7 +154,7 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
         )
         .map(nav => nav.path)
         .join('/')}`;
-      dispatch(replace(newPath));
+      dispatch(replace({ pathname: newPath, search: window.location.search }));
     } else {
       const newPath = `/${viewType}/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
@@ -163,7 +163,7 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
         .filter((nav, i) => i > matchingBlockNav + 1)
         .map(nav => nav.path)
         .join('/')}`;
-      dispatch(replace(newPath));
+      dispatch(replace({ pathname: newPath, search: window.location.search }));
     }
   }
 };
@@ -185,7 +185,7 @@ const navigateToPalette = () => (dispatch, getState) => {
       .filter((nav, i) => i <= navigationLists.length - 1 - lastAttributeNav)
       .map(nav => nav.path)
       .join('/')}/${routeEnding}`;
-    dispatch(push(newPath));
+    dispatch(push({ pathname: newPath, search: window.location.search }));
   }
 };
 
@@ -215,20 +215,20 @@ const closeChildPanel = () => (dispatch, getState) => {
           .join('/')}/${state.mainAttribute}${
           subElements ? `.${subElements.join('.')}` : ''
         }`;
-        dispatch(push(newPath));
+        dispatch(push({ pathname: newPath, search: window.location.search }));
       } else {
         const newPath = `/${viewType}/${navigationLists
           .slice(0, -1)
           .map(nav => nav.path)
           .join('/')}`;
-        dispatch(push(newPath));
+        dispatch(push({ pathname: newPath, search: window.location.search }));
       }
     } else {
       const newPath = `/${viewType}/${navigationLists
         .slice(0, -1)
         .map(nav => nav.path)
         .join('/')}`;
-      dispatch(push(newPath));
+      dispatch(push({ pathname: newPath, search: window.location.search }));
     }
   }
 };
@@ -252,7 +252,7 @@ const updateChildPanel = newChild => (dispatch, getState) => {
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   }
-  dispatch(push(newPath));
+  dispatch(push({ pathname: newPath, search: window.location.search }));
 };
 
 const updateChildPanelWithLink = (blockMri, portName) => (
@@ -289,7 +289,7 @@ const updateChildPanelWithLink = (blockMri, portName) => (
       .map(nav => nav.path)
       .join('/')}/${newChild}`;
   }
-  dispatch(push(newPath));
+  dispatch(push({ pathname: newPath, search: window.location.search }));
 };
 
 const closeInfo = (blockMri, attributeName, subElement) => (
@@ -304,13 +304,13 @@ const closeInfo = (blockMri, attributeName, subElement) => (
       .slice(0, -2)
       .map(nav => nav.path)
       .join('/')}/${mainAttribute}${subElement ? `.${subElement}` : ''}`;
-    dispatch(push(newPath));
+    dispatch(push({ pathname: newPath, search: window.location.search }));
   } else {
     const newPath = `/${viewType}/${navigationLists
       .slice(0, -1)
       .map(nav => nav.path)
       .join('/')}`;
-    dispatch(push(newPath));
+    dispatch(push({ pathname: newPath, search: window.location.search }));
   }
 };
 
