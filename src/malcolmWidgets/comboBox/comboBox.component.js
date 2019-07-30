@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -12,6 +13,13 @@ const styles = theme => ({
   formControl: {
     minHeight: 28,
     maxHeight: 28,
+  },
+  choice: {
+    minHeight: 28,
+    maxHeight: 28,
+    padding: 0,
+    paddingLeft: '4px',
+    paddingRight: '4px',
   },
   select: {
     margin: 0,
@@ -34,16 +42,18 @@ const WidgetComboBox = props => {
           {choice}
         </option>
       ) : (
-        <Typography
+        <MenuItem
+          selected={choice === value}
           value={choice}
           // Rule prevents behaviour we want in this case
           // eslint-disable-next-line react/no-array-index-key
           key={index}
           onClick={() => props.selectEventHandler(choice)}
           data-cy={`choice-${index}`}
+          className={props.classes.choice}
         >
-          {choice}
-        </Typography>
+          <Typography>{choice}</Typography>
+        </MenuItem>
       )
   );
   if (!props.Choices.includes(value)) {
@@ -96,6 +106,7 @@ WidgetComboBox.propTypes = {
   classes: PropTypes.shape({
     formControl: PropTypes.string,
     select: PropTypes.string,
+    choice: PropTypes.string,
   }).isRequired,
   mobile: PropTypes.bool,
   forceOpen: PropTypes.bool,

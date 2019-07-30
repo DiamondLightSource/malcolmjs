@@ -4,11 +4,11 @@ exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
 
 exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
 <div
-  className="ButtonAction-container-157"
+  className="ButtonAction-container-173"
   style={Object {}}
 >
   <WithStyles(Button)
-    className="ButtonAction-button-158"
+    className="ButtonAction-button-174"
     color="primary"
     disabled={true}
     onClick={[Function]}
@@ -22,10 +22,10 @@ exports[`AttributeSelector selector function returns info:button and renders cor
 
 exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
 <div
-  className="WidgetTextUpdate-divWrap-191"
+  className="WidgetTextUpdate-divWrap-207"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdateWrap-192"
+    className="WidgetTextUpdate-textUpdateWrap-208"
     style={Object {}}
   >
     test value
