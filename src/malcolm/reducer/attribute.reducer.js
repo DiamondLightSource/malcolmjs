@@ -325,6 +325,14 @@ export const presetMethodInputs = attribute => {
                 table: {},
               },
             };
+          } else if (isArrayType(attribute.raw.meta.takes.elements[input])) {
+            updatedAttribute.calculated.inputs[input] = {
+              meta: JSON.parse(
+                JSON.stringify(attribute.raw.meta.takes.elements[input])
+              ),
+              value: attribute.raw.took.value[input],
+              flags: { rows: [], table: {} },
+            };
           } else {
             updatedAttribute.calculated.inputs[input] = {
               value: attribute.raw.took.value[input],
