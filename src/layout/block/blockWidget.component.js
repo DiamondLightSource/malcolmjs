@@ -34,6 +34,7 @@ const styles = theme => ({
     position: 'relative',
     alignItems: 'center',
     marginBottom: 3,
+    justifyContent: 'center',
   },
   inputPortsContainer: {
     position: 'absolute',
@@ -55,7 +56,6 @@ const styles = theme => ({
     alignItems: 'center',
   },
   iconContents: {
-    flexGrow: 1,
     height: '100%',
     width: 120,
     opacity: 0.5,
