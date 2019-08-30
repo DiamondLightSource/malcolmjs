@@ -58,17 +58,17 @@ class Plotter extends React.Component {
     if (!state.userChangingViewState) {
       const newState = props.deriveState(props, state);
       if (props.attribute) {
-        const userHasChangedLayout =
-          /* this relies on the fact that plotly.js accepts JS Date objects for axis range values,
-          but changes them to strings when it sets the range itself (i.e. when the user pans or zooms)
-           */
-          state.layout.xaxis.range &&
-          (!(state.layout.xaxis.range[0] instanceof Date) ||
-            !(state.layout.xaxis.range[1] instanceof Date));
+        // const userHasChangedLayout =
+        //   /* this relies on the fact that plotly.js accepts JS Date objects for axis range values,
+        //   but changes them to strings when it sets the range itself (i.e. when the user pans or zooms)
+        //    */
+        //   state.layout.xaxis.range &&
+        //   (!(state.layout.xaxis.range[0] instanceof Date) ||
+        //     !(state.layout.xaxis.range[1] instanceof Date));
         if (
           newState.data[0] &&
           newState.data[0].x.length > 0 &&
-          !userHasChangedLayout
+          !state.userHasChangedLayout
         ) {
           newState.layout.xaxis = {
             ...newState.layout.xaxis,
@@ -126,6 +126,8 @@ class Plotter extends React.Component {
         margin: { l: 40, r: 30, t: 30, b: 30 },
       },
       userChangingViewState: false,
+      userHasChangedLayout: false,
+      init: true,
     };
     this.startChangingViewState = this.startChangingViewState.bind(this);
     this.finishChangingViewState = this.finishChangingViewState.bind(this);
@@ -166,6 +168,8 @@ class Plotter extends React.Component {
       this.setState({
         ...this.props.deriveState(this.props, this.state),
         userChangingViewState: false,
+        userHasChangedLayout: !this.state.init,
+        init: false,
       });
     }
   }
@@ -173,6 +177,8 @@ class Plotter extends React.Component {
   resetAxes() {
     this.setState({
       ...this.state,
+      userChangingViewState: false,
+      userHasChangedLayout: false,
       layout: {
         ...this.state.layout,
         datarevision: this.state.layout.datarevision + 1,

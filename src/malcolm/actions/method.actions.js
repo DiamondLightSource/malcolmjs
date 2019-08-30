@@ -19,12 +19,18 @@ export const buildMethodUpdate = (id, data) => ({
   },
 });
 
-export const malcolmUpdateMethodInput = (path, name, value) => ({
+export const malcolmUpdateMethodInput = (
+  path,
+  name,
+  value,
+  forceUpdate = false
+) => ({
   type: MalcolmUpdateMethodInputType,
   payload: {
     path,
     name,
     value,
+    forceUpdate,
   },
 });
 

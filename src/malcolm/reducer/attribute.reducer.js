@@ -284,72 +284,76 @@ export const updateLocalState = attribute => {
 export const presetMethodInputs = attribute => {
   const updatedAttribute = attribute;
   if (updatedAttribute && updatedAttribute.calculated.isMethod) {
-    updatedAttribute.calculated.inputs =
-      updatedAttribute.calculated.inputs || {};
-    updatedAttribute.calculated.outputs =
-      updatedAttribute.calculated.outputs || {};
-    Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
-      ([input, meta]) => {
-        if (attribute.raw.took && attribute.raw.took.present.includes(input)) {
+    if (!updatedAttribute.calculated.inputs) {
+      updatedAttribute.calculated.inputs = {};
+      updatedAttribute.calculated.outputs =
+        updatedAttribute.calculated.outputs || {};
+      Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
+        ([input, meta]) => {
           if (
-            attribute.raw.meta.takes.elements[input].typeid ===
-            malcolmTypes.table
+            attribute.raw.took &&
+            attribute.raw.took.present.includes(input)
           ) {
-            const labels = Object.keys(
-              attribute.raw.meta.takes.elements[input].elements
-            );
-            const columns = {};
-            labels.forEach(label => {
-              columns[label] = {};
-            });
-            updatedAttribute.calculated.inputs[input] = {
-              meta: JSON.parse(
-                JSON.stringify(attribute.raw.meta.takes.elements[input])
-              ),
-              value: attribute.raw.took.value[input][labels[0]].map(
-                (value, row) => {
-                  const dataRow = {};
-                  labels.forEach(label => {
-                    dataRow[label] =
-                      attribute.raw.took.value[input][label][row];
-                  });
-                  return dataRow;
-                }
-              ),
-              labels,
-              flags: {
-                columns,
-                rows: attribute.raw.took.value[input][labels[0]].map(
-                  () => ({})
+            if (
+              attribute.raw.meta.takes.elements[input].typeid ===
+              malcolmTypes.table
+            ) {
+              const labels = Object.keys(
+                attribute.raw.meta.takes.elements[input].elements
+              );
+              const columns = {};
+              labels.forEach(label => {
+                columns[label] = {};
+              });
+              updatedAttribute.calculated.inputs[input] = {
+                meta: JSON.parse(
+                  JSON.stringify(attribute.raw.meta.takes.elements[input])
                 ),
-                table: {},
-              },
-            };
-          } else if (isArrayType(attribute.raw.meta.takes.elements[input])) {
+                value: attribute.raw.took.value[input][labels[0]].map(
+                  (value, row) => {
+                    const dataRow = {};
+                    labels.forEach(label => {
+                      dataRow[label] =
+                        attribute.raw.took.value[input][label][row];
+                    });
+                    return dataRow;
+                  }
+                ),
+                labels,
+                flags: {
+                  columns,
+                  rows: attribute.raw.took.value[input][labels[0]].map(
+                    () => ({})
+                  ),
+                  table: {},
+                },
+              };
+            } else if (isArrayType(attribute.raw.meta.takes.elements[input])) {
+              updatedAttribute.calculated.inputs[input] = {
+                meta: JSON.parse(
+                  JSON.stringify(attribute.raw.meta.takes.elements[input])
+                ),
+                value: attribute.raw.took.value[input],
+                flags: { rows: [], table: {} },
+              };
+            } else {
+              updatedAttribute.calculated.inputs[input] = {
+                value: attribute.raw.took.value[input],
+                flags: {},
+              };
+            }
+          } else if (
+            updatedAttribute.raw.meta.takes.required.includes(input) &&
+            !updatedAttribute.calculated.inputs[input]
+          ) {
             updatedAttribute.calculated.inputs[input] = {
-              meta: JSON.parse(
-                JSON.stringify(attribute.raw.meta.takes.elements[input])
-              ),
-              value: attribute.raw.took.value[input],
-              flags: { rows: [], table: {} },
-            };
-          } else {
-            updatedAttribute.calculated.inputs[input] = {
-              value: attribute.raw.took.value[input],
+              value: getDefaultFromType(meta),
               flags: {},
             };
           }
-        } else if (
-          updatedAttribute.raw.meta.takes.required.includes(input) &&
-          !updatedAttribute.calculated.inputs[input]
-        ) {
-          updatedAttribute.calculated.inputs[input] = {
-            value: getDefaultFromType(meta),
-            flags: {},
-          };
         }
-      }
-    );
+      );
+    }
   }
   return updatedAttribute;
 };

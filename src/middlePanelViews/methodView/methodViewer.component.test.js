@@ -335,7 +335,8 @@ describe('Method viewer', () => {
     expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
       ['Test', 'Method'],
       'third',
-      ['SEVEN', '']
+      ['SEVEN', ''],
+      false
     );
   });
   /* TODO: fix tests for virtualizedTable-based array

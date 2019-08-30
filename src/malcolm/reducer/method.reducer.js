@@ -83,8 +83,13 @@ const pushParamsToArchive = (state, payload) => {
     const archive = attributes[matchingAttribute];
     const attribute = { ...blocks[blockName].attributes[matchingAttribute] };
     attribute.calculated.lastCallId = archive.value.size();
+    const took = {};
+    Object.keys(payload.parameters).forEach(param => {
+      took[param] = payload.parameters[param].value;
+    });
     archive.value.push({
-      took: payload.parameters,
+      calledWith: Object.keys(payload.parameters),
+      took,
       returned: null,
       source: Sources.LOCAL,
     });
@@ -182,6 +187,10 @@ const updateMethodInput = (state, payload) => {
             value: payload.value,
           }
         : { value: payload.value, flags: {} };
+      attributeCopy.calculated.inputs[payload.name].flags = {
+        ...attributeCopy.calculated.inputs[payload.name].flags,
+        forceUpdate: payload.forceUpdate,
+      };
     }
     attributeCopy.calculated.dirty =
       archive &&

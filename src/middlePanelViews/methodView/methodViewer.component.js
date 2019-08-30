@@ -288,7 +288,8 @@ const MethodViewer = props => {
         props.updateInput(
           props.method.calculated.path,
           paramName,
-          params[paramName]
+          params[paramName],
+          true
         );
       });
     };
@@ -412,8 +413,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateInput: (path, inputName, inputValue) => {
-    dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
+  updateInput: (path, inputName, inputValue, forceUpdate = false) => {
+    dispatch(
+      malcolmUpdateMethodInput(path, inputName, inputValue, forceUpdate)
+    );
   },
 });
 
