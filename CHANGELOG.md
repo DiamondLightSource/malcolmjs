@@ -1,4 +1,11 @@
 # Changelog
+## 1.7.4 (30/8/2019)
+Fixes:
+- Improved Method state persistenc (server updates no longer overwrite local state, "copy params" button works again)
+- Fixed array-type method params
+- Fixed icon sizes on layout blocks
+- reduced amount of useless entries in method archive
+- improved plot interaction (now retains user view state for non-archive plots)
 ## 1.7.2 (19/7/2019)
 Features:
 - Added ability to set theme via query params + simple theme editor 
