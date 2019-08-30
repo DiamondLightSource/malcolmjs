@@ -192,7 +192,10 @@ describe('method reducer', () => {
   });
 
   it('archiveMethodRun stores input parameters on post', () => {
-    const payload = { path: ['block1', 'attr1'], parameters: { a: 2, c: 'd' } };
+    const payload = {
+      path: ['block1', 'attr1'],
+      parameters: { a: { value: 2 }, c: { value: 'd' } },
+    };
     const attribute = runReducer(MalcolmArchiveMethodRun, payload, 'archive');
     expect(attribute.timeStamp.toarray().length).toEqual(1);
     expect(
