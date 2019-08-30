@@ -537,7 +537,10 @@ export function updateAttribute(
               alarmState
             );
           }
-        } else if (attribute.calculated.isMethod) {
+        } else if (
+          attribute.calculated.isMethod &&
+          !attribute.calculated.isWritableFlip
+        ) {
           archive[matchingAttributeIndex] = pushServerRunToArchive(
             attributeArchive,
             payload

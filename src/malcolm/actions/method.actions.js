@@ -6,7 +6,7 @@ import {
 } from '../malcolm.types';
 import blockUtils from '../blockUtils';
 
-export const buildMethodUpdate = (id, data) => ({
+export const buildMethodUpdate = (id, data, isWritableFlip = false) => ({
   type: MalcolmAttributeData,
   payload: {
     id,
@@ -15,6 +15,7 @@ export const buildMethodUpdate = (id, data) => ({
     calculated: {
       isMethod: true,
       pending: false,
+      isWritableFlip,
     },
   },
 });

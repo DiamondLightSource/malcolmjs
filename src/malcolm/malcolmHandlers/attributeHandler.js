@@ -99,13 +99,13 @@ const processAttributes = (messages, getState, dispatch) => {
   }
 };
 
-const processMethod = (request, method, dispatch) => {
+const processMethod = (request, method, dispatch, isWritableFlip = false) => {
   const changedMethod = {
     typeid: method.typeid,
     raw: { ...method },
   };
 
-  dispatch(buildMethodUpdate(request.id, changedMethod));
+  dispatch(buildMethodUpdate(request.id, changedMethod, isWritableFlip));
 };
 
 export default {
