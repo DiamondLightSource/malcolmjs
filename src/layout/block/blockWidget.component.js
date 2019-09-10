@@ -141,26 +141,6 @@ const BlockWidget = props => {
       }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
-      {props.node.alarmState !== AlarmStates.NO_ALARM ? (
-        <div className={props.classes.alarmDiv} style={{ zIndex: 999 }}>
-          <div
-            style={{ zIndex: 1000, position: 'absolute', top: 0, left: 1.856 }}
-          >
-            <AttributeAlarm alarmSeverity={props.node.alarmState} />
-          </div>
-          <div style={{ zIndex: 999, position: 'absolute', top: 0 }}>
-            <svg height="28" width="28">
-              <circle
-                cx="13.856"
-                cy="13.856"
-                r="13.856"
-                fill={props.theme.palette.background.paper}
-                fillOpacity={0.6}
-              />
-            </svg>
-          </div>
-        </div>
-      ) : null}
       <div
         style={{
           display: 'flex',
@@ -173,6 +153,24 @@ const BlockWidget = props => {
           {props.node.label}
         </Typography>
       </div>
+      {props.node.alarmState !== AlarmStates.NO_ALARM ? (
+        <div className={props.classes.alarmDiv}>
+          <div style={{ position: 'absolute', top: 0 }}>
+            <svg height="28" width="28">
+              <circle
+                cx="13.856"
+                cy="13.856"
+                r="13.856"
+                fill={props.theme.palette.background.paper}
+                fillOpacity={0.6}
+              />
+            </svg>
+          </div>
+          <div style={{ position: 'absolute', top: 0, left: 1.856 }}>
+            <AttributeAlarm alarmSeverity={props.node.alarmState} />
+          </div>
+        </div>
+      ) : null}
       <div className={props.classes.blockContents} style={{ minHeight }}>
         <div className={props.classes.iconContents}>{blockGraphic}</div>
         <div className={props.classes.inputPortsContainer}>

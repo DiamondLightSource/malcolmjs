@@ -14,7 +14,7 @@ export const defaultTheme = {
   alarmState: {
     warning: '#e6c01c',
     error: '#e8001f',
-    disconnected: '#9d07bb',
+    disconnected: '#4e0663',
   },
   // port colours should not use the themes secondary colour, it is used to highlight blocks and links
   portColours: {
