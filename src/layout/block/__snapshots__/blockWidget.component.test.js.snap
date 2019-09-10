@@ -9,31 +9,29 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseUp={[Function]}
 >
   <div
-    className="BlockWidget-alarmDiv-11"
     style={
       Object {
-        "zIndex": 999,
+        "display": "flex",
+        "justifyContent": "center",
+        "position": "relative",
+        "top": 2,
       }
     }
+  >
+    <WithStyles(Typography)
+      className="BlockWidget-title-3"
+    >
+      block 1
+    </WithStyles(Typography)>
+  </div>
+  <div
+    className="BlockWidget-alarmDiv-11"
   >
     <div
       style={
         Object {
-          "left": 1.856,
           "position": "absolute",
           "top": 0,
-          "zIndex": 1000,
-        }
-      }
-    >
-      <WithTheme(AttributeAlarm) />
-    </div>
-    <div
-      style={
-        Object {
-          "position": "absolute",
-          "top": 0,
-          "zIndex": 999,
         }
       }
     >
@@ -50,22 +48,17 @@ exports[`BlockWidget block renders correctly 1`] = `
         />
       </svg>
     </div>
-  </div>
-  <div
-    style={
-      Object {
-        "display": "flex",
-        "justifyContent": "center",
-        "position": "relative",
-        "top": 2,
+    <div
+      style={
+        Object {
+          "left": 1.856,
+          "position": "absolute",
+          "top": 0,
+        }
       }
-    }
-  >
-    <WithStyles(Typography)
-      className="BlockWidget-title-3"
     >
-      block 1
-    </WithStyles(Typography)>
+      <WithTheme(AttributeAlarm) />
+    </div>
   </div>
   <div
     className="BlockWidget-blockContents-4"
