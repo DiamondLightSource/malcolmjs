@@ -1,4 +1,8 @@
 # Changelog
+## 1.7.5 (27/9/2019)
+Fixes:
+- Changed logic in blockdetails so re-render now occurs if switching between two different attributes with identical fields
+- Changed layout block rendering so alarm icons now have correct z-index/don't appear on top of other blocks
 ## 1.7.4 (30/8/2019)
 Fixes:
 - Improved Method state persistenc (server updates no longer overwrite local state, "copy params" button works again)
