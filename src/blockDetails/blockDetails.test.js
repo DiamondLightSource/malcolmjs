@@ -199,11 +199,13 @@ describe('Block Details', () => {
           inGroup: true,
           isGroup: false,
           isMethod: false,
+          path: ['block', 'test1'],
         },
       },
       {
         calculated: {
           name: 'test2',
+          path: ['block', 'test2'],
         },
       },
     ];
@@ -222,7 +224,7 @@ describe('Block Details', () => {
 
     newAttributes = buildAttributes(a => ({
       ...a,
-      calculated: { ...a.calculated, name: 'test1 new' },
+      calculated: { ...a.calculated, path: ['block', 'test1New'] },
     }));
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
 

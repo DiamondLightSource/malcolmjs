@@ -92,7 +92,11 @@ const blockLoadingSpinner = notFound =>
 export const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.length === newAttributes.length &&
   oldAttributes.every(
-    (old, i) => old.calculated.name === newAttributes[i].calculated.name
+    (old, i) =>
+      old.calculated.path &&
+      old.calculated.path.every(
+        (el, j) => el === newAttributes[i].calculated.path[j]
+      )
   ) &&
   oldAttributes.every(
     (old, i) => old.calculated.inGroup === newAttributes[i].calculated.inGroup
@@ -153,6 +157,7 @@ const displayAttributes = props => {
         {props.methods.length > 0 ? (
           <GroupDivider classes={props.classes} />
         ) : null}
+
         {props.methods.map((method, i) => (
           <div>
             <MethodDetails
@@ -273,8 +278,9 @@ const mapStateToProps = (state, ownProps, memory) => {
       a =>
         a.calculated.isMethod &&
         !(
-          block.orphans &&
-          block.orphans.some(orphan => orphan === a.calculated.name)
+          (a.raw.meta && a.raw.meta.tags.includes('method:hidden')) ||
+          (block.orphans &&
+            block.orphans.some(orphan => orphan === a.calculated.name))
         )
     );
 
