@@ -110,19 +110,23 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
-  let blockGraphic =
+  const blockIcon =
     props.node.icon && props.node.icon !== '<svg/>'
       ? renderHTML(props.node.icon)
       : null;
-  blockGraphic = props.node.displayAttribute ? (
+  const blockWidget = props.node.displayAttribute ? (
     <div style={{ width: '80%', marginLeft: '16px' }}>
       <AttributeSelector
         blockName={props.node.displayAttribute[0]}
         attributeName={props.node.displayAttribute[1]}
       />
     </div>
-  ) : (
-    blockGraphic
+  ) : null;
+  const blockGraphic = (
+    <div>
+      {blockIcon}
+      {blockWidget}
+    </div>
   );
 
   const block = props.node.loading ? (

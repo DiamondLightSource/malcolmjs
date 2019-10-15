@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
+<div
+  className="WidgetMeter-div-1"
+>
+  <div
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #424242, #f00)",
+        "left": "0px",
+        "maxHeight": "28px",
+        "minHeight": "28px",
+        "minWidth": "100%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "backgroundColor": "#424242",
+        "borderLeft": "2px solid #fff",
+        "borderRight": "2px solid #fff",
+        "left": "100%",
+        "maxHeight": "28px",
+        "maxWidth": "0%",
+        "minHeight": "28px",
+        "minWidth": "0%",
+        "position": "relative",
+        "top": "-28px",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`WidgetMeter matches snapshot 1`] = `
+<div
+  className="WidgetMeter-div-1"
+>
+  <div
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #424242, #00f)",
+        "left": "0px",
+        "maxHeight": "28px",
+        "minHeight": "28px",
+        "minWidth": "100%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "backgroundColor": "#424242",
+        "borderLeft": "2px solid #fff",
+        "borderRight": "2px solid #fff",
+        "left": "50%",
+        "maxHeight": "28px",
+        "maxWidth": "50%",
+        "minHeight": "28px",
+        "minWidth": "50%",
+        "position": "relative",
+        "top": "-28px",
+      }
+    }
+  />
+</div>
+`;

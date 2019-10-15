@@ -69,10 +69,16 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       'widget:icon'
     );
 
-    const displayAttribute = blockUtils.findAttributesWithTag(
+    let displayAttribute = blockUtils.findAttributesWithTag(
       matchingBlock,
       'block:display'
     );
+    if (displayAttribute.length === 0) {
+      displayAttribute = blockUtils.findAttributesWithTag(
+        matchingBlock,
+        'widget:meter'
+      );
+    }
 
     if (iconAttribute.length > 0) {
       updatedBlock.icon = iconAttribute[0].raw.value;

@@ -10,6 +10,7 @@ import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
 import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
+import WidgetMeter from '../../meter/WidgetMeter.component';
 import AttributeAlarm from '../attributeAlarm/attributeAlarm.component';
 import {
   malcolmPutAction,
@@ -150,6 +151,8 @@ export const selectorFunction = (
           Units={(objectMeta.display && objectMeta.display.units) || null}
         />
       );
+    case 'widget:meter':
+      return <WidgetMeter value={value} limits={objectMeta.display} />;
     case 'widget:title':
     case 'widget:textinput': {
       let displayValue = '';
