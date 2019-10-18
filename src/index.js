@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 // import registerServiceWorker from './registerServiceWorker';
 import { unregister } from './registerServiceWorker';
@@ -21,7 +22,9 @@ import {
   registerSocketAndConnect,
 } from './malcolm/actions/socket.actions';
 import ReduxTimingMiddleware from './userTimingMiddleware';
-import ConnectedThemeProvider from './mainMalcolmView/connectedThemeProvider';
+import ConnectedThemeProvider, {
+  defaultTheme,
+} from './mainMalcolmView/connectedThemeProvider';
 
 require('typeface-roboto');
 
@@ -49,6 +52,8 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 );
 
+const staticTheme = createMuiTheme(defaultTheme);
+
 configureMalcolmSocketHandlers(store, worker);
 if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
   // if production connect directly to ws://{{host}}/ws
@@ -64,15 +69,24 @@ setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
 
+// eslint-disable-next-line no-unused-vars
+const normal = (
+  <MuiThemeProvider theme={staticTheme}>
+    <AppRouter />
+    <MessageSnackBar timeout={5000} />
+  </MuiThemeProvider>
+);
+const dynamic = (
+  <ConnectedThemeProvider>
+    <AppRouter />
+    <MessageSnackBar timeout={5000} />
+  </ConnectedThemeProvider>
+);
+
 ReactDOM.render(
   <Provider store={store}>
     <div className="App">
-      <ConnectedRouter history={history}>
-        <ConnectedThemeProvider>
-          <AppRouter />
-          <MessageSnackBar timeout={5000} />
-        </ConnectedThemeProvider>
-      </ConnectedRouter>
+      <ConnectedRouter history={history}>{dynamic}</ConnectedRouter>
     </div>
   </Provider>,
   document.getElementById('root')
