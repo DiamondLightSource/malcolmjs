@@ -8,11 +8,10 @@ exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
     style={
       Object {
         "backgroundImage": "linear-gradient(to right, #424242, #f00)",
+        "gridColumn": "1",
+        "gridRow": "1",
         "left": "0px",
-        "maxHeight": "28px",
-        "minHeight": "28px",
         "minWidth": "100%",
-        "position": "relative",
       }
     }
   />
@@ -20,18 +19,35 @@ exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
     style={
       Object {
         "backgroundColor": "#424242",
-        "borderLeft": "2px solid #fff",
-        "borderRight": "2px solid #fff",
-        "left": "100%",
-        "maxHeight": "28px",
+        "borderLeft": "2px solid #f00",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "calc(100% - 2px)",
         "maxWidth": "0%",
-        "minHeight": "28px",
         "minWidth": "0%",
         "position": "relative",
-        "top": "-28px",
       }
     }
   />
+  <div
+    style={
+      Object {
+        "gridColumn": "1",
+        "gridRow": "1",
+        "position": "relative",
+      }
+    }
+  >
+    <ReactFitText
+      compressor={1}
+      maxFontSize={Infinity}
+      minFontSize={-Infinity}
+    >
+      <WithStyles(Typography)>
+        150 / 100
+      </WithStyles(Typography)>
+    </ReactFitText>
+  </div>
 </div>
 `;
 
@@ -43,11 +59,10 @@ exports[`WidgetMeter matches snapshot 1`] = `
     style={
       Object {
         "backgroundImage": "linear-gradient(to right, #424242, #00f)",
+        "gridColumn": "1",
+        "gridRow": "1",
         "left": "0px",
-        "maxHeight": "28px",
-        "minHeight": "28px",
         "minWidth": "100%",
-        "position": "relative",
       }
     }
   />
@@ -55,17 +70,34 @@ exports[`WidgetMeter matches snapshot 1`] = `
     style={
       Object {
         "backgroundColor": "#424242",
-        "borderLeft": "2px solid #fff",
-        "borderRight": "2px solid #fff",
-        "left": "50%",
-        "maxHeight": "28px",
+        "borderLeft": "2px solid #00f",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "calc(50% - 2px)",
         "maxWidth": "50%",
-        "minHeight": "28px",
         "minWidth": "50%",
         "position": "relative",
-        "top": "-28px",
       }
     }
   />
+  <div
+    style={
+      Object {
+        "gridColumn": "1",
+        "gridRow": "1",
+        "position": "relative",
+      }
+    }
+  >
+    <ReactFitText
+      compressor={1}
+      maxFontSize={Infinity}
+      minFontSize={-Infinity}
+    >
+      <WithStyles(Typography)>
+        50 / 100
+      </WithStyles(Typography)>
+    </ReactFitText>
+  </div>
 </div>
 `;

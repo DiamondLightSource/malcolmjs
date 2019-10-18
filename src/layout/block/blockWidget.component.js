@@ -115,7 +115,14 @@ const BlockWidget = props => {
       ? renderHTML(props.node.icon)
       : null;
   const blockWidget = props.node.displayAttribute ? (
-    <div style={{ width: '80%', marginLeft: '16px' }}>
+    <div
+      style={{
+        height: '14px',
+        width: '80%',
+        marginLeft: '10%',
+        marginRight: '10%',
+      }}
+    >
       <AttributeSelector
         blockName={props.node.displayAttribute[0]}
         attributeName={props.node.displayAttribute[1]}

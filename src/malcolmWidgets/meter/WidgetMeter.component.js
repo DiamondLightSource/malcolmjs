@@ -1,12 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
+const ReactFitText = require('react-fittext');
 
 const styles = theme => ({
   div: {
-    maxHeight: '28px',
-    minHeight: '28px',
+    maxHeight: '100%',
+    minHeight: '100%',
     borderLeft: `2px solid ${theme.palette.divider}`,
+    display: 'grid',
+    gridTemplateColumns: '100%',
+    gridTemplateRows: '100%',
   },
 });
 
@@ -21,28 +27,38 @@ const WidgetMeter = props => {
     <div className={props.classes.div}>
       <div
         style={{
-          position: 'relative',
+          gridColumn: '1',
+          gridRow: '1',
           left: '0px',
           backgroundImage: `linear-gradient(to right, ${startCol}, ${endCol})`,
-          maxHeight: '28px',
-          minHeight: '28px',
           minWidth: '100%',
         }}
       />
       <div
         style={{
-          backgroundColor: props.theme.palette.background.paper,
           position: 'relative',
-          maxHeight: '28px',
-          minHeight: '28px',
-          left: `${prog}%`,
-          top: '-28px',
+          gridColumn: '1',
+          gridRow: '1',
+          backgroundColor: props.theme.palette.background.paper,
+          left: `calc(${prog}% - 2px)`,
           minWidth: `${100 - prog}%`,
           maxWidth: `${100 - prog}%`,
-          borderLeft: `2px solid ${props.theme.palette.divider}`,
-          borderRight: `2px solid ${props.theme.palette.divider}`,
+          borderLeft: `2px solid ${endCol}`,
         }}
       />
+      <div
+        style={{
+          gridColumn: '1',
+          gridRow: '1',
+          position: 'relative',
+        }}
+      >
+        <ReactFitText>
+          <Typography>
+            {`${props.value} / ${props.limits.limitHigh}`}
+          </Typography>
+        </ReactFitText>
+      </div>
     </div>
   );
 };
