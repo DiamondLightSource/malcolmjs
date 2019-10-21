@@ -12,6 +12,7 @@ exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
         "gridRow": "1",
         "left": "0px",
         "minWidth": "100%",
+        "position": "relative",
       }
     }
   />
@@ -39,11 +40,17 @@ exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
     }
   >
     <ReactFitText
-      compressor={1}
+      compressor={1.05}
       maxFontSize={Infinity}
       minFontSize={-Infinity}
     >
-      <WithStyles(Typography)>
+      <WithStyles(Typography)
+        style={
+          Object {
+            "padding": "2px",
+          }
+        }
+      >
         150 / 100
       </WithStyles(Typography)>
     </ReactFitText>
@@ -63,6 +70,7 @@ exports[`WidgetMeter matches snapshot 1`] = `
         "gridRow": "1",
         "left": "0px",
         "minWidth": "100%",
+        "position": "relative",
       }
     }
   />
@@ -90,11 +98,17 @@ exports[`WidgetMeter matches snapshot 1`] = `
     }
   >
     <ReactFitText
-      compressor={1}
+      compressor={1.05}
       maxFontSize={Infinity}
       minFontSize={-Infinity}
     >
-      <WithStyles(Typography)>
+      <WithStyles(Typography)
+        style={
+          Object {
+            "padding": "2px",
+          }
+        }
+      >
         50 / 100
       </WithStyles(Typography)>
     </ReactFitText>

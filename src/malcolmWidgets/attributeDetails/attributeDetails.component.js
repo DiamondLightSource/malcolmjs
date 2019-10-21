@@ -40,7 +40,6 @@ const styles = theme => ({
   controlContainer: {
     minWidth: '50%',
     maxWidth: '50%',
-    height: '28px',
     padding: 2,
   },
   button: {

@@ -7,8 +7,6 @@ const ReactFitText = require('react-fittext');
 
 const styles = theme => ({
   div: {
-    maxHeight: '100%',
-    minHeight: '100%',
     borderLeft: `2px solid ${theme.palette.divider}`,
     display: 'grid',
     gridTemplateColumns: '100%',
@@ -29,6 +27,7 @@ const WidgetMeter = props => {
         style={{
           gridColumn: '1',
           gridRow: '1',
+          position: 'relative',
           left: '0px',
           backgroundImage: `linear-gradient(to right, ${startCol}, ${endCol})`,
           minWidth: '100%',
@@ -53,8 +52,8 @@ const WidgetMeter = props => {
           position: 'relative',
         }}
       >
-        <ReactFitText>
-          <Typography>
+        <ReactFitText compressor={1.05}>
+          <Typography style={{ padding: '2px' }}>
             {`${props.value} / ${props.limits.limitHigh}`}
           </Typography>
         </ReactFitText>
