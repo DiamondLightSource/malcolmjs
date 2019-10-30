@@ -1,4 +1,9 @@
 # Changelog
+## 1.7.6 (30/10/2019)
+Features:
+- added new progressMeter widget
+Fixes:
+- Tweaked manner in which widget heights are set
 ## 1.7.5 (27/9/2019)
 Fixes:
 - Changed logic in blockdetails so re-render now occurs if switching between two different attributes with identical fields
