@@ -134,16 +134,24 @@ const NavBar = props => (
 );
 
 const mapStateToProps = state => {
+  const validNavs = [];
+  state.malcolm.navigation.navigationLists.forEach(nav => {
+    if (nav.navType) {
+      validNavs.push(nav);
+    }
+  });
   const finalNav =
-    state.malcolm.navigation.navigationLists.length === 0
+    state.malcolm.navigation.navigationLists.length === 0 ||
+    validNavs.length === 0
       ? state.malcolm.navigation.rootNav
-      : state.malcolm.navigation.navigationLists.slice(-1)[0];
+      : validNavs.slice(-1)[0];
   return {
     parentPanelOpen: state.viewState.openParentPanel,
     childPanelOpen:
       state.viewState.mobileViewIndex === undefined &&
       state.malcolm.childBlock !== undefined,
     navigation: state.malcolm.navigation.navigationLists,
+    validNavs,
     finalNav,
     finalNavHasChildren:
       finalNav && finalNav.children && finalNav.children.length !== 0,
