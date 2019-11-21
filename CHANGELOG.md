@@ -1,4 +1,8 @@
 # Changelog
+## 1.7.7 (21/11/2019)
+Fixes:
+- Improved nav bar behaviour for invalid/disconnected path (breadcrumb now appears if URL is a now-missing block)
+- Tweaked status icon colours (now defined as material-ui colours)
 ## 1.7.6 (30/10/2019)
 Features:
 - added new progressMeter widget
