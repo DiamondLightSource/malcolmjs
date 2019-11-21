@@ -130,6 +130,9 @@ describe('socket & message reducer', () => {
 
   it('does disconnect', () => {
     state = setDisconnected(state);
+    expect(
+      state.blockArchive.testBlock.attributes[attributeIndex].alarmState.size
+    ).toHaveBeenCalled();
     expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
       false
     );

@@ -189,8 +189,92 @@ const MethodViewer = props => {
             />
           );
         }
+        case 'widget:table': {
+          if (
+            props.selectedParamValue !== undefined &&
+            (props.selectedParam[0] === 'returns' ||
+              (props.selectedParamValue.meta && props.selectedParamValue.value))
+          ) {
+            return (
+              <WidgetTable
+                localState={
+                  props.selectedParam[0] === 'returns'
+                    ? {
+                        value: props.selectedParamValue.value,
+                        meta: props.selectedParamMeta,
+                        flags: { rows: [] },
+                      }
+                    : props.selectedParamValue
+                }
+                attribute={props.method}
+                eventHandler={
+                  props.selectedParam[0] === 'takes' &&
+                  props.selectedParamMeta.writeable
+                    ? (path, value, row) => {
+                        const newValue = [...props.selectedParamValue.value];
+                        newValue[row] = value;
+                        props.updateInput(
+                          path,
+                          props.selectedParam[1],
+                          newValue
+                        );
+                      }
+                    : noOp
+                }
+                setFlag={() => {}}
+                addRow={() => {
+                  props.updateInput(
+                    props.method.calculated.path,
+                    props.selectedParam[1],
+                    [
+                      ...props.selectedParamValue.value,
+                      getDefaultFromType(props.selectedParamMeta),
+                    ]
+                  );
+                }}
+                infoClickHandler={noOp}
+                rowClickHandler={noOp}
+                closePanelHandler={noOp}
+              />
+            );
+          }
+          return (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+              }}
+            >
+              <Typography style={{ fontSize: '20px' }}>
+                No value parameter value defined
+              </Typography>
+              {props.selectedParamMeta.writeable ? (
+                <Typography style={{ fontSize: '20px' }}>
+                  Press Edit button to initialise
+                </Typography>
+              ) : null}
+            </div>
+          );
+        }
         default:
-          return <div />;
+          return (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                textAlign: 'center',
+                verticalAlign: 'middle',
+              }}
+            >
+              <Typography style={{ fontSize: '20px' }}>
+                {`Error: Don't know how to display widget type ${widgetTag}!`}
+              </Typography>
+            </div>
+          );
       }
     } else {
       return <Typography>No results yet...run method first!</Typography>;
@@ -204,7 +288,8 @@ const MethodViewer = props => {
         props.updateInput(
           props.method.calculated.path,
           paramName,
-          params[paramName]
+          params[paramName],
+          true
         );
       });
     };
@@ -328,8 +413,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateInput: (path, inputName, inputValue) => {
-    dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
+  updateInput: (path, inputName, inputValue, forceUpdate = false) => {
+    dispatch(
+      malcolmUpdateMethodInput(path, inputName, inputValue, forceUpdate)
+    );
   },
 });
 

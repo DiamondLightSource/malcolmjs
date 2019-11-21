@@ -51,7 +51,7 @@ const initialiseAttribute = name => ({
   calculated: {
     name,
     loading: true,
-    children: [],
+    children: {},
     alarms: {},
   },
 });
@@ -111,11 +111,15 @@ export function updateBlock(state, payload) {
         loading: false,
         label: payload.label ? payload.label : blocks[blockName].label,
         attributes: blockAttributes,
-        children: payload.fields
-          ? [...payload.fields]
-          : blocks[blockName].children,
         orphans,
       };
+      if (payload.fields) {
+        payload.fields.forEach(name => {
+          if (!blocks[blockName].children[name]) {
+            blocks[blockName].children[name] = { label: name };
+          }
+        });
+      }
 
       blockArchive[blockName] = {
         attributes: attributeArchive,
@@ -129,7 +133,8 @@ export function updateBlock(state, payload) {
     ) {
       navigation = processNavigationLists(
         state.navigation.navigationLists.map(nav => nav.path),
-        blocks
+        blocks,
+        state.navigation.viewType
       );
     }
 
@@ -168,7 +173,7 @@ export function registerNewBlock(state, payload) {
       attributes: [],
       name: payload.blockName,
       loading: true,
-      children: [],
+      children: {},
       orphans: [],
     };
     if (!blockArchive[payload.blockName]) {
@@ -190,11 +195,18 @@ export function registerNewBlock(state, payload) {
 
 export function updateRootBlock(state, payload) {
   const blocks = { ...state.blocks };
-  blocks['.blocks'].children = payload.blocks;
+  blocks['.blocks'].children = {};
+  payload.blocks.mri.forEach((mri, index) => {
+    blocks['.blocks'].children[mri] = {
+      label: payload.blocks.label[index],
+      mri,
+    };
+  });
 
   const navigation = processNavigationLists(
     state.navigation.navigationLists.map(nav => nav.path),
-    blocks
+    blocks,
+    state.navigation.viewType
   );
 
   return NavigationReducer.updateNavTypes({

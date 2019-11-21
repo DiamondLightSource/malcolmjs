@@ -174,98 +174,101 @@ export const buildAttributeInfo = props => {
               ? attribute.raw.value[row]
               : 'undefined';
         }
-        info.rowOperations = {
-          label: 'Row Operations',
-          moveRowUp: {
-            label: 'Shift row up',
-            value: 'Shift row up',
-            showLabel: false,
-            disabled: row === 0,
-            tag: 'info:button',
-          },
-          moveRowDown: {
-            label: 'Shift row down',
-            value: 'Shift row down',
-            showLabel: false,
-            disabled: row === attribute.localState.value.length - 1,
-            tag: 'info:button',
-          },
-          addRowAbove: {
-            label: 'Insert row above',
-            value: 'Insert row above',
-            showLabel: false,
-            tag: 'info:button',
-          },
-          addRowBelow: {
-            label: 'Insert row below',
-            value: 'Insert row below',
-            showLabel: false,
-            tag: 'info:button',
-          },
-          deleteRow: {
-            label: 'Delete row',
-            value: 'Delete row',
-            inline: true,
-            showLabel: false,
-            tag: 'info:button',
-          },
-        };
+        if (attribute.localState.flags.table.extendable) {
+          info.rowOperations = {
+            label: 'Row Operations',
+            moveRowUp: {
+              label: 'Shift row up',
+              value: 'Shift row up',
+              showLabel: false,
+              disabled: row === 0,
+              tag: 'info:button',
+            },
+            moveRowDown: {
+              label: 'Shift row down',
+              value: 'Shift row down',
+              showLabel: false,
+              disabled: row === attribute.localState.value.length - 1,
+              tag: 'info:button',
+            },
+            addRowAbove: {
+              label: 'Insert row above',
+              value: 'Insert row above',
+              showLabel: false,
+              tag: 'info:button',
+            },
+            addRowBelow: {
+              label: 'Insert row below',
+              value: 'Insert row below',
+              showLabel: false,
+              tag: 'info:button',
+            },
+            deleteRow: {
+              label: 'Delete row',
+              value: 'Delete row',
+              inline: true,
+              showLabel: false,
+              tag: 'info:button',
+            },
+          };
+
+          if (props.addRow) {
+            info.rowOperations.addRowAbove.functions = {
+              clickHandler: () => {
+                props.addRow(props.attribute.calculated.path, row);
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row + 1}`
+                );
+              },
+            };
+            info.rowOperations.addRowBelow.functions = {
+              clickHandler: () => {
+                props.addRow(props.attribute.calculated.path, row, 'below');
+              },
+            };
+            info.rowOperations.deleteRow.functions = {
+              clickHandler: () => {
+                if (row >= props.attribute.localState.value.length - 1) {
+                  if (row !== 0) {
+                    props.changeInfoHandler(
+                      props.attribute.calculated.path,
+                      `row.${row - 1}`
+                    );
+                  } else {
+                    props.closeInfoHandler(props.attribute.calculated.path);
+                  }
+                }
+                props.addRow(props.attribute.calculated.path, row, 'delete');
+              },
+            };
+          }
+          if (props.moveRow) {
+            info.rowOperations.moveRowUp.functions = {
+              clickHandler: () => {
+                props.moveRow(props.attribute.calculated.path, row);
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row - 1}`
+                );
+              },
+            };
+            info.rowOperations.moveRowDown.functions = {
+              clickHandler: () => {
+                props.moveRow(props.attribute.calculated.path, row, 'below');
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row + 1}`
+                );
+              },
+            };
+          }
+        }
         info.rowValue = {
           label: 'Row remote state',
           ...dataRow,
         };
 
-        if (props.addRow) {
-          info.rowOperations.addRowAbove.functions = {
-            clickHandler: () => {
-              props.addRow(props.attribute.calculated.path, row);
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row + 1}`
-              );
-            },
-          };
-          info.rowOperations.addRowBelow.functions = {
-            clickHandler: () => {
-              props.addRow(props.attribute.calculated.path, row, 'below');
-            },
-          };
-          info.rowOperations.deleteRow.functions = {
-            clickHandler: () => {
-              if (row >= props.attribute.localState.value.length - 1) {
-                if (row !== 0) {
-                  props.changeInfoHandler(
-                    props.attribute.calculated.path,
-                    `row.${row - 1}`
-                  );
-                } else {
-                  props.closeInfoHandler(props.attribute.calculated.path);
-                }
-              }
-              props.addRow(props.attribute.calculated.path, row, 'delete');
-            },
-          };
-        }
-        if (props.moveRow) {
-          info.rowOperations.moveRowUp.functions = {
-            clickHandler: () => {
-              props.moveRow(props.attribute.calculated.path, row);
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row - 1}`
-              );
-            },
-          };
-          info.rowOperations.moveRowDown.functions = {
-            clickHandler: () => {
-              props.moveRow(props.attribute.calculated.path, row, 'below');
-              props.changeInfoHandler(
-                props.attribute.calculated.path,
-                `row.${row + 1}`
-              );
-            },
-          };
-        }
         if (props.rowRevertHandler) {
           info.localState.functions = {
             clickHandler: () => {

@@ -128,13 +128,13 @@ describe('malcolm reducer', () => {
   it('does not register a new block if it already exists', () => {
     // initialise the block
     state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
-    state.blocks.block1.children = ['block2'];
+    state.blocks.block1.children = { block2: {} };
 
     // attempt to re-register the block
     state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
 
     // check the state has not been changed
-    expect(state.blocks.block1.children).toEqual(['block2']);
+    expect(state.blocks.block1.children).toEqual({ block2: {} });
   });
 
   const buildEmptyAttributeAndFireBlockMeta = () => {
@@ -164,13 +164,13 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].calculated).toEqual({
       name: 'health',
       loading: true,
-      children: [],
+      children: {},
       alarms: {},
     });
     expect(state.blocks.block1.attributes[1].calculated).toEqual({
       name: 'icon',
       loading: true,
-      children: [],
+      children: {},
       alarms: {},
     });
   });
@@ -190,12 +190,30 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[2].calculated.name).toEqual(
       'BruceWayne'
     );
-    expect(state.blocks.block1.children).toEqual(['health', 'icon']);
+    expect(state.blocks.block1.children).toEqual({
+      health: { label: 'health' },
+      icon: { label: 'icon' },
+    });
     expect(state.blocks.block1.orphans).toEqual(['BruceWayne']);
   });
 
   it('updates attribute data and pushes to archive', () => {
-    addBlock('block1', [buildAttribute('health')], state);
+    addBlock(
+      'block1',
+      [
+        buildAttribute(
+          'health',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'epics:nt/NTScalar:1.0'
+        ),
+      ],
+      state
+    );
     addBlockArchive('block1', [buildBlockArchiveAttribute('health', 3)], state);
     addMessageInFlight(1, ['block1', 'health'], state);
 
@@ -222,6 +240,49 @@ describe('malcolm reducer', () => {
     expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
       123456789.00123
     );
+  });
+
+  it('updates attribute data but doesnt push to archive if not scalar', () => {
+    addBlock(
+      'block1',
+      [
+        buildAttribute(
+          'health',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'epics:nt/NOTScalar:1.0'
+        ),
+      ],
+      state
+    );
+    addBlockArchive('block1', [buildBlockArchiveAttribute('health', 3)], state);
+    addMessageInFlight(1, ['block1', 'health'], state);
+
+    const action = {
+      type: MalcolmAttributeData,
+      payload: {
+        id: 1,
+        delta: true,
+        raw: {
+          timeStamp: {
+            secondsPastEpoch: 123456789,
+            nanoseconds: 1230000,
+          },
+        },
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blockArchive.block1.attributes[0].value.counter).toEqual(0);
+    expect(state.blockArchive.block1.attributes[0].timeStamp.counter).toEqual(
+      0
+    );
+    expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(-1);
   });
 
   it('set flag sets attribute pending', () => {
@@ -331,7 +392,14 @@ describe('malcolm reducer', () => {
   });
 
   it('updates the root block', () => {
-    const blocks = ['block1', 'block2'];
+    const blocks = {
+      mri: ['block1', 'block2'],
+      label: ['1st block', '2nd block'],
+    };
+    const blockLabelMap = {
+      block1: { label: '1st block', mri: 'block1' },
+      block2: { label: '2nd block', mri: 'block2' },
+    };
     const action = {
       type: MalcolmRootBlockMeta,
       payload: {
@@ -344,7 +412,7 @@ describe('malcolm reducer', () => {
 
     state = malcolmReducer(state, action);
 
-    expect(state.blocks['.blocks'].children).toEqual(blocks);
+    expect(state.blocks['.blocks'].children).toEqual(blockLabelMap);
   });
 
   it('updates socket on socket connect actions', () => {

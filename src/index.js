@@ -6,17 +6,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import {
-  blue,
-  orange,
-  green,
-  brown,
-  pink,
-  purple,
-} from '@material-ui/core/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
+import { unregister } from './registerServiceWorker';
 import AppReducer from './AppReducer';
 import AppRouter from './AppRouter';
 import './App.css';
@@ -29,6 +22,9 @@ import {
   registerSocketAndConnect,
 } from './malcolm/actions/socket.actions';
 import ReduxTimingMiddleware from './userTimingMiddleware';
+import ConnectedThemeProvider, {
+  defaultTheme,
+} from './mainMalcolmView/connectedThemeProvider';
 
 require('typeface-roboto');
 
@@ -56,6 +52,8 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 );
 
+const staticTheme = createMuiTheme(defaultTheme);
+
 configureMalcolmSocketHandlers(store, worker);
 if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
   // if production connect directly to ws://{{host}}/ws
@@ -71,39 +69,31 @@ setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
 
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-    primary: blue,
-    secondary: green,
-  },
-  alarmState: {
-    warning: '#e6c01c',
-    error: '#e8001f',
-    disconnected: '#9d07bb',
-  },
-  // port colours should not use the themes secondary colour, it is used to highlight blocks and links
-  portColours: {
-    bool: blue,
-    int32: orange,
-    motor: pink,
-    NDArray: brown,
-    block: purple,
-  },
-});
+// eslint-disable-next-line no-unused-vars
+const normal = (
+  <MuiThemeProvider theme={staticTheme}>
+    <AppRouter />
+    <MessageSnackBar timeout={5000} />
+  </MuiThemeProvider>
+);
+const dynamic = (
+  <ConnectedThemeProvider>
+    <AppRouter />
+    <MessageSnackBar timeout={5000} />
+  </ConnectedThemeProvider>
+);
 
 ReactDOM.render(
   <Provider store={store}>
     <div className="App">
-      <ConnectedRouter history={history}>
-        <MuiThemeProvider theme={theme}>
-          <AppRouter />
-          <MessageSnackBar timeout={5000} />
-        </MuiThemeProvider>
-      </ConnectedRouter>
+      <ConnectedRouter history={history}>{dynamic}</ConnectedRouter>
     </div>
   </Provider>,
   document.getElementById('root')
 );
 
-registerServiceWorker();
+// Disable serviceWorker & fancy caching behaviour for now, causes issues since
+// doesn't cache redirect and seems to completely miss updates sometimes.
+// N.B. requires HTTPS connection to work on anything other than localhost
+// registerServiceWorker();
+unregister();

@@ -65,7 +65,9 @@ export const RootBlockHandler = (request, blocks, dispatch, state) => {
     .filter(
       block =>
         block.name !== '.blocks' &&
-        state.malcolm.blocks['.blocks'].children.includes(block.name)
+        Object.keys(state.malcolm.blocks['.blocks'].children).includes(
+          block.name
+        )
     )
     .forEach(block => {
       // socket reducer/middleware already prevents duplicate subscriptions so we don't need to check here
@@ -78,7 +80,7 @@ export const RootBlockHandler = (request, blocks, dispatch, state) => {
     const nav = navigationLists[i];
     if (
       !state.malcolm.blocks[nav.path] &&
-      blocks.findIndex(block => block === nav.path) > -1
+      blocks.mri.findIndex(block => block === nav.path) > -1
     ) {
       dispatch(malcolmNewBlockAction(nav.path, false, false));
       dispatch(malcolmSubscribeAction([nav.path, 'meta']));

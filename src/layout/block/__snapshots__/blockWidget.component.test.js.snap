@@ -8,11 +8,58 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseDown={[Function]}
   onMouseUp={[Function]}
 >
-  <WithStyles(Typography)
-    className="BlockWidget-title-3"
+  <div
+    style={
+      Object {
+        "display": "flex",
+        "justifyContent": "center",
+        "position": "relative",
+        "top": 2,
+      }
+    }
   >
-    block 1
-  </WithStyles(Typography)>
+    <WithStyles(Typography)
+      className="BlockWidget-title-3"
+    >
+      block 1
+    </WithStyles(Typography)>
+  </div>
+  <div
+    className="BlockWidget-alarmDiv-11"
+  >
+    <div
+      style={
+        Object {
+          "position": "absolute",
+          "top": 0,
+        }
+      }
+    >
+      <svg
+        height="28"
+        width="28"
+      >
+        <circle
+          cx="13.856"
+          cy="13.856"
+          fill="#fff"
+          fillOpacity={0.6}
+          r="13.856"
+        />
+      </svg>
+    </div>
+    <div
+      style={
+        Object {
+          "left": 1.856,
+          "position": "absolute",
+          "top": 0,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm) />
+    </div>
+  </div>
   <div
     className="BlockWidget-blockContents-4"
     style={
@@ -24,21 +71,23 @@ exports[`BlockWidget block renders correctly 1`] = `
     <div
       className="BlockWidget-iconContents-8"
     >
-      <svg
-        height="100"
-        key="0"
-        width="100"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          fill="red"
+      <div>
+        <svg
+          height="100"
           key="0"
-          r="40"
-          stroke="black"
-          strokeWidth="3"
-        />
-      </svg>
+          width="100"
+        >
+          <circle
+            cx="50"
+            cy="50"
+            fill="red"
+            key="0"
+            r="40"
+            stroke="black"
+            strokeWidth="3"
+          />
+        </svg>
+      </div>
     </div>
     <div
       className="BlockWidget-inputPortsContainer-5"

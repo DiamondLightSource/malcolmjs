@@ -81,6 +81,7 @@ describe('AttributeSelector', () => {
         blockName="PANDA1"
         attributeName="attribute1"
         store={mockStore(buildState(attribute))}
+        forceOpen
       />
     );
     expect(wrapper.dive()).toMatchSnapshot();
@@ -170,10 +171,11 @@ describe('AttributeSelector', () => {
         blockName="PANDA1"
         attributeName="attribute1"
         store={testStore}
+        forceOpen
       />
     );
     wrapper
-      .find('option')
+      .find('Typography')
       .last()
       .simulate('click');
     const pendingAction = {

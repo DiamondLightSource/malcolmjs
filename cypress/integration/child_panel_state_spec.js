@@ -161,7 +161,7 @@ describe('Child panel', () => {
       cy
         .get('[data-cy=table]')
         .find('input')
-        .first()
+        .eq(1)
         .click();
       cy.checkFor(childPanel, false);
     });

@@ -83,6 +83,10 @@ const buildIOComponent = (input, props, isOutput) => {
   } else {
     inputValue = getDefaultFromType(input[1]);
   }
+  const forceUpdate =
+    valueMap[input[0]] &&
+    valueMap[input[0]].flags &&
+    valueMap[input[0]].flags.forceUpdate;
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };
@@ -90,7 +94,7 @@ const buildIOComponent = (input, props, isOutput) => {
     props.flagInput(path, input[0], flagName, flagState);
   };
   const buttonClickHandler =
-    isArrayType(input[1]) && !isOutput
+    (widgetTag === 'widget:table' || isArrayType(input[1])) && !isOutput
       ? path => {
           props.initialiseLocalState(path, ['takes', input[0]]);
           props.methodParamClickHandler(path);
@@ -107,7 +111,7 @@ const buildIOComponent = (input, props, isOutput) => {
       setFlag,
       props.theme.palette.primary.light,
       parameterMeta,
-      false,
+      forceUpdate,
       updateStoreOnEveryValueChange,
       buttonClickHandler
     );

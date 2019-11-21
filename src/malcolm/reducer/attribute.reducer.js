@@ -29,15 +29,22 @@ import { getMethodParam, pushServerRunToArchive } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort, sourcePort } from '../malcolmConstants';
 
-export const updateAttributeChildren = attribute => {
+export const updateAttributeChildren = (attribute, blockList) => {
   const updatedAttribute = { ...attribute };
   if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
     if (
-      updatedAttribute.raw.meta.elements &&
-      updatedAttribute.raw.meta.elements.name
+      blockUtils.attributeHasTag(updatedAttribute, 'widget:flowgraph') &&
+      updatedAttribute.raw.value
     ) {
-      updatedAttribute.calculated.children = updatedAttribute.raw.value.name;
+      updatedAttribute.raw.value.name.forEach((name, index) => {
+        updatedAttribute.calculated.children[name] = {
+          label: blockList[updatedAttribute.raw.value.mri[index]]
+            ? blockList[updatedAttribute.raw.value.mri[index]].label
+            : 'ERROR: block not in global block list',
+          mri: updatedAttribute.raw.value.mri[index],
+        };
+      });
     }
   }
 
@@ -81,6 +88,7 @@ export const checkForFlowGraph = attribute => {
           y: value.y[i],
         },
         ports: [],
+        alarmState: AlarmStates.NO_ALARM,
         icon: undefined,
         loading: true,
       })),
@@ -155,7 +163,8 @@ export const updateNavigation = (state, attributeName, attribute) => {
         }
         return nav.path;
       }),
-      state.blocks
+      state.blocks,
+      state.navigation.viewType
     );
   }
 
@@ -194,7 +203,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     return layout;
   }
 
-  if (blockUtils.attributeHasTag(attribute, 'widget:icon')) {
+  if (LayoutReducer.isRelevantAttribute(attribute)) {
     layout = LayoutReducer.processLayout(updatedState);
   } else if (
     isPort(attribute) &&
@@ -244,8 +253,28 @@ export const updateLocalState = attribute => {
         updatedAttribute.calculated.forceUpdate
       ) {
         updatedAttribute = createLocalState(updatedAttribute);
+        updatedAttribute.calculated.forceUpdate = false;
       } else {
         updatedAttribute.localState.flags.table.fresh = false;
+        if (
+          !isArrayType(attribute.raw.meta) &&
+          !updatedAttribute.localState.flags.table.extendable
+        ) {
+          updatedAttribute.localState.value.forEach((row, index) => {
+            updatedAttribute.localState.labels.forEach(label => {
+              const rowCopy = row;
+              if (
+                !(
+                  updatedAttribute.localState.flags.rows[index]._dirty ||
+                  updatedAttribute.localState.flags.rows[index]._isChanged
+                ) ||
+                !updatedAttribute.raw.meta.elements[label].writeable
+              ) {
+                rowCopy[label] = updatedAttribute.raw.value[label][index];
+              }
+            });
+          });
+        }
       }
     }
   }
@@ -255,35 +284,83 @@ export const updateLocalState = attribute => {
 export const presetMethodInputs = attribute => {
   const updatedAttribute = attribute;
   if (updatedAttribute && updatedAttribute.calculated.isMethod) {
-    updatedAttribute.calculated.inputs =
-      updatedAttribute.calculated.inputs || {};
-    updatedAttribute.calculated.outputs =
-      updatedAttribute.calculated.outputs || {};
-    Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
-      ([input, meta]) => {
-        if (attribute.raw.took && attribute.raw.took.present.includes(input)) {
-          updatedAttribute.calculated.inputs[input] = {
-            value: attribute.raw.took.value[input],
-            flags: {},
-          };
-        } else if (
-          updatedAttribute.raw.meta.takes.required.includes(input) &&
-          !updatedAttribute.calculated.inputs[input]
-        ) {
-          updatedAttribute.calculated.inputs[input] = {
-            value: getDefaultFromType(meta),
-            flags: {},
-          };
+    if (!updatedAttribute.calculated.inputs) {
+      updatedAttribute.calculated.inputs = {};
+      updatedAttribute.calculated.outputs =
+        updatedAttribute.calculated.outputs || {};
+      Object.entries(updatedAttribute.raw.meta.takes.elements).forEach(
+        ([input, meta]) => {
+          if (
+            attribute.raw.took &&
+            attribute.raw.took.present.includes(input)
+          ) {
+            if (
+              attribute.raw.meta.takes.elements[input].typeid ===
+              malcolmTypes.table
+            ) {
+              const labels = Object.keys(
+                attribute.raw.meta.takes.elements[input].elements
+              );
+              const columns = {};
+              labels.forEach(label => {
+                columns[label] = {};
+              });
+              updatedAttribute.calculated.inputs[input] = {
+                meta: JSON.parse(
+                  JSON.stringify(attribute.raw.meta.takes.elements[input])
+                ),
+                value: attribute.raw.took.value[input][labels[0]].map(
+                  (value, row) => {
+                    const dataRow = {};
+                    labels.forEach(label => {
+                      dataRow[label] =
+                        attribute.raw.took.value[input][label][row];
+                    });
+                    return dataRow;
+                  }
+                ),
+                labels,
+                flags: {
+                  columns,
+                  rows: attribute.raw.took.value[input][labels[0]].map(
+                    () => ({})
+                  ),
+                  table: {},
+                },
+              };
+            } else if (isArrayType(attribute.raw.meta.takes.elements[input])) {
+              updatedAttribute.calculated.inputs[input] = {
+                meta: JSON.parse(
+                  JSON.stringify(attribute.raw.meta.takes.elements[input])
+                ),
+                value: attribute.raw.took.value[input],
+                flags: { rows: [], table: {} },
+              };
+            } else {
+              updatedAttribute.calculated.inputs[input] = {
+                value: attribute.raw.took.value[input],
+                flags: {},
+              };
+            }
+          } else if (
+            updatedAttribute.raw.meta.takes.required.includes(input) &&
+            !updatedAttribute.calculated.inputs[input]
+          ) {
+            updatedAttribute.calculated.inputs[input] = {
+              value: getDefaultFromType(meta),
+              flags: {},
+            };
+          }
         }
-      }
-    );
+      );
+    }
   }
   return updatedAttribute;
 };
 
-const checkForSpecialCases = inputAttribute => {
+const checkForSpecialCases = (inputAttribute, blockList = {}) => {
   let attribute = checkForFlowGraph(inputAttribute);
-  attribute = updateAttributeChildren(attribute);
+  attribute = updateAttributeChildren(attribute, blockList);
   attribute = hasSubElements(attribute);
   attribute = updateLocalState(attribute);
   attribute = presetMethodInputs(attribute);
@@ -411,6 +488,7 @@ export function updateAttribute(
             ...payload.calculated,
             loading: false,
             path,
+            parent: blockName,
           },
         };
         if (attribute.raw.alarm) {
@@ -422,13 +500,21 @@ export function updateAttribute(
                 : null,
           };
         }
+
+        if (payload.raw.meta && payload.raw.meta.label) {
+          state.blocks[blockName].children[attribute.calculated.name].label =
+            payload.raw.meta.label;
+        }
         if (payload.raw.timeStamp) {
           attribute.calculated.timeStamp = new Date(
             payload.raw.timeStamp.secondsPastEpoch * 1000 +
               payload.raw.timeStamp.nanoseconds / 1000000
           ).toISOString();
         }
-        attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+        attributes[matchingAttributeIndex] = checkForSpecialCases(
+          attribute,
+          state.blocks['.blocks'].children
+        );
 
         if (payload.raw.timeStamp) {
           const alarmState =
@@ -444,12 +530,17 @@ export function updateAttribute(
             JSON.stringify(payload.raw.value)
           );
           */
-          archive[matchingAttributeIndex] = pushToArchive(
-            attributeArchive,
-            payload,
-            alarmState
-          );
-        } else if (attribute.calculated.isMethod) {
+          if (attribute.raw.typeid === 'epics:nt/NTScalar:1.0') {
+            archive[matchingAttributeIndex] = pushToArchive(
+              attributeArchive,
+              payload,
+              alarmState
+            );
+          }
+        } else if (
+          attribute.calculated.isMethod &&
+          !attribute.calculated.isWritableFlip
+        ) {
           archive[matchingAttributeIndex] = pushServerRunToArchive(
             attributeArchive,
             payload
@@ -555,7 +646,10 @@ export function revertLocalState(oldState, payload) {
         },
       };
 
-      attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+      attributes[matchingAttributeIndex] = checkForSpecialCases(
+        attribute,
+        state.blocks['.blocks'].children
+      );
       // TODO: call processLayout and updateLayoutAndEngine here (if required)
     }
     const blocks = { ...state.blocks };

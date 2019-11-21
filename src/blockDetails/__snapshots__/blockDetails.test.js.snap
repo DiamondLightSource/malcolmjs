@@ -24,13 +24,19 @@ exports[`Block Details renders correctly when block not found 1`] = `
     </div>
     <br />
     <br />
-    <WithStyles(Typography)>
+    <WithStyles(Typography)
+      color="inherit"
+    >
       Block not found....yet
     </WithStyles(Typography)>
-    <WithStyles(Typography)>
+    <WithStyles(Typography)
+      color="inherit"
+    >
       it may still be loading and appear later
     </WithStyles(Typography)>
-    <WithStyles(Typography)>
+    <WithStyles(Typography)
+      color="inherit"
+    >
       (hint: URLs are case sensitive)
     </WithStyles(Typography)>
   </div>

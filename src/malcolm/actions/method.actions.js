@@ -6,7 +6,7 @@ import {
 } from '../malcolm.types';
 import blockUtils from '../blockUtils';
 
-export const buildMethodUpdate = (id, data) => ({
+export const buildMethodUpdate = (id, data, isWritableFlip = false) => ({
   type: MalcolmAttributeData,
   payload: {
     id,
@@ -15,16 +15,23 @@ export const buildMethodUpdate = (id, data) => ({
     calculated: {
       isMethod: true,
       pending: false,
+      isWritableFlip,
     },
   },
 });
 
-export const malcolmUpdateMethodInput = (path, name, value) => ({
+export const malcolmUpdateMethodInput = (
+  path,
+  name,
+  value,
+  forceUpdate = false
+) => ({
   type: MalcolmUpdateMethodInputType,
   payload: {
     path,
     name,
     value,
+    forceUpdate,
   },
 });
 

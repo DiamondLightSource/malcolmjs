@@ -29,6 +29,7 @@ const buildNavState = () => ({
           blockMri: 'PANDA:SEQ2',
         },
       ],
+      viewType: 'gui',
     },
   },
   viewState: {
@@ -141,9 +142,10 @@ describe('navigateToAttribute', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout/SEQ2/table'
-    );
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ2/table',
+      search: '',
+    });
   });
 });
 
@@ -162,7 +164,10 @@ describe('navigateToPalette', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/',
+      search: '',
+    });
   });
 
   it('closes the palette if it is already open', () => {
@@ -175,7 +180,10 @@ describe('navigateToPalette', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/.palette');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/.palette',
+      search: '',
+    });
   });
 });
 
@@ -190,7 +198,10 @@ describe('navigateToInfo', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/.info');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/.info',
+      search: '',
+    });
   });
   it('changes the url to show the info pane', () => {
     const dispatches = [];
@@ -210,9 +221,10 @@ describe('navigateToInfo', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout/SEQ2/table.row.1/.info'
-    );
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ2/table.row.1/.info',
+      search: '',
+    });
   });
 });
 
@@ -234,9 +246,10 @@ describe('navigateToSubElement', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout/SEQ2/table.row.1/'
-    );
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ2/table.row.1/',
+      search: '',
+    });
   });
 
   it('changes the url to show the sub-element with info pane', () => {
@@ -260,9 +273,10 @@ describe('navigateToSubElement', () => {
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
-    expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout/SEQ2/table.row.1/.info'
-    );
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ2/table.row.1/.info',
+      search: '',
+    });
   });
 });
 
@@ -277,13 +291,19 @@ describe('updateChildPanel', () => {
     state.malcolm.navigation.navigationLists.pop();
     const navAction = navigationActions.updateChildPanel('SEQ1');
     navAction(action => dispatches.push(action), () => state);
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/SEQ1');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ1',
+      search: '',
+    });
   });
 
   it('updateChildPanel replaces the end of the route if it does not end in layout', () => {
     const navAction = navigationActions.updateChildPanel('SEQ1');
     navAction(action => dispatches.push(action), () => state);
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/SEQ1');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout/SEQ1',
+      search: '',
+    });
   });
 });
 
@@ -298,7 +318,10 @@ describe('closeChildPanel', () => {
   it('closeChildPanel updates the route to remove the child', () => {
     const navAction = navigationActions.closeChildPanel();
     navAction(action => dispatches.push(action), () => state);
-    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout');
+    expect(dispatches[0].payload.args[0]).toEqual({
+      pathname: '/gui/PANDA/layout',
+      search: '',
+    });
   });
   it('closeChildPanel does nothing if no child panel is open', () => {
     state.malcolm.navigation.navigationLists.pop();

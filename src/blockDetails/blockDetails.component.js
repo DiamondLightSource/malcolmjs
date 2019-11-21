@@ -76,9 +76,11 @@ const blockLoadingSpinner = notFound =>
       </div>
       <br />
       <br />
-      <Typography>Block not found....yet</Typography>
-      <Typography>it may still be loading and appear later</Typography>
-      <Typography>(hint: URLs are case sensitive)</Typography>
+      <Typography color="inherit">Block not found....yet</Typography>
+      <Typography color="inherit">
+        it may still be loading and appear later
+      </Typography>
+      <Typography color="inherit">(hint: URLs are case sensitive)</Typography>
     </div>
   ) : (
     <div>
@@ -90,7 +92,11 @@ const blockLoadingSpinner = notFound =>
 export const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.length === newAttributes.length &&
   oldAttributes.every(
-    (old, i) => old.calculated.name === newAttributes[i].calculated.name
+    (old, i) =>
+      old.calculated.path &&
+      old.calculated.path.every(
+        (el, j) => el === newAttributes[i].calculated.path[j]
+      )
   ) &&
   oldAttributes.every(
     (old, i) => old.calculated.inGroup === newAttributes[i].calculated.inGroup
@@ -151,6 +157,7 @@ const displayAttributes = props => {
         {props.methods.length > 0 ? (
           <GroupDivider classes={props.classes} />
         ) : null}
+
         {props.methods.map((method, i) => (
           <div>
             <MethodDetails
@@ -209,9 +216,11 @@ const mapStateToProps = (state, ownProps, memory) => {
   stateMemory.orphans = stateMemory.orphans || [];
   let block;
   const blockList = state.malcolm.blocks['.blocks']
-    ? state.malcolm.blocks['.blocks'].children
+    ? Object.keys(state.malcolm.blocks['.blocks'].children)
     : [];
-  if (ownProps.parent) {
+  if (ownProps.mri) {
+    block = state.malcolm.blocks[ownProps.mri];
+  } else if (ownProps.parent) {
     block = state.malcolm.parentBlock
       ? state.malcolm.blocks[state.malcolm.parentBlock]
       : undefined;
@@ -265,7 +274,15 @@ const mapStateToProps = (state, ownProps, memory) => {
         ),
       }));
 
-    stateMemory.methods = block.attributes.filter(a => a.calculated.isMethod);
+    stateMemory.methods = block.attributes.filter(
+      a =>
+        a.calculated.isMethod &&
+        !(
+          (a.raw.meta && a.raw.meta.tags.includes('method:hidden')) ||
+          (block.orphans &&
+            block.orphans.some(orphan => orphan === a.calculated.name))
+        )
+    );
 
     stateMemory.oldAttributes = block.attributes;
   }

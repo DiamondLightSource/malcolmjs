@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WidgetMeter displays out-of-bounds correctly 1`] = `
+<div
+  className="WidgetMeter-div-1"
+>
+  <div
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #424242, #f00)",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "0px",
+        "minWidth": "100%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "backgroundColor": "#424242",
+        "borderLeft": "2px solid #f00",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "calc(100% - 2px)",
+        "maxWidth": "0%",
+        "minWidth": "0%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "gridColumn": "1",
+        "gridRow": "1",
+        "position": "relative",
+      }
+    }
+  >
+    <ReactFitText
+      compressor={1.05}
+      maxFontSize={Infinity}
+      minFontSize={-Infinity}
+    >
+      <WithStyles(Typography)
+        style={
+          Object {
+            "padding": "2px",
+          }
+        }
+      >
+        150 / 100
+      </WithStyles(Typography)>
+    </ReactFitText>
+  </div>
+</div>
+`;
+
+exports[`WidgetMeter matches snapshot 1`] = `
+<div
+  className="WidgetMeter-div-1"
+>
+  <div
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #424242, #00f)",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "0px",
+        "minWidth": "100%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "backgroundColor": "#424242",
+        "borderLeft": "2px solid #00f",
+        "gridColumn": "1",
+        "gridRow": "1",
+        "left": "calc(50% - 2px)",
+        "maxWidth": "50%",
+        "minWidth": "50%",
+        "position": "relative",
+      }
+    }
+  />
+  <div
+    style={
+      Object {
+        "gridColumn": "1",
+        "gridRow": "1",
+        "position": "relative",
+      }
+    }
+  >
+    <ReactFitText
+      compressor={1.05}
+      maxFontSize={Infinity}
+      minFontSize={-Infinity}
+    >
+      <WithStyles(Typography)
+        style={
+          Object {
+            "padding": "2px",
+          }
+        }
+      >
+        50 / 100
+      </WithStyles(Typography)>
+    </ReactFitText>
+  </div>
+</div>
+`;

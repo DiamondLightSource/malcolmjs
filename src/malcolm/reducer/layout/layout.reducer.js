@@ -69,8 +69,33 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
       'widget:icon'
     );
 
+    let displayAttribute = blockUtils.findAttributesWithTag(
+      matchingBlock,
+      'block:display'
+    );
+    if (displayAttribute.length === 0) {
+      displayAttribute = blockUtils.findAttributesWithTag(
+        matchingBlock,
+        'widget:meter'
+      );
+    }
+
     if (iconAttribute.length > 0) {
       updatedBlock.icon = iconAttribute[0].raw.value;
+    }
+
+    if (displayAttribute.length > 0) {
+      updatedBlock.displayAttribute = displayAttribute[0].calculated.path;
+    }
+
+    const healthAttribute = blockUtils.findAttribute(
+      malcolmState.blocks,
+      layoutBlock.mri,
+      'health'
+    );
+    if (healthAttribute !== undefined) {
+      updatedBlock.alarmState =
+        healthAttribute.raw.alarm && healthAttribute.raw.alarm.severity;
     }
 
     updatedBlock.ports = buildPorts(matchingBlock);
@@ -367,8 +392,12 @@ const isRelevantWidget = attribute => {
 const isLabelAttribute = attribute =>
   attribute.calculated && attribute.calculated.name === 'label';
 
+const isHealthAttribute = attribute =>
+  attribute.calculated && attribute.calculated.name === 'health';
+
 const isRelevantAttribute = attribute =>
-  attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute));
+  (attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute))) ||
+  isHealthAttribute(attribute);
 
 const resetPorts = state => {
   let updatedState = selectPortForLink(state, undefined, true);

@@ -21,22 +21,23 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/",
-            "children": Array [
-              "layout",
-            ],
-            "childrenLabels": Array [
-              "layout",
-            ],
+            "children": Object {
+              "layout": Object {
+                "label": "layout",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/",
-              "children": Array [
-                "PANDA",
-                "PANDA:SEQ1",
-              ],
-              "childrenLabels": Array [
-                "PANDA",
-                "PANDA:SEQ1",
-              ],
+              "children": Object {
+                "PANDA": Object {
+                  "label": "PANDA",
+                },
+                "PANDA:SEQ1": Object {
+                  "label": "PANDA:SEQ1",
+                },
+                "navType": true,
+              },
               "path": "",
             },
             "path": "PANDA",
@@ -49,30 +50,31 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/layout/",
-            "children": Array [
-              "SEQ1",
-            ],
-            "childrenLabels": Array [
-              "Test layout child #1",
-            ],
+            "children": Object {
+              "SEQ1": Object {
+                "label": "Test layout child #1",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/PANDA/",
-              "children": Array [
-                "layout",
-              ],
-              "childrenLabels": Array [
-                "layout",
-              ],
+              "children": Object {
+                "layout": Object {
+                  "label": "layout",
+                },
+              },
+              "navType": true,
               "parent": Object {
                 "basePath": "/",
-                "children": Array [
-                  "PANDA",
-                  "PANDA:SEQ1",
-                ],
-                "childrenLabels": Array [
-                  "PANDA",
-                  "PANDA:SEQ1",
-                ],
+                "children": Object {
+                  "PANDA": Object {
+                    "label": "PANDA",
+                  },
+                  "PANDA:SEQ1": Object {
+                    "label": "PANDA:SEQ1",
+                  },
+                  "navType": true,
+                },
                 "path": "",
               },
               "path": "PANDA",
@@ -88,35 +90,34 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
           Object {
             "basePath": "/PANDA/layout/SEQ1/",
             "children": Array [],
-            "childrenLabels": Array [
-              "Value",
-            ],
+            "navType": true,
             "parent": Object {
               "basePath": "/PANDA/layout/",
-              "children": Array [
-                "SEQ1",
-              ],
-              "childrenLabels": Array [
-                "Test layout child #1",
-              ],
+              "children": Object {
+                "SEQ1": Object {
+                  "label": "Test layout child #1",
+                },
+              },
+              "navType": true,
               "parent": Object {
                 "basePath": "/PANDA/",
-                "children": Array [
-                  "layout",
-                ],
-                "childrenLabels": Array [
-                  "layout",
-                ],
+                "children": Object {
+                  "layout": Object {
+                    "label": "layout",
+                  },
+                },
+                "navType": true,
                 "parent": Object {
                   "basePath": "/",
-                  "children": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
-                  "childrenLabels": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
+                  "children": Object {
+                    "PANDA": Object {
+                      "label": "PANDA",
+                    },
+                    "PANDA:SEQ1": Object {
+                      "label": "PANDA:SEQ1",
+                    },
+                    "navType": true,
+                  },
                   "path": "",
                 },
                 "path": "PANDA",
@@ -129,6 +130,17 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
         navigateToChild={[Function]}
       />
     </div>
+    <WithStyles(IconButton)
+      onClick={[Function]}
+      style={
+        Object {
+          "position": "absolute",
+          "right": "4px",
+        }
+      }
+    >
+      <pure(SettingsIcon) />
+    </WithStyles(IconButton)>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;
@@ -154,22 +166,23 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/",
-            "children": Array [
-              "layout",
-            ],
-            "childrenLabels": Array [
-              "layout",
-            ],
+            "children": Object {
+              "layout": Object {
+                "label": "layout",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/",
-              "children": Array [
-                "PANDA",
-                "PANDA:SEQ1",
-              ],
-              "childrenLabels": Array [
-                "PANDA",
-                "PANDA:SEQ1",
-              ],
+              "children": Object {
+                "PANDA": Object {
+                  "label": "PANDA",
+                },
+                "PANDA:SEQ1": Object {
+                  "label": "PANDA:SEQ1",
+                },
+                "navType": true,
+              },
               "path": "",
             },
             "path": "PANDA",
@@ -182,30 +195,31 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/layout/",
-            "children": Array [
-              "SEQ1",
-            ],
-            "childrenLabels": Array [
-              "Test layout child #1",
-            ],
+            "children": Object {
+              "SEQ1": Object {
+                "label": "Test layout child #1",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/PANDA/",
-              "children": Array [
-                "layout",
-              ],
-              "childrenLabels": Array [
-                "layout",
-              ],
+              "children": Object {
+                "layout": Object {
+                  "label": "layout",
+                },
+              },
+              "navType": true,
               "parent": Object {
                 "basePath": "/",
-                "children": Array [
-                  "PANDA",
-                  "PANDA:SEQ1",
-                ],
-                "childrenLabels": Array [
-                  "PANDA",
-                  "PANDA:SEQ1",
-                ],
+                "children": Object {
+                  "PANDA": Object {
+                    "label": "PANDA",
+                  },
+                  "PANDA:SEQ1": Object {
+                    "label": "PANDA:SEQ1",
+                  },
+                  "navType": true,
+                },
                 "path": "",
               },
               "path": "PANDA",
@@ -220,38 +234,39 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/layout/SEQ1/",
-            "children": Array [
-              "Val",
-            ],
-            "childrenLabels": Array [
-              "Value",
-            ],
+            "children": Object {
+              "Val": Object {
+                "label": "Value",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/PANDA/layout/",
-              "children": Array [
-                "SEQ1",
-              ],
-              "childrenLabels": Array [
-                "Test layout child #1",
-              ],
+              "children": Object {
+                "SEQ1": Object {
+                  "label": "Test layout child #1",
+                },
+              },
+              "navType": true,
               "parent": Object {
                 "basePath": "/PANDA/",
-                "children": Array [
-                  "layout",
-                ],
-                "childrenLabels": Array [
-                  "layout",
-                ],
+                "children": Object {
+                  "layout": Object {
+                    "label": "layout",
+                  },
+                },
+                "navType": true,
                 "parent": Object {
                   "basePath": "/",
-                  "children": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
-                  "childrenLabels": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
+                  "children": Object {
+                    "PANDA": Object {
+                      "label": "PANDA",
+                    },
+                    "PANDA:SEQ1": Object {
+                      "label": "PANDA:SEQ1",
+                    },
+                    "navType": true,
+                  },
                   "path": "",
                 },
                 "path": "PANDA",
@@ -269,38 +284,39 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "basePath": "/PANDA/layout/SEQ1/",
-            "children": Array [
-              "Val",
-            ],
-            "childrenLabels": Array [
-              "Value",
-            ],
+            "children": Object {
+              "Val": Object {
+                "label": "Value",
+              },
+            },
+            "navType": true,
             "parent": Object {
               "basePath": "/PANDA/layout/",
-              "children": Array [
-                "SEQ1",
-              ],
-              "childrenLabels": Array [
-                "Test layout child #1",
-              ],
+              "children": Object {
+                "SEQ1": Object {
+                  "label": "Test layout child #1",
+                },
+              },
+              "navType": true,
               "parent": Object {
                 "basePath": "/PANDA/",
-                "children": Array [
-                  "layout",
-                ],
-                "childrenLabels": Array [
-                  "layout",
-                ],
+                "children": Object {
+                  "layout": Object {
+                    "label": "layout",
+                  },
+                },
+                "navType": true,
                 "parent": Object {
                   "basePath": "/",
-                  "children": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
-                  "childrenLabels": Array [
-                    "PANDA",
-                    "PANDA:SEQ1",
-                  ],
+                  "children": Object {
+                    "PANDA": Object {
+                      "label": "PANDA",
+                    },
+                    "PANDA:SEQ1": Object {
+                      "label": "PANDA:SEQ1",
+                    },
+                    "navType": true,
+                  },
                   "path": "",
                 },
                 "path": "PANDA",
@@ -313,6 +329,17 @@ exports[`NavBar renders correctly 1`] = `
         navigateToChild={[Function]}
       />
     </div>
+    <WithStyles(IconButton)
+      onClick={[Function]}
+      style={
+        Object {
+          "position": "absolute",
+          "right": "4px",
+        }
+      }
+    >
+      <pure(SettingsIcon) />
+    </WithStyles(IconButton)>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;
@@ -342,20 +369,32 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
         nav={
           Object {
             "basePath": "/",
-            "children": Array [
-              "PANDA",
-              "PANDA:SEQ1",
-            ],
-            "childrenLabels": Array [
-              "PANDA",
-              "PANDA:SEQ1",
-            ],
+            "children": Object {
+              "PANDA": Object {
+                "label": "PANDA",
+              },
+              "PANDA:SEQ1": Object {
+                "label": "PANDA:SEQ1",
+              },
+              "navType": true,
+            },
             "path": "",
           }
         }
         navigateToChild={[Function]}
       />
     </div>
+    <WithStyles(IconButton)
+      onClick={[Function]}
+      style={
+        Object {
+          "position": "absolute",
+          "right": "4px",
+        }
+      }
+    >
+      <pure(SettingsIcon) />
+    </WithStyles(IconButton)>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;

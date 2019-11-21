@@ -42,23 +42,20 @@ exports[`NavControl renders correctly 1`] = `
 >
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
-    color="default"
+    color="inherit"
     onClick={[Function]}
     variant="subheading"
   >
-    PANDA
+    PANDA:mri
   </WithStyles(Typography)>
   <Component
     anchorEl={null}
-    childElementLabels={
-      Array [
-        "PANDA",
-      ]
-    }
     childElements={
-      Array [
-        "PANDA:mri",
-      ]
+      Object {
+        "PANDA:mri": Object {
+          "label": "PANDA",
+        },
+      }
     }
     currentPath="PANDA:mri"
     handleClick={[Function]}
@@ -437,17 +434,15 @@ exports[`NavControl renders correctly for final 1`] = `
 >
   <Component
     anchorEl={null}
-    childElementLabels={
-      Array [
-        "layout",
-        "table",
-      ]
-    }
     childElements={
-      Array [
-        "layout",
-        "table",
-      ]
+      Object {
+        "layout": Object {
+          "label": "Block layout",
+        },
+        "table": Object {
+          "label": "table",
+        },
+      }
     }
     handleClick={[Function]}
     handleClose={[Function]}
@@ -833,7 +828,7 @@ exports[`NavControl renders correctly when nav element is errored and has no sib
   </WithStyles(Typography)>
   <Component
     anchorEl={null}
-    currentPath="PANDA:mri"
+    currentPath="NotPANDA"
     handleClick={[Function]}
     handleClose={[Function]}
     icon={<pure(KeyboardArrowDownIcon) />}
@@ -1218,17 +1213,14 @@ exports[`NavControl renders correctly when nav element is errored but has valid 
   </WithStyles(Typography)>
   <Component
     anchorEl={null}
-    childElementLabels={
-      Array [
-        "PANDA",
-      ]
-    }
     childElements={
-      Array [
-        "PANDA:mri",
-      ]
+      Object {
+        "PANDA:mri": Object {
+          "label": "PANDA",
+        },
+      }
     }
-    currentPath="PANDA:mri"
+    currentPath="NotPANDA"
     handleClick={[Function]}
     handleClose={[Function]}
     icon={<pure(KeyboardArrowDownIcon) />}
@@ -1637,14 +1629,38 @@ exports[`NavControl selector component renders correctly 1`] = `
       onClick={[Function]}
       selected={false}
     >
-      layout
+      <WithStyles(Typography)
+        align="left"
+        style={
+          Object {
+            "paddingRight": "4px",
+          }
+        }
+      >
+        layout - 
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        align="right"
+        variant="caption"
+      >
+        Block layout
+      </WithStyles(Typography)>
     </WithStyles(MenuItem)>
     <WithStyles(MenuItem)
       key="table"
       onClick={[Function]}
       selected={false}
     >
-      table
+      <WithStyles(Typography)
+        align="left"
+        style={
+          Object {
+            "paddingRight": "4px",
+          }
+        }
+      >
+        table
+      </WithStyles(Typography)>
     </WithStyles(MenuItem)>
   </WithStyles(Menu)>
 </div>

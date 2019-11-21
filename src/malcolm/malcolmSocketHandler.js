@@ -56,7 +56,16 @@ const handleMessages = (messages, dispatch, getState) => {
         } else if (typeid.slice(0, 8) === 'epics:nt') {
           // multiple attribute updates are now handled separately.
         } else if (typeid === 'malcolm:core/Method:1.1') {
-          AttributeHandler.processMethod(originalRequest, object, dispatch);
+          const writableStateChange =
+            data.changes.length === 1 &&
+            data.changes[0][0][0] === 'meta' &&
+            data.changes[0][0][1] === 'writeable';
+          AttributeHandler.processMethod(
+            originalRequest,
+            object,
+            dispatch,
+            writableStateChange
+          );
         } else {
           dispatch({
             type: 'unprocessed_delta',

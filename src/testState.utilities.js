@@ -29,7 +29,9 @@ export const buildTestState = () => ({
       },
     },
     // see addBlock for more details
-    blocks: {},
+    blocks: {
+      '.blocks': { children: {} },
+    },
     blockArchive: {},
     parentBlock: undefined,
     mainAttribute: undefined,
@@ -44,15 +46,51 @@ export const buildTestState = () => ({
   },
   // all the state purely about the MalcolmJS interface
   viewState: {
-    footerHeight: 0,
-    openChildPanel: true,
     openParentPanel: true,
+    openChildPanel: true,
+    openHeaderBar: true,
     snackbar: {
-      open: false,
       message: '',
+      open: false,
     },
+    theme: { primary: 'blue', type: 'dark', muiTheme: {} },
+    footerHeight: 0,
+    transitionParent: false,
+    mobileViewIndex: undefined,
+    version: undefined,
   },
 });
+
+export const buildLocalState = (attribute, length, labels) => {
+  const dummy = [];
+  for (let i = 0; i < length; i += 1) {
+    dummy[i] = '';
+  }
+  const dummyRow = {};
+  labels.forEach(label => {
+    dummyRow[label] = '';
+  });
+  return {
+    value: dummy.map(() => dummyRow),
+    meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+    labels,
+    userChanges: {},
+    flags: {
+      rows: dummy.map(() => ({})),
+      table: {
+        dirty: false,
+        fresh: true,
+        timeStamp:
+          attribute.raw.timeStamp !== undefined
+            ? JSON.parse(JSON.stringify(attribute.raw.timeStamp))
+            : undefined,
+        extendable:
+          attribute.raw.meta.writeable &&
+          !labels.some(label => !attribute.raw.meta.elements[label].writeable),
+      },
+    },
+  };
+};
 
 export const addMessageInFlight = (id, path, malcolmState) => {
   const updatedState = malcolmState;
@@ -70,7 +108,7 @@ export const addBlockArchive = (mri, attributes, malcolmState) => {
   };
 };
 
-export const addBlock = (name, attributes, malcolmState, children = []) => {
+export const addBlock = (name, attributes, malcolmState, children = {}) => {
   const updatedState = malcolmState;
   updatedState.blocks[name] = {
     typeid: 'malcolm:core/BlockMeta:1.0',
@@ -81,18 +119,23 @@ export const addBlock = (name, attributes, malcolmState, children = []) => {
     children,
     orphans: [],
   };
+  updatedState.blocks['.blocks'].children[name] = {
+    label: name.replace(':', 'ing '),
+  };
 };
 
 export const buildMeta = (
   tags = [],
   writeable = true,
   label = '',
-  typeid = ''
+  typeid = '',
+  elements
 ) => ({
   tags,
   writeable,
   label,
   typeid,
+  elements,
 });
 
 const buildMethodMeta = (
@@ -115,8 +158,9 @@ export const buildAttribute = (
   value,
   alarm = 0,
   meta = buildMeta(),
-  children = [],
-  loading = false
+  children = {},
+  loading = false,
+  typeid
 ) => ({
   // the data coming back from the server is always stored in raw
   raw: {
@@ -125,6 +169,7 @@ export const buildAttribute = (
       severity: alarm,
     },
     meta,
+    typeid,
   },
   // other additional properties are stored in calculated
   calculated: {
@@ -228,31 +273,22 @@ export const addTableLocalState = (
     blockName,
     attributeName
   );
-  const dummy = [];
-  for (let i = 0; i < length; i += 1) {
-    dummy[i] = '';
-  }
-  const dummyRow = {};
-  labels.forEach(label => {
-    dummyRow[label] = '';
-  });
+
   if (attributeIndex > -1) {
-    updatedState.blocks[blockName].attributes[attributeIndex].localState = {
-      value: dummy.map(() => dummyRow),
-      meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
-      labels,
-      flags: {
-        rows: dummy.map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp:
-            attribute.raw.timeStamp !== undefined
-              ? JSON.parse(JSON.stringify(attribute.raw.timeStamp))
-              : undefined,
-        },
-      },
-    };
+    updatedState.blocks[blockName].attributes[
+      attributeIndex
+    ].localState = buildLocalState(attribute, length, labels);
+    if (
+      updatedState.blocks[blockName].attributes[attributeIndex].raw.value ===
+      undefined
+    ) {
+      updatedState.blocks[blockName].attributes[attributeIndex].raw.value = {};
+      labels.forEach(label => {
+        updatedState.blocks[blockName].attributes[attributeIndex].raw.value[
+          label
+        ] = [];
+      });
+    }
   }
   return updatedState;
 };

@@ -53,6 +53,10 @@ const testMethodInputs = {
     intIn: { typeid: malcolmTypes.number },
     boolIn: { typeid: malcolmTypes.bool },
     objectIn: { typeid: malcolmTypes.pointGenerator },
+    tableIn: {
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    },
   },
 };
 
@@ -84,6 +88,9 @@ describe('attribute reducer', () => {
     createLocalState.mockImplementation(attribute => attribute);
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
+    LayoutReducer.isRelevantAttribute.mockImplementation(attr =>
+      blockUtils.attributeHasTag(attr, 'widget:icon')
+    );
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
     LayoutReducer.processLayout.mockImplementation(() => ({
@@ -133,13 +140,21 @@ describe('attribute reducer', () => {
           ['block1', 'table'],
           undefined,
           0,
-          buildMeta(['widget:table'], true, '', malcolmTypes.table)
+          buildMeta(['widget:table'], true, '', malcolmTypes.table, {
+            mri: {},
+            name: {},
+            x: {},
+            y: {},
+            visible: {},
+          })
         ),
       ],
       state
     );
     addBlockArchive('block1', [buildBlockArchiveAttribute('layout', 5)], state);
-
+    addBlock('test:block2', [], state);
+    addBlock('test:block3', [], state);
+    addBlock('test:block4', [], state);
     payload = {
       delta: true,
       id: 1,
@@ -149,6 +164,9 @@ describe('attribute reducer', () => {
           elements: {
             mri: {},
             name: {},
+            x: {},
+            y: {},
+            visible: {},
           },
         },
         value: {
@@ -179,14 +197,23 @@ describe('attribute reducer', () => {
   it('updates children for layout attribute', () => {
     state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
-    expect(state.blocks.block1.attributes[0].calculated.children).toHaveLength(
-      3
-    );
-    expect(state.blocks.block1.attributes[0].calculated.children).toEqual([
-      'block2',
-      'block3',
-      'block4',
-    ]);
+    expect(
+      Object.keys(state.blocks.block1.attributes[0].calculated.children)
+    ).toHaveLength(3);
+    expect(state.blocks.block1.attributes[0].calculated.children).toEqual({
+      block2: {
+        label: 'testing block2',
+        mri: 'test:block2',
+      },
+      block3: {
+        label: 'testing block3',
+        mri: 'test:block3',
+      },
+      block4: {
+        label: 'testing block4',
+        mri: 'test:block4',
+      },
+    });
   });
 
   it('returns state if it is not a delta', () => {
@@ -654,12 +681,17 @@ describe('attribute reducer', () => {
       [],
       { required: ['stringIn', 'boolIn'], ...testMethodInputs },
       {
-        present: ['stringIn', 'objectIn'],
+        present: ['stringIn', 'objectIn', 'tableIn'],
         value: {
           stringIn: 'testing',
           boolIn: true,
           intIn: 0,
           objectIn: { isATest: true },
+          tableIn: {
+            column1: ['a', 'b'],
+            column2: [1, 2],
+            typeid: malcolmTypes.table,
+          },
         },
       }
     );
@@ -669,5 +701,19 @@ describe('attribute reducer', () => {
     expect(resultMethod.calculated.inputs.intIn).not.toBeDefined();
     expect(resultMethod.calculated.inputs.boolIn.value).toEqual(false);
     expect(resultMethod.calculated.inputs.objectIn.value.isATest).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.meta).toEqual({
+      typeid: malcolmTypes.table,
+      elements: { column1: {}, column2: {} },
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value).toBeDefined();
+    expect(resultMethod.calculated.inputs.tableIn.value.length).toEqual(2);
+    expect(resultMethod.calculated.inputs.tableIn.value[0]).toEqual({
+      column1: 'a',
+      column2: 1,
+    });
+    expect(resultMethod.calculated.inputs.tableIn.value[1]).toEqual({
+      column1: 'b',
+      column2: 2,
+    });
   });
 });

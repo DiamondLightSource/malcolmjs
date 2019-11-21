@@ -1,7 +1,7 @@
 import NavTypes from '../NavTypes';
 import blockUtils from '../blockUtils';
 
-export const processNavigationLists = (paths, blocks) => {
+export const processNavigationLists = (paths, blocks, viewType) => {
   const navigationLists = paths.map(p => ({
     path: p,
     children: [],
@@ -31,13 +31,18 @@ export const processNavigationLists = (paths, blocks) => {
   return {
     navigationLists,
     rootNav,
+    viewType,
   };
 };
 
 function updateNavigationPath(state, payload) {
   return {
     ...state,
-    navigation: processNavigationLists(payload.blockPaths, state.blocks),
+    navigation: processNavigationLists(
+      payload.blockPaths,
+      state.blocks,
+      payload.viewType
+    ),
     parentBlock: undefined,
     childBlock: undefined,
     mainAttribute: undefined,
@@ -45,8 +50,7 @@ function updateNavigationPath(state, payload) {
 }
 
 const isBlockMri = (navPath, blocks) =>
-  blocks['.blocks'] &&
-  blocks['.blocks'].children.findIndex(block => block === navPath) > -1;
+  blocks['.blocks'] && blocks['.blocks'].children[navPath] !== undefined;
 
 const previousNavIsBlock = (i, navigationLists, blocks) =>
   i > 0 &&
@@ -59,25 +63,21 @@ const previousNavIsAttribute = (i, navigationLists) =>
 const updateBlockChildren = (nav, blocks) => {
   const updatedNav = nav;
   if (blocks[nav.blockMri]) {
-    updatedNav.children = blocks[nav.blockMri].children.filter(child => {
+    updatedNav.children = {};
+    Object.keys(blocks[nav.blockMri].children).forEach(child => {
       const attribute = blocks[nav.blockMri].attributes.find(
         a => a.calculated.name === child
       );
-      return (
+      if (
         attribute &&
         ((attribute.raw.meta &&
           attribute.raw.meta.tags.some(
             tag => tag.slice(0, 7) === 'widget:' && tag !== 'widget:icon'
           )) ||
           attribute.calculated.isMethod)
-      );
-    });
-    updatedNav.childrenLabels = updatedNav.children.map(child => {
-      const attribute = blocks[nav.blockMri].attributes.find(
-        a => a.calculated.name === child
-      );
-
-      return attribute && attribute.raw.meta ? attribute.raw.meta.label : child;
+      ) {
+        updatedNav.children[child] = blocks[nav.blockMri].children[child];
+      }
     });
   }
 };
@@ -120,7 +120,6 @@ function updateNavTypes(state) {
           if (matchingAttribute && !matchingAttribute.calculated.loading) {
             nav.navType = NavTypes.Attribute;
             nav.children = matchingAttribute.calculated.children;
-            nav.childrenLabels = matchingAttribute.calculated.children;
             const rawPath = nav.path.split('.');
             [nav.path] = nav.path.split('.');
             nav.label = nav.path;

@@ -124,7 +124,7 @@ describe('virtualized table widget', () => {
     );
     wrapper
       .find('input')
-      .at(1)
+      .at(2)
       .simulate('change', { target: { value: 'fish' } });
     expect(rowChangeHandler).toHaveBeenCalledTimes(1);
     expect(rowChangeHandler).toHaveBeenCalledWith(
@@ -149,7 +149,7 @@ describe('virtualized table widget', () => {
     );
     wrapper
       .find('input')
-      .at(1)
+      .at(2)
       .simulate('focus');
     expect(rowFlagHandler).toHaveBeenCalledTimes(1);
     expect(rowFlagHandler).toHaveBeenCalledWith(

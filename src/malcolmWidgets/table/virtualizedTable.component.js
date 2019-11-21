@@ -74,9 +74,10 @@ export const getTableState = props => {
   const isArray = props.attribute.calculated.isMethod
     ? isArrayType(props.localState.meta)
     : isArrayType(props.attribute.raw.meta);
-  tableState.columnLabels = !isArray
-    ? Object.keys(props.attribute.raw.meta.elements)
-    : undefined;
+  tableState.columnLabels =
+    !isArray && !props.attribute.calculated.isMethod
+      ? Object.keys(props.attribute.raw.meta.elements)
+      : undefined;
   tableState.columnLabels =
     props.localState !== undefined
       ? props.localState.labels
@@ -105,6 +106,18 @@ export const getTableState = props => {
     props.localState === undefined
       ? props.attribute.raw.meta
       : props.localState.meta;
+  if (isArray) {
+    tableState.flags.table = tableState.flags.table || {};
+    tableState.flags.table.extendable = tableState.meta.writeable;
+  } else {
+    tableState.flags.table.extendable =
+      tableState.flags.table.extendable === undefined
+        ? tableState.meta.writeable &&
+          !tableState.columnLabels.some(
+            label => !tableState.meta.elements[label].writeable
+          )
+        : tableState.flags.table.extendable;
+  }
   return tableState;
 };
 
@@ -406,7 +419,7 @@ const WidgetTable = props => {
           }}
         </AutoSizer>
       </div>
-      {tableState.meta.writeable ? (
+      {tableState.flags.table.extendable ? (
         <Tooltip id="1" title="Add row to bottom of table" placement="top">
           <Button
             variant="fab"
