@@ -36,16 +36,19 @@ describe('NavBar', () => {
               path: 'PANDA',
               basePath: '/PANDA/',
               children: { layout: { label: 'layout' } },
+              navType: true,
             },
             {
               path: 'layout',
               children: { SEQ1: { label: 'Test layout child #1' } },
               basePath: '/PANDA/layout/',
+              navType: true,
             },
             {
               path: 'PANDA:SEQ1',
               children: { Val: { label: 'Value' } },
               basePath: '/PANDA/layout/SEQ1/',
+              navType: true,
             },
           ],
           rootNav: {
@@ -53,6 +56,7 @@ describe('NavBar', () => {
             children: {
               PANDA: { label: 'PANDA' },
               'PANDA:SEQ1': { label: 'PANDA:SEQ1' },
+              navType: true,
             },
             basePath: '/',
           },
