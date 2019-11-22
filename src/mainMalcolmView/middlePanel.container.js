@@ -272,6 +272,7 @@ const findAttributeComponent = props => {
     case 'widget:led':
     case 'widget:checkbox':
     case 'widget:combo':
+    case 'widget:meter':
       if (!isArrayType({ typeid: props.typeid })) {
         return (
           <div className={props.classes.plainBackground}>
