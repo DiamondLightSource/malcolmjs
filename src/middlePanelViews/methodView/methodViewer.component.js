@@ -23,6 +23,7 @@ import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 import {
   getDefaultFromType,
   isArrayType,
+  Widget,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { Sources } from '../../malcolm/reducer/method.reducer';
 import {
@@ -69,7 +70,7 @@ const MethodViewer = props => {
       props.selectedParam[0] === 'takes'
     ) {
       switch (widgetTag) {
-        case 'widget:tree':
+        case Widget.TREE:
           return (
             <div style={{ width: '100%', textAlign: 'left' }}>
               <div style={{ height: 'calc(100% - 56px)' }}>
@@ -105,11 +106,11 @@ const MethodViewer = props => {
               </Table>
             </div>
           );
-        case 'widget:textinput':
-        case 'widget:textupdate':
-        case 'widget:combobox':
-        case 'widget:checkbox':
-        case 'widget:led': {
+        case Widget.TEXTINPUT:
+        case Widget.TEXTUPDATE:
+        case Widget.COMBO:
+        case Widget.CHECKBOX:
+        case Widget.LED: {
           if (isArrayType(props.selectedParamMeta)) {
             if (props.selectedParamValue === undefined) {
               return (
@@ -189,7 +190,7 @@ const MethodViewer = props => {
             />
           );
         }
-        case 'widget:table': {
+        case Widget.TABLE: {
           if (
             props.selectedParamValue !== undefined &&
             (props.selectedParam[0] === 'returns' ||
@@ -328,23 +329,23 @@ const MethodViewer = props => {
         meta: {
           elements: {
             source: {
-              tags: ['info:alarm'],
+              tags: [Widget.i_ALARM],
               label: 'Origin',
             },
             postTime: {
-              tags: ['widget:textupdate'],
+              tags: [Widget.TEXTUPDATE],
               label: 'Time run',
             },
             returnTime: {
-              tags: ['widget:textupdate'],
+              tags: [Widget.TEXTUPDATE],
               label: 'Time results received',
             },
             returnStatus: {
-              tags: ['widget:textupdate'],
+              tags: [Widget.TEXTUPDATE],
               label: 'Return Status',
             },
             copyParams: {
-              tags: ['info:button'],
+              tags: [Widget.i_BUTTON],
               label: 'Reuse run params',
               writeable: true,
             },

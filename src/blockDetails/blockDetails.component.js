@@ -8,6 +8,7 @@ import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.compone
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 import MethodDetails from '../malcolmWidgets/method/method.component';
 import blockUtils from '../malcolm/blockUtils';
+import { Widget } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const ascii404 =
   '                __     __      _____      __     __ \n' +
@@ -27,7 +28,7 @@ const styles = theme => ({
   },
 });
 
-const ignoredAttributes = ['widget:icon'];
+const ignoredAttributes = [Widget.ICON];
 
 export const isBlockLoading = (
   block,
@@ -247,7 +248,7 @@ const mapStateToProps = (state, ownProps, memory) => {
   ) {
     stateMemory.rootAttributes = [
       ...block.attributes.filter(a =>
-        blockUtils.attributeHasTag(a, 'widget:help')
+        blockUtils.attributeHasTag(a, Widget.HELP)
       ),
       ...block.attributes.filter(
         a =>
@@ -256,7 +257,7 @@ const mapStateToProps = (state, ownProps, memory) => {
             block.orphans &&
             block.orphans.some(orphan => orphan === a.calculated.name)
           ) &&
-          !blockUtils.attributeHasTag(a, 'widget:help')
+          !blockUtils.attributeHasTag(a, Widget.HELP)
       ),
     ];
     stateMemory.orphans = block.orphans;

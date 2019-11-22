@@ -36,6 +36,27 @@ export const malcolmTypes = {
   pointGenerator: 'malcolm:core/PointGeneratorMeta:1.0',
 };
 
+export const Widget = {
+  NONE: 'widget:',
+  FLOWGRAPH: 'widget:flowgraph',
+  TABLE: 'widget:table',
+  PLOT: 'widget:plot',
+  TREE: 'widget:tree',
+  TEXTUPDATE: 'widget:textupdate',
+  MULTILINE: 'widget:multilinetextupdate',
+  TEXTINPUT: 'widget:textinput',
+  LED: 'widget:led',
+  CHECKBOX: 'widget:checkbox',
+  COMBO: 'widget:combo',
+  METER: 'widget:meter',
+  HELP: 'widget:help',
+  GROUP: 'widget:group',
+  ICON: 'widget:icon',
+  i_ALARM: 'info:alarm',
+  i_MULTILINE: 'info:multiline',
+  i_BUTTON: 'info:button',
+};
+
 export const isArrayType = meta =>
   // malcolm array types have IDs "malcolm:core/[Number,String]ArrayMeta:1.x"
   meta &&
@@ -116,7 +137,7 @@ export const selectorFunction = (
     );
   }
   switch (widgetTag) {
-    case 'widget:led':
+    case Widget.LED:
       return (
         <WidgetLED
           LEDState={value}
@@ -124,7 +145,7 @@ export const selectorFunction = (
           colorCenter={colorLED}
         />
       );
-    case 'widget:checkbox':
+    case Widget.CHECKBOX:
       return (
         <WidgetCheckbox
           CheckState={value}
@@ -133,7 +154,7 @@ export const selectorFunction = (
           isUndefined={value === undefined}
         />
       );
-    case 'widget:combo':
+    case Widget.COMBO:
       return (
         <WidgetComboBox
           Value={value}
@@ -144,17 +165,16 @@ export const selectorFunction = (
           forceOpen={forceOpen}
         />
       );
-    case 'widget:textupdate':
+    case Widget.TEXTUPDATE:
       return (
         <TextUpdate
           Text={objectMeta.display ? format(value, objectMeta.display) : value}
           Units={(objectMeta.display && objectMeta.display.units) || null}
         />
       );
-    case 'widget:meter':
+    case Widget.METER:
       return <WidgetMeter value={value} limits={objectMeta.display} />;
-    case 'widget:title':
-    case 'widget:textinput': {
+    case Widget.TEXTINPUT: {
       let displayValue = '';
       if (objectMeta.display) {
         displayValue = format(value, objectMeta.display);
@@ -178,14 +198,14 @@ export const selectorFunction = (
         />
       );
     }
-    case 'widget:table':
+    case Widget.TABLE:
       return (
         <ButtonAction
           text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
-    case 'widget:plot':
+    case Widget.PLOT:
       return objectMeta.insideArray ? (
         <TextUpdate
           Text={objectMeta.display ? format(value, objectMeta.display) : value}
@@ -198,7 +218,7 @@ export const selectorFunction = (
         />
       );
 
-    case 'widget:flowgraph':
+    case Widget.FLOWGRAPH:
       return (
         <div style={{ position: 'relative', minHeight: '28px' }}>
           <LayoutButtonGraphic
@@ -217,17 +237,17 @@ export const selectorFunction = (
           />
         </div>
       );
-    case 'widget:tree':
+    case Widget.TREE:
       return (
         <ButtonAction
           text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
-    case 'widget:multilinetextupdate':
-    case 'info:multiline':
+    case Widget.MULTILINE:
+    case Widget.i_MULTILINE:
       return <TextUpdate Text={`${value}`} noWrap={false} />;
-    case 'info:button':
+    case Widget.i_BUTTON:
       return (
         <ButtonAction
           method
@@ -236,7 +256,7 @@ export const selectorFunction = (
           disabled={flags.isDisabled}
         />
       );
-    case 'widget:help':
+    case Widget.HELP:
       return (
         <ButtonAction
           text="View"
@@ -244,7 +264,7 @@ export const selectorFunction = (
           id={`help.${path[0]}.${path[1]}`}
         />
       );
-    case 'info:alarm':
+    case Widget.i_ALARM:
       return (
         <AttributeAlarm
           alarmSeverity={value.alarm}

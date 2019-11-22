@@ -1,6 +1,7 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import { InfoDetails } from './infoDetails.component';
+import { Widget } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 describe('InfoDetails', () => {
   let shallow;
@@ -23,7 +24,7 @@ describe('InfoDetails', () => {
       value: 'test in',
       inline: true,
       label: 'inline input',
-      tag: 'widget:textinput',
+      tag: Widget.TEXTINPUT,
     },
     groupValues: {
       simpleInGroup: 'zap',

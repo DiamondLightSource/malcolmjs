@@ -20,12 +20,13 @@ import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import { idSeparator } from '../layout/layout.component';
+import { Widget } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const getTag = element => {
   if (element && element.tag) {
     return element.tag;
   }
-  return 'info:multiline';
+  return Widget.i_MULTILINE;
 };
 
 const infoAlarmState = value => {
@@ -141,10 +142,12 @@ export class InfoDetails extends React.Component {
       <div>
         {[
           ...infoElements.filter(
-            a => this.state.info[a] && this.state.info[a].tag !== 'info:button'
+            a =>
+              this.state.info[a] && this.state.info[a].tag !== Widget.i_BUTTON
           ),
           ...infoElements.filter(
-            a => this.state.info[a] && this.state.info[a].tag === 'info:button'
+            a =>
+              this.state.info[a] && this.state.info[a].tag === Widget.i_BUTTON
           ),
         ].map(a => (
           <InfoElement

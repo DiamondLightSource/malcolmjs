@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import { ARCHIVE_REFRESH_INTERVAL } from '../../malcolm/reducer/malcolmReducer';
 import blockUtils from '../../malcolm/blockUtils';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const noOp = () => {};
 
@@ -48,15 +49,15 @@ class ArchiveTable extends React.Component {
             meta: {
               elements: {
                 alarm: {
-                  tags: ['info:alarm'],
+                  tags: [Widget.i_ALARM],
                   label: ' ',
                 },
                 timeStamp: {
-                  tags: ['widget:textupdate'],
+                  tags: [Widget.TEXTUPDATE],
                   label: 'Time set',
                 },
                 value: {
-                  tags: ['widget:textupdate'],
+                  tags: [Widget.TEXTUPDATE],
                   label: 'Value',
                 },
               },

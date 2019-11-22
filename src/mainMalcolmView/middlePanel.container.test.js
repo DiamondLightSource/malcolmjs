@@ -2,7 +2,10 @@ import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  Widget,
+} from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import MiddlePanel from './middlePanel.container';
 
 describe('MalcolmMiddlePanel', () => {
@@ -29,7 +32,7 @@ describe('MalcolmMiddlePanel', () => {
                 },
                 raw: {
                   meta: {
-                    tags: ['widget:flowgraph'],
+                    tags: [Widget.FLOWGRAPH],
                   },
                 },
               },
@@ -39,7 +42,7 @@ describe('MalcolmMiddlePanel', () => {
                 },
                 raw: {
                   meta: {
-                    tags: ['widget:textupdate'],
+                    tags: [Widget.TEXTUPDATE],
                     typeid: malcolmTypes.string,
                   },
                 },
@@ -76,7 +79,7 @@ describe('MalcolmMiddlePanel', () => {
   });
 
   it('renders table correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
+    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = [Widget.TABLE];
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });

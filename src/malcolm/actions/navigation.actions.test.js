@@ -6,6 +6,7 @@ import {
   malcolmNewBlockAction,
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const buildNavState = () => ({
   malcolm: {
@@ -73,7 +74,7 @@ describe('subscribeToChildren', () => {
           visible: [true, false, true],
         },
         undefined,
-        buildMeta(['widget:flowgraph']),
+        buildMeta([Widget.FLOWGRAPH]),
         ['Test1', 'Test2', 'Test3']
       ),
     ];

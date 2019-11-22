@@ -10,6 +10,7 @@ import {
   malcolmIntialiseMethodParam,
 } from '../../malcolm/actions/method.actions';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import { Widget } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../../malcolm/actions/navigation.actions');
 jest.mock('../../malcolm/malcolmActionCreators');
@@ -31,11 +32,11 @@ describe('Method component', () => {
   const testOutputs = {
     first: {
       label: 'First output',
-      tags: ['widget:led'],
+      tags: [Widget.LED],
     },
     second: {
       label: 'Second output',
-      tags: ['widget:textupdate'],
+      tags: [Widget.TEXTUPDATE],
     },
   };
 
@@ -126,13 +127,13 @@ describe('Method component', () => {
       first: {
         label: 'First input',
         description: 'a test input',
-        tags: ['widget:textinput'],
+        tags: [Widget.TEXTINPUT],
         writeable: true,
       },
       second: {
         label: 'Second input',
         description: 'a test input',
-        tags: ['widget:textinput'],
+        tags: [Widget.TEXTINPUT],
         writeable: true,
       },
     };

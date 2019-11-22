@@ -6,6 +6,7 @@ import configureStore from 'redux-mock-store';
 import AttributeDetails, {
   AttributeDetailsComponent,
 } from './attributeDetails.component';
+import { Widget } from './attributeSelector/attributeSelector.component';
 
 const description = alarmState =>
   `A container for displaying attributes, the alarm is in the state ${alarmState}`;
@@ -30,7 +31,7 @@ const attribute = alarmStateValue => ({
       writeable: false,
       typeid: 'malcolm:core/BooleanMeta:1.0',
       label: 'Attribute 1',
-      tags: [alarmStateValue === -2 ? 'widget:textinput' : 'widget:led'],
+      tags: [alarmStateValue === -2 ? Widget.TEXTINPUT : Widget.LED],
     },
     value: true,
   },

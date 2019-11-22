@@ -2,7 +2,10 @@ import {
   harderAttribute,
   expectedCopy,
 } from '../malcolmWidgets/table/table.stories';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  Widget,
+} from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { buildAttributeInfo } from './infoBuilders';
 import { buildLocalState } from '../testState.utilities';
 
@@ -74,7 +77,7 @@ describe('info builder', () => {
         writeable: {
           inline: true,
           label: 'Writeable?',
-          tag: 'widget:led',
+          tag: Widget.LED,
           valuePath: 'raw.meta.writeable',
         },
       },
@@ -120,7 +123,7 @@ describe('info builder', () => {
   });
 
   it('attribute info builder generates correct structure for attribute with local state', () => {
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
@@ -130,13 +133,13 @@ describe('info builder', () => {
       inline: true,
       label: 'Discard Local State',
       showLabel: false,
-      tag: 'info:button',
+      tag: Widget.i_BUTTON,
       value: 'Discard Local State',
     });
   });
 
   it('attribute info builder generates correct structure for attribute with sub-element defined', () => {
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     props.attribute.localState = buildLocalState(props.attribute, 5, labels);
     props.subElement = ['row', '1'];
@@ -148,7 +151,7 @@ describe('info builder', () => {
       inline: true,
       label: 'Row local state',
       showLabel: false,
-      tag: 'info:button',
+      tag: Widget.i_BUTTON,
       value: 'Discard row local state',
     });
   });
@@ -162,7 +165,7 @@ describe('info builder', () => {
           },
           alarm: {},
           meta: {
-            tags: ['widget:table'],
+            tags: [Widget.TABLE],
           },
         },
         calculated: {
@@ -184,7 +187,7 @@ describe('info builder', () => {
     props.addRow = jest.fn();
     props.moveRow = jest.fn();
     props.changeInfoHandler = jest.fn();
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 
@@ -223,7 +226,7 @@ describe('info builder', () => {
   it('table delete row methods fires info route change if bottom row selected', () => {
     props.addRow = jest.fn();
     props.changeInfoHandler = jest.fn();
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 
@@ -251,7 +254,7 @@ describe('info builder', () => {
     });
     props.addRow = jest.fn();
     props.closeInfoHandler = jest.fn();
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     props.attribute.localState = buildLocalState(props.attribute, 5, labels);
     props.attribute.localState.value = [dataRow];
@@ -273,7 +276,7 @@ describe('info builder', () => {
       [, dataRow[label]] = props.attribute.raw.value[label];
     });
     props.rowRevertHandler = jest.fn();
-    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.raw.meta.tags = [Widget.TABLE];
     props.attribute.calculated.dirty = false;
     props.attribute.localState = buildLocalState(props.attribute, 5, labels);
 

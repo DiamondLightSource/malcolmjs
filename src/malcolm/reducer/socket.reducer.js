@@ -2,6 +2,7 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import blockUtils from '../blockUtils';
 import createReducer from './createReducer';
 import { pushToArchive, updateAttribute } from './attribute.reducer';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   MalcolmDisconnected,
   MalcolmError,
@@ -182,7 +183,7 @@ export function handleErrorMessage(state, payload) {
       attribute.raw &&
       attribute.raw.meta &&
       attribute.raw.meta.tags &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')
+      attribute.raw.meta.tags.some(t => t === Widget.FLOWGRAPH)
     ) {
       // reset the layout
       const id =

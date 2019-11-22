@@ -15,7 +15,10 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
 } from '../malcolm.types';
-import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  Widget,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { ARCHIVE_REFRESH_INTERVAL } from './malcolmReducer';
 import {
   buildTestState,
@@ -89,7 +92,7 @@ describe('attribute reducer', () => {
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
     LayoutReducer.isRelevantAttribute.mockImplementation(attr =>
-      blockUtils.attributeHasTag(attr, 'widget:icon')
+      blockUtils.attributeHasTag(attr, Widget.ICON)
     );
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
@@ -126,21 +129,21 @@ describe('attribute reducer', () => {
           ['block1', 'layout'],
           undefined,
           0,
-          buildMeta(['widget:flowgraph'])
+          buildMeta([Widget.FLOWGRAPH])
         ),
         buildAttribute(
           'testInput',
           ['block1', 'testInput'],
           'testing',
           0,
-          buildMeta(['widget:textinput'])
+          buildMeta([Widget.TEXTINPUT])
         ),
         buildAttribute(
           'table',
           ['block1', 'table'],
           undefined,
           0,
-          buildMeta(['widget:table'], true, '', malcolmTypes.table, {
+          buildMeta([Widget.TABLE], true, '', malcolmTypes.table, {
             mri: {},
             name: {},
             x: {},
@@ -160,7 +163,7 @@ describe('attribute reducer', () => {
       id: 1,
       raw: {
         meta: {
-          tags: ['widget:flowgraph'],
+          tags: [Widget.FLOWGRAPH],
           elements: {
             mri: {},
             name: {},
@@ -185,7 +188,7 @@ describe('attribute reducer', () => {
     payload2 = {
       delta: true,
       id: 2,
-      raw: { meta: { tags: ['widget:textinput'] }, value: 'testing#123' },
+      raw: { meta: { tags: [Widget.TEXTINPUT] }, value: 'testing#123' },
     };
   });
 
@@ -311,7 +314,7 @@ describe('attribute reducer', () => {
       },
       raw: {
         meta: {
-          tags: ['widget:icon'],
+          tags: [Widget.ICON],
         },
       },
     });

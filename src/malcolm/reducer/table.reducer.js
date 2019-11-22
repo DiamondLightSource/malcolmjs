@@ -10,6 +10,7 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import {
   getDefaultFromType,
   isArrayType,
+  Widget,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const rowIsDifferent = (attribute, row) =>
@@ -28,7 +29,7 @@ export const tableHasRow = (row, table) =>
   table &&
   ((table.localState && parseInt(row, 10) < table.localState.value.length) ||
     (table.raw.meta &&
-      blockUtils.attributeHasTag(table, 'widget:table') &&
+      blockUtils.attributeHasTag(table, Widget.TABLE) &&
       parseInt(row, 10) <
         table.raw.value[Object.keys(table.raw.meta.elements)[0]].length));
 

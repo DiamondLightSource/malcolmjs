@@ -4,6 +4,7 @@ import { sinkPort } from '../malcolm/malcolmConstants';
 import {
   malcolmTypes,
   isArrayType,
+  Widget,
 } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -41,7 +42,7 @@ export const buildAttributeInfo = props => {
           valuePath: 'raw.meta.writeable',
           label: 'Writeable?',
           inline: true,
-          tag: 'widget:led',
+          tag: Widget.LED,
         },
       };
       info.malcolmAlarm = {
@@ -92,7 +93,7 @@ export const buildAttributeInfo = props => {
           value: 'Acknowledge Error',
           disabledPath: 'NOT.calculated.errorState',
           inline: true,
-          tag: 'info:button',
+          tag: Widget.i_BUTTON,
           functions: {
             clickHandler: () => props.clearError(attribute.calculated.path),
           },
@@ -100,7 +101,7 @@ export const buildAttributeInfo = props => {
       }
       if (
         attribute.raw.meta.tags.some(a =>
-          ['widget:table', 'widget:textinput', 'widget:flowgraph'].includes(a)
+          [Widget.TABLE, Widget.TEXTINPUT, Widget.FLOWGRAPH].includes(a)
         )
       ) {
         info.localState = {
@@ -109,7 +110,7 @@ export const buildAttributeInfo = props => {
           showLabel: false,
           disabledPath: 'NOT.calculated.dirty',
           inline: true,
-          tag: 'info:button',
+          tag: Widget.i_BUTTON,
           alarmStatePath: 'calculated.alarms.dirty',
         };
         if (props.revertHandler) {
@@ -120,13 +121,13 @@ export const buildAttributeInfo = props => {
           };
         }
         if (
-          attribute.raw.meta.tags.some(a => a === 'widget:textinput') &&
+          attribute.raw.meta.tags.some(a => a === Widget.TEXTINPUT) &&
           !isArrayType(attribute.raw.meta)
         ) {
           info.remoteState = {
             label: 'Remote state',
             value: attribute.raw.value,
-            tag: 'widget:textupdate',
+            tag: Widget.TEXTINPUT,
             inline: true,
           };
         }
@@ -156,7 +157,7 @@ export const buildAttributeInfo = props => {
           value: 'Discard row local state',
           disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
           inline: true,
-          tag: 'info:button',
+          tag: Widget.i_BUTTON,
           alarmState:
             rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
         };
@@ -182,33 +183,33 @@ export const buildAttributeInfo = props => {
               value: 'Shift row up',
               showLabel: false,
               disabled: row === 0,
-              tag: 'info:button',
+              tag: Widget.i_BUTTON,
             },
             moveRowDown: {
               label: 'Shift row down',
               value: 'Shift row down',
               showLabel: false,
               disabled: row === attribute.localState.value.length - 1,
-              tag: 'info:button',
+              tag: Widget.i_BUTTON,
             },
             addRowAbove: {
               label: 'Insert row above',
               value: 'Insert row above',
               showLabel: false,
-              tag: 'info:button',
+              tag: Widget.i_BUTTON,
             },
             addRowBelow: {
               label: 'Insert row below',
               value: 'Insert row below',
               showLabel: false,
-              tag: 'info:button',
+              tag: Widget.i_BUTTON,
             },
             deleteRow: {
               label: 'Delete row',
               value: 'Delete row',
               inline: true,
               showLabel: false,
-              tag: 'info:button',
+              tag: Widget.i_BUTTON,
             },
           };
 
@@ -333,7 +334,7 @@ export const buildAttributeInfo = props => {
           value: attribute.raw.meta.writeable,
           label: 'Writeable?',
           inline: true,
-          tag: 'widget:led',
+          tag: Widget.LED,
         },
       };
       if (Object.keys(attribute.raw.meta.takes.elements).length > 0) {
@@ -353,7 +354,7 @@ export const buildAttributeInfo = props => {
             showLabel: false,
             label: 'Discard params',
             value: 'Discard params',
-            tag: 'info:button',
+            tag: Widget.i_BUTTON,
             functions: {
               clickHandler: () => {
                 Object.keys(attribute.raw.meta.takes.elements).forEach(
@@ -394,7 +395,7 @@ export const buildAttributeInfo = props => {
           value: 'Acknowledge Error',
           disabledPath: 'NOT.calculated.errorState',
           inline: true,
-          tag: 'info:button',
+          tag: Widget.i_BUTTON,
           functions: {
             clickHandler: () => props.clearError(attribute.calculated.path),
           },
@@ -439,7 +440,7 @@ export const buildAttributeInfo = props => {
             label: 'Discard param',
             value: 'Discard param',
             inline: true,
-            tag: 'info:button',
+            tag: Widget.i_BUTTON,
             functions: {
               clickHandler: () => {
                 props.clearParamState(
@@ -481,7 +482,7 @@ export const linkInfo = props => {
       label: 'Source',
       valuePath: 'raw.value',
       inline: true,
-      tag: portAttribute.raw.meta.choices ? 'widget:combo' : 'widget:textinput',
+      tag: portAttribute.raw.meta.choices ? Widget.COMBO : Widget.TEXTINPUT,
       choices: portAttribute.raw.meta.choices,
       disabled: props.isLayoutLocked || !portAttribute.raw.meta.writeable,
       functions: {
@@ -500,7 +501,7 @@ export const linkInfo = props => {
       label: '',
       value: 'Show Source',
       inline: true,
-      tag: 'info:button',
+      tag: Widget.i_BUTTON,
       showLabel: false,
       disabled:
         layout.visible[sourceIndex] ||
@@ -525,7 +526,7 @@ export const linkInfo = props => {
       label: '',
       value: 'Delete',
       inline: true,
-      tag: 'info:button',
+      tag: Widget.i_BUTTON,
       showLabel: false,
       disabled:
         props.isLayoutLocked ||

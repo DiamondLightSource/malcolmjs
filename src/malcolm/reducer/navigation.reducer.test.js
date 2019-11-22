@@ -12,6 +12,7 @@ import {
 } from '../../testState.utilities';
 
 import blockUtils from '../blockUtils';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 describe('navigation reducer', () => {
   it('updateNavigationPath set navigation on state', () => {
@@ -63,7 +64,7 @@ describe('NavigationReducer.updateNavTypes', () => {
             mri: ['PANDA:SEQ1', 'PANDA:SEQ2'],
           },
           0,
-          buildMeta(['widget:flowgraph'], true, 'Layout'),
+          buildMeta([Widget.FLOWGRAPH], true, 'Layout'),
           { SEQ1: { label: 'sequencer 1' }, SEQ2: { label: 'sequencer 2' } },
           false
         ),

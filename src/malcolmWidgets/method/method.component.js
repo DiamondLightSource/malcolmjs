@@ -24,6 +24,7 @@ import {
   selectorFunction,
   getDefaultFromType,
   isArrayType,
+  Widget,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 
@@ -94,7 +95,7 @@ const buildIOComponent = (input, props, isOutput) => {
     props.flagInput(path, input[0], flagName, flagState);
   };
   const buttonClickHandler =
-    (widgetTag === 'widget:table' || isArrayType(input[1])) && !isOutput
+    (widgetTag === Widget.TABLE || isArrayType(input[1])) && !isOutput
       ? path => {
           props.initialiseLocalState(path, ['takes', input[0]]);
           props.methodParamClickHandler(path);
@@ -116,7 +117,7 @@ const buildIOComponent = (input, props, isOutput) => {
       buttonClickHandler
     );
   }
-  return selectorFunction('widget:undefined');
+  return selectorFunction(Widget.NONE);
 };
 
 const MethodDetails = props => {

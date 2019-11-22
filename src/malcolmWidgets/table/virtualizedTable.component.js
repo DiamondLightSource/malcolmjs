@@ -16,7 +16,10 @@ import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
-import { isArrayType } from '../attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  isArrayType,
+  Widget,
+} from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = theme => ({
   header: {
@@ -60,11 +63,10 @@ const styles = theme => ({
   },
 });
 
-const widgetWidths = {
-  'widget:checkbox': 36,
-  'widget:led': 36,
-  'info:alarm': 36,
-};
+const widgetWidths = {};
+widgetWidths[Widget.CHECKBOX] = 36;
+widgetWidths[Widget.LED] = 36;
+widgetWidths[Widget.i_ALARM] = 36;
 
 const variableWidgetMinWidth = 180;
 const iconWidth = 36;

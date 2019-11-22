@@ -17,6 +17,7 @@ import {
   getDefaultFromType,
   malcolmTypes,
   isArrayType,
+  Widget,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   createLocalState,
@@ -34,7 +35,7 @@ export const updateAttributeChildren = (attribute, blockList) => {
   if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
     if (
-      blockUtils.attributeHasTag(updatedAttribute, 'widget:flowgraph') &&
+      blockUtils.attributeHasTag(updatedAttribute, Widget.FLOWGRAPH) &&
       updatedAttribute.raw.value
     ) {
       updatedAttribute.raw.value.name.forEach((name, index) => {
@@ -56,7 +57,7 @@ export const timestamp2Date = timeStamp =>
 
 const hasSubElements = inputAttribute => {
   const attribute = inputAttribute;
-  if (blockUtils.attributeHasTag(attribute, 'widget:table')) {
+  if (blockUtils.attributeHasTag(attribute, Widget.TABLE)) {
     attribute.calculated.subElements = {
       row: tableHasRow,
       col: tableHasColumn,
@@ -75,7 +76,7 @@ const hasSubElements = inputAttribute => {
 };
 
 export const checkForFlowGraph = attribute => {
-  if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+  if (blockUtils.attributeHasTag(attribute, Widget.FLOWGRAPH)) {
     const updatedAttribute = { ...attribute };
     const { value } = updatedAttribute.raw;
     updatedAttribute.calculated.layout = {
@@ -195,7 +196,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     attribute &&
     (attribute.raw &&
       attribute.raw.meta &&
-      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph') &&
+      attribute.raw.meta.tags.some(t => t === Widget.FLOWGRAPH) &&
       attribute.calculated.name === state.mainAttribute &&
       attribute.calculated.path[0] === state.parentBlock)
   ) {
@@ -236,7 +237,7 @@ export const updateLocalState = attribute => {
   if (updatedAttribute && updatedAttribute.raw.meta) {
     if (
       updatedAttribute.raw.meta.tags &&
-      updatedAttribute.raw.meta.tags.includes('widget:textinput') &&
+      updatedAttribute.raw.meta.tags.includes(Widget.TEXTINPUT) &&
       !isArrayType(attribute.raw.meta) &&
       (!updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate)
@@ -400,7 +401,7 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
     plotValue = payload.raw.value === undefined ? undefined : plotValue;
   }
   /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
-        else if (attributeArchive.meta.tags.includes('widget:combo')) {
+        else if (attributeArchive.meta.tags.includes(Widget.COMBO)) {
         plotValue = attributeArchive.meta.choices.findIndex(
           val => val === payload.raw.value
         );

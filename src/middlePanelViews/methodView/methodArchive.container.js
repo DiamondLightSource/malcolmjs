@@ -9,6 +9,7 @@ import {
   AlarmStates,
   AlarmStatesByIndex,
 } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const noOp = () => {};
 
@@ -86,15 +87,15 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
     meta: {
       elements: {
         alarm: {
-          tags: ['info:alarm'],
+          tags: [Widget.i_ALARM],
           label: 'Method Alarm state',
         },
         timeStamp: {
-          tags: ['widget:textupdate'],
+          tags: [Widget.TEXTUPDATE],
           label: selectedParam[0] === 'takes' ? 'Time sent' : 'Time received',
         },
         value: {
-          tags: ['widget:textupdate'],
+          tags: [Widget.TEXTUPDATE],
           label: 'Parameter value',
         },
       },

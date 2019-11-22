@@ -5,6 +5,7 @@ import {
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const processDeltaMessage = (changes, oldObject) => {
   let object = { ...oldObject };
@@ -47,7 +48,7 @@ const processAttribute = (request, changedAttribute) => {
       delta: true,
       raw: { ...changedAttribute },
       calculated: {
-        isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
+        isGroup: changedAttribute.meta.tags.some(t => t === Widget.GROUP),
         inGroup,
         group,
         id: request.id,
@@ -72,7 +73,7 @@ const processAttributes = (messages, getState, dispatch) => {
   dispatch(navigationActions.subscribeToNewBlocksInRoute());
 
   const layoutMessages = messages.filter(msg =>
-    msg.attributeDelta.meta.tags.some(t => t === 'widget:flowgraph')
+    msg.attributeDelta.meta.tags.some(t => t === Widget.FLOWGRAPH)
   );
 
   if (layoutMessages.length > 0) {

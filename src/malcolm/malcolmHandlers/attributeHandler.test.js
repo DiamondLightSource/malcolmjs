@@ -3,6 +3,7 @@ import {
   MalcolmAttributeData,
   MalcolmMultipleAttributeData,
 } from '../malcolm.types';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 let oldStyleAttribute;
 let newStyleAttribute;
@@ -150,7 +151,7 @@ describe('attribute handler', () => {
 
   it('detects group attributes', () => {
     AttributeHandler.processAttributes(
-      buildMessageList(request, changes(['widget:group'])),
+      buildMessageList(request, changes([Widget.GROUP])),
       store.getState,
       dispatch
     );
@@ -175,7 +176,7 @@ describe('attribute handler', () => {
 
   it('detects root level attributes', () => {
     AttributeHandler.processAttributes(
-      buildMessageList(request, changes(['widget:led'])),
+      buildMessageList(request, changes([Widget.LED])),
       store.getState,
       dispatch
     );

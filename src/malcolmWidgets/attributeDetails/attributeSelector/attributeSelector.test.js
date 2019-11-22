@@ -4,6 +4,7 @@ import configureStore from 'redux-mock-store';
 import AttributeSelector, {
   selectorFunction,
   getDefaultFromType,
+  Widget,
 } from './attributeSelector.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import { parentPanelTransition } from '../../../viewState/viewState.actions';
@@ -280,7 +281,7 @@ describe('AttributeSelector', () => {
 
   it('selector function returns info:button and renders correctly', () => {
     const component = selectorFunction(
-      'info:button',
+      Widget.i_BUTTON,
       [''],
       'testButton',
       () => {},
@@ -298,7 +299,7 @@ describe('AttributeSelector', () => {
 
   it('selector function returns info:multiline and renders correctly', () => {
     const component = selectorFunction(
-      'info:multiline',
+      Widget.i_MULTILINE,
       [''],
       'test value',
       () => {},
@@ -317,7 +318,7 @@ describe('AttributeSelector', () => {
   it('info:button hooks up click handler correctly', () => {
     const clickHandler = jest.fn();
     const component = selectorFunction(
-      'info:button',
+      Widget.i_BUTTON,
       [''],
       'testButton',
       () => {},

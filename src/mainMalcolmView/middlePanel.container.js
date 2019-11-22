@@ -28,7 +28,10 @@ import LayoutBin from '../layout/layoutBin.component';
 import ThemeEditor from './themeEditor';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 import { malcolmClearLayoutSelect } from '../malcolm/malcolmActionCreators';
-import { isArrayType } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  isArrayType,
+  Widget,
+} from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import layoutActions from '../malcolm/actions/layout.action';
 
 const styles = theme => {
@@ -151,7 +154,7 @@ const findAttributeComponent = props => {
   let zoomButtonIndent = props.openParent ? 360 + 29 : 29;
   zoomButtonIndent = props.mobile ? 36 : zoomButtonIndent;
   switch (widgetTag) {
-    case 'widget:flowgraph':
+    case Widget.FLOWGRAPH:
       return (
         <div className={props.classes.layoutArea}>
           <Layout />
@@ -241,7 +244,7 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
-    case 'widget:table':
+    case Widget.TABLE:
       return (
         <div className={props.classes.plainBackground}>
           <div
@@ -266,13 +269,13 @@ const findAttributeComponent = props => {
         </div>
       );
 
-    case 'widget:textupdate':
-    case 'widget:multilinetextupdate':
-    case 'widget:textinput':
-    case 'widget:led':
-    case 'widget:checkbox':
-    case 'widget:combo':
-    case 'widget:meter':
+    case Widget.TEXTUPDATE:
+    case Widget.MULTILINE:
+    case Widget.TEXTINPUT:
+    case Widget.LED:
+    case Widget.CHECKBOX:
+    case Widget.COMBO:
+    case Widget.METER:
       if (!isArrayType({ typeid: props.typeid })) {
         return (
           <div className={props.classes.plainBackground}>
@@ -315,7 +318,7 @@ const findAttributeComponent = props => {
         </div>
       );
 
-    case 'widget:tree':
+    case Widget.TREE:
       return (
         <div className={props.classes.plainBackground}>
           <div
@@ -338,7 +341,7 @@ const findAttributeComponent = props => {
         </div>
       );
 
-    case 'widget:plot':
+    case Widget.PLOT:
       return (
         <div className={props.classes.plainBackground}>
           <div

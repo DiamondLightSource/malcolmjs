@@ -6,6 +6,7 @@ import LayoutReducer, {
 } from './layout.reducer';
 import { malcolmSelectBlock } from '../../malcolmActionCreators';
 import layoutActions from '../../actions/layout.action';
+import { Widget } from '../../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const sourcePort = 'sourcePort';
 const sinkPort = 'sinkPort';
@@ -61,7 +62,7 @@ const buildMalcolmState = () => ({
         {
           raw: {
             meta: {
-              tags: ['widget:icon'],
+              tags: [Widget.ICON],
             },
             value: 'icon 123',
           },
@@ -334,13 +335,13 @@ describe('Layout Reducer', () => {
     attribute.raw.meta.tags = [`${sinkPort}:ZERO`];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
-    attribute.raw.meta.tags = ['widget:icon'];
+    attribute.raw.meta.tags = [Widget.ICON];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
-    attribute.raw.meta.tags = ['widget:icon'];
+    attribute.raw.meta.tags = [Widget.ICON];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
-    attribute.raw.meta.tags = ['something else', 'widget:icon'];
+    attribute.raw.meta.tags = ['something else', Widget.ICON];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
   });
 

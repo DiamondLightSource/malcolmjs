@@ -13,6 +13,7 @@ import {
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
 import { idSeparator } from '../../../layout/layout.component';
+import { Widget } from '../../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const hiddenLinkIdSeparator = '࿈';
 
@@ -66,19 +67,13 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
 
     const iconAttribute = blockUtils.findAttributesWithTag(
       matchingBlock,
-      'widget:icon'
+      Widget.ICON
     );
 
-    let displayAttribute = blockUtils.findAttributesWithTag(
+    const displayAttribute = blockUtils.findAttributesWithTag(
       matchingBlock,
-      'block:display'
+      Widget.METER
     );
-    if (displayAttribute.length === 0) {
-      displayAttribute = blockUtils.findAttributesWithTag(
-        matchingBlock,
-        'widget:meter'
-      );
-    }
 
     if (iconAttribute.length > 0) {
       updatedBlock.icon = iconAttribute[0].raw.value;
@@ -384,8 +379,8 @@ const isRelevantWidget = attribute => {
   return (
     tags &&
     (tags.some(t => t.indexOf(sinkPort) > -1) ||
-      tags.some(t => t.indexOf('widget:icon') > -1) ||
-      tags.some(t => t.indexOf('widget:flowgraph') > -1))
+      tags.some(t => t.indexOf(Widget.ICON) > -1) ||
+      tags.some(t => t.indexOf(Widget.FLOWGRAPH) > -1))
   );
 };
 

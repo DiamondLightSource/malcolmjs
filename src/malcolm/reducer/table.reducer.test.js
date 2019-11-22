@@ -5,7 +5,10 @@ import {
   MalcolmLocalCopy,
   MalcolmTableFlag,
 } from '../malcolm.types';
-import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  getDefaultFromType,
+  Widget,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   harderAttribute,
   expectedCopy,
@@ -33,7 +36,7 @@ const rowValues = harderAttribute.raw.value[
 });
 
 const testArrayLocalState = {
-  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: ['widget:textinput'] },
+  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: [Widget.TEXTINPUT] },
   value: ['a', 'b', 'c'],
   flags: {
     rows: [{}, {}, {}],
@@ -49,7 +52,7 @@ const testArrayAttribute = {
   raw: {
     meta: {
       typeid: 'foo:bar/someArrayMeta:1.6',
-      tags: ['widget:textinput'],
+      tags: [Widget.TEXTINPUT],
     },
     value: ['a', 'b', 'c'],
   },

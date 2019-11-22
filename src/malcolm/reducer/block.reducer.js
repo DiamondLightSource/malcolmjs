@@ -15,6 +15,7 @@ import {
   MalcolmNewBlock,
   MalcolmRootBlockMeta,
 } from '../malcolm.types';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const processOrphans = (
   blocks,
@@ -147,7 +148,7 @@ export function updateBlock(state, payload) {
     if (
       (mainAttribute &&
         (mainAttribute.meta &&
-          mainAttribute.meta.tags.some(t => t === 'widget:flowgraph'))) ||
+          mainAttribute.meta.tags.some(t => t === Widget.FLOWGRAPH))) ||
       state.layout.blocks.map(block => block.mri).includes(blockName)
     ) {
       layout = layoutReducer.processLayout({ ...state, blocks });

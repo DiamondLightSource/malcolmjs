@@ -1,7 +1,10 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils'; // , createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
-import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  Widget,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 import AttributeViewer from './attributeView.container';
 
@@ -31,7 +34,7 @@ describe('attributeView', () => {
                 },
                 raw: {
                   meta: {
-                    tags: ['widget:textupdate'],
+                    tags: [Widget.TEXTUPDATE],
                     typeid: malcolmTypes.string,
                   },
                 },
@@ -62,7 +65,7 @@ describe('attributeView', () => {
         store={mockStore(state)}
         attributeName="health"
         blockName="test1"
-        widgetTag="widget:textupdate"
+        widgetTag={Widget.TEXTUPDATE}
         typeid={malcolmTypes.string}
       />
     );
@@ -75,7 +78,7 @@ describe('attributeView', () => {
         store={mockStore(state)}
         attributeName="health"
         blockName="test1"
-        widgetTag="widget:textupdate"
+        widgetTag={Widget.TEXTUPDATE}
         typeid={malcolmTypes.string}
         defaultTab={1}
       />

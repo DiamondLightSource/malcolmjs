@@ -5,7 +5,10 @@ import { blue } from '@material-ui/core/colors/index';
 import MethodViewer from './methodViewer.component';
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
-import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  malcolmTypes,
+  Widget,
+} from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../../malcolm/actions/method.actions');
 
@@ -68,15 +71,15 @@ describe('Method viewer', () => {
   const testOutputs = {
     first: {
       label: 'First output',
-      tags: ['widget:led'],
+      tags: [Widget.LED],
     },
     second: {
       label: 'Second output',
-      tags: ['widget:textupdate'],
+      tags: [Widget.TEXTUPDATE],
     },
     third: {
       label: 'Third output',
-      tags: ['widget:textupdate'],
+      tags: [Widget.TEXTUPDATE],
       typeid: malcolmTypes.stringArray,
     },
   };
@@ -162,7 +165,7 @@ describe('Method viewer', () => {
         flags: { rows: [] },
         meta: {
           typeid: malcolmTypes.stringArray,
-          tags: ['widget:textinput'],
+          tags: [Widget.TEXTINPUT],
           writeable: true,
         },
       },
@@ -172,17 +175,17 @@ describe('Method viewer', () => {
       first: {
         label: 'First input',
         description: 'a test input',
-        tags: ['widget:textinput'],
+        tags: [Widget.TEXTINPUT],
       },
       second: {
         label: 'Second input',
         description: 'a test input',
-        tags: ['widget:tree'],
+        tags: [Widget.TREE],
       },
       third: {
         label: 'Third input',
         description: 'an array',
-        tags: ['widget:textinput'],
+        tags: [Widget.TEXTINPUT],
         typeid: malcolmTypes.stringArray,
         writeable: true,
       },

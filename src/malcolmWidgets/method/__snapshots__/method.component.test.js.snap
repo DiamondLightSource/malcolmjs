@@ -75,7 +75,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         className="MethodDetails-controlContainer-3"
       >
         <WithStyles(Tooltip)
-          title="widget:undefined"
+          title="widget:"
         >
           <pure(BugReportIcon)
             nativeColor="red"

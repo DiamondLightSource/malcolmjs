@@ -13,11 +13,12 @@ import {
 } from '../../malcolm/malcolmActionCreators';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
+import { Widget } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../../malcolm/actions/navigation.actions');
 
 const testArrayLocalState = {
-  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: ['widget:textinput'] },
+  meta: { typeid: 'foo:bar/someArrayMeta:1.6', tags: [Widget.TEXTINPUT] },
   value: ['a', 'b', 'c'],
   flags: {
     rows: [{}, {}, {}],
@@ -176,7 +177,7 @@ describe('Table container', () => {
 
   it('subelement in url selects row correctly', () => {
     state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
-    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
+    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = [Widget.TABLE];
     const testStore = {
       getState: () => state,
       dispatch: () => {},

@@ -14,6 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import blockUtils from '../../../malcolm/blockUtils';
 import EditError from './EditError.component';
+import { Widget } from '../attributeSelector/attributeSelector.component';
 
 export const FieldTypes = {
   ATTRIBUTE: 'attribute',
@@ -48,7 +49,7 @@ export const AlarmStatesByIndex = [
 ];
 
 export const getAlarmState = attribute => {
-  if (blockUtils.attributeHasTag(attribute, 'widget:help')) {
+  if (blockUtils.attributeHasTag(attribute, Widget.HELP)) {
     return AlarmStates.HELP;
   }
 

@@ -7,6 +7,7 @@ import {
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const findBlockIndex = (navList, blockMri) => {
   const navLength = navList.length;
@@ -44,7 +45,7 @@ const subscribeToChildren = () => (dispatch, getState) => {
       lastNav.parent.blockMri,
       lastNav.path
     );
-    if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+    if (blockUtils.attributeHasTag(attribute, Widget.FLOWGRAPH)) {
       attribute.raw.value.visible.forEach((visible, i) => {
         const child = attribute.raw.value.mri[i];
         if (visible && !state.blocks[child]) {
@@ -69,7 +70,7 @@ const navigateToAttribute = (blockMri, attributeName) => (
   );
 
   // subscribe to layout blocks
-  if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+  if (blockUtils.attributeHasTag(attribute, Widget.FLOWGRAPH)) {
     dispatch(malcolmClearLayoutSelect());
     attribute.raw.value.visible.forEach((visible, i) => {
       if (visible) {

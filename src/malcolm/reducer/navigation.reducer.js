@@ -1,5 +1,6 @@
 import NavTypes from '../NavTypes';
 import blockUtils from '../blockUtils';
+import { Widget } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const processNavigationLists = (paths, blocks, viewType) => {
   const navigationLists = paths.map(p => ({
@@ -72,7 +73,7 @@ const updateBlockChildren = (nav, blocks) => {
         attribute &&
         ((attribute.raw.meta &&
           attribute.raw.meta.tags.some(
-            tag => tag.slice(0, 7) === 'widget:' && tag !== 'widget:icon'
+            tag => tag.slice(0, 7) === 'widget:' && tag !== Widget.ICON
           )) ||
           attribute.calculated.isMethod)
       ) {
@@ -163,7 +164,7 @@ function updateNavTypes(state) {
           );
           if (matchingAttribute) {
             if (
-              blockUtils.attributeHasTag(matchingAttribute, 'widget:flowgraph')
+              blockUtils.attributeHasTag(matchingAttribute, Widget.FLOWGRAPH)
             ) {
               const nameIndex = matchingAttribute.raw.value.name.findIndex(
                 n => n === nav.path
