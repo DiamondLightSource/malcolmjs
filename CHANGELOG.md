@@ -1,4 +1,7 @@
 # Changelog
+## 1.7.8 (22/11/2019)
+Fixes:
+- Fixed plot view for widget:meter
 ## 1.7.7 (21/11/2019)
 Fixes:
 - Improved nav bar behaviour for invalid/disconnected path (breadcrumb now appears if URL is a now-missing block)
