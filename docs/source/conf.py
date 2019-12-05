@@ -65,6 +65,10 @@ author = u'Tom Cobb, Ray Millward, Bryan Tester'
 # Something like 1.5.0-3-g3ab26eb
 release = subprocess.check_output([
     "git", "describe", "--abbrev=7", "--dirty","--always", "--tags"])
+
+if sys.version_info[0] >= 3:
+    release = release.decode('utf-8')
+
 # The short X.Y version.
 version = ".".join(release.split(".")[:2])
 
