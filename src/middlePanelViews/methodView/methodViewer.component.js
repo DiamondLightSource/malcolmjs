@@ -35,6 +35,9 @@ const noOp = () => {};
 
 const MethodViewer = props => {
   if (props.method && props.selectedParam) {
+    console.log('+++++++++++++++++++++++');
+    console.log(props.selectedParamMeta);
+    console.log(props.method);
     const widgetTag = props.selectedParamMeta.tags.find(
       t => t.indexOf('widget:') !== -1
     );
@@ -92,7 +95,12 @@ const MethodViewer = props => {
                   id={props.selectedParam}
                   height="100%"
                   width="100%"
-                  style={{ body: { fontSize: '100%' } }}
+                  style={{
+                    body: {
+                      fontSize: '100%',
+                      backgroundColor: props.theme.palette.background.default,
+                    },
+                  }}
                 />
               </div>
               <Table>
@@ -454,6 +462,11 @@ MethodViewer.propTypes = {
     PropTypes.number,
     PropTypes.object,
   ]).isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      background: PropTypes.shape({ default: PropTypes.string }),
+    }),
+  }).isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   selectedParam: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,

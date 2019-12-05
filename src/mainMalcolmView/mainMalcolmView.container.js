@@ -10,14 +10,19 @@ import Palette from '../layout/palette/palette.component';
 import InfoDetails from '../infoDetails/infoDetails.component';
 import NavTypes from '../malcolm/NavTypes';
 
-const blockDetailsUrl = (rootUrl, blockPath) =>
-  `${rootUrl}/details/${blockPath}`;
+const blockDetailsUrl = (rootUrl, blockPath) => {
+  let url = `${rootUrl}/details/${blockPath}`;
+  if (window.location.href.indexOf('?') !== -1) {
+    url = `${url}?${window.location.href.split('?')[1]}`;
+  }
+  return url;
+};
 
 const popOutFunction = (rootUrl, width, blockPath) =>
   window.open(
     blockDetailsUrl(rootUrl, blockPath),
     blockPath,
-    `width=${width},height=${window.innerHeight}`
+    `width=${width},height=${window.innerHeight}?`
   );
 
 const childPanelSelector = props => {
