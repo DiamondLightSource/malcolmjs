@@ -22,10 +22,10 @@ exports[`AttributeSelector selector function returns info:button and renders cor
 
 exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
 <div
-  className="WidgetTextUpdate-divWrap-207"
+  className="WidgetTextUpdate-divWrap-208"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdateWrap-208"
+    className="WidgetTextUpdate-textUpdateWrap-209"
     style={Object {}}
   >
     test value

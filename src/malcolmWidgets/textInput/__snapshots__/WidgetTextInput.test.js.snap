@@ -6,6 +6,7 @@ exports[`WidgetTextUpdate displays dirty 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
+      "style": Object {},
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -33,6 +34,7 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
+      "style": Object {},
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -60,6 +62,7 @@ exports[`WidgetTextUpdate displays localState if different to given value 1`] = 
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
+      "style": Object {},
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -87,6 +90,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
+      "style": Object {},
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -113,13 +117,26 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   InputProps={
     Object {
       "className": "WidgetTextInput-InputStyle-3",
-      "endAdornment": <WithStyles(InputAdornment)
-        className="WidgetTextInput-units-5"
-        disableTypography={true}
-        position="end"
+      "endAdornment": <div
+        className="WidgetTextInput-unitDiv-5"
     >
-        GW
-    </WithStyles(InputAdornment)>,
+        <div
+            style={
+                Object {
+                    "display": "block",
+                  }
+            }
+        >
+            <WithStyles(InputAdornment)
+                className="WidgetTextInput-units-6"
+                disableTypography={true}
+                style={Object {}}
+            >
+                GW
+            </WithStyles(InputAdornment)>
+        </div>
+    </div>,
+      "style": Object {},
     }
   }
   className="WidgetTextInput-textInput-1"
