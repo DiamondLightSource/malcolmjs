@@ -7,7 +7,6 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   textInput: {
-    width: '100%',
     maxHeight: '28px',
     verticalAlign: 'bottom',
   },
@@ -15,10 +14,13 @@ const styles = theme => ({
     fontSize: '12pt',
     textAlign: 'Right',
     padding: '2px',
+    flexGrow: 2,
   },
   InputStyle: {
     maxHeight: '28px',
     lineHeight: '28px',
+    flexGrow: 2,
+    color: theme.palette.primary.contrastText,
   },
   button: {
     width: '24px',
@@ -28,10 +30,14 @@ const styles = theme => ({
       backgroundColor: 'transparent',
     },
   },
+  unitDiv: {
+    maxWidth: '20%',
+    flexGrow: 1,
+    flexBasis: '30%',
+  },
   units: {
     fontSize: '9pt',
     marginLeft: '2px',
-    maxWidth: '50%',
     height: '100%',
     lineHeight: '28px',
     textOverflow: 'ellipsis',
@@ -81,6 +87,7 @@ class WidgetTextInput extends React.Component {
       case 'Tab':
       case 'Enter':
         this.props.submitEventHandler(event);
+        this.setState({ ...this.state, hasFocus: false });
         break;
       case 'Escape':
         this.setState({
@@ -124,13 +131,21 @@ class WidgetTextInput extends React.Component {
   render() {
     const endAdornment =
       this.props.Units && !this.state.hasFocus ? (
-        <InputAdornment
-          position="end"
-          className={this.props.classes.units}
-          disableTypography
-        >
-          {this.props.Units}
-        </InputAdornment>
+        <div className={this.props.classes.unitDiv}>
+          <div style={{ display: 'block' }}>
+            <InputAdornment
+              className={this.props.classes.units}
+              style={
+                this.props.alwaysContrastText
+                  ? { color: this.props.theme.palette.primary.contrastText }
+                  : {}
+              }
+              disableTypography
+            >
+              {this.props.Units}
+            </InputAdornment>
+          </div>
+        </div>
       ) : null;
 
     return (
@@ -146,6 +161,9 @@ class WidgetTextInput extends React.Component {
         InputProps={{
           endAdornment,
           className: this.props.classes.InputStyle,
+          style: this.props.alwaysContrastText
+            ? { color: this.props.theme.palette.primary.contrastText }
+            : {},
         }}
         // eslint-disable-next-line react/jsx-no-duplicate-props
         inputProps={{ className: this.props.classes.inputStyle }}
@@ -178,8 +196,17 @@ WidgetTextInput.propTypes = {
     inputStyle: PropTypes.string,
     button: PropTypes.string,
     units: PropTypes.string,
+    unitDiv: PropTypes.string,
+  }).isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      primary: PropTypes.shape({
+        contrastText: PropTypes.string,
+      }),
+    }),
   }).isRequired,
   continuousSend: PropTypes.bool,
+  alwaysContrastText: PropTypes.bool,
 };
 
 WidgetTextInput.defaultProps = {
@@ -188,6 +215,7 @@ WidgetTextInput.defaultProps = {
   Units: '',
   Error: false,
   continuousSend: false,
+  alwaysContrastText: false,
   localState: { set: () => {} },
   focusHandler: () => {},
   blurHandler: () => {},

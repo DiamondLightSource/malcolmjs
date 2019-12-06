@@ -237,7 +237,8 @@ export const updateLocalState = attribute => {
   if (updatedAttribute && updatedAttribute.raw.meta) {
     if (
       updatedAttribute.raw.meta.tags &&
-      updatedAttribute.raw.meta.tags.includes(Widget.TEXTINPUT) &&
+      (updatedAttribute.raw.meta.tags.includes(Widget.METER) ||
+        updatedAttribute.raw.meta.tags.includes(Widget.TEXTINPUT)) &&
       !isArrayType(attribute.raw.meta) &&
       (!updatedAttribute.calculated.dirty ||
         updatedAttribute.calculated.forceUpdate)
@@ -282,6 +283,30 @@ export const updateLocalState = attribute => {
   return updatedAttribute;
 };
 
+export const setMethodTableInput = (meta, tookValue) => {
+  const labels = Object.keys(meta.elements);
+  const columns = {};
+  labels.forEach(label => {
+    columns[label] = {};
+  });
+  return {
+    meta: JSON.parse(JSON.stringify(meta)),
+    value: tookValue[labels[0]].map((value, row) => {
+      const dataRow = {};
+      labels.forEach(label => {
+        dataRow[label] = tookValue[label][row];
+      });
+      return dataRow;
+    }),
+    labels,
+    flags: {
+      columns,
+      rows: tookValue[labels[0]].map(() => ({})),
+      table: {},
+    },
+  };
+};
+
 export const presetMethodInputs = attribute => {
   const updatedAttribute = attribute;
   if (updatedAttribute && updatedAttribute.calculated.isMethod) {
@@ -299,36 +324,10 @@ export const presetMethodInputs = attribute => {
               attribute.raw.meta.takes.elements[input].typeid ===
               malcolmTypes.table
             ) {
-              const labels = Object.keys(
-                attribute.raw.meta.takes.elements[input].elements
+              updatedAttribute.calculated.inputs[input] = setMethodTableInput(
+                attribute.raw.meta.takes.elements[input],
+                attribute.raw.took.value[input]
               );
-              const columns = {};
-              labels.forEach(label => {
-                columns[label] = {};
-              });
-              updatedAttribute.calculated.inputs[input] = {
-                meta: JSON.parse(
-                  JSON.stringify(attribute.raw.meta.takes.elements[input])
-                ),
-                value: attribute.raw.took.value[input][labels[0]].map(
-                  (value, row) => {
-                    const dataRow = {};
-                    labels.forEach(label => {
-                      dataRow[label] =
-                        attribute.raw.took.value[input][label][row];
-                    });
-                    return dataRow;
-                  }
-                ),
-                labels,
-                flags: {
-                  columns,
-                  rows: attribute.raw.took.value[input][labels[0]].map(
-                    () => ({})
-                  ),
-                  table: {},
-                },
-              };
             } else if (isArrayType(attribute.raw.meta.takes.elements[input])) {
               updatedAttribute.calculated.inputs[input] = {
                 meta: JSON.parse(

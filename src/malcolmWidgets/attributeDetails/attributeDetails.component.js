@@ -75,7 +75,7 @@ const AttributeDetails = props => {
   }
   if (![null, -1].includes(props.widgetTagIndex) || props.isLinked !== 0) {
     const rowHighlight = props.isMainAttribute
-      ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
+      ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.175) }
       : {};
     let onClick = props.isGrandchild
       ? () =>

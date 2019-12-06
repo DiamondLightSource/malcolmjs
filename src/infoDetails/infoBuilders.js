@@ -45,6 +45,12 @@ export const buildAttributeInfo = props => {
           tag: Widget.LED,
         },
       };
+      if (attribute.raw.meta.display) {
+        info.meta = {
+          ...info.meta,
+          ...attribute.raw.meta.display,
+        };
+      }
       info.malcolmAlarm = {
         label: 'Alarm',
       };
@@ -337,6 +343,14 @@ export const buildAttributeInfo = props => {
           tag: Widget.LED,
         },
       };
+      /*
+      if (attribute.raw.meta.display) {
+        info.meta = {
+          ...info.meta,
+          ...attribute.raw.meta.display,
+        };
+      }
+      */
       if (Object.keys(attribute.raw.meta.takes.elements).length > 0) {
         info.takes = { label: 'Input parameter types' };
         Object.keys(attribute.raw.meta.takes.elements).forEach(input => {

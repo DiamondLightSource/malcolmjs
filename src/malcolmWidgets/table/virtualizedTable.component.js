@@ -325,6 +325,7 @@ const WidgetTable = props => {
     rowFlagHandler: mapRowFlagHandler(props.localState, props.setFlag),
   };
   const columnWidgetTags = getTableWidgetTags(tableState.meta);
+  console.log(JSON.stringify(tableState));
   return (
     <div
       role="presentation"

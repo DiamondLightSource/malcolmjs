@@ -126,6 +126,7 @@ const BlockWidget = props => {
       <AttributeSelector
         blockName={props.node.displayAttribute[0]}
         attributeName={props.node.displayAttribute[1]}
+        isBlockDisplay
       />
     </div>
   ) : null;

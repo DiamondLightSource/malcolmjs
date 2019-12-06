@@ -173,7 +173,20 @@ export const selectorFunction = (
         />
       );
     case Widget.METER:
-      return <WidgetMeter value={value} limits={objectMeta.display} />;
+      return (
+        <WidgetMeter
+          value={value}
+          limits={objectMeta.display}
+          Error={flags.isErrorState}
+          readOnly={flags.isDisabled}
+          submitEventHandler={event => valueHandler(path, event.target.value)}
+          localState={localState}
+          isDirty={flags.isDirty}
+          setFlag={(flag, state) => flagHandler(path, flag, state)}
+          isSelected={flags.isSelected}
+          isBlockDisplay={flags.isBlockDisplay}
+        />
+      );
     case Widget.TEXTINPUT: {
       let displayValue = '';
       if (objectMeta.display) {
@@ -298,6 +311,8 @@ const AttributeSelector = props => {
         props.attribute.calculated.pending ||
         !props.attribute.raw.meta.writeable,
       isErrorState: props.attribute.calculated.errorState,
+      isSelected: props.isMainAttribute,
+      isBlockDisplay: props.isBlockDisplay,
     };
     const continuousSend = false;
 
@@ -341,6 +356,11 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     attribute,
+    isMainAttribute:
+      attribute &&
+      attribute.calculated &&
+      ownProps.blockName === state.malcolm.parentBlock &&
+      state.malcolm.mainAttribute === attribute.calculated.name,
     isGrandchild: ownProps.blockName === state.malcolm.childBlock,
     mobile: state.viewState && state.viewState.mobileViewIndex !== undefined,
   };
@@ -407,10 +427,14 @@ AttributeSelector.propTypes = {
   eventHandler: PropTypes.func.isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
   buttonClickHandlerWithTransition: PropTypes.func.isRequired,
+  isBlockDisplay: PropTypes.bool,
+  isMainAttribute: PropTypes.bool,
 };
 
 AttributeSelector.defaultProps = {
   forceOpen: false,
+  isBlockDisplay: false,
+  isMainAttribute: false,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
