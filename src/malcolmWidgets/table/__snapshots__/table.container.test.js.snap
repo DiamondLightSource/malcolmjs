@@ -1073,7 +1073,41 @@ exports[`Table container renders correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(Typography)
+        style={
+          Object {
+            "minWidth": "120px",
+          }
+        }
+      >
+        Selected Row:
+      </WithStyles(Typography)>
+      <WithStyles(WidgetComboBox)
+        Choices={
+          Array [
+            0,
+            1,
+            2,
+            3,
+            4,
+          ]
+        }
+        selectEventHandler={[Function]}
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "display": "flex",
+          "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }
@@ -1085,7 +1119,9 @@ exports[`Table container renders correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }
@@ -1099,7 +1135,9 @@ exports[`Table container renders correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }
@@ -2186,7 +2224,42 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
+          "padding": "4px",
+        }
+      }
+    >
+      <WithStyles(Typography)
+        style={
+          Object {
+            "minWidth": "120px",
+          }
+        }
+      >
+        Selected Row:
+      </WithStyles(Typography)>
+      <WithStyles(WidgetComboBox)
+        Choices={
+          Array [
+            0,
+            1,
+            2,
+            3,
+            4,
+          ]
+        }
+        Value={1}
+        selectEventHandler={[Function]}
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "display": "flex",
+          "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }
@@ -2198,7 +2271,9 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }
@@ -2212,7 +2287,9 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     <div
       style={
         Object {
+          "display": "flex",
           "flexGrow": 1,
+          "justifyContent": "center",
           "padding": "4px",
         }
       }

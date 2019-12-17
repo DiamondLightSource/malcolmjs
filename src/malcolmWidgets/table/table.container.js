@@ -15,6 +15,7 @@ import {
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from './virtualizedTable.component';
+import WidgetComboBox from '../comboBox/comboBox.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
 
@@ -51,13 +52,33 @@ const TableContainer = props => {
     props.copyTable(path);
   }
   const pad = child => (
-    <div style={{ padding: '4px', flexGrow: 1 }}>{child}</div>
+    <div
+      style={{
+        display: 'flex',
+        padding: '4px',
+        flexGrow: 1,
+        justifyContent: 'center',
+      }}
+    >
+      {child}
+    </div>
   );
   const updateTime = `Update received @   ${new Date(
     props.attribute.raw.timeStamp.secondsPastEpoch * 1000
   ).toISOString()}`;
   const footerItems = [
     ...props.footerItems,
+    props.attribute.localState &&
+      pad([
+        <Typography style={{ minWidth: '120px' }}>Selected Row:</Typography>,
+        <WidgetComboBox
+          Choices={props.attribute.localState.value.map((val, ind) => ind)}
+          Value={props.selectedRow}
+          selectEventHandler={event => {
+            props.rowClickHandler(path, `row.${event}`);
+          }}
+        />,
+      ]),
     props.attribute.localState && props.attribute.localState.flags.table.fresh
       ? pad(<Typography>Up to date!</Typography>)
       : pad(<Typography>{updateTime}</Typography>),
@@ -192,7 +213,7 @@ TableContainer.propTypes = {
       meta: PropTypes.shape({
         writeable: PropTypes.bool,
       }),
-      value: PropTypes.shape({}),
+      value: PropTypes.array,
       isDirty: PropTypes.bool,
       flags: PropTypes.shape({
         table: PropTypes.shape({

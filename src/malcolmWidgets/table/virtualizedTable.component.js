@@ -325,7 +325,6 @@ const WidgetTable = props => {
     rowFlagHandler: mapRowFlagHandler(props.localState, props.setFlag),
   };
   const columnWidgetTags = getTableWidgetTags(tableState.meta);
-  console.log(JSON.stringify(tableState));
   return (
     <div
       role="presentation"
@@ -362,6 +361,7 @@ const WidgetTable = props => {
             return (
               <div>
                 <Table
+                  scrollToIndex={props.selectedRow}
                   noRowsRenderer={() => (
                     <div className={props.classes.textBody}>
                       <Typography style={{ fontSize: '14pt' }}>
@@ -462,6 +462,7 @@ WidgetTable.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
+  selectedRow: PropTypes.number,
   eventHandler: PropTypes.func.isRequired,
   closePanelHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
@@ -476,6 +477,7 @@ WidgetTable.defaultProps = {
   localState: undefined,
   hideInfo: false,
   showFooter: false,
+  selectedRow: undefined,
   addRow: () => {},
 };
 
