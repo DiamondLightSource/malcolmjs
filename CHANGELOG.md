@@ -1,4 +1,12 @@
 # Changelog
+## 1.7.10 (24/1/2020)
+Features:
+- Added optional label/badge to layout ports (e.g. to display delay on bits in PandA)
+## 1.7.9 (17/12/2019)
+Features:
+- Added seek to relected row & combobox to allow row selection in table
+Fixes:
+- Made meter widget value editable when displayed in details pane
 ## 1.7.8 (22/11/2019)
 Fixes:
 - Fixed plot view for widget:meter
