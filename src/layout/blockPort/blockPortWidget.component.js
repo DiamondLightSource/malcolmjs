@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { idSeparator } from '../layout.component';
 import { malcolmSelectLink } from '../../malcolm/malcolmActionCreators';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import blockUtils from '../../malcolm/blockUtils';
 
 const styles = () => ({
   container: {
@@ -78,6 +79,51 @@ class BlockPortWidget extends BaseWidget {
           : 'rgba(0,0,0,0)',
     };
 
+    let portDisplay = (
+      <div
+        className={this.props.classes.port}
+        style={{
+          background:
+            this.state.selected &&
+            ((this.props.linkInProgress && this.props.canConnectToStartPort) ||
+              !this.props.linkInProgress)
+              ? portColour[100]
+              : portColour[500],
+        }}
+        role="presentation"
+      />
+    );
+    if (this.props.portBadge) {
+      switch (this.props.portBadge[1]) {
+        case 'plus':
+          if (this.props.badgeValue) {
+            portDisplay = (
+              <div
+                className={this.props.classes.port}
+                style={{
+                  background:
+                    this.state.selected &&
+                    ((this.props.linkInProgress &&
+                      this.props.canConnectToStartPort) ||
+                      !this.props.linkInProgress)
+                      ? portColour[100]
+                      : portColour[500],
+                  width: '24px',
+                }}
+                role="presentation"
+              >
+                <Typography style={{ fontSize: '8pt' }}>
+                  {`+${this.props.badgeValue}`}
+                </Typography>
+              </div>
+            );
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
     const port =
       this.props.portType === 'HIDDEN' ? (
         <div
@@ -114,19 +160,7 @@ class BlockPortWidget extends BaseWidget {
             }
           }}
         >
-          <div
-            className={this.props.classes.port}
-            style={{
-              background:
-                this.state.selected &&
-                ((this.props.linkInProgress &&
-                  this.props.canConnectToStartPort) ||
-                  !this.props.linkInProgress)
-                  ? portColour[100]
-                  : portColour[500],
-            }}
-            role="presentation"
-          />
+          {portDisplay}
         </div>
       );
     const label =
@@ -184,7 +218,32 @@ export const mapStateToProps = (state, ownProps) => {
       );
     }
   }
-
+  const blockName = ownProps.portId.split(idSeparator)[0];
+  const fieldName = ownProps.portId.split(idSeparator)[1];
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    blockName,
+    fieldName
+  );
+  let portBadge = null;
+  let badgeValue = null;
+  if (attribute && blockUtils.attributeHasTag(attribute, 'badgevalue')) {
+    const ind = attribute.raw.meta.tags.findIndex(
+      tag => tag.indexOf('badgevalue') > -1
+    );
+    if (ind > -1) {
+      portBadge = attribute.raw.meta.tags[ind].split(':');
+      const badgeBlock = portBadge.slice(3).join(':');
+      const badgeAttr = blockUtils.findAttribute(
+        state.malcolm.blocks,
+        badgeBlock,
+        portBadge[2]
+      );
+      if (badgeAttr) {
+        badgeValue = badgeAttr.raw.value;
+      }
+    }
+  }
   return {
     inputPort: port.in,
     portName: port.name,
@@ -196,6 +255,8 @@ export const mapStateToProps = (state, ownProps) => {
         a.split(idSeparator)[2] === ownProps.portId.split(idSeparator)[0] &&
         a.split(idSeparator)[3] === ownProps.portId.split(idSeparator)[1]
     ),
+    portBadge,
+    badgeValue,
     portValue: port.value,
     linkInProgress:
       state.malcolm.layoutState.startPortForLink !== undefined &&
