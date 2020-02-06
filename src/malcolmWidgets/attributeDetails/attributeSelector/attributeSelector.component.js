@@ -52,6 +52,7 @@ export const Widget = {
   HELP: 'widget:help',
   GROUP: 'widget:group',
   ICON: 'widget:icon',
+  FFMPEG: 'widget:ffmpeg',
   i_ALARM: 'info:alarm',
   i_MULTILINE: 'info:multiline',
   i_BUTTON: 'info:button',
@@ -215,6 +216,13 @@ export const selectorFunction = (
       return (
         <ButtonAction
           text={objectMeta.writeable ? 'Edit' : 'View'}
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
+    case Widget.FFMPEG:
+      return (
+        <ButtonAction
+          text="View"
           clickAction={() => buttonClickHandler(path)}
         />
       );

@@ -16,6 +16,7 @@ import TableContainer from '../malcolmWidgets/table/table.container';
 import AttributePlotter from '../malcolmWidgets/plotter/plotter.component';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
 import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
+import FFmpegViewer from '../malcolmWidgets/ffmpegViewer/ffmpegViewer.component';
 import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
@@ -351,6 +352,25 @@ const findAttributeComponent = props => {
             <AttributePlotter
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
+            />
+          </div>
+        </div>
+      );
+
+    case Widget.FFMPEG:
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={{
+              ...transitionWithPanelStyle,
+              verticalAlign: 'middle',
+              justifyContent: 'center',
+            }}
+          >
+            <FFmpegViewer
+              blockName={props.parentBlock}
+              attributeName={props.mainAttribute}
             />
           </div>
         </div>
