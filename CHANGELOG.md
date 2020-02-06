@@ -1,4 +1,7 @@
 # Changelog
+## 1.7.11 (6/2/2020)
+Features:
+- Added FFMPEG viewer widget
 ## 1.7.10 (24/1/2020)
 Features:
 - Added optional label/badge to layout ports (e.g. to display delay on bits in PandA)
