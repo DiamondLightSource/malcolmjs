@@ -357,7 +357,7 @@ const findAttributeComponent = props => {
         </div>
       );
 
-    case Widget.FFMPEG:
+    case Widget.IMGURL:
       return (
         <div className={props.classes.plainBackground}>
           <div

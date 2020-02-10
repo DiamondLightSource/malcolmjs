@@ -52,7 +52,7 @@ export const Widget = {
   HELP: 'widget:help',
   GROUP: 'widget:group',
   ICON: 'widget:icon',
-  FFMPEG: 'widget:ffmpeg',
+  IMGURL: 'widget:imgurl',
   i_ALARM: 'info:alarm',
   i_MULTILINE: 'info:multiline',
   i_BUTTON: 'info:button',
@@ -219,7 +219,7 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
-    case Widget.FFMPEG:
+    case Widget.IMGURL:
       return (
         <ButtonAction
           text="View"
