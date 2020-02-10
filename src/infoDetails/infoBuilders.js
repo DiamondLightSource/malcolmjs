@@ -486,6 +486,7 @@ export const linkInfo = props => {
     .find(t => t.indexOf(sinkPort) > -1)
     .split(':')
     .slice(-1)[0];
+
   /*
   const layout = props.layoutAttribute.raw.value;
   const sourceIndex = -1;
@@ -554,6 +555,26 @@ export const linkInfo = props => {
       },
     },
   };
+  if (props.badge.attribute) {
+    info[props.badge.name] = {
+      label: props.badge.attribute.raw.meta.label,
+      blockName: props.badge.block,
+      attributeName: props.badge.name,
+      valuePath: 'raw.value',
+      inline: true,
+      tag: Widget.TEXTINPUT,
+      disabled:
+        props.isLayoutLocked || !props.badge.attribute.raw.meta.writeable,
+      functions: {
+        eventHandler: (nullPath, value) =>
+          props.eventHandler(
+            [props.badge.block, props.badge.name, 'value'],
+            value
+          ),
+        setFlag: () => {},
+      },
+    };
+  }
 
   return {
     info,

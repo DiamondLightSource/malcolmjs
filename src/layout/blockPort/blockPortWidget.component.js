@@ -108,12 +108,37 @@ class BlockPortWidget extends BaseWidget {
                       !this.props.linkInProgress)
                       ? portColour[100]
                       : portColour[500],
-                  width: '24px',
+                  minWidth: '24px',
                 }}
                 role="presentation"
               >
                 <Typography style={{ fontSize: '8pt' }}>
                   {`+${this.props.badgeValue}`}
+                </Typography>
+              </div>
+            );
+          }
+          break;
+        case 'asynAddr':
+          if (this.props.badgeValue) {
+            portDisplay = (
+              <div
+                className={this.props.classes.port}
+                style={{
+                  background:
+                    this.state.selected &&
+                    ((this.props.linkInProgress &&
+                      this.props.canConnectToStartPort) ||
+                      !this.props.linkInProgress)
+                      ? portColour[100]
+                      : portColour[500],
+                  minWidth: '24px',
+                  height: '16px',
+                }}
+                role="presentation"
+              >
+                <Typography style={{ fontSize: '8pt' }}>
+                  {`@${this.props.badgeValue}`}
                 </Typography>
               </div>
             );

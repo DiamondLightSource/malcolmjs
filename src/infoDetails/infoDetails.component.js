@@ -169,8 +169,10 @@ export class InfoDetails extends React.Component {
             handlers={this.state.info[a].functions}
             choices={this.state.info[a].choices}
             showLabel={this.state.info[a].showLabel}
-            blockName={this.props.blockName}
-            attributeName={this.props.attributeName}
+            blockName={this.state.info[a].block || this.props.blockName}
+            attributeName={
+              this.state.info[a].attributeName || this.props.attributeName
+            }
             disabled={this.state.info[a].disabled}
             disabledFlagPath={this.state.info[a].disabledPath}
           />
@@ -208,8 +210,13 @@ export class InfoDetails extends React.Component {
                       : undefined
                   }
                   tag={getTag(this.state.info[group][a])}
-                  blockName={this.props.blockName}
-                  attributeName={this.props.attributeName}
+                  blockName={
+                    this.state.info[group][a].block || this.props.blockName
+                  }
+                  attributeName={
+                    this.state.info[group][a].attributeName ||
+                    this.props.attributeName
+                  }
                   disabled={this.state.info[group][a].disabled}
                   disabledFlagPath={this.state.info[group][a].disabledPath}
                   handlers={this.state.info[group][a].functions}
@@ -304,6 +311,8 @@ const mapStateToProps = state => {
   let attributeName;
   let subElement;
   let layoutAttribute;
+  let attribute;
+  let badge;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
   if (navLists[2].navType === NavTypes.Info) {
     blockName =
@@ -314,10 +323,16 @@ const mapStateToProps = state => {
       navLists[1].navType === NavTypes.Attribute && navLists[1].subElements
         ? navLists[1].subElements
         : undefined;
+    attribute = blockUtils.findAttribute(
+      state.malcolm.blocks,
+      blockName,
+      attributeName
+    );
   }
 
   const showLinkInfo = navLists[2].path.endsWith('.link');
   let linkBlockName;
+
   if (showLinkInfo) {
     layoutAttribute = blockUtils.findAttribute(
       state.malcolm.blocks,
@@ -333,20 +348,37 @@ const mapStateToProps = state => {
       blockName = layoutAttribute.raw.value.mri[blockNameIndex];
       attributeName = navLists[2].linkInputPort;
       linkBlockName = navLists[2].linkInputBlock;
+      attribute = blockUtils.findAttribute(
+        state.malcolm.blocks,
+        blockName,
+        attributeName
+      );
+    }
+    badge = {};
+    if (blockUtils.attributeHasTag(attribute, 'badgevalue')) {
+      const ind = attribute.raw.meta.tags.findIndex(
+        tag => tag.indexOf('badgevalue') > -1
+      );
+      if (ind > -1) {
+        const portBadge = attribute.raw.meta.tags[ind].split(':');
+        badge.block = portBadge.slice(3).join(':');
+        // eslint-disable-next-line prefer-destructuring
+        badge.name = portBadge[2];
+        badge.attribute = blockUtils.findAttribute(
+          state.malcolm.blocks,
+          badge.block,
+          badge.name
+        );
+      }
     }
   }
-
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    blockName,
-    attributeName
-  );
 
   return {
     attribute,
     blockName,
     attributeName,
     subElement,
+    badge,
     isLinkInfo: showLinkInfo,
     layoutAttribute: showLinkInfo ? layoutAttribute : undefined,
     isMethodInfo:

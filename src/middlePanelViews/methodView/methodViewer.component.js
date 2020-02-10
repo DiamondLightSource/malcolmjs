@@ -24,7 +24,9 @@ import {
   getDefaultFromType,
   isArrayType,
   Widget,
+  malcolmTypes,
 } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import { setMethodTableInput } from '../../malcolm/reducer/attribute.reducer';
 import { Sources } from '../../malcolm/reducer/method.reducer';
 import {
   FieldTypes,
@@ -35,9 +37,6 @@ const noOp = () => {};
 
 const MethodViewer = props => {
   if (props.method && props.selectedParam) {
-    console.log('+++++++++++++++++++++++');
-    console.log(props.selectedParamMeta);
-    console.log(props.method);
     const widgetTag = props.selectedParamMeta.tags.find(
       t => t.indexOf('widget:') !== -1
     );
@@ -294,12 +293,21 @@ const MethodViewer = props => {
     const copyRunParams = row => {
       const params = values[row].took;
       values[row].calledWith.forEach(paramName => {
-        props.updateInput(
-          props.method.calculated.path,
-          paramName,
-          params[paramName],
-          true
-        );
+        if (params[paramName].typeid === malcolmTypes.table) {
+          props.updateInput(
+            props.method.calculated.path,
+            paramName,
+            setMethodTableInput(props.selectedParamMeta, params[paramName]),
+            true
+          );
+        } else {
+          props.updateInput(
+            props.method.calculated.path,
+            paramName,
+            params[paramName],
+            true
+          );
+        }
       });
     };
     const dummyAttribute = {
