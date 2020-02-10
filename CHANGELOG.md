@@ -1,4 +1,8 @@
 # Changelog
+## 1.7.12 (10/2/2020)
+Features:
+- Added port badge for asyn array address
+- Added port badge attribute to link info screen
 ## 1.7.11 (6/2/2020)
 Features:
 - Added FFMPEG viewer widget
