@@ -1,4 +1,7 @@
 # Changelog
+## 1.7.13 (10/2/2020)
+Tweaks:
+- Renamed FFMPEG widget tag to imgurl
 ## 1.7.12 (10/2/2020)
 Features:
 - Added port badge for asyn array address
