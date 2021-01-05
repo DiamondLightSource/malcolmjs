@@ -10,7 +10,7 @@
     "@storybook/addon-links": "^3.4.0",
     "@storybook/addons": "^3.4.0",
     "@storybook/react": "^3.4.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "circular-buffer": "^1.0.2",
     "classnames": "^2.2.5",
     "d3-time-format": "^2.1.3",
