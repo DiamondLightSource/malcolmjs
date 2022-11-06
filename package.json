@@ -129,7 +129,7 @@
     "react-test-renderer": "^16.3.2",
     "source-map-explorer": "^1.6.0",
     "start-server-and-test": "^1.4.1",
-    "storybook": "^1.0.0",
+    "storybook": "^6.5.13",
     "stylelint": "^9.2.0",
     "stylelint-config-standard": "^18.2.0",
     "worker-loader": "^2.0.0"
