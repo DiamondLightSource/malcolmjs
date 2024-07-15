@@ -6,8 +6,8 @@
 
 ### Confirm deployment process
 1. Show the repo and the commit that was tagged as `1.0.0`
-1. Describe how that was pushed and travis automatically started building it. Show the build at https://travis-ci.org/dls-controls/malcolmjs/builds/430413700
-1. Show the `1.0.0` release at https://github.com/dls-controls/malcolmjs/releases and show the contents of the zip.
+1. Describe how that was pushed and travis automatically started building it. Show the build at https://travis-ci.org/DiamondLightSource/malcolmjs/builds/430413700
+1. Show the `1.0.0` release at https://github.com/DiamondLightSource/malcolmjs/releases and show the contents of the zip.
 
 ### Remove all visible references to Malcolm
 1. Show the site running, show there are no Malcolm logos present except the favicon (this will be replaced when deployed on a panda box).

@@ -5,10 +5,10 @@ Useful URLs
 -----------
 
 ======================= ===========================================================
-Code                     https://github.com/dls-controls/malcolmjs
-Agile board              https://waffle.io/dls-controls/malcolmjs
-Travis                   https://travis-ci.org/dls-controls/malcolmjs
-Coverage                 https://codecov.io/gh/dls-controls/malcolmjs/branch/version1
+Code                     https://github.com/DiamondLightSource/malcolmjs
+Agile board              https://waffle.io/DiamondLightSource/malcolmjs
+Travis                   https://travis-ci.org/DiamondLightSource/malcolmjs
+Coverage                 https://codecov.io/gh/DiamondLightSource/malcolmjs/branch/version1
 Docs                     http://malcolmjs.readthedocs.io/en/latest/
 PyMalcolm Docs           http://pymalcolm.readthedocs.io/en/latest/
 ======================= ===========================================================
@@ -86,7 +86,7 @@ Simulator
 In order to run the simulator, there are several things required:
 
 #. PandABlocks-* config/binary files [server, FPGA, 2nd-FPGA, rootfs, webcontrol]
-#. Latest version of pyMalcolm (clone from https://github.com/dls-controls/pymalcolm)
+#. Latest version of pyMalcolm (clone from https://github.com/DiamondLightSource/pymalcolm)
 #. YAML config file for pyMalcolm
 
 The appropriate versions of the PandABlocks-* components should be obtained from Tom Cobb; once they have been placed on a local machine,

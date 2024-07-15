@@ -181,7 +181,7 @@ Coding Standards
 
 Static code analysis is done by running ESLint against the code with the `AirBnB rule set <http://airbnb.io/javascript/>`_. Code styling is done with `Prettier <https://prettier.io/>`_ to avoid debates on code styling. These are both enforced as pre-commit hooks with the ``--fix`` option turned on so as much as possible is automatically fixed. This ensures the static code analysis violations remain at zero unless explicitly ignored.
 
-Unit testing is all done with Jest which provides code coverage information using the ``--coverage`` flag, this generates an LCOV report with all the coverage information. The coverage information is tracked on CodeCov, where during this phase of development, all the information is on the `version 1 branch <https://codecov.io/gh/dls-controls/malcolmjs/branch/version1>`_.
+Unit testing is all done with Jest which provides code coverage information using the ``--coverage`` flag, this generates an LCOV report with all the coverage information. The coverage information is tracked on CodeCov, where during this phase of development, all the information is on the `version 1 branch <https://codecov.io/gh/DiamondLightSource/malcolmjs/branch/version1>`_.
 
 .. figure:: images/coverage-chart.png
     :align: center

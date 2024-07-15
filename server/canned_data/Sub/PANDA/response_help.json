@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "https://github.com/dls-controls/pymalcolm", 
+        "value": "https://github.com/DiamondLightSource/pymalcolm", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 

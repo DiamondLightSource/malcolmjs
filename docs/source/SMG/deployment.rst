@@ -3,7 +3,7 @@ Deployment
 
 The continuous integration environment using Travis automatically deploys the built code bundle to Github when a particular commit is tagged. Therefore, to release MalcolmJS all you need to do is tag a commit and push that tag back to the server.
 
-Once the resulting build is complete then the release will appear in the list of `MalcolmJS releases <https://github.com/dls-controls/malcolmjs/releases>`_.
+Once the resulting build is complete then the release will appear in the list of `MalcolmJS releases <https://github.com/DiamondLightSource/malcolmjs/releases>`_.
 
 Tags should take the form major.minor.patch ``#-#-#``, the artifacts then use ``git describe`` to append the number of commits since the tag as well as the SHA if relevant.
 
@@ -28,5 +28,5 @@ This results in something similar to:
     on:
       tags: true::
 
-If doing this from within Diamond, one should generate keys using the ``dls-controls-user`` GitHub account (login details available from Controls password vault).
+If doing this from within Diamond, one should generate keys using the ``DiamondLightSource-user`` GitHub account (login details available from Controls password vault).
 Travis CLI tools can be obtained by loading the Ruby module with ``module load ruby``.

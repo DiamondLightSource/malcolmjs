@@ -15,7 +15,7 @@ Full documentation is available at http://malcolmjs.readthedocs.org
 Source Code
 -----------
 
-Available from https://github.com/dls-controls/malcolmjs
+Available from https://github.com/DiamondLightSource/malcolmjs
 
 
 Changelog
@@ -33,12 +33,12 @@ License
 APACHE License. (see `LICENSE`_)
 
 
-.. |buildstatus| image:: https://travis-ci.org/dls-controls/malcolmjs.svg?branch=version1
-    :target: https://travis-ci.org/dls-controls/malcolmjs
+.. |buildstatus| image:: https://travis-ci.org/DiamondLightSource/malcolmjs.svg?branch=version1
+    :target: https://travis-ci.org/DiamondLightSource/malcolmjs
     :alt: Build Status
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/graph/badge.svg
-    :target: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/
+.. |coverage| image:: https://codecov.io/gh/DiamondLightSource/malcolmjs/branch/version1/graph/badge.svg
+    :target: https://codecov.io/gh/DiamondLightSource/malcolmjs/branch/version1/
     :alt: Test coverage
 
 .. |readthedocs| image:: https://readthedocs.org/projects/malcolmjs/badge/?version=latest
@@ -54,10 +54,10 @@ APACHE License. (see `LICENSE`_)
     :alt: Code style: prettier
 
 .. _CHANGELOG:
-    https://github.com/dls-controls/malcolmjs/blob/master/CHANGELOG.rst
+    https://github.com/DiamondLightSource/malcolmjs/blob/master/CHANGELOG.rst
 
 .. _CONTRIBUTING:
-    https://github.com/dls-controls/malcolmjs/blob/master/CONTRIBUTING.rst
+    https://github.com/DiamondLightSource/malcolmjs/blob/master/CONTRIBUTING.rst
 
 .. _LICENSE:
-    https://github.com/dls-controls/malcolmjs/blob/master/LICENSE
+    https://github.com/DiamondLightSource/malcolmjs/blob/master/LICENSE
